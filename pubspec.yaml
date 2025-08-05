@@ -1,0 +1,111 @@
+name: makarna_app
+description: "Dijital Restorant Çözümleri"
+publish_to: 'none'
+
+version: 1.0.0+4
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+
+  # Mevcut Paketleriniz
+  http: ^1.2.1
+  socket_io_client: ^2.0.3+1
+  flutter_ringtone_player: ^4.0.0+4
+  firebase_core: ^3.1.1
+  firebase_storage: ^12.1.0
+  qr_flutter: ^4.1.0
+  printing: ^5.13.0
+  pdf: ^3.10.8
+  jwt_decoder: ^2.0.1
+  intl: ^0.19.0
+  cupertino_icons: ^1.0.8
+  image_picker: ^1.1.2
+  flutter_staggered_grid_view: ^0.7.0
+  collection: ^1.18.0
+  flutter_blue_plus: ^1.31.20
+  permission_handler: ^11.3.1
+  provider: ^6.1.2
+  convert: ^3.1.1
+  table_calendar: ^3.1.2
+  flutter_colorpicker: ^1.1.0
+  timezone: ^0.9.4
+  flutter_timezone: ^1.0.8
+  esc_pos_printer_plus: ^0.1.1
+  esc_pos_utils_plus: ^2.0.4
+  network_info_plus: ^5.0.3
+  network_discovery: ^1.0.0
+  internet_connection_checker: ^1.0.0
+  animated_text_kit: ^4.2.2
+  path: ^1.9.0
+  in_app_purchase: ^3.1.5
+  equatable: ^2.0.5
+  excel: ^2.1.0
+  open_file_plus: ^3.4.1
+  another_flushbar: ^1.12.30
+
+  # === Yeni Eklenen Offline Mod Paketleri ===
+  connectivity_plus: ^6.0.3
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
+  path_provider: ^2.1.3
+  uuid: ^4.4.0
+  flutter_dotenv: ^5.1.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+  flutter_native_splash: ^2.4.0
+
+  # === Offline Mod Dev Paketleri ===
+  hive_generator: ^2.0.1
+  build_runner: ^2.4.10
+
+  # --- YENİ: UYGULAMA SİMGESİ OLUŞTURUCU ---
+  flutter_launcher_icons: ^0.13.1
+
+dependency_overrides:
+  fl_chart:
+    git:
+      url: https://github.com/imaNNeoFighT/fl_chart.git
+      ref: main
+
+flutter:
+  uses-material-design: true
+  generate: true
+
+  assets:
+    - assets/fonts/
+    - .env
+    - assets/images/
+
+
+# --- YENİ: UYGULAMA SİMGESİ YAPILANDIRMASI ---
+# Bu blok, uygulamanızın logosunu otomatik olarak oluşturur.
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  # ÖNEMLİ: Logonuzun doğru dosya yolunu buraya yazdığınızdan emin olun.
+  image_path: "assets/images/logo.png" 
+  min_sdk_android: 21 # Android minimum SDK versiyonu
+
+
+flutter_native_splash:
+  # Bu renk, resminiz yüklenirken veya resim yoksa arka plan olarak kullanılır.
+  # Uygulamanızın ana arka plan rengiyle uyumlu olması en iyisidir.
+  color: "#0d47a1" # Bu renk sizin blue.shade900'e yakındır
+
+  # (Opsiyonel) Açılış ekranında logonuzu göstermek için:
+  # image: assets/logo.png 
+
+  # Android 12 ve sonrası için özel ikon (arka planı olmayan, şeffaf bir logo olmalı)
+  # android_12_image: assets/logo_android12.png
+
+  # iOS için de benzer şekilde 'branding' gibi özellikler ekleyebilirsiniz.
+  # Detaylı bilgi için paketin dokümantasyonuna bakabilirsiniz.

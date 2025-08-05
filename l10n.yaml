@@ -1,0 +1,5 @@
+# Projenin ana dizinine bu dosyayı ekleyin.
+arb-dir: lib/l10n
+template-arb-file: intl_tr.arb
+output-localization-file: app_localizations.dart
+untranslated-messages-file: eksik_ceviri.txt

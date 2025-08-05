@@ -1,0 +1,3163 @@
+{
+  "@@locale": "tr",
+  "loginPageTitle": "Giriş Yap",
+  "usernameLabel": "Kullanıcı Adı",
+  "passwordLabel": "Şifre",
+  "usernameHint": "Lütfen kullanıcı adınızı girin.",
+  "passwordHint": "Lütfen şifrenizi girin.",
+  "loginButtonText": "Giriş Yap",
+  "forgotPasswordButtonText": "Şifremi Unuttum?",
+  "registerPromptText": "Hesabın yok mu? Kayıt Ol",
+  "loginErrorInvalidCredentials": "Kullanıcı adı veya şifre hatalı.",
+  "loginErrorAccountInactive": "Hesabınız aktif değil. Lütfen yönetici ile iletişime geçin.",
+  "loginErrorAccountNotApproved": "Hesabınız henüz yönetici tarafından onaylanmamıştır.",
+  "registerPageTitle": "İşletme Sahibi Kaydı",
+  "emailLabel": "E-posta Adresi",
+  "usernameHintRequired": "Lütfen kullanıcı adı girin",
+  "usernameHintMinLength": "Kullanıcı adı en az 4 karakter olmalıdır.",
+  "emailHintRequired": "Lütfen e-posta adresi girin",
+  "emailHintInvalid": "Geçerli bir e-posta adresi girin",
+  "passwordHintRequired": "Lütfen şifre girin",
+  "passwordHintMinLength": "Şifre en az 6 karakter olmalıdır.",
+  "registerTypeLabel": "Kayıt Türü",
+  "registerTypeBusinessOwner": "İşletme Sahibi",
+  "registerButtonText": "Kayıt Ol",
+  "registerSuccessMessage": "Kayıt başarılı! 🎉 Uygulamayı 14 gün boyunca ücretsiz kullanabilirsiniz.",
+  "registerErrorUsernameExists": "Bu kullanıcı adı zaten mevcut.",
+  "registerErrorEmailExists": "Bu e-posta adresi zaten kayıtlı.",
+  "registerErrorPasswordCommon": "Şifre çok yaygın, lütfen daha güçlü bir şifre seçin.",
+  "addStaffTitle": "Yeni Personel Ekle",
+  "editStaffTitle": "Personel Düzenle",
+  "addKitchenStaffTitle": "Yeni Mutfak Personeli Ekle",
+  "editKitchenStaffTitle": "Mutfak Personeli Düzenle",
+  "positionLabel": "Pozisyon",
+  "positionSalonStaff": "Salon Personeli",
+  "positionKitchenStaff": "Mutfak Personeli",
+  "firstNameLabel": "Adı*",
+  "lastNameLabel": "Soyadı*",
+  "firstNameRequired": "Personel adı gerekli",
+  "lastNameRequired": "Personel soyadı gerekli",
+  "passwordNewLabel": "Yeni Şifre (Değişiklik yoksa boş bırakın)",
+  "passwordRequiredLabel": "Şifre*",
+  "passwordRequiredHintForNewStaff": "Yeni personel için şifre gerekli",
+  "activeUserLabel": "Aktif Kullanıcı",
+  "permissionPresetLabel": "Hazır İzin Seti Seç (Opsiyonel)",
+  "screenPermissionsLabel": "Ekran İzinleri:",
+  "notificationPermissionsLabel": "Alınacak Bildirim İzinleri:",
+  "accessibleKdsScreensLabel": "Erişilebilir KDS Ekranları:",
+  "noKdsAvailable": "Bu işletme için tanımlı KDS ekranı bulunmuyor.",
+  "kdsLoadingError": "KDS ekranları yüklenemedi: {error}",
+  "updateButton": "Güncelle",
+  "createButton": "Oluştur",
+  "staffUpdateSuccess": "Personel başarıyla güncellendi.",
+  "staffCreateSuccess": "Personel başarıyla oluşturuldu.",
+  "setupWizardTitle": "İşletme Kurulumu ({currentPage}/{totalPages})",
+  "setupWizardStep1Title": "1. Masa Bilgilerini Oluşturun",
+  "setupWizardStep2Title": "2. Mutfak Ekranlarını Tanımlayın",
+  "setupWizardStep3Title": "3. Ürün Kategorilerinizi Oluşturun",
+  "setupWizardStep4Title": "4. Ana Ürün Bilgilerini Oluşturun",
+  "setupWizardStep5Title": "5. Ürün Varyant ve Fiyat Bilgilerini Oluşturun",
+  "setupWizardStep6Title": "6. Stok Sayısını Girin (Opsiyonel)",
+  "setupWizardSuccessMessage": "İşletme kurulumu başarıyla tamamlandı! 🎉",
+  "setupWizardErrorMessage": "Kurulum tamamlanırken hata: {error}",
+  "setupWizardBackButton": "Geri",
+  "setupWizardSkipButton": "Bu Adımı Atla",
+  "setupWizardFinishButton": "Bitir ve Kaydet",
+  "setupWizardNextButton": "İleri",
+  "takeawayOrderTitle": "Paket Sipariş - {customerName}",
+  "guestCustomerName": "Misafir",
+  "orderStatusPaid": " (Ödendi)",
+  "orderStatusCancelled": " (İptal)",
+  "orderStatusRejected": " (Reddedildi)",
+  "tooltipPrintReceipt": "Fiş Yazdır",
+  "tooltipShowQr": "Müşteri QR Kodu Göster",
+  "tooltipCancelOrder": "Siparişi İptal Et",
+  "errorNoQrLink": "Bu sipariş için QR linki bulunmuyor.",
+  "infoLinkCopied": "Link panoya kopyalandı.",
+  "errorNoPrinters": "Kayıtlı yazıcı bulunamadı. Lütfen Yazıcı Ayarları'ndan ekleyin.",
+  "infoPrintingCustomerReceipt": "Müşteri fişi yazdırılıyor...",
+  "errorPrintingReceipt": "Fiş yazdırma hatası: {error}",
+  "infoPrintingKitchenTicket": "Mutfak fişi yazdırılıyor...",
+  "errorPrintingKitchenTicket": "Mutfak fişi yazdırma hatası: {error}",
+  "dialogCancelOrderTitle": "Siparişi İptal Et",
+  "dialogCancelOrderContent": "Bu siparişi iptal etmek istediğinize emin misiniz? Bu işlem geri alınamaz.",
+  "dialogButtonNo": "Hayır",
+  "dialogButtonYesCancel": "Evet, İptal Et",
+  "buttonDeliver": "Teslim Et",
+  "buttonAddExtra": "Ekstra Ekle",
+  "buttonRemove": "Kaldır",
+  "buttonPaymentScreen": "Ödeme Ekranı",
+  "statusDelivered": "Teslim Edildi",
+  "statusPaidFull": "BU SİPARİŞ ÖDENDİ",
+  "statusCancelledFull": "SİPARİŞ İPTAL EDİLDİ",
+  "statusRejectedFull": "SİPARİŞ REDDEDİLDİ",
+  "errorNoOrderItems": "Sipariş kalemleri bulunamadı.",
+  "infoProductAdded": "Ürün başarıyla eklendi.",
+  "errorAddingProduct": "Ürün eklenirken hata: {statusCode} - {details}",
+  "errorAddingProductGeneral": "Ürün ekleme sırasında beklenmedik bir hata: {error}",
+  "infoProductDeleted": "Ürün başarıyla silindi.",
+  "errorDeletingProduct": "Ürün silinirken hata oluştu: {statusCode} - {details}",
+  "errorDeletingProductGeneral": "Hata: {error}",
+  "infoItemDelivered": "Kalem teslim edildi.",
+  "errorDeliveringItem": "Teslim işlemi sırasında hata oluştu: {statusCode}",
+  "errorDeliveringItemGeneral": "Teslim işlemi hatası: {error}",
+  "infoPagerAssigned": "Çağrı cihazı siparişe atandı.",
+  "errorAssigningPager": "Cihaz atama hatası: {statusCode}",
+  "errorAssigningPagerGeneral": "Cihaz atama sırasında hata: {error}",
+  "infoOrderCancelled": "Sipariş başarıyla iptal edildi.",
+  "errorCancellingOrder": "Sipariş iptal edilirken hata: {statusCode} - {details}",
+  "errorCancellingOrderGeneral": "İptal hatası: {error}",
+  "dialogDeleteItemTitle": "Ürünü Sil",
+  "dialogDeleteItemContent": "Bu ürünü siparişten kaldırmak istediğinize emin misiniz?",
+  "dialogButtonDelete": "Sil",
+  "dialogQrTitle": "Müşteri Sipariş Linki (#{orderId})",
+  "dialogButtonClose": "Kapat",
+  "errorOrderDetailsNotFound": "Sipariş detayları alınamadı veya sipariş silinmiş olabilir.",
+  "errorOrderDetailsUpdate": "Sipariş detayları güncelleme hatası: {error}",
+  "infoAddingProduct": "Ürün ekleniyor...",
+  "takeawayOrderDetailsTitle": "Paket Sipariş Detayları",
+  "categoryListPageTitle": "Kategoriler",
+  "tooltipAddCategory": "Kategori Ekle",
+  "tooltipEdit": "Düzenle",
+  "tooltipDelete": "Sil",
+  "dialogDeleteCategoryTitle": "Kategoriyi Sil",
+  "dialogButtonCancel": "İptal",
+  "dialogButtonDeleteConfirm": "Evet, Sil",
+  "infoCategoryDeleted": "Kategori başarıyla silindi.",
+  "errorCategoryDelete": "Kategori silinirken hata oluştu: {statusCode} - {details}",
+  "noCategoriesAdded": "Henüz kategori eklenmemiş.",
+  "buttonAddFirstCategory": "İlk Kategoriyi Ekle",
+  "errorFetchingCategories": "Kategori listesi alınırken hata oluştu: {statusCode}",
+  "unknownCategory": "Bilinmeyen Kategori",
+  "manageMenuPageTitle": "Menü Yönetimi",
+  "tooltipAddMenuItem": "Yeni Menü Öğesi Ekle",
+  "noMenuItemsAdded": "Henüz menü öğesi eklenmemiş.",
+  "buttonAddFirstMenuItem": "İlk Menü Öğesini Ekle",
+  "dialogDeleteMenuItemTitle": "Menü Öğesi Sil",
+  "dialogDeleteMenuItemContent": "'{itemName}' adlı menü öğesini silmek istediğinize emin misiniz? Bu işlem geri alınamaz.",
+  "infoMenuItemDeleted": "Menü öğesi başarıyla silindi.",
+  "errorDeletingMenuItem": "Menü öğesi silinirken hata: {statusCode} - {details}",
+  "errorDeletingMenuItemGeneral": "Menü öğesi silme hatası: {error}",
+  "errorFetchingMenuItems": "Menü öğeleri alınırken hata oluştu: {statusCode}",
+  "addMenuItemTitle": "Yeni Menü Öğesi",
+  "editMenuItemTitle": "Menü Öğesini Düzenle",
+  "menuItemPhotoNotSelected": "Fotoğraf seçilmedi.",
+  "buttonSelectOrChangePhoto": "Fotoğraf Seç/Değiştir",
+  "menuItemNameLabel": "Ürün Adı",
+  "menuItemNameValidator": "Lütfen ürün adını girin",
+  "menuItemDescriptionLabel": "Açıklama",
+  "menuItemDescriptionValidator": "Lütfen açıklama girin",
+  "menuCategoryLabel": "Kategori (Opsiyonel)",
+  "menuCategoryNotSelected": "Kategori seçilmedi",
+  "infoMenuItemCreated": "Menü öğesi başarıyla oluşturuldu!",
+  "infoMenuItemUpdated": "Menü öğesi başarıyla güncellendi!",
+  "errorUploadingPhoto": "Fotoğraf Firebase'e yüklenirken hata oluştu.",
+  "errorUploadingPhotoGeneral": "Firebase yükleme hatası: {error}",
+  "errorLoadingCategories": "Kategoriler yüklenemedi: {statusCode}",
+  "errorLoadingCategoriesGeneral": "Kategoriler yüklenirken hata: {error}",
+  "errorMenuItemGeneral": "İşlem sırasında hata: {statusCode} - {details}",
+  "errorMenuItemApi": "API isteği hatası: {error}",
+  "manageVariantPageTitle": "Ürün Varyant Yönetimi",
+  "errorFetchingVariants": "Varyantlar alınırken hata oluştu: {statusCode}",
+  "errorFetchingVariantsGeneral": "Varyantları çekerken hata: {error}",
+  "variantPhotoNotSelected": "Fotoğraf seçilmedi.",
+  "infoVariantAddedSuccess": "Varyant başarıyla eklendi!",
+  "errorAddingVariant": "Varyant eklenirken hata: {statusCode} - {details}",
+  "errorAddingVariantGeneral": "API isteği sırasında hata: {error}",
+  "dialogDeleteVariantTitle": "Varyantı Sil",
+  "infoVariantDeletedSuccess": "Varyant başarıyla silindi.",
+  "errorDeletingVariant": "Varyant silinirken hata: {statusCode} - {details}",
+  "errorDeletingVariantGeneral": "Varyant silme hatası: {error}",
+  "variantNameLabel": "Varyant Adı (örn: Büyük)",
+  "variantNameValidator": "Lütfen varyant adını girin",
+  "variantPriceLabel": "Fiyatı*",
+  "variantPriceValidator": "Fiyat gerekli.",
+  "variantPriceValidatorInvalid": "Geçerli bir fiyat girin.",
+  "variantIsExtraLabel": "Ekstra Seçenek Mi?",
+  "buttonSelectPhoto": "Fotoğraf Seç",
+  "buttonAddVariant": "Varyant Ekle",
+  "currentVariantsTitle": "Mevcut Varyantlar",
+  "noVariantsAdded": "Bu ürün için henüz varyant eklenmemiş.",
+  "variantExtraSuffix": " (Ekstra)",
+  "editVariantPageTitle": "Varyant Düzenle",
+  "variantPhotoNotUploaded": "Fotoğraf yüklenmemiş.",
+  "buttonChangePhoto": "Fotoğraf Değiştir",
+  "infoVariantUpdatedSuccess": "Varyant başarıyla güncellendi!",
+  "errorUpdatingVariant": "Varyant güncellenirken hata: {statusCode} - {details}",
+  "errorUpdatingVariantGeneral": "API isteği sırasında hata: {error}",
+  "homePageTitleBusinessOwner": "İşletme Paneli",
+  "homePageTitleStaff": "Personel Paneli",
+  "homePageTitleKitchenStaff": "Mutfak Paneli",
+  "homeTabLabel": "Ana Sayfa",
+  "tableTabLabel": "Masa",
+  "takeawayTabLabel": "Paket",
+  "kitchenTabLabel": "Mutfak",
+  "kdsSetupTabLabel": "KDS Kur",
+  "notificationsTabLabel": "Bildirimler",
+  "tooltipGoToHome": "Ana Sayfa'ya Git",
+  "infoKdsScreensLoading": "KDS ekranları yükleniyor, lütfen bekleyin...",
+  "infoCreateKdsScreenFirst": "Önce KDS ekranı oluşturun. Yönetim sayfasına yönlendiriliyorsunuz.",
+  "infoNoActiveKdsAvailable": "Erişebileceğiniz aktif bir KDS ekranı bulunmuyor.",
+  "dialogSelectKdsScreenTitle": "KDS Ekranı Seçin",
+  "infoKdsSelectionPending": "Mutfak sekmesi için KDS seçimi bekleniyor...",
+  "buttonCreateKdsScreen": "KDS Ekranı Oluştur",
+  "infoContentLoading": "İçerik yükleniyor veya erişim yok.",
+  "pendingOrdersPageTitle": "Ödenmemiş Siparişler",
+  "errorFetchingPendingOrders": "Siparişler alınırken bir hata oluştu.",
+  "noPendingOrdersFound": "Ödenmemiş sipariş bulunamadı.",
+  "pendingOrderCardTitleTable": "Masa {tableNumber}",
+  "pendingOrderCardTitleTakeaway": "Paket Sipariş",
+  "editOrderTitleDetails": "Sipariş Detayları",
+  "editOrderTitleTakeaway": "Paket Sipariş - {customerName}",
+  "editOrderTitleTable": "Masa {tableNumber}",
+  "editOrderStatusCreditUnpaid": " (Veresiye - Ödenmedi)",
+  "editOrderStatusCreditPaid": " (Veresiye - Ödendi)",
+  "editOrderPagerAssigned": "Atanmış Cihaz: {pagerInfo}",
+  "editOrderPagerNotAssigned": "Çağrı Cihazı Atanmamış",
+  "buttonChange": "Değiştir",
+  "buttonAssign": "Ata",
+  "editOrderCreditNote": "Veresiye Notu: {note}",
+  "editOrderTooltipAddProduct": "Yeni Ürün Ekle",
+  "editOrderButtonCloseCreditPayment": "Veresiye Ödemesini Kapat",
+  "editOrderStatusCreditPaymentReceived": "VERESİYE ÖDEMESİ ALINDI",
+  "scheduleTitle": "Rota Planlama",
+  "scheduleErrorLoadingData": "Veriler yüklenirken hata: {error}",
+  "scheduleErrorFetchingShifts": "Vardiyalar çekilirken hata: {error}",
+  "scheduleErrorCreateShiftTemplateFirst": "Lütfen önce vardiya şablonu oluşturun.",
+  "scheduleTitleAssignShiftForDate": "{date} Günü Vardiya Ata",
+  "scheduleErrorNoStaffToAssign": "Atanacak personel bulunamadı.",
+  "scheduleStatusNoShiftAssigned": "Vardiya Atanmamış",
+  "scheduleTooltipRemoveShift": "Vardiyayı Kaldır",
+  "scheduleHintSelect": "Seç...",
+  "scheduleErrorSelectAtLeastOneDay": "Lütfen takvimden en az bir gün seçin.",
+  "scheduleSuccessMultiDayAssignment": "{count} gün için atama yapıldı.",
+  "scheduleErrorMultiDayAssignment": "Toplu atama sırasında hata: {error}",
+  "scheduleButtonMultiSelect": "Çoklu Seçim",
+  "scheduleTooltipManageShiftTemplates": "Vardiya Şablonlarını Yönet",
+  "scheduleFabManageSelectedDays": "Seçili Günleri Yönet",
+  "scheduleFabManageDay": "Günü Yönet",
+  "scheduleTooltipAssignToSelectedDays": "Seçili günlere atama yap",
+  "scheduleTooltipAssignRemoveForDay": "Seçili güne vardiya ata/kaldır",
+  "scheduleNoShiftsForDate": "{date} için vardiya yok.",
+  "stockScreenTitle": "Stok Yönetimi",
+  "stockScreenTooltipAddNew": "Yeni Stok Kaydı Oluştur",
+  "stockScreenNoStockItems": "Stok takibi yapılacak ürün bulunamadı.\nYeni kayıt eklemek için '+' butonunu kullanın.",
+  "stockMovementAddition": "Stok Girişi",
+  "stockMovementWastage": "Zayiat/Fire",
+  "stockMovementAdjustmentIn": "Sayım Düzeltme (Fazla)",
+  "stockMovementAdjustmentOut": "Sayım Düzeltme (Eksik)",
+  "stockDialogMovementTitle": "Stok Hareketi",
+  "stockDialogQuantityLabel": "Miktar",
+  "stockDialogQuantityEntryLabel": "Giriş Miktarı",
+  "stockDialogQuantityWastageLabel": "Zayiat Miktarı",
+  "stockDialogQuantitySurplusLabel": "Fazla Miktar",
+  "stockDialogQuantityDeficitLabel": "Eksik Miktar",
+  "stockDialogErrorEnterQuantity": "Lütfen miktar girin.",
+  "stockDialogErrorPositiveQuantity": "Geçerli pozitif bir miktar girin.",
+  "stockDialogErrorQuantityExceeds": "Çıkarılacak miktar mevcut stoktan ({quantity}) fazla olamaz.",
+  "@stockDialogErrorQuantityExceeds": {
+    "placeholders": {
+      "quantity": {
+        "type": "String"
+      }
+    }
+  },
+  "stockDialogDescriptionLabel": "Açıklama (Opsiyonel)",
+  "stockDialogSuccessMessage": "{movementName} işlemi başarılı.",
+  "@stockDialogSuccessMessage": {
+    "placeholders": {
+      "movementName": {
+        "type": "String"
+      }
+    }
+  },
+  "stockDialogErrorMessage": "Stok hareketi hatası: {error}",
+  "@stockDialogErrorMessage": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "stockDialogErrorNoNewVariant": "Stok kaydı olmayan yeni ürün varyantı bulunamadı.",
+  "stockDialogCreateTitle": "Yeni Stok Kaydı Oluştur",
+  "stockDialogSelectVariantLabel": "Ürün Varyantı Seçin",
+  "unknownVariant": "Bilinmeyen Varyant",
+  "unknownProduct": "Ürün",
+  "stockDialogErrorSelectVariant": "Lütfen bir varyant seçin.",
+  "stockDialogInitialQuantityLabel": "Başlangıç Stok Miktarı",
+  "stockDialogErrorValidQuantity": "Geçerli bir miktar girin.",
+  "stockDialogCreateSuccess": "Yeni stok kaydı başarıyla oluşturuldu.",
+  "stockDialogCreateError": "Yeni stok kaydı hatası: {error}",
+  "@stockDialogCreateError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "stockCardSettingsSaved": "Ayarlar kaydedildi.",
+  "stockCardCurrentStock": "Stok: {quantity}",
+  "@stockCardCurrentStock": {
+    "placeholders": {
+      "quantity": {
+        "type": "String"
+      }
+    }
+  },
+  "stockCardEnableTracking": "Stok Takibini Aktifleştir",
+  "stockCardAlertThresholdLabel": "Uyarı Eşiği (Adet)",
+  "stockCardAlertThresholdHint": "Örn: 50 (Boş bırakılırsa uyarmaz)",
+  "stockCardSaveSettingsButton": "Ayarları Kaydet",
+  "stockCardOtherActionsTooltip": "Diğer İşlemler",
+  "stockCardHistoryButton": "Stok Geçmişi",
+  "accountSettingsTitle": "Hesap Ayarları",
+  "unknownUser": "Bilinmiyor",
+  "accountSettingsErrorFetching": "Hesap bilgileri alınırken hata: {error}",
+  "@accountSettingsErrorFetching": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "photoUploadErrorFirebase": "Fotoğraf Firebase'e yüklenemedi.",
+  "accountSettingsSuccessPhotoUpdate": "Profil fotoğrafı başarıyla güncellendi.",
+  "accountSettingsErrorUploadingPhotoGeneric": "Fotoğraf yüklenirken hata: {error}",
+  "@accountSettingsErrorUploadingPhotoGeneric": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "accountSettingsErrorNewPasswordsMismatch": "Yeni parolalar eşleşmiyor.",
+  "accountSettingsSuccessUpdate": "Hesap bilgileri başarıyla güncellendi.",
+  "accountSettingsSuccessPasswordUpdate": "Parolanız başarıyla değiştirildi. Lütfen tekrar giriş yapın.",
+  "accountSettingsSuccessEmailUpdate": "E-posta adresiniz başarıyla güncellendi.",
+  "accountSettingsErrorUpdate": "Güncelleme hatası: {error}",
+  "@accountSettingsErrorUpdate": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "accountSettingsEmailLabel": "E-Posta",
+  "accountSettingsPasswordChangeSectionTitle": "Parola Değişikliği (İsteğe Bağlı)",
+  "accountSettingsCurrentPasswordLabel": "Mevcut Parola",
+  "accountSettingsValidatorEnterCurrentPassword": "Parola değiştirmek için mevcut parolanızı girin.",
+  "accountSettingsNewPasswordLabel": "Yeni Parola",
+  "accountSettingsValidatorEnterNewPassword": "Parola değiştirmek için yeni parolanızı girin.",
+  "accountSettingsConfirmNewPasswordLabel": "Yeni Parola Tekrar",
+  "accountSettingsValidatorConfirmNewPassword": "Lütfen yeni parolanızı tekrar girin.",
+  "accountSettingsErrorPasswordsMismatch": "Parolalar eşleşmiyor.",
+  "accountSettingsSaveChangesButton": "Değişiklikleri Kaydet",
+  "reportsScreenTitle": "Gelişmiş Rapor - {filterName}",
+  "@reportsScreenTitle": {
+    "placeholders": {
+      "filterName": {
+        "type": "String"
+      }
+    }
+  },
+  "reportsFilterToday": "Bugün",
+  "reportsFilterThisWeek": "Bu Hafta",
+  "reportsFilterThisMonth": "Bu Ay",
+  "reportsFilterThisYear": "Bu Yıl",
+  "reportsFilterCustom": "Özel Tarih Aralığı",
+  "reportsErrorSelectDateRange": "Lütfen özel bir tarih aralığı seçin.",
+  "reportsErrorFetching": "Rapor alınırken hata oluştu: {statusCode}",
+  "@reportsErrorFetching": {
+    "placeholders": {
+      "statusCode": {
+        "type": "String"
+      }
+    }
+  },
+  "reportsChartTitleHourly": "Saatlik Ciro Dağılımı ({date})",
+  "@reportsChartTitleHourly": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "reportsChartTitleDailyRange": "Günlük Ciro ({startDate} - {endDate})",
+  "@reportsChartTitleDailyRange": {
+    "placeholders": {
+      "startDate": {
+        "type": "String"
+      },
+      "endDate": {
+        "type": "String"
+      }
+    }
+  },
+  "reportsChartTitleDailyThisWeek": "Günlük Ciro Dağılımı (Bu Hafta)",
+  "reportsChartTitleMonthlyRange": "Aylık Ciro ({startDate} - {endDate})",
+  "@reportsChartTitleMonthlyRange": {
+    "placeholders": {
+      "startDate": {
+        "type": "String"
+      },
+      "endDate": {
+        "type": "String"
+      }
+    }
+  },
+  "reportsChartTitleMonthlyThisMonth": "Aylık Ciro ({month} {year})",
+  "@reportsChartTitleMonthlyThisMonth": {
+    "placeholders": {
+      "month": {
+        "type": "String"
+      },
+      "year": {
+        "type": "String"
+      }
+    }
+  },
+  "reportsChartTitleMonthlyThisYear": "Aylık Ciro ({year})",
+  "@reportsChartTitleMonthlyThisYear": {
+    "placeholders": {
+      "year": {
+        "type": "String"
+      }
+    }
+  },
+  "reportsChartTitleMonthlyDefault": "Aylık Ciro Dağılımı",
+  "reportsChartTitleNoData": "Ciro Grafiği (Veri Yok)",
+  "reportsSummaryHeaderProperty": "Özellik",
+  "reportsSummaryHeaderValue": "Değer",
+  "reportsSummaryTotalTurnover": "Toplam Ciro",
+  "reportsSummaryTotalOrders": "Toplam Sipariş",
+  "reportsSummaryBestSelling": "En Çok Satan",
+  "reportsSummaryLeastSelling": "En Az Satan",
+  "reportsSummaryItemCount": "{count} adet",
+  "@reportsSummaryItemCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "reportsSummaryNoData": "-",
+  "reportsPickDateTooltip": "Tarih Aralığı Seç",
+  "reportsSelectedDateRange": "Seçili Tarih: {startDate} - {endDate}",
+  "@reportsSelectedDateRange": {
+    "placeholders": {
+      "startDate": {
+        "type": "String"
+      },
+      "endDate": {
+        "type": "String"
+      }
+    }
+  },
+  "pagerManagementTitle": "Çağrı Cihazı Yönetimi",
+  "pagerTooltipAdd": "Yeni Cihaz Ekle/Kaydet",
+  "pagerTooltipScanBle": "Bluetooth Cihazlarını Tara",
+  "pagerTooltipRefreshList": "Listeyi Yenile",
+  "pagerStatusBle": "BT Durumu: {status}",
+  "@pagerStatusBle": {
+    "placeholders": {
+      "status": {
+        "type": "String"
+      }
+    }
+  },
+  "pagerStatusBleWaiting": "Bluetooth durumu bekleniyor...",
+  "pagerNoDevicesFound": "Sisteme kayıtlı çağrı cihazı bulunmuyor.\n'+' butonu ile veya tarayarak ekleyebilirsiniz.",
+  "pagerHeaderInUse": "Kullanımda Olan Cihazlar",
+  "pagerHeaderAvailable": "Boşta Olan Cihazlar",
+  "pagerHeaderOtherStatus": "Diğer Durumdaki Cihazlar",
+  "pagerCardDeviceId": "Cihaz ID: {id}",
+  "@pagerCardDeviceId": {
+    "placeholders": {
+      "id": {
+        "type": "String"
+      }
+    }
+  },
+  "pagerCardStatus": "Durum: {status}",
+  "@pagerCardStatus": {
+    "placeholders": {
+      "status": {
+        "type": "String"
+      }
+    }
+  },
+  "pagerCardOrderId": "Sipariş ID: #{id}",
+  "@pagerCardOrderId": {
+    "placeholders": {
+      "id": {
+        "type": "String"
+      }
+    }
+  },
+  "pagerCardNotes": "Not: {notes}",
+  "@pagerCardNotes": {
+    "placeholders": {
+      "notes": {
+        "type": "String"
+      }
+    }
+  },
+  "pagerMenuSendTestNotification": "Test Bildirimi Gönder",
+  "pagerMenuMarkAsAvailable": "Boşta Olarak İşaretle",
+  "pagerMenuMarkAsCharging": "Şarjda Olarak İşaretle",
+  "pagerMenuMarkAsOutOfService": "Servis Dışı Bırak",
+  "pagerMenuDeleteFromSystem": "Sistemden Sil",
+  "pagerDialogDeleteTitle": "Cihazı Sil",
+  "pagerInfoDeviceDeleted": "Cihaz silindi.",
+  "pagerErrorDeleting": "Silme hatası: {error}",
+  "@pagerErrorDeleting": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "pagerTestNotificationSuccess": "Test bildirimi ({pagerName}) gönderildi.",
+  "@pagerTestNotificationSuccess": {
+    "placeholders": {
+      "pagerName": {
+        "type": "String"
+      }
+    }
+  },
+  "pagerTestNotificationFailure": "Bildirim gönderilemedi.",
+  "pagerDefaultDeviceName": "Cihaz",
+  "pagerDialogUpdateStatusTitle": "Durum Güncelleme",
+  "pagerDialogUpdateStatusContent": "'{pagerName}' cihazının durumunu '{status}' olarak değiştirmek istediğinize emin misiniz?",
+  "@pagerDialogUpdateStatusContent": {
+    "placeholders": {
+      "pagerName": {
+        "type": "String"
+      },
+      "status": {
+        "type": "String"
+      }
+    }
+  },
+  "pagerButtonConfirmChange": "Evet, Değiştir",
+  "pagerInfoStatusUpdated": "Çağrı cihazı durumu güncellendi.",
+  "pagerErrorStatusUpdate": "Durum güncellenirken hata: {error}",
+  "@pagerErrorStatusUpdate": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "pagerDialogAddTitle": "Yeni Çağrı Cihazı Ekle/Kaydet",
+  "pagerButtonScanning": "Taranıyor...",
+  "pagerButtonScanAndSelect": "Bluetooth Cihazlarını Tara ve Seç",
+  "pagerDiscoveredDevicesTitle": "Bulunan Bluetooth Cihazları",
+  "pagerUnknownDevice": "Bilinmeyen Cihaz",
+  "pagerInfoNoBleDevicesFound": "Çevrede Bluetooth cihazı bulunamadı.",
+  "pagerLabelDeviceIdRequired": "Cihaz ID (MAC Adresi)*",
+  "pagerValidatorDeviceIdRequired": "Cihaz ID gerekli.",
+  "pagerLabelDeviceNameOptional": "Cihaz Adı (Opsiyonel)",
+  "pagerLabelNotesOptional": "Notlar (Opsiyonel)",
+  "pagerButtonAdd": "Ekle",
+  "pagerStatusAvailable": "Boşta",
+  "pagerStatusInUse": "Kullanımda",
+  "pagerStatusCharging": "Şarj Oluyor",
+  "pagerStatusLowBattery": "Düşük Batarya",
+  "pagerStatusOutOfService": "Servis Dışı",
+  "createOrderErrorCannotTransfer": "Bu sipariş transfer edilemez: {status}",
+  "@createOrderErrorCannotTransfer": {
+    "placeholders": {
+      "status": {
+        "type": "String"
+      }
+    }
+  },
+  "createOrderErrorAlreadyProcessed": "Bu sipariş zaten işlem görmüş, iptal edilmiş veya tamamlanmış.",
+  "createOrderTooltipGoHome": "Ana Sayfa",
+  "createOrderButtonRetry": "Tekrar Dene",
+  "manageTablesTitle": "Masa Yönetimi",
+  "manageTablesErrorLoading": "Masa bilgileri alınırken hata oluştu: {statusCode}",
+  "@manageTablesErrorLoading": {
+    "placeholders": {
+      "statusCode": {
+        "type": "String"
+      }
+    }
+  },
+  "manageTablesDialogAddTitle": "Yeni Masa Oluştur",
+  "manageTablesDialogEditTitle": "Masayı Düzenle",
+  "manageTablesLabelTableNumber": "Masa Numarası",
+  "manageTablesValidatorEnterNumber": "Lütfen masa numarası girin",
+  "manageTablesValidatorInvalidNumber": "Geçerli bir sayı girin",
+  "manageTablesInfoCreated": "Masa başarıyla oluşturuldu!",
+  "manageTablesInfoUpdated": "Masa başarıyla güncellendi!",
+  "manageTablesErrorGeneric": "İşlem sırasında bir hata oluştu: {error}",
+  "@manageTablesErrorGeneric": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "manageTablesButtonCreate": "Oluştur",
+  "manageTablesDialogDeleteTitle": "Masayı Sil",
+  "manageTablesDialogDeleteContent": "Bu masayı silmek istediğinize emin misiniz? Bu işlem geri alınamaz.",
+  "manageTablesInfoDeleted": "Masa başarıyla silindi.",
+  "manageTablesErrorDeleting": "Masa silinirken hata: {error}",
+  "@manageTablesErrorDeleting": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "manageTablesInfoGuestLinkCopied": "Misafir QR linki panoya kopyalandı.",
+  "manageTablesErrorNoGuestLink": "Bu masa için geçerli bir misafir linki bulunamadı.",
+  "manageTablesDialogQrTitle": "Masa {tableNumber} QR Kodu",
+  "@manageTablesDialogQrTitle": {
+    "placeholders": {
+      "tableNumber": {
+        "type": "String"
+      }
+    }
+  },
+  "manageTablesErrorCreatingQr": "QR Kod oluşturulurken hata oluştu.",
+  "manageTablesTooltipAdd": "Yeni Masa Ekle",
+  "manageTablesNoTablesFound": "Henüz masa eklenmemiş.\nYeni masa eklemek için '+' butonunu kullanın.",
+  "manageTablesCardTitle": "Masa {tableNumber}",
+  "@manageTablesCardTitle": {
+    "placeholders": {
+      "tableNumber": {
+        "type": "String"
+      }
+    }
+  },
+  "manageTablesCardGuestLink": "Misafir Linki:",
+  "manageTablesTooltipCopyLink": "Linki Kopyala",
+  "manageTablesTooltipShowQr": "QR Kodu Göster",
+  "notificationsPageTitle": "Bildirimler",
+  "connectionStatusWaiting": "Bağlantı durumu bekleniyor...",
+  "connectionStatusConnected": "Bildirim sunucusuna bağlı.",
+  "connectionStatusConnectingOrDisconnected": "Bildirim sunucusuna bağlanılıyor veya bağlantı yok.",
+  "connectionStatusSocketError": "Socket.IO örneği sağlanamadı.",
+  "notificationTimestamp": "[{timestamp}] {message}",
+  "@notificationTimestamp": {
+    "placeholders": {
+      "timestamp": {
+        "type": "String"
+      },
+      "message": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationConnected": "Bildirim sunucusuna başarıyla bağlandı.",
+  "notificationDisconnected": "Bildirim sunucusuyla bağlantı koptu.",
+  "notificationConnectionError": "Bildirim sunucusuna bağlanırken hata oluştu.",
+  "notificationSystemError": "Bildirim sisteminde bir hata oluştu.",
+  "notificationDefaultOrderStatusUpdate": "Bir sipariş durumu güncellendi.",
+  "notificationDefaultWaitingListUpdate": "Bekleme listesi güncellendi.",
+  "notificationsNoNotifications": "Henüz bildirim yok.",
+  "addCampaignTitle": "Yeni Kampanya Oluştur",
+  "editCampaignTitle": "Kampanyayı Düzenle",
+  "campaignNameLabel": "Kampanya Adı*",
+  "validatorRequiredField": "Bu alan zorunludur",
+  "campaignDescriptionLabel": "Açıklama",
+  "campaignPriceLabel": "Kampanya Fiyatı*",
+  "validatorInvalidPositivePrice": "Geçerli pozitif bir fiyat girin",
+  "campaignActiveLabel": "Aktif Kampanya",
+  "campaignNoStartDate": "Başlangıç Tarihi Yok",
+  "campaignStartDateLabel": "Başlangıç: {date}",
+  "@campaignStartDateLabel": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "campaignNoEndDate": "Bitiş Tarihi Yok",
+  "campaignEndDateLabel": "Bitiş: {date}",
+  "@campaignEndDateLabel": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "campaignSelectImageButton": "Kampanya Görseli Seç",
+  "campaignImageNotSelected": "Görsel Seçilmedi",
+  "campaignErrorAddItem": "Kampanyaya en az bir ürün eklemelisiniz.",
+  "campaignErrorSubmit": "Kampanya kaydedilirken bir hata oluştu: {error}",
+  "@campaignErrorSubmit": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "campaignSuccessCreated": "Kampanya başarıyla oluşturuldu.",
+  "campaignSuccessUpdated": "Kampanya başarıyla güncellendi.",
+  "campaignCreateButton": "Kampanyayı Oluştur",
+  "campaignUpdateButton": "Kampanyayı Güncelle",
+  "newOrderTitle": "Yeni Sipariş - Masa {tableNumber}",
+  "@newOrderTitle": {
+    "placeholders": {
+      "tableNumber": {
+        "type": "String"
+      }
+    }
+  },
+  "newOrderLoadingInitialData": "Başlangıç verileri yüklenemedi.",
+  "newOrderLoadingData": "Veriler yükleniyor...",
+  "newOrderWaitingForTableType": "Masa tipi bekleniyor...",
+  "newOrderTableTypeSingle": "Tekil",
+  "newOrderTableTypeSplit": "Bölünmüş",
+  "newOrderNoOwnersEntered": "Masa sahipleri girilmedi.",
+  "newOrderOwnersList": "Sahipler: {owners}",
+  "@newOrderOwnersList": {
+    "placeholders": {
+      "owners": {
+        "type": "String"
+      }
+    }
+  },
+  "newOrderEditOwnersTooltip": "Masa Sahiplerini Düzenle",
+  "newOrderCreateOrderButton": "Siparişi Oluştur",
+  "newOrderErrorAddAtLeastOneProduct": "Lütfen en az bir ürün ekleyin.",
+  "newOrderErrorMinOwnersForSplit": "Bölünmüş masa için en az 2 masa sahibi adı girilmelidir.",
+  "newOrderSuccess": "Sipariş başarıyla oluşturuldu.",
+  "newOrderSuccessOffline": "Sipariş çevrimdışı olarak başarıyla kaydedildi. Bağlantı kurulduğunda gönderilecektir.",
+  "newOrderErrorGeneric": "Sipariş oluşturulurken hata oluştu ({statusCode}): {details}",
+  "@newOrderErrorGeneric": {
+    "placeholders": {
+      "statusCode": {
+        "type": "String"
+      },
+      "details": {
+        "type": "String"
+      }
+    }
+  },
+  "newOrderErrorCatch": "Sipariş oluşturma hatası: {error}",
+  "@newOrderErrorCatch": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "dialogTableTypeTitle": "Masa Tipi Seçimi",
+  "dialogTableTypeContent": "Bu masayı tek bir kişi mi yoksa birden fazla kişi arasında bölünmüş olarak mı kullanacaksınız?",
+  "dialogTableTypeButtonSingle": "Tekil Masa",
+  "dialogTableTypeButtonSplit": "Bölünmüş Masa",
+  "dialogTableOwnersTitle": "Masa Sahipleri",
+  "dialogTableOwnersHint": "Sahip Adı {number}",
+  "@dialogTableOwnersHint": {
+    "placeholders": {
+      "number": {
+        "type": "String"
+      }
+    }
+  },
+  "dialogTableOwnersAddButton": "Masa Sahibi Ekle",
+  "dialogButtonConfirmAction": "Onayla",
+  "completedOrdersTitle": "Ödenmiş Siparişler",
+  "completedOrdersUnknown": "Bilinmiyor",
+  "completedOrdersInvalidDate": "Hatalı Tarih",
+  "completedOrdersErrorLoadMore": "Daha fazla sipariş yüklenemedi.",
+  "completedOrdersNoOrdersFound": "Ödenmiş sipariş bulunamadı.",
+  "paymentTypeCreditCard": "Kredi Kartı",
+  "paymentTypeCash": "Nakit",
+  "paymentTypeFoodCard": "Yemek Kartı",
+  "paymentTypeUnknown": "Bilinmiyor",
+  "orderCardTitleTable": "Masa {tableNumber} - Sipariş #{orderId}",
+  "@orderCardTitleTable": {
+    "placeholders": {
+      "tableNumber": {
+        "type": "String"
+      },
+      "orderId": {
+        "type": "String"
+      }
+    }
+  },
+  "orderCardTitleTakeaway": "Paket - Sipariş #{orderId}",
+  "@orderCardTitleTakeaway": {
+    "placeholders": {
+      "orderId": {
+        "type": "String"
+      }
+    }
+  },
+  "orderCardDetailsButton": "Detay",
+  "manageStaffTitle": "Personel Yönetimi",
+  "manageStaffErrorFetching": "Personel listesi alınırken hata oluştu: {error}",
+  "@manageStaffErrorFetching": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "manageStaffTooltipAdd": "Yeni Personel Ekle",
+  "manageStaffNoStaff": "Henüz personel eklenmemiş.",
+  "manageStaffUnknownStaff": "Bilinmeyen Personel",
+  "manageStaffNoEmail": "E-posta yok",
+  "manageStaffDialogDeleteTitle": "Personeli Sil",
+  "manageStaffDialogDeleteContent": "Bu personeli silmek istediğinize emin misiniz? Bu işlem geri alınamaz.",
+  "manageStaffSuccessDelete": "Personel başarıyla silindi.",
+  "manageStaffErrorDelete": "Personel silinirken hata: {error}",
+  "@manageStaffErrorDelete": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "orderDetailTitle": "Sipariş #{orderId} Detayları",
+  "@orderDetailTitle": {
+    "placeholders": {
+      "orderId": {
+        "type": "String"
+      }
+    }
+  },
+  "durationNotCalculated": "Hesaplanamadı",
+  "durationZeroSeconds": "0 sn",
+  "timelineUnitHour": "sa",
+  "timelineUnitMinute": "dk",
+  "timelineUnitSecond": "sn",
+  "orderDetailCardGeneralInfo": "Genel Bilgiler",
+  "orderDetailLabelId": "Sipariş ID:",
+  "orderDetailLabelCustomer": "Müşteri:",
+  "orderDetailLabelType": "Sipariş Tipi:",
+  "orderDetailTypeTable": "Masa",
+  "orderDetailTypeTakeaway": "Paket Servis",
+  "orderDetailLabelTableNumber": "Masa No:",
+  "orderDetailLabelDate": "Tarih:",
+  "dataNotAvailable": "-",
+  "orderDetailCardTimeline": "Sipariş Zaman Akışı",
+  "timelineApprovalDuration": "Onay Süresi",
+  "timelineKitchenDuration": "Mutfak Hazırlama Süresi",
+  "timelineWaiterPickupDuration": "Garson Teslim Alma Süresi",
+  "timelineCustomerDeliveryDuration": "Müşteri Teslim Süresi",
+  "timelineTotalDuration": "Toplam Geçen Süre",
+  "takeawayOrderApproved": "Sipariş onaylandı.",
+  "takeawayErrorApproving": "Onaylama hatası: {error}",
+  "@takeawayErrorApproving": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "takeawayDialogRejectTitle": "Siparişi Reddet",
+  "takeawayDialogRejectContent": "Müşterinin eklediği ürünleri reddetmek istediğinize emin misiniz?",
+  "takeawayDialogButtonReject": "Evet, Reddet",
+  "takeawayOrderRejected": "Sipariş reddedildi.",
+  "takeawayErrorRejecting": "Reddetme hatası: {error}",
+  "@takeawayErrorRejecting": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "takeawayDialogCancelContent": "Bu siparişi iptal etmek istediğinize emin misiniz?",
+  "takeawayErrorCancellingWithCode": "Sipariş iptal edilirken hata: {statusCode}",
+  "@takeawayErrorCancellingWithCode": {
+    "placeholders": {
+      "statusCode": {
+        "type": "String"
+      }
+    }
+  },
+  "takeawayErrorAssigningPagerWithCode": "Cihaz atama hatası: {statusCode}",
+  "@takeawayErrorAssigningPagerWithCode": {
+    "placeholders": {
+      "statusCode": {
+        "type": "String"
+      }
+    }
+  },
+  "takeawayTooltipNewOrder": "Yeni Paket Sipariş",
+  "takeawayNoActiveOrders": "Aktif takeaway siparişi bulunmamaktadır.",
+  "takeawayOrderFormTitle": "Yeni Paket Sipariş",
+  "takeawayOrderFormErrorLoadingData": "Veriler yüklenirken hata: {error}",
+  "@takeawayOrderFormErrorLoadingData": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "takeawayOrderFormErrorCustomerInfo": "Lütfen müşteri bilgilerini eksiksiz girin.",
+  "takeawayOrderFormErrorAddProduct": "Lütfen en az bir ürün ekleyin.",
+  "takeawayOrderFormSuccess": "Paket sipariş başarıyla oluşturuldu.",
+  "takeawayOrderFormSuccessOffline": "Sipariş çevrimdışı kaydedildi. Bağlantı kurulduğunda gönderilecektir.",
+  "takeawayOrderFormErrorCreating": "Sipariş oluşturulurken hata oluştu.",
+  "takeawayOrderFormErrorCreatingWithCode": "Sipariş oluşturulurken hata: {statusCode}",
+  "@takeawayOrderFormErrorCreatingWithCode": {
+    "placeholders": {
+      "statusCode": {
+        "type": "String"
+      }
+    }
+  },
+  "takeawayOrderFormErrorCreatingGeneric": "Hata: {error}",
+  "@takeawayOrderFormErrorCreatingGeneric": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "takeawayOrderFormCustomerNameLabel": "Müşteri Adı Soyadı*",
+  "takeawayOrderFormCustomerNameValidator": "Müşteri adı gerekli.",
+  "takeawayOrderFormCustomerPhoneLabel": "Telefon Numarası*",
+  "takeawayOrderFormCustomerPhoneValidator": "Telefon numarası gerekli.",
+  "takeawayOrderFormCreateButton": "Siparişi Oluştur",
+  "staffPerformanceScreenTitle": "Personel Performans Raporu",
+  "staffPerformanceErrorFetching": "Performans verileri alınırken hata oluştu: {error}",
+  "@staffPerformanceErrorFetching": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "staffPerformanceTimeRangeToday": "Bugün",
+  "staffPerformanceTimeRangeThisWeek": "Bu Hafta",
+  "staffPerformanceTimeRangeThisMonth": "Bu Ay",
+  "staffPerformanceTimeRangeLast7Days": "Son 7 Gün",
+  "staffPerformanceTimeRangeLast30Days": "Son 30 Gün",
+  "staffPerformanceTimeRangeCustom": "Özel Tarih Aralığı",
+  "staffPerformancePickDateTooltip": "Tarih Aralığı Seç",
+  "staffPerformanceNoData": "Raporlanacak yetkiye sahip personel bulunamadı.",
+  "staffPerformanceOrderCountLabel": "Satış Sipariş Adedi: {count}",
+  "@staffPerformanceOrderCountLabel": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "staffPerformancePreparedItemsLabel": "Hazırlanan Ürün Adedi: {count}",
+  "@staffPerformancePreparedItemsLabel": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "staffPerformanceChipSalesPermission": "Satış Yetkisi",
+  "staffPerformanceChipKdsPermission": "KDS: {names}",
+  "@staffPerformanceChipKdsPermission": {
+    "placeholders": {
+      "names": {
+        "type": "String"
+      }
+    }
+  },
+  "manageCampaignsScreenTitle": "Kampanya Yönetimi",
+  "manageCampaignsTooltipAdd": "Yeni Kampanya Ekle",
+  "manageCampaignsErrorFetching": "Kampanyalar yüklenirken hata: {error}",
+  "@manageCampaignsErrorFetching": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "manageCampaignsNoCampaigns": "Henüz kampanya oluşturulmamış.",
+  "manageCampaignsDeleteDialogTitle": "Kampanyayı Sil",
+  "manageCampaignsDeleteDialogContent": "'{campaignName}' adlı kampanyayı silmek istediğinize emin misiniz? Bu işlem geri alınamaz.",
+  "@manageCampaignsDeleteDialogContent": {
+    "placeholders": {
+      "campaignName": {
+        "type": "String"
+      }
+    }
+  },
+  "manageCampaignsDeleteDialogConfirmButton": "Evet, Sil",
+  "manageCampaignsSuccessDelete": "'{campaignName}' kampanyası silindi.",
+  "@manageCampaignsSuccessDelete": {
+    "placeholders": {
+      "campaignName": {
+        "type": "String"
+      }
+    }
+  },
+  "manageCampaignsErrorDelete": "Kampanya silinirken hata: {error}",
+  "@manageCampaignsErrorDelete": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "manageCampaignsStatusActive": "Aktif",
+  "manageCampaignsStatusInactive": "Pasif",
+  "manageCampaignsStartDate": "Başlangıç: {date}",
+  "@manageCampaignsStartDate": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "manageCampaignsEndDate": " - Bitiş: {date}",
+  "@manageCampaignsEndDate": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "creditSalesScreenTitle": "Veresiye Yönetimi",
+  "creditSalesUnknown": "Bilinmiyor",
+  "creditSalesInvalidDate": "Hatalı Tarih",
+  "creditSalesErrorFetching": "Veresiye satışlar alınırken hata: {error}",
+  "@creditSalesErrorFetching": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "creditSalesErrorLoadMore": "Daha fazla veri yüklenemedi.",
+  "creditSalesNoActiveOrders": "Aktif veresiye siparişi bulunmamaktadır.",
+  "creditSalesCardOrderId": "Sipariş ID: #{orderId}",
+  "@creditSalesCardOrderId": {
+    "placeholders": {
+      "orderId": {
+        "type": "String"
+      }
+    }
+  },
+  "creditSalesCardCustomer": "Müşteri: {name}",
+  "@creditSalesCardCustomer": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "creditSalesCardPhone": "Telefon: {phone}",
+  "@creditSalesCardPhone": {
+    "placeholders": {
+      "phone": {
+        "type": "String"
+      }
+    }
+  },
+  "creditSalesCardNotes": "Not: {notes}",
+  "@creditSalesCardNotes": {
+    "placeholders": {
+      "notes": {
+        "type": "String"
+      }
+    }
+  },
+  "creditSalesCardCreditDate": "Veresiye Tarihi: {date}",
+  "@creditSalesCardCreditDate": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "creditSalesCardPayButton": "Ödeme Yap",
+  "kdsScreenTitle": "KDS: {screenName}",
+  "@kdsScreenTitle": {
+    "placeholders": {
+      "screenName": {
+        "type": "String"
+      }
+    }
+  },
+  "kdsScreenTooltipGoHome": "Ana Sayfa",
+  "kdsScreenTooltipBack": "Geri",
+  "kdsScreenTooltipRefresh": "Yenile",
+  "kdsScreenSnackbarOrderUpdated": "Sipariş durumu güncellendi.",
+  "kdsScreenErrorFetching": "KDS siparişleri alınırken hata: {error}",
+  "@kdsScreenErrorFetching": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "kdsScreenButtonRetry": "Tekrar Dene",
+  "kdsScreenNoOrders": "Bu KDS ekranı için hazırlanacak sipariş bulunmuyor.",
+  "manageShiftsScreenTitle": "Vardiya Şablonları",
+  "manageShiftsTooltipAdd": "Yeni Vardiya Şablonu Ekle",
+  "manageShiftsDeleteDialogTitle": "Vardiyayı Sil",
+  "manageShiftsDeleteDialogContent": "'{shiftName}' vardiya şablonu silinecek. Bu şablonun kullanıldığı tüm atamalar da silinir. Emin misiniz?",
+  "@manageShiftsDeleteDialogContent": {
+    "placeholders": {
+      "shiftName": {
+        "type": "String"
+      }
+    }
+  },
+  "manageShiftsSuccessDelete": "'{shiftName}' silindi.",
+  "@manageShiftsSuccessDelete": {
+    "placeholders": {
+      "shiftName": {
+        "type": "String"
+      }
+    }
+  },
+  "manageShiftsAddDialogTitle": "Yeni Vardiya Şablonu",
+  "manageShiftsEditDialogTitle": "Vardiyayı Düzenle",
+  "manageShiftsShiftNameLabel": "Vardiya Adı",
+  "manageShiftsStartTimeLabel": "Başlangıç: {time}",
+  "@manageShiftsStartTimeLabel": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "manageShiftsEndTimeLabel": "Bitiş: {time}",
+  "@manageShiftsEndTimeLabel": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "manageShiftsSelectButton": "Seç",
+  "manageShiftsColorLabel": "Vardiya Rengi",
+  "generalYes": "Evet",
+  "generalNo": "Hayır",
+  "manageKdsScreenTitle": "KDS Ekranları Yönetimi",
+  "manageKdsTooltipAdd": "Yeni KDS Ekranı Ekle",
+  "manageKdsErrorLoading": "KDS Ekranları yüklenirken hata: {error}",
+  "@manageKdsErrorLoading": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "manageKdsAddDialogTitle": "Yeni KDS Ekranı",
+  "manageKdsEditDialogTitle": "KDS Ekranını Düzenle",
+  "manageKdsNameLabel": "Ekran Adı*",
+  "manageKdsNameValidator": "Ekran adı gerekli.",
+  "manageKdsDescriptionLabel": "Açıklama (Opsiyonel)",
+  "manageKdsIsActiveLabel": "Aktif Mi?",
+  "manageKdsDeleteDialogTitle": "KDS Ekranını Sil",
+  "manageKdsDeleteDialogContent": "'{screenName}' adlı KDS ekranını silmek istediğinizden emin misiniz? Bu ekrana atanmış kategorilerin yönlendirmesi kaldırılacaktır.",
+  "@manageKdsDeleteDialogContent": {
+    "placeholders": {
+      "screenName": {
+        "type": "String"
+      }
+    }
+  },
+  "manageKdsSuccessDelete": "'{screenName}' KDS ekranı başarıyla silindi.",
+  "@manageKdsSuccessDelete": {
+    "placeholders": {
+      "screenName": {
+        "type": "String"
+      }
+    }
+  },
+  "manageKdsErrorDelete": "KDS ekranı silinirken hata: {error}",
+  "@manageKdsErrorDelete": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "manageKdsNoScreensFound": "Henüz KDS ekranı oluşturulmadı.",
+  "manageKdsCreateFirstButton": "İlk KDS Ekranını Oluştur",
+  "manageKdsNoDescription": "Açıklama yok",
+  "manageKdsListItemSubtitle": "{description}\nSlug: {slug} - Aktif: {isActive}",
+  "@manageKdsListItemSubtitle": {
+    "placeholders": {
+      "description": {
+        "type": "String"
+      },
+      "slug": {
+        "type": "String"
+      },
+      "isActive": {
+        "type": "String"
+      }
+    }
+  },
+  "passwordResetTitle": "Şifremi Unuttum",
+  "passwordResetSuccessMessage": "Şifre sıfırlama kodu e-posta adresinize gönderildi. Lütfen e-postanızı kontrol edin.",
+  "passwordResetInstruction": "Kayıtlı e-posta adresinizi girin. Size bir şifre sıfırlama kodu göndereceğiz.",
+  "passwordResetSendCodeButton": "Sıfırlama Kodu Gönder",
+  "passwordResetConfirmTitle": "Yeni Şifre Oluştur",
+  "passwordResetConfirmSuccessMessage": "Şifreniz başarıyla sıfırlandı. Lütfen yeni şifrenizle giriş yapın.",
+  "passwordResetConfirmInstruction": "E-postanıza gönderilen 6 haneli kodu ve yeni şifrenizi girin.",
+  "passwordResetConfirmCodeLabel": "Sıfırlama Kodu",
+  "passwordResetConfirmCodeValidator": "Lütfen sıfırlama kodunu girin.",
+  "passwordResetConfirmCodeLengthValidator": "Kod 6 haneli olmalıdır.",
+  "passwordResetConfirmResetButton": "Şifreyi Sıfırla",
+  "createCategoryScreenTitle": "Ürün Kategorisi Oluştur",
+  "createCategoryErrorLoadingParents": "Üst kategoriler yüklenirken hata: {error}",
+  "@createCategoryErrorLoadingParents": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "createCategoryPhotoNotSelected": "Fotoğraf seçilmedi.",
+  "createCategorySuccess": "Kategori başarıyla oluşturuldu!",
+  "createCategoryError": "Kategori oluşturulurken hata: {statusCode} - {details}",
+  "@createCategoryError": {
+    "placeholders": {
+      "statusCode": {
+        "type": "String"
+      },
+      "details": {
+        "type": "String"
+      }
+    }
+  },
+  "createCategoryButton": "Kategori Oluştur",
+  "stockHistoryScreenTitle": "{variantName} - Stok Geçmişi",
+  "@stockHistoryScreenTitle": {
+    "placeholders": {
+      "variantName": {
+        "type": "String"
+      }
+    }
+  },
+  "stockHistoryFiltersTitle": "Filtreler:",
+  "stockHistorySelectDateRange": "Tarih Aralığı Seç",
+  "stockHistoryDateRangeDisplay": "{startDate} - {endDate}",
+  "@stockHistoryDateRangeDisplay": {
+    "placeholders": {
+      "startDate": {
+        "type": "String"
+      },
+      "endDate": {
+        "type": "String"
+      }
+    }
+  },
+  "stockHistoryMovementTypeLabel": "Hareket Tipi",
+  "stockHistoryMovementTypeAll": "Tümü",
+  "stockHistoryMovementTypeInitial": "Başlangıç Stoku",
+  "stockHistoryMovementTypeSale": "Satış",
+  "stockHistoryMovementTypeReturn": "Müşteri İadesi",
+  "stockHistoryMovementTypeAdjIn": "Sayım Düzeltme (Fazla)",
+  "stockHistoryMovementTypeAdjOut": "Sayım Düzeltme (Eksik)",
+  "stockHistoryMovementTypeWastage": "Zayiat/Fire",
+  "stockHistoryMovementTypeManual": "Manuel Düzenleme",
+  "stockHistoryNoMovements": "Stok hareketi bulunamadı.",
+  "stockHistoryMovementTitle": "{movementType}: {change}",
+  "@stockHistoryMovementTitle": {
+    "placeholders": {
+      "movementType": {
+        "type": "String"
+      },
+      "change": {
+        "type": "String"
+      }
+    }
+  },
+  "stockHistoryQuantityChange": "Önce: {before} → Sonra: {after}",
+  "@stockHistoryQuantityChange": {
+    "placeholders": {
+      "before": {
+        "type": "String"
+      },
+      "after": {
+        "type": "String"
+      }
+    }
+  },
+  "stockHistoryDateLabel": "Tarih: {date}",
+  "@stockHistoryDateLabel": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "stockHistoryUserLabel": "Kullanıcı: {username}",
+  "@stockHistoryUserLabel": {
+    "placeholders": {
+      "username": {
+        "type": "String"
+      }
+    }
+  },
+  "stockHistoryDescriptionLabel": "Açıklama: {description}",
+  "@stockHistoryDescriptionLabel": {
+    "placeholders": {
+      "description": {
+        "type": "String"
+      }
+    }
+  },
+  "stockHistoryRelatedOrderLabel": "İlişkili Sipariş: #{orderId}",
+  "@stockHistoryRelatedOrderLabel": {
+    "placeholders": {
+      "orderId": {
+        "type": "String"
+      }
+    }
+  },
+  "manageVariantListScreenTitle": "Menü Ürün Varyantları",
+  "manageVariantListItemId": "ID: {id}",
+  "manageVariantListErrorLoading": "Menü öğeleri yüklenirken bir hata oluştu.",
+  "@manageVariantListItemId": {
+    "placeholders": {
+      "id": {
+        "type": "String"
+      }
+    }
+  },
+  "pagerAssignmentScreenTitle": "Boşta Çağrı Cihazı Seç",
+  "pagerAssignmentTooltipRefresh": "Listeyi Yenile",
+  "pagerAssignmentErrorNoAvailable": "Şu anda boşta uygun çağrı cihazı bulunmuyor.",
+  "pagerAssignmentErrorNoRegistered": "Sisteme kayıtlı çağrı cihazı bulunmuyor.",
+  "pagerAssignmentErrorFetch": "Boşta çağrı cihazları getirilirken hata: {error}",
+  "@pagerAssignmentErrorFetch": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "pagerAssignmentDefaultError": "Atanabilecek boşta çağrı cihazı bulunmuyor.",
+  "pagerAssignmentStatusLabel": "Durum: {status}",
+  "@pagerAssignmentStatusLabel": {
+    "placeholders": {
+      "status": {
+        "type": "String"
+      }
+    }
+  },
+  "paymentProcessingScreenTitle": "Ödeme İşlemi",
+  "paymentProcessingTableLabel": "Masa: {tableNumber}",
+  "@paymentProcessingTableLabel": {
+    "placeholders": {
+      "tableNumber": {
+        "type": "String"
+      }
+    }
+  },
+  "paymentProcessingSelectTypeLabel": "Ödeme Türünü Seçin:",
+  "paymentProcessingSuccess": "Ödeme başarıyla tamamlandı!",
+  "paymentProcessingError": "Ödeme tamamlanırken bir hata oluştu.",
+  "setupCategoriesErrorSelectKds": "Lütfen kategorinin görüntüleneceği KDS ekranını seçin.",
+  "setupCategoriesSuccessAdded": "'{categoryName}' kategorisi başarıyla eklendi.",
+  "setupCategoriesDeleteDialogContent": "'{categoryName}' kategorisini ve (varsa) tüm alt kategorilerini silmek istediğinizden emin misiniz? Bu işlem, ürünlerin kategori bağlantısını kaldıracaktır.",
+  "setupCategoriesInfoDeleted": "'{categoryName}' kategorisi silindi.",
+  "setupCategoriesErrorDeleting": "Kategori silinirken hata: {error}",
+  "setupCategoriesDescription": "Siparişlerinizi ve ürünlerinizi kategorilere ayırarak menünüzü düzenleyin.",
+  "setupCategoriesMainCategory": "Ana Kategori",
+  "setupCategoriesKdsLoading": "KDS Ekranları Yükleniyor...",
+  "setupCategoriesErrorDefineKdsFirst": "Lütfen önce bir KDS ekranı tanımlayın.",
+  "setupCategoriesLabelDisplayKds": "Görüntülenecek KDS Ekranı*",
+  "setupCategoriesHintSelectKds": "KDS Ekranı Seçin",
+  "setupCategoriesValidatorSelectKds": "Lütfen bir KDS ekranı seçin.",
+  "setupCategoriesSelectImageLabel": "Kategori Görseli Seç\n(Opsiyonel)",
+  "setupCategoriesAddButton": "Kategori Ekle",
+  "setupCategoriesAddedTitle": "Eklenen Kategoriler",
+  "setupCategoriesSubtitleParent": " (Üst Kategori: {parentName})",
+  "setupCategoriesSubtitleKdsName": " (KDS: {kdsName})",
+  "setupCategoriesSubtitleKdsId": " (KDS ID: {kdsId})",
+  "setupCategoriesKdsNotAssigned": "KDS Atanmamış",
+  "setupCategoriesDeleteTooltip": "Kategoriyi Sil",
+  "setupCategoriesDeleteFallbackName": "bu kategori",
+  "setupStockErrorEnterQuantity": "{itemName} - {variantName} için miktar girilmedi.",
+  "setupStockErrorInvalidQuantity": "{itemName} - {variantName} için geçerli bir miktar girin.",
+  "setupStockSuccessUpdated": "{itemName} - {variantName} için stok güncellendi: {quantity}",
+  "setupStockErrorUpdating": "{itemName} - {variantName} stoğu güncellenirken hata: {error}",
+  "setupStockUnknownProduct": "Bilinmeyen Ürün",
+  "setupStockErrorNoVariants": "Stok takibi için lütfen önceki adımlarda ürün ve varyant oluşturun.",
+  "setupStockDescription": "Ürünlerinizin başlangıç stok miktarlarını girin. Bu adımı daha sonra da tamamlayabilirsiniz.",
+  "setupStockNoStockEntered": "Henüz stok girilmedi.",
+  "setupStockLastUpdate": "Son Güncelleme: {date}",
+  "dateTimeFormat": "dd.MM.yy HH:mm",
+  "setupStockQuantityHint": "Adet",
+  "setupKdsErrorLoadingExisting": "Mevcut ekranlar yüklenemedi: {error}",
+  "setupKdsDefaultKitchen": "Mutfak",
+  "setupKdsDefaultBar": "Bar",
+  "setupKdsErrorEnterOneName": "Lütfen en az bir geçerli ekran adı girin.",
+  "setupKdsSuccessCreated": "{count} adet yeni KDS ekranı oluşturuldu.",
+  "setupKdsDeleteDialogTitle": "Ekranı Sil",
+  "setupKdsDeleteDialogContent": "'{screenName}' adlı ekranı silmek istediğinizden emin misiniz?",
+  "setupKdsInfoDeleted": "'{screenName}' silindi.",
+  "setupKdsErrorDeleting": "Silme hatası: {error}",
+  "setupKdsEditDialogTitle": "Ekranı Düzenle",
+  "setupKdsEditDialogNameLabel": "Ekran Adı",
+  "setupKdsEditDialogActiveLabel": "Aktif",
+  "setupKdsErrorUpdating": "Güncelleme hatası: {error}",
+  "setupKdsDescription": "Sipariş sürecinizi kaç ekrana bölmek istersiniz? (Örn: Mutfak, Bar, Pastane)",
+  "setupKdsNewLabel": "Yeni Ekran Sayısı*",
+  "setupKdsScreenNameLabel": "Ekran {number} Adı*",
+  "setupKdsScreenNameValidator": "Ekran adı boş olamaz.",
+  "setupKdsAddButton": "Yeni Ekran(lar) Ekle",
+  "setupKdsExistingTitle": "Mevcut KDS Ekranları",
+  "setupKdsNoScreensYet": "Henüz KDS ekranı oluşturulmadı.",
+  "setupKdsStatusLabel": "Durum: {status}",
+  "setupKdsStatusActive": "Aktif",
+  "setupKdsStatusInactive": "Pasif",
+  "setupTablesErrorLoadingExisting": "Mevcut masalar yüklenirken bir hata oluştu.",
+  "setupTablesSuccessCreated": "{count} adet yeni masa başarıyla oluşturuldu.\nToplam masa sayısı: {total}",
+  "setupTablesDescription": "İşletmenizdeki toplam masa sayısını girerek tüm masalarınızı anında oluşturun. Her masa için otomatik olarak oluşturulacak QR menülerinizi, kurulum ekranı tamamladıktan sonra görüntüleyebilirsiniz.",
+  "setupTablesLabelQuantity": "Oluşturulacak Masa Adedi",
+  "setupTablesButtonCreate": "Masaları Oluştur",
+  "setupTablesLoadingExisting": "Mevcut masalar yükleniyor...",
+  "setupTablesTotalCreated": "Oluşturulan Toplam Masa: {count}",
+  "setupMenuItemsErrorSelectCategory": "Lütfen ürün için bir kategori seçin.",
+  "setupMenuItemsSuccessAdded": "'{productName}' ürünü başarıyla eklendi.",
+  "setupMenuItemsInfoDeleted": "'{productName}' ürünü silindi.",
+  "setupMenuItemsDescription": "Menü öğelerinizi ekleyin. Fiyatları ve varyantları bir sonraki adımda ekleyebilirsiniz.",
+  "setupMenuItemsNameLabel": "Ürün Adı*",
+  "setupMenuItemsNameValidator": "Ürün adı gerekli.",
+  "setupMenuItemsDescriptionLabel": "Açıklama (Opsiyonel)",
+  "setupMenuItemsLoadingCategories": "Kategoriler yükleniyor...",
+  "setupMenuItemsErrorCreateCategoryFirst": "Lütfen önce bir kategori oluşturun veya önceki adıma geri dönün.",
+  "setupMenuItemsSelectCategoryLabel": "Kategori Seçin*",
+  "setupMenuItemsSelectCategoryValidator": "Lütfen bir kategori seçin.",
+  "setupMenuItemsSelectImageLabel": "Ürün Görseli Seç\n(Opsiyonel)",
+  "setupMenuItemsAddButton": "Ürün Ekle",
+  "setupMenuItemsAddedTitle": "Eklenen Ürünler",
+  "setupMenuItemsNoCategory": "Kategorisiz",
+  "setupMenuItemsDeleteTooltip": "Ürünü Sil",
+  "setupVariantsErrorLoadingMenuItems": "Menü öğeleri yüklenirken hata: {error}",
+  "setupVariantsErrorLoadingVariants": "Varyantlar yüklenirken hata: {error}",
+  "setupVariantsErrorSelectMainProductFirst": "Lütfen önce bir ana ürün seçin.",
+  "setupVariantsSuccessAdded": "'{variantName}' varyantı başarıyla eklendi.",
+  "setupVariantsLoadingMainProducts": "Ana ürünler yükleniyor...",
+  "setupVariantsErrorCreateMainProductFirst": "Lütfen önce bir ana ürün oluşturun (Önceki Adım).",
+  "setupVariantsLabelSelectMainProduct": "Varyant Eklenecek Ana Ürün*",
+  "setupVariantsValidatorSelectMainProduct": "Lütfen bir ana ürün seçin.",
+  "setupVariantsTitleAddNew": "Yeni Varyant Ekle: {productName}",
+  "setupVariantsLabelVariantName": "Varyant Adı* (örn: Büyük, Acılı)",
+  "setupVariantsLabelSelectImage": "Varyant Görseli Seç\n(Opsiyonel)",
+  "setupVariantsTitleAddedFor": "{productName} İçin Eklenen Varyantlar",
+  "setupVariantsLoading": "Varyantlar yükleniyor...",
+  "setupVariantsHintSelectProductToView": "Varyantlarını görmek için bir ana ürün seçin.",
+  "setupVariantsNoVariantsForProduct": "{productName} için henüz varyant eklenmedi.",
+  "homeMenuStaffSchedule": "Personel Vardiyası",
+  "homeMenuKds": "Mutfak Ekranı",
+  "homeMenuKdsSettings": "KDS Ayarları",
+  "homeMenuGeneralReport": "Genel Raporlar",
+  "homeMenuStaffPerformance": "Personel Performansı",
+  "homeMenuCreditSales": "Veresiye Satışlar",
+  "homeMenuStaffManagement": "Personel Yönetimi",
+  "homeMenuMenuItems": "Menü Öğeleri",
+  "homeMenuProductVariants": "Ürün Varyantları",
+  "homeMenuStockManagement": "Stok Yönetimi",
+  "homeMenuTableManagement": "Masa Yönetimi",
+  "homeMenuCategoryManagement": "Kategori Yönetimi",
+  "homeMenuCampaignManagement": "Kampanya Yönetimi",
+  "homeMenuPaidOrders": "Ödenmiş Siparişler",
+  "homeMenuActiveTableOrders": "Aktif Masa Siparişleri",
+  "homeMenuActiveTakeawayOrders": "Aktif Paket Siparişler",
+  "homeMenuWaitingCustomers": "Sıradaki Müşteriler",
+  "homeMenuPagerManagement": "Pager Yönetimi",
+  "homeMenuPrinterSettings": "Yazıcı Ayarları",
+  "homeMenuAccountSettings": "Hesap Ayarları",
+  "dialogTransferErrorNoEmptyTables": "Transfer için uygun boş masa bulunamadı!",
+  "dialogTransferTitle": "Masa Transferi",
+  "dialogTransferContent": "{tableNumber} numaralı masadan siparişi transfer et?",
+  "@dialogTransferContent": {
+    "placeholders": {
+      "tableNumber": {
+        "type": "String"
+      }
+    }
+  },
+  "dialogTransferDropdownLabel": "Yeni Masa Seçin",
+  "dialogTransferButtonTransfer": "Transfer Et",
+  "takeawayCardErrorItemPickup": "Ürün teslim alındı olarak işaretlenemedi (Kod: {statusCode})",
+  "@takeawayCardErrorItemPickup": {
+    "placeholders": {
+      "statusCode": {
+        "type": "String"
+      }
+    }
+  },
+  "takeawayCardErrorItemPickupGeneric": "Ürün teslim alınırken bir hata oluştu: {error}",
+  "@takeawayCardErrorItemPickupGeneric": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "takeawayCardTooltipDelivered": "Müşteriye Teslim Edildi",
+  "takeawayCardTooltipMarkAsPickedUp": "Teslim Alındı Olarak İşaretle",
+  "takeawayCardTooltipDeliverToCustomer": "Müşteriye Teslim Et",
+  "kdsStatusWaitingForApproval": "Onay Bekliyor",
+  "takeawayCardStatusSyncPending": "Senkronizasyon Bekleniyor...",
+  "buttonApprove": "Onayla",
+  "buttonReject": "Reddet",
+  "takeawayCardTooltipPagerInfo": "Atanmış Pager: {pagerInfo}",
+  "@takeawayCardTooltipPagerInfo": {
+    "placeholders": {
+      "pagerInfo": {
+        "type": "String"
+      }
+    }
+  },
+  "takeawayCardTooltipAssignPager": "Pager Ata",
+  "paymentTypeCredit": "Veresiye",
+  "waitingCustomerDialogEditTitle": "Müşteri Düzenle",
+  "waitingCustomerDialogNameLabel": "İsim Soyisim*",
+  "waitingCustomerDialogNameValidator": "İsim boş olamaz",
+  "waitingCustomerDialogPhoneLabel": "Telefon",
+  "waitingCustomerDialogPartySizeLabel": "Kişi Sayısı*",
+  "waitingCustomerDialogPartySizeValidatorRequired": "Kişi sayısı boş olamaz",
+  "waitingCustomerDialogPartySizeValidatorPositive": "Geçerli pozitif bir sayı girin",
+  "waitingCustomerDialogNotesLabel": "Notlar (Opsiyonel)",
+  "waitingCustomerDialogWaitingLabel": "Bekliyor",
+  "waitingCustomerDialogDeleteTitle": "Müşteri Sil",
+  "waitingCustomerDialogDeleteContent": "ID: {customerId} olan müşteriyi silmek istediğinize emin misiniz?",
+  "@waitingCustomerDialogDeleteContent": {
+    "placeholders": {
+      "customerId": {
+        "type": "String"
+      }
+    }
+  },
+  "addCustomerFormNameLabel": "İsim Soyisim*",
+  "addCustomerFormAddButton": "Müşteri Ekle",
+  "waitingCustomerTableWaitingTime": "{minutes} dk",
+  "@waitingCustomerTableWaitingTime": {
+    "placeholders": {
+      "minutes": {
+        "type": "String"
+      }
+    }
+  },
+  "waitingCustomerTableNoCustomers": "Bekleyen müşteri yok.",
+  "waitingCustomerTableColOrder": "Sıra",
+  "waitingCustomerTableColName": "İsim",
+  "waitingCustomerTableColPhone": "Telefon",
+  "waitingCustomerTableColWaitingTime": "Bekleme\nSüresi",
+  "waitingCustomerTableColActions": "İşlemler",
+  "multiDayShiftDialogTitle": "{count} Gün İçin Atama Yap",
+  "@multiDayShiftDialogTitle": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "multiDayShiftDialogSelectedDatesLabel": "Seçilen Tarihler: ",
+  "multiDayShiftDialogStep1": "1. Personelleri Seçin:",
+  "multiDayShiftDialogStep2": "2. Vardiyayı Seçin:",
+  "multiDayShiftDialogHint": "Vardiya şablonu seçin...",
+  "multiDayShiftDialogValidator": "Lütfen bir vardiya seçin.",
+  "waitingCustomerButtonLabel": "Bekleyen ({count} kişi)",
+  "@waitingCustomerButtonLabel": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationEventGuestOrderPendingApproval": "Misafir Siparişi Onay Bekliyor",
+  "notificationEventOrderPendingApproval": "Kayıtlı Kullanıcı Siparişi Onay Bekliyor",
+  "notificationEventExistingOrderNeedsReapproval": "Mevcut Sipariş Tekrar Onay Bekliyor",
+  "notificationEventNewApprovedOrder": "Yeni Onaylanmış Sipariş",
+  "notificationEventOrderApprovedForKitchen": "Sipariş Mutfağa İletildi",
+  "notificationEventOrderPreparingUpdate": "Sipariş Hazırlanıyor",
+  "notificationEventOrderReadyForPickupUpdate": "Sipariş Mutfakta Hazır",
+  "notificationEventOrderPickedUpByWaiter": "Sipariş Garson Tarafından Alındı",
+  "notificationEventOrderOutForDeliveryUpdate": "Sipariş Teslime Hazır",
+  "notificationEventOrderItemDelivered": "Ürün Teslim Edildi",
+  "notificationEventOrderFullyDelivered": "Sipariş Tümüyle Teslim Edildi",
+  "notificationEventOrderCompletedUpdate": "Sipariş Tamamlandı",
+  "notificationEventOrderCancelledUpdate": "Sipariş İptal Edildi",
+  "notificationEventOrderRejectedUpdate": "Sipariş Reddedildi",
+  "notificationEventOrderUpdated": "Sipariş Güncellendi",
+  "notificationEventOrderItemAdded": "Siparişe Ürün Eklendi",
+  "notificationEventOrderItemRemoved": "Siparişten Ürün Çıkarıldı",
+  "notificationEventOrderItemUpdated": "Sipariş Kalemi Güncellendi",
+  "notificationEventOrderTransferred": "Sipariş Başka Masaya Transfer Edildi",
+  "notificationEventWaitingCustomerAdded": "Yeni Bekleyen Müşteri",
+  "notificationEventWaitingCustomerUpdated": "Bekleyen Müşteri Güncellemesi",
+  "notificationEventWaitingCustomerRemoved": "Bekleyen Müşteri Silindi",
+  "notificationEventStockAdjusted": "Stok Güncellemesi",
+  "notificationEventPagerStatusUpdated": "Çağrı Cihazı Durumu Güncellendi",
+  "orderStatusPendingApproval": "Onay Bekliyor",
+  "orderStatusApproved": "Onaylandı",
+  "orderStatusPreparing": "Hazırlanıyor",
+  "orderStatusReadyForPickup": "Mutfakta Hazır",
+  "orderStatusReadyForDelivery": "Teslime Hazır",
+  "orderStatusCompleted": "Tamamlandı",
+  "orderStatusCancelled": "İptal Edildi",
+  "orderStatusRejected": "Reddedildi",
+  "orderStatusPendingSync": "Senkronizasyon Bekliyor",
+  "unknown": "Bilinmiyor",
+  "creditPaymentTitle": "Veresiye Kaydı",
+  "creditPaymentValidationError": "İsim ve telefon alanları boş bırakılamaz.",
+  "creditPaymentSuccess": "Veresiye kaydı başarıyla oluşturuldu!",
+  "creditPaymentErrorWithDetails": "Veresiye kaydı sırasında hata oluştu: {statusCode} - {details}",
+  "creditPaymentCustomerNameLabel": "Müşteri Adı Soyadı*",
+  "creditPaymentPhoneLabel": "Telefon*",
+  "creditPaymentNotesLabel": "Notlar (Opsiyonel)",
+  "creditPaymentSaveButton": "Veresiye Kaydet",
+  "orderItemQuantity": "Adet: {count}",
+  "@orderItemQuantity": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "orderItemExtrasLabel": "Ekstralar:",
+  "orderItemUnknownExtra": "Bilinmeyen Ekstra",
+  "orderItemTableOwner": "Masa Sahibi: {owner}",
+  "@orderItemTableOwner": {
+    "placeholders": {
+      "owner": {
+        "type": "String"
+      }
+    }
+  },
+  "orderItemStatusDelivered": "Teslim Edildi",
+  "orderItemTooltipAddExtra": "Ekstra Ekle",
+  "orderItemTooltipRemove": "Kaldır",
+  "kdsStatusDisplayNoActionNeeded": "{kdsName}: İşlem Gerekmiyor",
+  "@kdsStatusDisplayNoActionNeeded": {
+    "description": "KDS ekranında bu siparişle ilgili yapılacak bir işlem olmadığını belirten başlık.",
+    "placeholders": {
+      "kdsName": {
+        "type": "String",
+        "example": "Mutfak"
+      }
+    }
+  },
+  "kdsStatusDisplaySentToKitchen": "{kdsName}: Mutfağa İletildi",
+  "@kdsStatusDisplaySentToKitchen": {
+    "description": "Siparişin ilgili KDS ekranına yeni gönderildiğini belirten başlık.",
+    "placeholders": {
+      "kdsName": {
+        "type": "String",
+        "example": "Mutfak"
+      }
+    }
+  },
+  "kdsStatusDisplayPreparing": "{kdsName}: {readyCount}/{totalCount} ürün hazırlanıyor",
+  "@kdsStatusDisplayPreparing": {
+    "description": "KDS ekranında hazırlık aşamasındaki ürün sayısını gösteren başlık.",
+    "placeholders": {
+      "kdsName": {
+        "type": "String",
+        "example": "Bar"
+      },
+      "readyCount": {
+        "type": "String",
+        "example": "1"
+      },
+      "totalCount": {
+        "type": "String",
+        "example": "3"
+      }
+    }
+  },
+  "kdsStatusDisplayReadyForPickup": "{kdsName}: Tüm ürünler hazır, garson bekleniyor",
+  "@kdsStatusDisplayReadyForPickup": {
+    "description": "KDS ekranındaki tüm ürünlerin hazır olduğunu ve garson tarafından alınmayı beklediğini belirten başlık.",
+    "placeholders": {
+      "kdsName": {
+        "type": "String",
+        "example": "Mutfak"
+      }
+    }
+  },
+  "kdsStatusDisplayAllPickedUp": "{kdsName}: Tüm ürünler alındı",
+  "@kdsStatusDisplayAllPickedUp": {
+    "description": "KDS ekranındaki tüm ürünlerin garson tarafından alındığını belirten başlık.",
+    "placeholders": {
+      "kdsName": {
+        "type": "String",
+        "example": "Mutfak"
+      }
+    }
+  },
+  "kdsStatusDisplayDefault": "{kdsName}: Durum Bilinmiyor",
+  "@kdsStatusDisplayDefault": {
+    "description": "KDS başlığı için varsayılan durum metni.",
+    "placeholders": {
+      "kdsName": {
+        "type": "String",
+        "example": "Mutfak"
+      }
+    }
+  },
+  "waitingCustomerErrorFetchList": "Müşteri listesi alınamadı ({statusCode}) - {details}",
+  "@waitingCustomerErrorFetchList": {
+    "placeholders": {
+      "statusCode": {
+        "type": "String"
+      },
+      "details": {
+        "type": "String"
+      }
+    }
+  },
+  "waitingCustomerErrorFetchListGeneric": "Müşteri listesi alınırken hata: {error}",
+  "@waitingCustomerErrorFetchListGeneric": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "waitingCustomerErrorNameEmpty": "İsim boş olamaz.",
+  "waitingCustomerErrorPartySizePositive": "Kişi sayısı pozitif bir değer olmalıdır.",
+  "waitingCustomerSuccessAdd": "Müşteri başarıyla eklendi.",
+  "waitingCustomerErrorAdd": "Müşteri eklenirken hata: {statusCode} - {details}",
+  "@waitingCustomerErrorAdd": {
+    "placeholders": {
+      "statusCode": {
+        "type": "String"
+      },
+      "details": {
+        "type": "String"
+      }
+    }
+  },
+  "waitingCustomerErrorAddGeneric": "Müşteri ekleme hatası: {error}",
+  "@waitingCustomerErrorAddGeneric": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "waitingCustomerSuccessUpdate": "Müşteri başarıyla güncellendi.",
+  "waitingCustomerErrorUpdate": "Müşteri güncellenirken hata: {statusCode} - {details}",
+  "@waitingCustomerErrorUpdate": {
+    "placeholders": {
+      "statusCode": {
+        "type": "String"
+      },
+      "details": {
+        "type": "String"
+      }
+    }
+  },
+  "waitingCustomerErrorUpdateGeneric": "Müşteri güncelleme hatası: {error}",
+  "@waitingCustomerErrorUpdateGeneric": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "waitingCustomerInfoDeleting": "Müşteri siliniyor...",
+  "waitingCustomerSuccessDelete": "Müşteri başarıyla silindi.",
+  "waitingCustomerErrorDelete": "Müşteri silinirken hata: {statusCode} - {details}",
+  "@waitingCustomerErrorDelete": {
+    "placeholders": {
+      "statusCode": {
+        "type": "String"
+      },
+      "details": {
+        "type": "String"
+      }
+    }
+  },
+  "waitingCustomerErrorDeleteGeneric": "Müşteri silme hatası: {error}",
+  "@waitingCustomerErrorDeleteGeneric": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "pagerServiceErrorFetch": "Çağrı cihazları alınamadı: {statusCode}",
+  "@pagerServiceErrorFetch": {
+    "placeholders": {
+      "statusCode": {
+        "type": "String"
+      }
+    }
+  },
+  "pagerServiceErrorFetchGeneric": "Çağrı cihazları çekilirken hata: {error}",
+  "@pagerServiceErrorFetchGeneric": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "pagerServiceErrorCreate": "Çağrı cihazı oluşturulamadı: {statusCode} - {details}",
+  "@pagerServiceErrorCreate": {
+    "placeholders": {
+      "statusCode": {
+        "type": "String"
+      },
+      "details": {
+        "type": "String"
+      }
+    }
+  },
+  "pagerServiceErrorCreateGeneric": "Çağrı cihazı oluşturulurken hata: {error}",
+  "@pagerServiceErrorCreateGeneric": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "pagerServiceErrorUpdateNoData": "Güncellenecek veri bulunamadı.",
+  "pagerServiceErrorUpdate": "Çağrı cihazı güncellenemedi: {statusCode} - {details}",
+  "@pagerServiceErrorUpdate": {
+    "placeholders": {
+      "statusCode": {
+        "type": "String"
+      },
+      "details": {
+        "type": "String"
+      }
+    }
+  },
+  "pagerServiceErrorUpdateGeneric": "Çağrı cihazı güncellenirken hata: {error}",
+  "@pagerServiceErrorUpdateGeneric": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "pagerServiceErrorDelete": "Çağrı cihazı silinemedi: {statusCode}",
+  "@pagerServiceErrorDelete": {
+    "placeholders": {
+      "statusCode": {
+        "type": "String"
+      }
+    }
+  },
+  "pagerServiceErrorDeleteGeneric": "Çağrı cihazı silinirken hata: {error}",
+  "@pagerServiceErrorDeleteGeneric": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "bleStatusNotConnected": "Bağlı değil",
+  "bleStatusUnsupportedWeb": "Bluetooth LE web platformunda desteklenmiyor.",
+  "bleStatusUnsupportedDevice": "Bluetooth LE bu cihazda desteklenmiyor.",
+  "bleStatusOn": "Bluetooth açık, cihaz aranabilir.",
+  "bleStatusOff": "Bluetooth kapalı.",
+  "bleStatusPermissionsRequired": "Bluetooth izinleri gerekli.",
+  "bleStatusScanning": "Çağrı cihazları aranıyor...",
+  "bleStatusScanError": "Tarama hatası: {error}",
+  "@bleStatusScanError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "bleStatusScanStopped": "Tarama durdu.",
+  "bleStatusDeviceFound": "{count} cihaz bulundu.",
+  "@bleStatusDeviceFound": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "bleStatusDeviceNotFound": "Cihaz bulunamadı.",
+  "bleStatusConnectingTo": "{deviceName}'e bağlanılıyor...",
+  "@bleStatusConnectingTo": {
+    "placeholders": {
+      "deviceName": {
+        "type": "String"
+      }
+    }
+  },
+  "bleStatusConnectedTo": "{deviceName} bağlandı.",
+  "@bleStatusConnectedTo": {
+    "placeholders": {
+      "deviceName": {
+        "type": "String"
+      }
+    }
+  },
+  "bleStatusCouldNotConnectTo": "{deviceName}'e bağlanılamadı.",
+  "@bleStatusCouldNotConnectTo": {
+    "placeholders": {
+      "deviceName": {
+        "type": "String"
+      }
+    }
+  },
+  "bleStatusDisconnectedFrom": "{deviceName} bağlantısı kesildi.",
+  "@bleStatusDisconnectedFrom": {
+    "placeholders": {
+      "deviceName": {
+        "type": "String"
+      }
+    }
+  },
+  "bleStatusDisconnectError": "Bağlantı kesilirken hata oluştu.",
+  "bleStatusDiscoveringServices": "Servisler ve karakteristikler aranıyor...",
+  "bleStatusDiscoveringServicesError": "Servis keşfi hatası.",
+  "bleStatusCharacteristicFound": "Komut karakteristiği bulundu. Cihaz hazır.",
+  "bleStatusCharacteristicNotFound": "Uygun servis/karakteristik bulunamadı.",
+  "bleStatusCommandSent": "Komut gönderildi.",
+  "bleStatusCommandError": "Komut gönderme hatası.",
+  "bleStatusCommandFailed": "Komut gönderilemedi: Bağlantı yok.",
+  "bleStatusPreparingNotificationFor": "'{pagerId}' ID'li çağrı cihazına bildirim hazırlanıyor...",
+  "@bleStatusPreparingNotificationFor": {
+    "placeholders": {
+      "pagerId": {
+        "type": "String"
+      }
+    }
+  },
+  "bleStatusCouldNotConnectForNotification": "'{pagerId}' ID'li çağrı cihazına bağlanılamadı veya hazır değil.",
+  "@bleStatusCouldNotConnectForNotification": {
+    "placeholders": {
+      "pagerId": {
+        "type": "String"
+      }
+    }
+  },
+  "bleStatusNotificationSent": "'{pagerId}' ID'li cihaza bildirim gönderildi.",
+  "@bleStatusNotificationSent": {
+    "placeholders": {
+      "pagerId": {
+        "type": "String"
+      }
+    }
+  },
+  "bleStatusNotificationError": "'{pagerId}' ID'li cihaza bildirim gönderilirken hata.",
+  "@bleStatusNotificationError": {
+    "placeholders": {
+      "pagerId": {
+        "type": "String"
+      }
+    }
+  },
+  "bleStatusDeviceNotFoundAfterScan": "Çağrı cihazı ID '{pagerId}' tarama sonrası bulunamadı.",
+  "@bleStatusDeviceNotFoundAfterScan": {
+    "placeholders": {
+      "pagerId": {
+        "type": "String"
+      }
+    }
+  },
+  "bleDeviceNameUnknown": "Bilinmeyen Cihaz",
+  "bleDeviceNameSearchedById": "ID ile Aranan",
+  "bleDeviceNameNotFound": "BULUNAMADI",
+  "language": "Uygulama Dili",
+  "unknownErrorOccurred": "Bilinmeyen bir hata oluştu.",
+  "addOrderItemDialogSelectionError": "Lütfen gerekli seçimleri yapın.",
+  "variantSelectionDialogTitle": "Varyant Seçimi: {itemName}",
+  "@variantSelectionDialogTitle": {
+    "placeholders": {
+      "itemName": {
+        "type": "String"
+      }
+    }
+  },
+  "variantSelectionDialogTableOwnerLabel": "Masa Sahibi",
+  "variantSelectionDialogTableOwnerValidator": "Lütfen masa sahibini seçin.",
+  "variantSelectionDialogVariantLabel": "Varyant",
+  "variantSelectionDialogVariantValidator": "Lütfen bir varyant seçin.",
+  "variantSelectionDialogExtrasLabel": "Ekstra Seçenekler:",
+  "tooltipDecrement": "Azalt",
+  "variantSelectionDialogQuantity": "{quantity} Adet",
+  "@variantSelectionDialogQuantity": {
+    "placeholders": {
+      "quantity": {
+        "type": "String"
+      }
+    }
+  },
+  "tooltipIncrement": "Artır",
+  "variantSelectionDialogAddToCartButton": "Sepete Ekle",
+  "tableOrderDetailsModalUpdateError": "Sipariş durumu güncellenemedi.",
+  "newOrderNotificationTitleNew": "Yeni Sipariş!",
+  "newOrderNotificationTitleUpdate": "Sipariş Güncellendi",
+  "newOrderNotificationDefaultMessage": "Yeni bir işlem yapıldı.",
+  "newOrderNotificationUpdateTable": "Masa {tableNumber} siparişine '{itemName}' eklendi.",
+  "@newOrderNotificationUpdateTable": {
+    "placeholders": {
+      "itemName": {
+        "type": "String"
+      },
+      "tableNumber": {
+        "type": "String"
+      }
+    }
+  },
+  "newOrderNotificationUpdateTakeaway": "Paket siparişe '{itemName}' eklendi.",
+  "@newOrderNotificationUpdateTakeaway": {
+    "placeholders": {
+      "itemName": {
+        "type": "String"
+      }
+    }
+  },
+  "newOrderNotificationUpdateTakeawayWithCustomer": "Paket siparişe '{itemName}' eklendi ({customerName}).",
+  "@newOrderNotificationUpdateTakeawayWithCustomer": {
+    "placeholders": {
+      "itemName": {
+        "type": "String"
+      },
+      "customerName": {
+        "type": "String"
+      }
+    }
+  },
+  "newOrderNotificationUpdateGeneric": "'{itemName}' siparişe eklendi.",
+  "@newOrderNotificationUpdateGeneric": {
+    "placeholders": {
+      "itemName": {
+        "type": "String"
+      }
+    }
+  },
+  "newOrderNotificationNewOrderTable": "Masa {tableNumber} için yeni sipariş alındı. İlk ürün: '{itemName}'.",
+  "@newOrderNotificationNewOrderTable": {
+    "placeholders": {
+      "tableNumber": {
+        "type": "String"
+      },
+      "itemName": {
+        "type": "String"
+      }
+    }
+  },
+  "newOrderNotificationNewOrderTakeaway": "Yeni paket sipariş alındı. İlk ürün: '{itemName}'.",
+  "@newOrderNotificationNewOrderTakeaway": {
+    "placeholders": {
+      "itemName": {
+        "type": "String"
+      }
+    }
+  },
+  "newOrderNotificationNewOrderTakeawayWithCustomer": "Yeni paket sipariş alındı ({customerName}). İlk ürün: '{itemName}'.",
+  "@newOrderNotificationNewOrderTakeawayWithCustomer": {
+    "placeholders": {
+      "customerName": {
+        "type": "String"
+      },
+      "itemName": {
+        "type": "String"
+      }
+    }
+  },
+  "newOrderNotificationNewOrderGeneric": "Yeni sipariş alındı. İlk ürün: '{itemName}'.",
+  "@newOrderNotificationNewOrderGeneric": {
+    "placeholders": {
+      "itemName": {
+        "type": "String"
+      }
+    }
+  },
+  "newOrderNotificationOrderId": "Sipariş ID: {orderId}",
+  "@newOrderNotificationOrderId": {
+    "placeholders": {
+      "orderId": {
+        "type": "String"
+      }
+    }
+  },
+  "newOrderNotificationTableNumber": "Masa No: {tableNumber}",
+  "@newOrderNotificationTableNumber": {
+    "placeholders": {
+      "tableNumber": {
+        "type": "String"
+      }
+    }
+  },
+  "newOrderNotificationCustomerName": "Müşteri: {customerName}",
+  "@newOrderNotificationCustomerName": {
+    "placeholders": {
+      "customerName": {
+        "type": "String"
+      }
+    }
+  },
+  "okButtonText": "Tamam",
+  "categoryAll": "Tümü",
+  "menuNoProductsInCategory": "Seçilen kategoride ürün bulunamadı.",
+  "menuVariantsAvailable": "Varyant seçenekleri mevcut",
+  "basketTitle": "Sepet",
+  "removeFromBasketTooltip": "Sepetten Kaldır",
+  "tableTypeModalOwnersTitle": "Masa Sahiplerini Girin (En az 2)",
+  "continueButtonText": "Devam",
+  "kitchenDialogTitleDefault": "Yeni Sipariş Mutfakta!",
+  "kitchenDialogTitleWithKds": "Yeni Sipariş {kdsName}'a İletildi!",
+  "@kitchenDialogTitleWithKds": {
+    "placeholders": {
+      "kdsName": {
+        "type": "String"
+      }
+    }
+  },
+  "kitchenDialogMessageDefault": "Yeni bir sipariş onaylandı ve mutfağa iletildi!",
+  "kitchenDialogMessageTable": "Masa {tableNumber} için yeni sipariş onaylandı ve mutfağa iletildi.",
+  "@kitchenDialogMessageTable": {
+    "placeholders": {
+      "tableNumber": {
+        "type": "String"
+      }
+    }
+  },
+  "kitchenDialogMessageTakeawayCustomer": "{customerName} isimli paket sipariş onaylandı ve mutfağa iletildi.",
+  "@kitchenDialogMessageTakeawayCustomer": {
+    "placeholders": {
+      "customerName": {
+        "type": "String"
+      }
+    }
+  },
+  "kitchenDialogMessageTakeawayId": "Paket sipariş (ID: {orderId}) onaylandı ve mutfağa iletildi.",
+  "@kitchenDialogMessageTakeawayId": {
+    "placeholders": {
+      "orderId": {
+        "type": "String"
+      }
+    }
+  },
+  "tableCellItemPickupErrorWithDetails": "Ürün alınamadı: {statusCode} - {details}",
+  "@tableCellItemPickupErrorWithDetails": {
+    "placeholders": {
+      "statusCode": {
+        "type": "String"
+      },
+      "details": {
+        "type": "String"
+      }
+    }
+  },
+  "tableCellItemPickupErrorGeneric": "Ürün alma hatası: {error}",
+  "@tableCellItemPickupErrorGeneric": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "tableCellDeliverErrorWithStatus": "Teslim işlemi sırasında hata: {statusCode}",
+  "@tableCellDeliverErrorWithStatus": {
+    "placeholders": {
+      "statusCode": {
+        "type": "String"
+      }
+    }
+  },
+  "tableCellDeliverErrorGeneric": "Teslim işlemi hatası: {error}",
+  "@tableCellDeliverErrorGeneric": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "tableCellDefaultTitle": "Masa {tableNumber}",
+  "@tableCellDefaultTitle": {
+    "placeholders": {
+      "tableNumber": {
+        "type": "String"
+      }
+    }
+  },
+  "tableCellTooltipDeliveredToCustomer": "Müşteriye Teslim Edildi",
+  "tableCellTooltipMarkAsPickedUpByWaiter": "Garson Aldı Olarak İşaretle",
+  "tableCellTooltipDeliverToCustomer": "Müşteriye Teslim Et",
+  "kdsStatusPreparing": "Mutfakta Hazırlanıyor",
+  "tableCellTooltipWaitingForKitchen": "Mutfak Onayı Bekliyor",
+  "newItemSuffix": " (Yeni)",
+  "tableCellNoOrderItems": "Sipariş Kalemi Yok",
+  "addOrEditButton": "Ekle/Düzenle",
+  "addProductOrEditTooltip": "Ürün Ekle / Düzenle",
+  "otherActionsTooltip": "Diğer İşlemler",
+  "transferTableMenuItem": "Masayı Taşı",
+  "cancelOrderMenuItem": "Siparişi İptal Et",
+  "readyForPickupTitle": "Mutfak Hazır!",
+  "readyForPickupMessageDefault": "Bir sipariş mutfakta hazır, garson bekleniyor!",
+  "readyForPickupMessageTable": "Masa {tableNumber} siparişi mutfakta hazır, garson tarafından alınmayı bekliyor.",
+  "@readyForPickupMessageTable": {
+    "placeholders": {
+      "tableNumber": {
+        "type": "String"
+      }
+    }
+  },
+  "readyForPickupMessageTakeawayCustomer": "{customerName} isimli paket sipariş mutfakta hazır, garson tarafından alınmayı bekliyor.",
+  "@readyForPickupMessageTakeawayCustomer": {
+    "placeholders": {
+      "customerName": {
+        "type": "String"
+      }
+    }
+  },
+  "readyForPickupMessageTakeawayId": "Paket sipariş (ID: {orderId}) mutfakta hazır, garson tarafından alınmayı bekliyor.",
+  "@readyForPickupMessageTakeawayId": {
+    "placeholders": {
+      "orderId": {
+        "type": "String"
+      }
+    }
+  },
+  "kdsCouldNotMarkPreparing": "Ürün hazırlanıyor olarak işaretlenemedi: {statusCode}",
+  "@kdsCouldNotMarkPreparing": {
+    "placeholders": {
+      "statusCode": {
+        "type": "String"
+      }
+    }
+  },
+  "kdsCouldNotMarkReady": "Ürün hazır olarak işaretlenemedi: {statusCode}",
+  "@kdsCouldNotMarkReady": {
+    "placeholders": {
+      "statusCode": {
+        "type": "String"
+      }
+    }
+  },
+  "kdsNoItemsForKds": "Bu KDS için ürün kalemi yok.",
+  "kdsTooltipStartPreparing": "Hazırlamaya Başla",
+  "kdsTooltipMarkAsReady": "Hazır Olarak İşaretle",
+  "infoTransferringTable": "Masa transfer ediliyor...",
+  "infoTransferSuccess": "Masa transferi başarılı.",
+  "errorTransferringTable": "Masa transferi sırasında hata oluştu: {statusCode} - {details}",
+  "@errorTransferringTable": {
+    "placeholders": {
+      "statusCode": {
+        "type": "String"
+      },
+      "details": {
+        "type": "String"
+      }
+    }
+  },
+  "errorTransferGeneric": "Transfer hatası: {error}",
+  "@errorTransferGeneric": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "infoCancellingOrder": "Sipariş iptal ediliyor...",
+  "errorUnknownServer": "Bilinmeyen sunucu hatası.",
+  "errorDuringCancellation": "İptal sırasında hata.",
+  "errorCancellingOrderWithDetails": "Sipariş iptali sırasında hata oluştu: {statusCode} - {details}",
+  "@errorCancellingOrderWithDetails": {
+    "placeholders": {
+      "statusCode": {
+        "type": "String"
+      },
+      "details": {
+        "type": "String"
+      }
+    }
+  },
+  "errorCancellationGeneric": "İptal hatası: {error}",
+  "@errorCancellationGeneric": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "infoApprovingOrder": "Sipariş onaylanıyor...",
+  "infoGuestOrderApproved": "Misafir siparişi onaylandı.",
+  "errorApprovingOrder": "Sipariş onayı sırasında hata: {statusCode} - {details}",
+  "@errorApprovingOrder": {
+    "placeholders": {
+      "statusCode": {
+        "type": "String"
+      },
+      "details": {
+        "type": "String"
+      }
+    }
+  },
+  "errorApprovalGeneric": "Sipariş onay hatası: {error}",
+  "@errorApprovalGeneric": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "infoRejectingOrder": "Sipariş reddediliyor...",
+  "infoGuestOrderRejected": "Misafir siparişi reddedildi.",
+  "errorRejectingOrder": "Sipariş reddi sırasında hata: {statusCode} - {details}",
+  "@errorRejectingOrder": {
+    "placeholders": {
+      "statusCode": {
+        "type": "String"
+      },
+      "details": {
+        "type": "String"
+      }
+    }
+  },
+  "errorRejectionGeneric": "Sipariş reddetme hatası: {error}",
+  "@errorRejectionGeneric": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "orderItemLineTotal": "Kalem Toplam: {amount} {currency}",
+  "@orderItemLineTotal": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "currency": {
+        "type": "String"
+      }
+    }
+  },
+  "pendingOrderCardSubtitle": "Toplam Tutar: {formattedAmount}",
+  "@pendingOrderCardSubtitle": {
+    "description": "Ödenmemiş sipariş kartında toplam tutarı gösteren alt başlık.",
+    "placeholders": {
+      "formattedAmount": {
+        "type": "String",
+        "example": "₺45.50"
+      }
+    }
+  },
+  "paymentProcessingAmountLabel": "Ödenecek Tutar: {formattedAmount}",
+  "@paymentProcessingAmountLabel": {
+    "description": "Ödeme ekranında ödenecek toplam tutar.",
+    "placeholders": {
+      "formattedAmount": {
+        "type": "String",
+        "example": "₺120,00"
+      }
+    }
+  },
+  "staffPerformanceTurnoverLabel": "Satış Cirosu: {amount} {currency}",
+  "@staffPerformanceTurnoverLabel": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "currency": {
+        "type": "String"
+      }
+    }
+  },
+  "creditSalesCardTotalAmount": "Toplam Tutar: {amount} {currency}",
+  "@creditSalesCardTotalAmount": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "currency": {
+        "type": "String"
+      }
+    }
+  },
+  "campaignItemDetails": "Adet: {quantity} - Normal Fiyat: {price} {currency}",
+  "@campaignItemDetails": {
+    "placeholders": {
+      "quantity": {
+        "type": "String"
+      },
+      "price": {
+        "type": "String"
+      },
+      "currency": {
+        "type": "String"
+      }
+    }
+  },
+  "campaignContentTitle": "Kampanya İçeriği (Normal Toplam: {total} {currency})",
+  "@campaignContentTitle": {
+    "placeholders": {
+      "total": {
+        "type": "String"
+      },
+      "currency": {
+        "type": "String"
+      }
+    }
+  },
+  "variantPriceDisplay": "{name} - {price} {currency}",
+  "@variantPriceDisplay": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "price": {
+        "type": "String"
+      },
+      "currency": {
+        "type": "String"
+      }
+    }
+  },
+  "orderCardSubtitleDetails": "Tutar: {totalAmount}\nÖdeme: {paymentType}\nTarih: {displayDate}\nSaat: {displayTime}",
+  "@orderCardSubtitleDetails": {
+    "placeholders": {
+      "totalAmount": {
+        "type": "String"
+      },
+      "paymentType": {
+        "type": "String"
+      },
+      "displayDate": {
+        "type": "String"
+      },
+      "displayTime": {
+        "type": "String"
+      }
+    }
+  },
+  "paymentModalTotalAmount": "Toplam: {amount} {currency} ({paymentType})",
+  "@paymentModalTotalAmount": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "currency": {
+        "type": "String"
+      },
+      "paymentType": {
+        "type": "String"
+      }
+    }
+  },
+  "newOrderBasketTotal": "Sepet Toplamı: {totalAmount} ({currency})",
+  "@newOrderBasketTotal": {
+    "placeholders": {
+      "totalAmount": {
+        "type": "String"
+      },
+      "currency": {
+        "type": "String"
+      }
+    }
+  },
+  "newOrderBasketTotalLabel": "Toplam: {formattedAmount}",
+  "@newOrderBasketTotalLabel": {
+    "description": "Yeni sipariş sepetinin toplamını gösteren etiket.",
+    "placeholders": {
+      "formattedAmount": {
+        "type": "String",
+        "example": "₺110,00"
+      }
+    }
+  },
+  "businessSettingsTitle": "İşletme Ayarları",
+  "homeMenuBusinessSettings": "İşletme Ayarları",
+  "businessSettingsCurrencyLabel": "İşletme Para Birimi",
+  "businessSettingsSuccess": "Ayarlar başarıyla kaydedildi.",
+  "businessSettingsError": "Ayarları kaydederken hata: {error}",
+  "@businessSettingsError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "permissionViewReports": "Raporları Görüntüleme",
+  "permissionManageCreditSales": "Veresiye Satış Yönetimi",
+  "permissionManageMenu": "Menü Yönetimi",
+  "permissionManageStock": "Stok Yönetimi",
+  "permissionManageTables": "Masa Yönetimi",
+  "permissionViewCompletedOrders": "Tamamlanmış Siparişleri Görüntüleme",
+  "permissionViewPendingOrders": "Bekleyen Siparişleri Görüntüleme",
+  "permissionTakeOrders": "Sipariş Alma",
+  "permissionManageStaff": "Personel Yönetimi",
+  "permissionManageWaitingCustomers": "Bekleyen Müşteri Yönetimi",
+  "permissionViewAccountSettings": "Hesap Ayarları",
+  "permissionManageKds": "Mutfak Ekranı Yönetimi",
+  "permissionManageKdsScreens": "KDS Ekran Tanımları Yönetimi",
+  "permissionManagePagers": "Çağrı Cihazı Yönetimi",
+  "permissionManageCampaigns": "Kampanya Yönetimi",
+  "buttonSave": "Kaydet",
+  "logout": "Çıkış Yap",
+  "errorLoadingInitialData": "Başlangıç verileri yüklenirken hata oluştu: {details}",
+  "@errorLoadingInitialData": {
+    "placeholders": {
+      "details": {
+        "type": "String"
+      }
+    }
+  },
+  "errorFirebaseUploadFailed": "Firebase dosya yüklemesi başarısız oldu.",
+  "categoryNameLabelRequired": "Kategori Adı*",
+  "categoryNameValidator": "Lütfen kategori adını girin.",
+  "parentCategoryLabel": "Üst Kategori",
+  "dialogDeleteVariantContent": "'{variantName}' adlı varyantı silmek istediğinizden emin misiniz?",
+  "@dialogDeleteVariantContent": {
+    "placeholders": {
+      "variantName": {
+        "type": "String"
+      }
+    }
+  },
+  "currencyTL": "₺",
+  "currencySymbol": "₺",
+  "dialogDeleteCategoryContent": "Bu kategoriyi ve altındaki tüm ürünleri silmek istediğinize emin misiniz? Bu işlem geri alınamaz.",
+  "errorGeneral": "Bir hata oluştu: {details}",
+  "@errorGeneral": {
+    "placeholders": {
+      "details": {
+        "type": "String"
+      }
+    }
+  },
+  "editOrderErrorFetchingBusinessName": "İşletme adı alınırken hata: {error}",
+  "@editOrderErrorFetchingBusinessName": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "editOrderErrorLoadingCategories": "Kategoriler yüklenirken bir hata oluştu.",
+  "editOrderErrorAddingProductWithStatus": "Ürün eklenirken hata oluştu (Kod: {statusCode}): {details}",
+  "@editOrderErrorAddingProductWithStatus": {
+    "placeholders": {
+      "statusCode": {
+        "type": "String"
+      },
+      "details": {
+        "type": "String"
+      }
+    }
+  },
+  "editOrderErrorUpdatingPagerStatus": "Çağrı cihazı durumu güncellenirken hata: {error}",
+  "@editOrderErrorUpdatingPagerStatus": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "editOrderErrorUpdatingPagerOnCancel": "Sipariş iptalinde çağrı cihazı güncellenirken hata: {error}",
+  "@editOrderErrorUpdatingPagerOnCancel": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "editOrderPrintCustomerReceipt": "Müşteri Fişi Yazdır",
+  "editOrderPrintKitchenTicket": "Mutfak Fişi Yazdır",
+  "editOrderTotal": "Genel Toplam: {totalAmount}",
+  "@editOrderTotal": {
+    "placeholders": {
+      "totalAmount": {
+        "type": "String"
+      }
+    }
+  },
+  "yourBusiness": "İşletmeniz",
+  "orderTypeTable": "Masa",
+  "orderTypeTakeaway": "Paket",
+  "waitingCustomersTitle": "Bekleyen Müşteriler",
+  "addNewCustomerButtonLabel": "Yeni Müşteri Ekle",
+  "pagerDialogDeleteContent": "'{pagerName}' adlı çağrı cihazını silmek istediğinizden emin misiniz?",
+  "@pagerDialogDeleteContent": {
+    "placeholders": {
+      "pagerName": {
+        "type": "String"
+      }
+    }
+  },
+  "manageCampaignsCardSubtitle": "Fiyat: {price} {currency} | Aktif: {isActive}",
+  "@manageCampaignsCardSubtitle": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      },
+      "currency": {
+        "type": "String"
+      },
+      "isActive": {
+        "type": "String"
+      }
+    }
+  },
+  "printerSettingsErrorLoadingSavedPrinters": "Kayıtlı yazıcılar yüklenirken hata: {error}",
+  "@printerSettingsErrorLoadingSavedPrinters": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "printerSettingsErrorIpExists": "Bu IP adresine sahip bir yazıcı zaten mevcut.",
+  "printerSettingsDeleteTitle": "Yazıcıyı Sil",
+  "printerSettingsDeleteConfirmation": "'{printerName}' adlı yazıcıyı silmek istediğinizden emin misiniz?",
+  "@printerSettingsDeleteConfirmation": {
+    "placeholders": {
+      "printerName": {
+        "type": "String"
+      }
+    }
+  },
+  "printerSettingsSuccessDeleted": "'{printerName}' adlı yazıcı başarıyla silindi.",
+  "@printerSettingsSuccessDeleted": {
+    "placeholders": {
+      "printerName": {
+        "type": "String"
+      }
+    }
+  },
+  "printerSettingsErrorDiscoveryNotSupportedOnWeb": "Web platformunda yazıcı keşfi desteklenmemektedir.",
+  "printerSettingsErrorDuringDiscovery": "Yazıcı keşfi sırasında hata: {error}",
+  "@printerSettingsErrorDuringDiscovery": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "printerSettingsInfoTesting": "'{printerName}' yazıcısı test ediliyor...",
+  "@printerSettingsInfoTesting": {
+    "placeholders": {
+      "printerName": {
+        "type": "String"
+      }
+    }
+  },
+  "printerSettingsSuccessTestPrint": "Test çıktısı başarılı!",
+  "printerSettingsErrorTestPrintFailed": "Test çıktısı başarısız.",
+  "printerSettingsErrorDuringTest": "Test sırasında hata: {error}",
+  "@printerSettingsErrorDuringTest": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "printerSettingsTitleAddManual": "Manuel Yazıcı Ekle",
+  "printerSettingsTitleSaveDiscovered": "Keşfedilen Yazıcıyı Kaydet",
+  "printerSettingsLabelNameHint": "Yazıcı Adı (Örn: Mutfak Yazıcısı)",
+  "printerSettingsValidatorNameEmpty": "Yazıcı adı boş olamaz.",
+  "printerSettingsLabelIpHint": "IP Adresi (Örn: 192.168.1.100)",
+  "printerSettingsValidatorIpEmpty": "IP adresi boş olamaz.",
+  "printerSettingsValidatorIpInvalid": "Geçerli bir IP adresi girin.",
+  "printerSettingsLabelType": "Yazıcı Tipi",
+  "printerSettingsTypeKitchen": "Mutfak",
+  "printerSettingsTypeReceipt": "Fiş",
+  "printerSettingsValidatorTypeEmpty": "Lütfen yazıcı tipi seçin.",
+  "printerSettingsTitle": "Yazıcı Ayarları",
+  "printerSettingsStateDiscovering": "Yazıcılar Aranıyor...",
+  "printerSettingsButtonDiscover": "Ağdaki Yazıcıları Keşfet",
+  "printerSettingsNoPrintersFound": "Kayıtlı yazıcı bulunamadı.",
+  "printerSettingsHeaderDiscovered": "Keşfedilen Yazıcılar",
+  "printerSettingsTooltipSaveDiscovered": "Bu yazıcıyı kaydet",
+  "printerSettingsHeaderSaved": "Kayıtlı Yazıcılar",
+  "printerSettingsPrinterTypeLabel": "Tip: {type}",
+  "@printerSettingsPrinterTypeLabel": {
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "printerSettingsTooltipTestPrint": "Test Çıktısı Gönder",
+  "printerSettingsButtonAddManual": "Manuel Yazıcı Ekle",
+  "printerSettingsTooltipAddManual": "IP adresi ile manuel yazıcı ekle",
+  "newOrderBasketQuantity": "Adet: {quantity}",
+  "@newOrderBasketQuantity": {
+    "placeholders": {
+      "quantity": {
+        "type": "String"
+      }
+    }
+  },
+  "extrasLabel": "Ekstralar:",
+  "lineItemTotal": "{amount} {currency}",
+  "@lineItemTotal": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "currency": {
+        "type": "String"
+      }
+    }
+  },
+  "tableOwnerLabel": "Sahip: {name}",
+  "@tableOwnerLabel": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "paymentModalErrorWithDetails": "Ödeme hatası (Kod: {statusCode}): {details}",
+  "@paymentModalErrorWithDetails": {
+    "placeholders": {
+      "statusCode": {
+        "type": "String"
+      },
+      "details": {
+        "type": "String"
+      }
+    }
+  },
+  "menuCampaignPrice": "Kampanya Fiyatı: {price} {currency}",
+  "@menuCampaignPrice": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      },
+      "currency": {
+        "type": "String"
+      }
+    }
+  },
+  "newOrderBasketEmpty": "Sepetiniz boş.",
+  "newOrderBasketExtras": "Ekstralar: {extrasList}",
+  "@newOrderBasketExtras": {
+    "placeholders": {
+      "extrasList": {
+        "type": "String"
+      }
+    }
+  },
+  "orderItemButtonDeliver": "Teslim Et",
+  "errorUsernameExists": "Bu kullanıcı adı zaten kullanılıyor.",
+  "errorEmailExists": "Bu e-posta adresi zaten kullanılıyor.",
+  "parentCategoryHint": "Ana kategori seçilmedi",
+  "infoCategoryUpdatedSuccess": "Kategori başarıyla güncellendi.",
+  "errorUpdatingCategory": "Kategori güncellenirken hata (Kod: {statusCode}): {details}",
+  "@errorUpdatingCategory": {
+    "placeholders": {
+      "statusCode": {
+        "type": "String"
+      },
+      "details": {
+        "type": "String"
+      }
+    }
+  },
+  "errorUpdatingCategoryGeneral": "Kategori güncellenirken genel hata: {error}",
+  "@errorUpdatingCategoryGeneral": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "editCategoryPageTitle": "Kategoriyi Düzenle",
+  "infoKdsLoading": "KDS ekranları yükleniyor...",
+  "kdsScreenLabel": "KDS Ekranı",
+  "kdsScreenNotSelected": "KDS Ekranı Seçilmedi",
+  "noKdsForBusiness": "İşletme için KDS bulunamadı.",
+  "buttonUpdateCategory": "Kategoriyi Güncelle",
+  "errorLoadingDataWithDetails": "Veri yüklenirken hata: {details}",
+  "@errorLoadingDataWithDetails": {
+    "placeholders": {
+      "details": {
+        "type": "String"
+      }
+    }
+  },
+  "errorUploadingPhotoWithDetails": "Fotoğraf yüklenirken hata: {details}",
+  "@errorUploadingPhotoWithDetails": {
+    "placeholders": {
+      "details": {
+        "type": "String"
+      }
+    }
+  },
+  "campaignNoProductsAdded": "Henüz ürün eklenmedi.",
+  "campaignAddProductButton": "Ürün Ekle",
+  "productSelectorNoProducts": "Ürün bulunamadı.",
+  "variantDisplayPrice": "{name} ({price} {currency})",
+  "@variantDisplayPrice": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "price": {
+        "type": "String"
+      },
+      "currency": {
+        "type": "String"
+      }
+    }
+  },
+  "setupWizardStepLocalizationTitle": "Adım 1: Dil ve Para Birimi",
+  "setupLocalizationDescription": "Uygulamanın genelinde kullanılacak dili ve menülerde gösterilecek para birimini seçin. Bu ayarları daha sonra hesap ayarlarından değiştirebilirsiniz.",
+  "setupWizardSaveAndContinueButton": "Kaydet ve Devam Et",
+  "setupWizardErrorSavingSettings": "Ayarlar kaydedilirken hata oluştu: {errorDetails}",
+  "@setupWizardErrorSavingSettings": {
+      "description": "Error message when saving localization settings fails.",
+      "placeholders": {
+          "errorDetails": {
+              "type": "String",
+              "example": "Network error"
+          }
+      }
+  },
+  "subscriptionScreenTitle": "Abonelik Yönetimi",
+  "@subscriptionScreenTitle": {
+      "description": "Abonelik ve satın alma ekranının başlığı"
+  },
+  "subscriptionErrorLoadingProducts": "Abonelik seçenekleri yüklenemedi. Lütfen tekrar deneyin.",
+  "@subscriptionErrorLoadingProducts": {
+      "description": "Uygulama içi satın alma ürünleri getirilemediğinde gösterilen hata."
+  },
+  "subscriptionScreenHeader": "Uygulamayı Kullanmaya Devam Etmek İçin Abone Olun",
+  "@subscriptionScreenHeader": {
+      "description": "Abonelik ekranında kullanıcıyı bilgilendiren ana başlık."
+  },
+  "subscriptionStatusTrial": "Deneme sürenizin bitmesine {days} gün kaldı. Abone olmak için tıklayın.",
+  "@subscriptionStatusTrial": {
+      "description": "Kalan deneme günü sayısını gösterir.",
+      "placeholders": {
+          "days": {
+              "type": "String",
+              "example": "5"
+          }
+      }
+  },
+  "subscriptionStatusTrialLastDay": "Deneme sürenizin bitmesine 1 günden az kaldı!",
+  "@subscriptionStatusTrialLastDay": {
+      "description": "Deneme süresinin son gününde gösterilen mesaj."
+  },
+  "subscriptionStatusTrialEnded": "Deneme süreniz sona erdi!",
+  "@subscriptionStatusTrialEnded": {
+      "description": "Deneme süresi bittiğinde gösterilen mesaj."
+  },
+  "subscriptionStatusInactive": "Aboneliğiniz pasif. Devam etmek için lütfen abone olun.",
+  "@subscriptionStatusInactive": {
+      "description": "Pasif veya iptal edilmiş abonelikler için gösterilen mesaj."
+  },
+  "subscriptionStatusButtonSubscribe": "Abone Ol",
+  "@subscriptionStatusButtonSubscribe": {
+      "description": "Abonelik ekranına yönlendiren buton metni."
+  },
+
+  "loginErrorAccountInactive": "Hesabınız pasif durumdadır. Lütfen yönetici ile iletişime geçin.",
+  "loginErrorAccountNotApproved": "Hesabınız henüz yönetici tarafından onaylanmamıştır.",
+  "loginErrorInvalidCredentials": "Kullanıcı adı veya şifre hatalı.",
+
+  "loginErrorSubscriptionExpired": "Aboneliğiniz sona ermiştir. Lütfen devam etmek için aboneliğinizi yenileyin.",
+  "@loginErrorSubscriptionExpired": {
+    "description": "Kullanıcı, aboneliği bittiği için giriş yapamadığında gösterilen mesaj."
+  },
+  "setupTablesErrorNoTablesCreated": "Devam etmeden önce en az bir masa oluşturmalısınız.",
+  "@setupTablesErrorNoTablesCreated": {
+    "description": "Kurulum sihirbazında, hiç masa oluşturulmamışken devam etmeye çalışıldığında gösterilen uyarı."
+  },
+
+  "setupKdsErrorNoScreensCreated": "Devam etmeden önce en az bir KDS ekranı oluşturmalısınız.",
+  "@setupKdsErrorNoScreensCreated": {
+    "description": "Kurulum sihirbazında, hiç KDS ekranı oluşturulmamışken devam etmeye çalışıldığında gösterilen uyarı."
+  },
+  "setupCategoriesErrorNoCategoriesCreated": "Devam etmeden önce en az bir kategori oluşturmalısınız.",
+  "@setupCategoriesErrorNoCategoriesCreated": {
+    "description": "Kurulum sihirbazında, hiç kategori oluşturulmamışken devam etmeye çalışıldığında gösterilen uyarı."
+  },
+  "setupMenuItemsErrorNoItemsCreated": "Devam etmeden önce en az bir ürün oluşturmalısınız.",
+  "@setupMenuItemsErrorNoItemsCreated": {
+    "description": "Kurulum sihirbazında, hiç ürün oluşturulmamışken devam etmeye çalışıldığında gösterilen uyarı."
+  },
+  "setupVariantsErrorNoVariantsCreated": "Devam etmeden önce her ürün için en az bir varyant (örn: Standart Fiyat) oluşturmalısınız.",
+  "@setupVariantsErrorNoVariantsCreated": {
+    "description": "Kurulum sihirbazında, hiç varyant oluşturulmamışken devam etmeye çalışıldığında gösterilen uyarı."
+  },
+  "setupTablesTotalCreatedWithLimit": "Mevcut Masa Sayısı: {currentCount} / {limit}",
+  "@setupTablesTotalCreatedWithLimit": {
+    "description": "Kurulum sihirbazında mevcut masa sayısını ve limiti gösteren metin.",
+    "placeholders": {
+      "currentCount": { "type": "String", "example": "7" },
+      "limit": { "type": "String", "example": "10" }
+    }
+  },
+  "setupKdsTotalCreatedWithLimit": "Mevcut KDS Ekran Sayısı: {currentCount} / {limit}",
+  "@setupKdsTotalCreatedWithLimit": {
+    "description": "Kurulum sihirbazında mevcut KDS sayısını ve limiti gösteren metin.",
+    "placeholders": {
+      "currentCount": { "type": "String", "example": "1" },
+      "limit": { "type": "String", "example": "2" }
+    }
+  },
+  "setupCategoriesTotalCreatedWithLimit": "Mevcut Kategori Sayısı: {currentCount} / {limit}",
+  "@setupCategoriesTotalCreatedWithLimit": {
+    "description": "Kurulum sihirbazında mevcut kategori sayısını ve limiti gösteren metin.",
+    "placeholders": {
+      "currentCount": { "type": "String", "example": "3" },
+      "limit": { "type": "String", "example": "4" }
+    }
+  },
+  "setupMenuItemsTotalCreatedWithLimit": "Mevcut Ürün Sayısı: {currentCount} / {limit}",
+  "@setupMenuItemsTotalCreatedWithLimit": {
+    "description": "Kurulum sihirbazında mevcut ürün sayısını ve limiti gösteren metin.",
+    "placeholders": {
+      "currentCount": { "type": "String", "example": "15" },
+      "limit": { "type": "String", "example": "20" }
+    }
+  },
+  "setupVariantsTotalCreatedWithLimit": "Toplam Varyant Sayısı: {currentCount} / {limit}",
+  "@setupVariantsTotalCreatedWithLimit": {
+    "description": "Kurulum sihirbazında mevcut varyant sayısını ve limiti gösteren metin.",
+    "placeholders": {
+      "currentCount": { "type": "String", "example": "35" },
+      "limit": { "type": "String", "example": "50" }
+    }
+  },
+  "manageStaffTotalWithLimit": "Personel Sayısı: {currentCount} / {limit}",
+  "@manageStaffTotalWithLimit": {
+    "description": "Personel yönetim ekranında mevcut personel sayısını ve limiti gösteren metin.",
+    "placeholders": {
+      "currentCount": { "type": "String", "example": "1" },
+      "limit": { "type": "String", "example": "2" }
+    }
+  },
+  "dialogLimitReachedTitle": "Limit Aşıldı",
+  "@dialogLimitReachedTitle": {
+      "description": "Abonelik limiti aşıldığında gösterilen diyalog başlığı."
+  },
+  "dialogButtonLater": "Daha Sonra",
+  "@dialogButtonLater": {
+      "description": "Limit aşıldı diyalogundaki 'iptal' veya 'daha sonra' butonu."
+  },
+  "dialogButtonUpgradePlan": "Paketi Yükselt",
+  "@dialogButtonUpgradePlan": {
+      "description": "Limit aşıldı diyalogundaki eylem butonu."
+  },
+  "setupTablesErrorLimitReached": "Masa oluşturma limitinize ulaştınız. Yeni masa eklemek için lütfen abonelik paketinizi yükseltin.",
+  "@setupTablesErrorLimitReached": {
+    "description": "Masa oluşturma limiti aşıldığında gösterilen hata mesajı."
+  },
+  "setupKdsTotalCreatedWithLimit": "Mevcut KDS Ekran Sayısı: {currentCount} / {limit}",
+  "@setupKdsTotalCreatedWithLimit": {
+    "description": "Kurulum sihirbazında mevcut KDS ekranı sayısını ve toplam limiti gösteren metin.",
+    "placeholders": {
+      "currentCount": { "type": "String", "example": "1" },
+      "limit": { "type": "String", "example": "2" }
+    }
+  },
+  "setupKdsErrorLimitReached": "KDS ekranı oluşturma limitinize ulaştınız. Yeni ekran eklemek için lütfen abonelik paketinizi yükseltin.",
+  "@setupKdsErrorLimitReached": {
+    "description": "KDS ekranı oluşturma limiti aşıldığında gösterilen hata mesajı."
+  },
+  "setupMenuItemsErrorLimitReached": "Ürün oluşturma limitinize ulaştınız. Yeni ürün eklemek için lütfen abonelik paketinizi yükseltin.",
+  "@setupMenuItemsErrorLimitReached": {
+    "description": "Menüye yeni ürün ekleme limiti aşıldığında gösterilen hata mesajı."
+  },
+  "setupCategoriesTotalCreatedWithLimit": "{count} / {limit} Kategori Oluşturuldu",
+  "setupTablesErrorLimitExceeded": "Masa limitinizi ({maxTables}) aştınız. Mevcut {currentTables} masanıza {newTables} adet daha ekleyemezsiniz.",
+  "setupKdsErrorLimitExceeded": "KDS Ekran limitinizi ({maxKds}) aştınız. Mevcut {currentKds} ekranınıza {newKds} adet daha ekleyemezsiniz.",
+  "createCategoryErrorLimitExceeded": "Kategori oluşturma limitinize ({maxCategories}) ulaştınız. Yeni bir kategori ekleyebilmek için lütfen paketinizi yükseltin.",
+  "createMenuItemErrorLimitExceeded": "Ürün oluşturma limitinize ({maxMenuItems}) ulaştınız. Yeni bir ürün ekleyebilmek için lütfen paketinizi yükseltin.",
+  "manageKdsErrorLimitExceeded": "KDS Ekranı oluşturma limitinize ({maxKds}) ulaştınız. Yeni bir ekran ekleyebilmek için lütfen paketinizi yükseltin.",
+  "manageTablesErrorLimitExceeded": "Masa oluşturma limitinize ({maxTables}) ulaştınız. Yeni bir masa ekleyebilmek için lütfen paketinizi yükseltin.",
+  "createVariantErrorLimitExceeded": "Varyant/seçenek oluşturma limitinize ({maxVariants}) ulaştınız. Yeni bir varyant ekleyebilmek için lütfen paketinizi yükseltin.",
+  "manageStaffErrorLimitExceeded": "Personel oluşturma limitinize ({maxStaff}) ulaştınız. Yeni bir personel ekleyebilmek için lütfen paketinizi yükseltin.",
+  "menuItemKdvRateLabel": "KDV Oranı",
+  "kdvRateValidatorRequired": "Lütfen bir KDV oranı girin.",
+  "kdvRateValidatorInvalid": "Lütfen 0 ile 100 arasında geçerli bir oran girin.",
+  "categoryKdvRateLabel": "Varsayılan KDV Oranı (%)",
+    "categoryDefaultKdvRateLabel": "Varsayılan KDV Oranı (%)",
+    "reportsExportToExcelTooltip": "Raporu Excel'e Aktar",
+    "reportsErrorNoDataToExport": "Dışa aktarılacak veri bulunamadı.",
+    "reportsErrorExportFailed": "Rapor dışa aktarılırken hata oluştu: {errorDetails}",
+    "@reportsErrorExportFailed": {
+        "description": "Excel'e aktarma sırasında oluşan hata mesajı.",
+        "placeholders": {
+            "errorDetails": {
+                "type": "String",
+                "example": "Dosya yazılamadı."
+            }
+        }
+    },
+    "reportsExportToExcelTooltip": "Raporu Excel'e Aktar",
+    "reportsErrorNoDataToExport": "Dışa aktarılacak veri bulunamadı.",
+    "reportsErrorExportFailed": "Rapor dışa aktarılırken hata oluştu: {errorDetails}",
+    "@reportsErrorExportFailed": {
+        "description": "Excel'e aktarma sırasında oluşan hata mesajı.",
+        "placeholders": {
+            "errorDetails": {
+                "type": "String",
+                "example": "Dosya yazılamadı."
+            }
+        }
+    },
+
+    "setupWizardStepStaffTitle": "Personel Ekle",
+    "errorLoadingData": "Veriler yüklenirken hata oluştu: {error}",
+    "@errorLoadingData": {
+        "placeholders": {
+            "error": {
+                "type": "String"
+            }
+        }
+    },
+    "setupStaffDialogTitle": "Yeni Personel Ekle",
+    "roleLabel": "Rol",
+    "roleStaff": "Garson (Sipariş Yetkili)",
+    "roleKitchenStaff": "Mutfak Personeli (KDS Yetkili)",
+    "buttonAdd": "Ekle",
+    "setupStaffDescription": "Sipariş alacak ve mutfakta çalışacak personelinizi şimdi ekleyebilirsiniz. Atadığınız vardiyalar, personelin sisteme yalnızca belirlenen gün ve saatlerde giriş yapabilmesini sağlar.",
+    "addStaffButtonLabel": "Personel Ekle",
+    "setupStaffAddedTitle": "Eklenen Personeller",
+    "noStaffAdded": "Henüz personel eklenmedi.",
+    "setupStaffTotalCreatedWithLimit": "{count} / {limit} Personel Oluşturuldu",
+    "@setupStaffTotalCreatedWithLimit": {
+        "placeholders": {
+            "count": { "type": "String" },
+            "limit": { "type": "String" }
+        }
+    },
+  "kdsAccessSelectionTitle": "Erişebileceği Mutfak Ekranları",
+  "kdsAccessNoKdsAvailable": "Atanacak aktif KDS ekranı bulunamadı. Lütfen önceki adımda bir KDS ekranı oluşturun.",
+  "setupStaffShowOtherPermissions": "Diğer Ekran İzinlerini Göster",
+  "setupStaffShowOtherNotifications": "Diğer Bildirim İzinlerini Göster",
+  "setupStaffAssignShiftButton": "Vardiya Ata",
+
+  "setupStaffErrorAssignShift": "Lütfen devam etmeden önce eklenen tüm personele en az bir vardiya atayın.",
+  "setupStaffRedirectingToSchedule": "{staffName} için vardiya atama ekranına yönlendiriliyorsunuz...",
+  "@setupStaffRedirectingToSchedule": {
+    "placeholders": {
+      "staffName": {
+        "type": "String"
+      }
+    }
+  },
+  "setupStaffShiftAssigned": "Vardiya atandı.",
+  "setupStaffShiftNotAssigned": "Vardiya atanmadı! Devam etmek için atama yapmalısınız.",
+  "scheduleSetupWizardPrompt": "Devam etmek için lütfen yeni personele en az bir vardiya atayın.",
+  "homeSectionOrderKitchen": "Sipariş & Mutfak Yönetimi",
+  "@homeSectionOrderKitchen": {
+    "description": "Ana ekrandaki Sipariş ve Mutfak yönetimi bölümünün başlığı."
+  },
+  "homeSectionMenuStock": "Menü & Stok Yönetimi",
+  "@homeSectionMenuStock": {
+    "description": "Ana ekrandaki Menü ve Stok yönetimi bölümünün başlığı."
+  },
+  "homeSectionBusinessManagement": "İşletme Yönetimi",
+  "@homeSectionBusinessManagement": {
+    "description": "Ana ekrandaki Personel, Masa, Veresiye gibi işletme yönetimi bölümünün başlığı."
+  },
+  "homeSectionReports": "Raporlar & Analiz",
+  "@homeSectionReports": {
+    "description": "Ana ekrandaki Raporlar ve Analiz bölümünün başlığı."
+  },
+  "homeSectionSettings": "Ayarlar",
+  "@homeSectionSettings": {
+    "description": "Ana ekrandaki Genel Ayarlar bölümünün başlığı."
+  },
+  "searchPlaceholder": "Menüde Ara...",
+  "@searchPlaceholder": {
+    "description": "Ana ekrandaki menü arama çubuğunun içinde görünen ipucu metni."
+  },
+  "searchNoResults": "Arama sonucu bulunamadı.",
+  "@searchNoResults": {
+    "description": "Ana ekrandaki menü aramasında sonuç bulunamadığında gösterilen metin."
+  },
+  "loginErrorNoShiftScheduled": "Bugün için planlanmış bir vardiyanız bulunmadığından giriş yapamazsınız.",
+  "@loginErrorNoShiftScheduled": {
+     "description": "Kullanıcı, o gün için atanmış bir vardiyası olmadığında gösterilen giriş hatası mesajı."
+  },
+  "loginErrorSubscriptionExpired": "Aboneliğiniz sona erdiği için giriş yapamazsınız. Lütfen yenileyin.",
+  "@loginErrorSubscriptionExpired": {
+     "description": "İşletme sahibinin aboneliği bittiğinde gösterilen giriş hatası mesajı."
+  },
+  "loginErrorNoActiveShift": "Şu an aktif bir çalışma vardiyanız bulunmuyor. Lütfen vardiya saatleriniz içinde tekrar deneyin.",
+  "@loginErrorNoActiveShift": {
+    "description": "Kullanıcının o anki saatte bir vardiyası olmadığında gösterilen giriş hatası mesajı."
+  },
+  "loginErrorNetwork": "İnternet bağlantısı kurulamadı. Lütfen ağ ayarlarınızı kontrol edin.",
+  "@loginErrorNetwork": {
+    "description": "Ağ hatası olduğunda gösterilen mesaj."
+    },
+  "loginErrorGeneric": "Giriş sırasında beklenmedik bir hata oluştu. Lütfen tekrar deneyin.",
+  "@loginErrorGeneric": {
+    "description": "Diğer tüm beklenmedik hatalar için gösterilen genel mesaj."
+  },
+  "businessSettingsTimezoneLabel": "İşletme Zaman Dilimi",
+  "@businessSettingsTimezoneLabel": {
+    "description": "İşletme ayarlarında zaman dilimi seçimi için etiket."
+  },
+  "businessSettingsTimezoneValidator": "Lütfen bir zaman dilimi seçin.",
+  "@businessSettingsTimezoneValidator": {
+    "description": "Zaman dilimi seçilmediğinde gösterilen hata mesajı."
+  },
+  "businessSettingsErrorLoading": "İşletme bilgileri yüklenirken hata oluştu: {error}",
+  "@businessSettingsErrorLoading": {
+     "description": "İşletme ayarları ekranı açılırken veri çekilemezse gösterilen hata.",
+     "placeholders": {
+         "error": {
+              "type": "String",
+              "example": "Network error"
+          }
+      }
+  },
+  "businessSettingsSectionLocalization": "Bölgesel Ayarlar",
+  "@businessSettingsSectionLocalization": {
+     "description": "İşletme ayarlarındaki para birimi ve zaman dilimi bölümünün başlığı."
+  },
+  "setupWizardSettingsSaved": "Ayarlar kaydedildi",
+  "manageShiftsNoShiftsFound": "Henüz vardiya oluşturulmamış.",
+  "defaultCampaignCategoryName": "Kampanyalar",
+  "@defaultCampaignCategoryName": {
+    "description": "Kampanya ürünlerinin otomatik olarak eklendiği varsayılan kategori adı."
+  },
+  "campaignKdsAssignmentTitle": "Mutfak Ekranı Gerekli",
+  "@campaignKdsAssignmentTitle": {
+    "description": "Kampanya kategorisine KDS atanması gerektiğini belirten diyalog başlığı."
+  },
+  "campaignKdsAssignmentPrompt": "'{campaignCategoryName}' kategorisine henüz bir mutfak ekranı atanmamış. Bu kampanyanın mutfakta görünmesi için şimdi bir atama yapmak ister misiniz?",
+  "@campaignKdsAssignmentPrompt": {
+    "description": "Kampanya kategorisine KDS ataması yapılması için kullanıcıyı bilgilendiren ve yönlendiren metin.",
+    "placeholders": {
+      "campaignCategoryName": {
+        "type": "String",
+        "example": "Kampanyalar"
+      }
+    }
+  },
+  "dialogButtonAssignNow": "Şimdi Ata",
+  "@dialogButtonAssignNow": {
+    "description": "Kullanıcıyı KDS atama ekranına yönlendiren buton metni."
+  },
+  "dialogDeleteCategoryContent": "'{categoryName}' kategorisini ve bağlantılı tüm ürünleri silmek geri döndürülemez bir işlemdir. Devam etmek istediğinizden emin misiniz?",
+  "@dialogDeleteCategoryContent": {
+    "description": "Kategori silme onayı için diyalog içeriği.",
+    "placeholders": {
+      "categoryName": {
+        "type": "String",
+        "example": "Sıcak İçecekler"
+      }
+    }
+  },
+  "subscriptionErrorWeb": "Uygulama içi abonelikler şu anda sadece mobil uygulamalar üzerinden yapılabilmektedir.",
+  "subscriptionPurchasing": "Satın alma işleniyor...",
+  "planBasic": "Temel Paket",
+  "planSilver": "Silver Paket",
+  "planGold": "Gold Paket",
+  "maxTables": "Maks. Masa Sayısı",
+  "maxStaff": "Maks. Personel Sayısı",
+  "maxKdsScreens": "Maks. KDS Ekranı",
+  "maxCategories": "Maks. Kategori",
+  "maxMenuItems": "Maks. Menü Ürünü",
+  "maxVariants": "Maks. Ürün Varyantı",
+  "planMonthly": "Ay",
+  "planYearly": "Yıl",
+  "subscriptionRestoring": "Satın alımlar geri yükleniyor...",
+  "subscriptionRestoreButton": "Geri Yükle"
+}

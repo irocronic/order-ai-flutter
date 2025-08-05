@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "868285110583",
+    "project_id": "makarnaappfirebase",
+    "storage_bucket": "makarnaappfirebase.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:868285110583:android:b40e9ef9fb3782ca64a2b2",
+        "android_client_info": {
+          "package_name": "com.orderai.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCAVns-BUU72xfQYverQWe1OnR7xl_8zvc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

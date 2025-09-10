@@ -21,13 +21,12 @@ import '../../screens/manage_table_screen.dart';
 import '../../screens/manage_variant_list_screen.dart';
 import '../../screens/reports_screen.dart';
 import '../../screens/staff_performance_screen.dart';
-import '../../screens/stock_screen.dart';
+import '../../screens/ingredient_management_screen.dart'; // YENİ - stock_screen yerine
 import '../../services/user_session.dart';
 import '../../widgets/waiting_customers_modal.dart';
 import '../../utils/notifiers.dart';
 import '../../screens/printer_settings_screen.dart';
 import 'subscription_status_card.dart';
-import '../../screens/ingredient_management_screen.dart';
 // YENİ EKLENEN EKRANLAR
 import '../../screens/supplier_management_screen.dart';
 import '../../screens/purchase_order_list_screen.dart';
@@ -434,10 +433,7 @@ class _BusinessOwnerHomeContentState extends State<BusinessOwnerHomeContent> {
             onTapBuilder: (ctx) => () => Navigator.push(
               ctx, 
               MaterialPageRoute(
-                builder: (_) => StockScreen(
-                  token: widget.token, 
-                  businessId: widget.businessId
-                )
+                builder: (_) => const IngredientManagementScreen()
               )
             )
           ),

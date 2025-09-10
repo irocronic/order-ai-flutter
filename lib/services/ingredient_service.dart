@@ -1,6 +1,6 @@
 // lib/services/ingredient_service.dart
 
-import 'dart.convert';
+import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'api_service.dart';
 import '../models/ingredient.dart';
@@ -8,10 +8,18 @@ import '../models/unit_of_measure.dart';
 import '../models/ingredient_stock_movement.dart';
 
 class IngredientService {
+  // Hata Düzeltmesi: getHeaders metodu bu servis içinde yerel olarak tanımlandı.
+  static Map<String, String> getHeaders(String token) {
+    return {
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Authorization': 'Bearer $token',
+    };
+  }
+
   static Future<List<Ingredient>> fetchIngredients(String token) async {
     final response = await http.get(
       ApiService.getUrl('/ingredients/'),
-      headers: ApiService.getHeaders(token),
+      headers: getHeaders(token),
     );
     if (response.statusCode == 200) {
       List<dynamic> data = jsonDecode(utf8.decode(response.bodyBytes));
@@ -24,7 +32,7 @@ class IngredientService {
   static Future<List<UnitOfMeasure>> fetchUnits(String token) async {
     final response = await http.get(
       ApiService.getUrl('/units-of-measure/'),
-      headers: ApiService.getHeaders(token),
+      headers: getHeaders(token),
     );
     if (response.statusCode == 200) {
       List<dynamic> data = jsonDecode(utf8.decode(response.bodyBytes));
@@ -42,7 +50,7 @@ class IngredientService {
   }) async {
     final response = await http.post(
       ApiService.getUrl('/ingredients/'),
-      headers: ApiService.getHeaders(token),
+      headers: getHeaders(token),
       body: jsonEncode({
         'name': name,
         'stock_quantity': stockQuantity.toString(),
@@ -63,7 +71,7 @@ class IngredientService {
   }) async {
     final response = await http.post(
       ApiService.getUrl('/ingredients/$ingredientId/adjust-stock/'),
-      headers: ApiService.getHeaders(token),
+      headers: getHeaders(token),
       body: jsonEncode({
         'movement_type': movementType,
         'quantity_change': quantityChange,
@@ -79,7 +87,7 @@ class IngredientService {
       String token, int ingredientId) async {
     final response = await http.get(
       ApiService.getUrl('/ingredients/$ingredientId/history/'),
-      headers: ApiService.getHeaders(token),
+      headers: getHeaders(token),
     );
     if (response.statusCode == 200) {
       List<dynamic> data = jsonDecode(utf8.decode(response.bodyBytes));
@@ -89,7 +97,6 @@ class IngredientService {
     }
   }
 
-  // +++++++++++++++++++++ YENİ METOT +++++++++++++++++++++
   static Future<void> sendLowStockEmailToSupplier({
     required String token,
     required int supplierId,
@@ -97,16 +104,14 @@ class IngredientService {
   }) async {
     final response = await http.post(
       ApiService.getUrl('/ingredients/send-low-stock-report/'),
-      headers: ApiService.getHeaders(token),
+      headers: getHeaders(token),
       body: jsonEncode({
         'supplier_id': supplierId,
         'ingredient_ids': ingredientIds,
       }),
     );
-    // 202 (Accepted), Celery görevi başarıyla kuyruğa alındığında döner.
     if (response.statusCode != 202) {
       throw Exception('Tedarikçiye e-posta gönderilemedi: ${utf8.decode(response.bodyBytes)}');
     }
   }
-  // ++++++++++++++++++++++++++++++++++++++++++++++++++++++
 }

@@ -7,12 +7,12 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
-import 'package:makarna_app/services/stock_service.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:collection/collection.dart';
 // Servisler
 import '../services/user_session.dart';
 import '../services/socket_service.dart';
+import '../services/ingredient_service.dart'; // YENİ - stock_service yerine
 import '../services/order_service.dart';
 import '../services/kds_service.dart';
 import '../services/kds_management_service.dart';
@@ -839,10 +839,12 @@ class _BusinessOwnerHomeState extends State<BusinessOwnerHome>
         }
         
         try {
-            final stocks = await StockService.fetchBusinessStock(widget.token);
+            // YENİ HALİ: IngredientService kullanımı
+            final ingredients = await IngredientService.fetchIngredients(widget.token);
             bool alertFound = false;
-            for (final stock in stocks) {
-                if (stock.trackStock && stock.alertThreshold != null && stock.quantity <= stock.alertThreshold!) {
+            for (final ingredient in ingredients) {
+                // track_stock alanı Ingredient modeline taşınmıştı, bu yüzden kontrolü ona göre yapıyoruz.
+                if (ingredient.trackStock && ingredient.alertThreshold != null && ingredient.stockQuantity <= ingredient.alertThreshold!) {
                     alertFound = true;
                     break;
                 }

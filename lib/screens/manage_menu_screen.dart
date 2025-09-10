@@ -376,7 +376,7 @@ class _ManageMenuScreenState extends State<ManageMenuScreen> {
   }
 }
 
-// MenuItemModal Widget'ı aynı kalabilir
+// MenuItemModal Widget'ı güncellendi
 class MenuItemModal extends StatefulWidget {
   final AppLocalizations l10n;
   final String token;
@@ -404,6 +404,11 @@ class _MenuItemModalState extends State<MenuItemModal> {
   late TextEditingController _nameController;
   late TextEditingController _descriptionController;
   late TextEditingController _kdvController;
+  
+  // --- EKLENECEK: Yeni state değişkenleri ---
+  bool _isFromRecipe = true; // Varsayılan olarak ürünün reçeteli olduğunu varsayalım
+  final TextEditingController _priceController = TextEditingController(); // Reçetesiz ürün fiyatı için
+  
   dynamic _selectedCategoryId;
   bool _isSubmitting = false;
   String _message = '';
@@ -420,6 +425,7 @@ class _MenuItemModalState extends State<MenuItemModal> {
     _nameController = TextEditingController(text: widget.menuItem?.name ?? '');
     _descriptionController = TextEditingController(text: widget.menuItem?.description ?? '');
     _kdvController = TextEditingController(text: widget.menuItem?.kdvRate?.toString() ?? '10.0');
+    _priceController.text = widget.menuItem?.price?.toStringAsFixed(2) ?? '';
     _currentImageUrl = widget.menuItem?.image;
 
     dynamic initialWidgetCategoryId;
@@ -508,7 +514,6 @@ class _MenuItemModalState extends State<MenuItemModal> {
       }
     });
   }
-
 
   Future<void> _pickImage() async {
     final ImagePicker picker = ImagePicker();
@@ -635,8 +640,15 @@ class _MenuItemModalState extends State<MenuItemModal> {
       'kdv_rate': _kdvController.text.isNotEmpty ? double.tryParse(_kdvController.text.replaceAll(',', '.')) : 10.0,
     };
 
+    // --- DEĞİŞİKLİK: Reçetesiz ise, payload'a ek alanlar eklenir ---
+    if (isNew && !_isFromRecipe) {
+      payload['from_recipe'] = false;
+      payload['price'] = _priceController.text.replaceAll(',', '.');
+    }
+
+    // --- DEĞİŞİKLİK: Yeni ürün ise 'create-smart' endpoint'i kullanılır ---
     final url = isNew
-        ? ApiService.getUrl('/menu-items/')
+        ? ApiService.getUrl('/menu-items/create-smart/') // YENİ ENDPOINT
         : ApiService.getUrl('/menu-items/${widget.menuItem!.id}/');
 
     try {
@@ -695,6 +707,7 @@ class _MenuItemModalState extends State<MenuItemModal> {
     _nameController.dispose();
     _descriptionController.dispose();
     _kdvController.dispose();
+    _priceController.dispose();
     super.dispose();
   }
 
@@ -814,6 +827,48 @@ class _MenuItemModalState extends State<MenuItemModal> {
                   return null;
                 },
               ),
+              
+              // --- EKLENECEK: Form'a eklenecek yeni Switch ---
+              // Sadece yeni ürün eklenirken gösterilir.
+              if (widget.menuItem == null) ...[
+                const SizedBox(height: 16),
+                SwitchListTile(
+                  title: Text(widget.l10n.menuItemIsFromRecipeLabel),
+                  subtitle: Text(
+                    _isFromRecipe
+                        ? widget.l10n.menuItemIsFromRecipeSubtitleYes
+                        : widget.l10n.menuItemIsFromRecipeSubtitleNo,
+                  ),
+                  value: _isFromRecipe,
+                  onChanged: (bool value) {
+                    setState(() {
+                      _isFromRecipe = value;
+                    });
+                  },
+                  activeColor: Theme.of(context).primaryColorDark,
+                ),
+                if (!_isFromRecipe) ...[
+                  const SizedBox(height: 12),
+                  TextFormField(
+                    controller: _priceController,
+                    decoration: InputDecoration(
+                      labelText: widget.l10n.menuItemPriceLabel,
+                      prefixText: '₺ ',
+                    ),
+                    keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                    validator: (value) {
+                      if (!_isFromRecipe && (value == null || value.isEmpty)) {
+                        return widget.l10n.validatorRequiredField;
+                      }
+                      if (value != null && value.isNotEmpty && double.tryParse(value.replaceAll(',', '.')) == null) {
+                        return widget.l10n.validatorInvalidNumber;
+                      }
+                      return null;
+                    },
+                  ),
+                ],
+              ],
+              
               const SizedBox(height: 20),
               if (displayMessage.isNotEmpty)
                 Padding(

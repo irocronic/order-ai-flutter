@@ -1,5 +1,5 @@
 // lib/main.dart
-// Enhanced with network state tracking and improved socket connection management
+// Çalışan Sürüm
 
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';

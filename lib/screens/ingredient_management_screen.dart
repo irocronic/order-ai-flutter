@@ -1,14 +1,14 @@
 // lib/screens/ingredient_management_screen.dart
 
 import 'package:flutter/material.dart';
-import 'package.intl/intl.dart';
+import 'package:intl/intl.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../models/ingredient.dart';
 import '../services/ingredient_service.dart';
-import '../services/procurement_service.dart'; // YENİ: Tedarikçi servisi
+import '../services/procurement_service.dart';
 import '../services/user_session.dart';
 import '../models/unit_of_measure.dart';
-import '../models/supplier.dart'; // YENİ: Tedarikçi modeli
+import '../models/supplier.dart';
 import 'ingredient_history_screen.dart';
 
 class IngredientManagementScreen extends StatefulWidget {
@@ -22,10 +22,8 @@ class IngredientManagementScreen extends StatefulWidget {
 class _IngredientManagementScreenState extends State<IngredientManagementScreen> {
   late Future<List<Ingredient>> _ingredientsFuture;
   
-  // +++ YENİ STATE DEĞİŞKENLERİ +++
   final Set<int> _selectedIngredientIds = {};
   bool get _isSelectionMode => _selectedIngredientIds.isNotEmpty;
-  // +++++++++++++++++++++++++++++++
 
   @override
   void initState() {
@@ -36,13 +34,11 @@ class _IngredientManagementScreenState extends State<IngredientManagementScreen>
   void _refreshIngredients() {
     if (!mounted) return;
     setState(() {
-      // Seçim modunu sıfırla ve verileri yeniden çek
       _selectedIngredientIds.clear();
       _ingredientsFuture = IngredientService.fetchIngredients(UserSession.token);
     });
   }
 
-  // +++ YENİ METOT: Seçimi değiştirir +++
   void _toggleSelection(int ingredientId) {
     if (!mounted) return;
     setState(() {
@@ -54,7 +50,6 @@ class _IngredientManagementScreenState extends State<IngredientManagementScreen>
     });
   }
   
-  // +++ YENİ METOT: Tedarikçi seçme ve e-posta gönderme +++
   Future<void> _showSupplierSelectionAndSendEmail() async {
     final l10n = AppLocalizations.of(context)!;
     
@@ -67,7 +62,6 @@ class _IngredientManagementScreenState extends State<IngredientManagementScreen>
     }
 
     try {
-      // Tedarikçileri çek
       final suppliers = await ProcurementService.fetchSuppliers(UserSession.token);
       if (!mounted) return;
 
@@ -81,7 +75,6 @@ class _IngredientManagementScreenState extends State<IngredientManagementScreen>
       
       Supplier? selectedSupplier;
       
-      // Tedarikçi seçme diyalogunu göster
       final bool? shouldSend = await showDialog<bool>(
         context: context,
         builder: (dialogContext) {
@@ -117,11 +110,10 @@ class _IngredientManagementScreenState extends State<IngredientManagementScreen>
         },
       );
 
-      // E-postayı gönder
       if (shouldSend == true && selectedSupplier != null) {
         await IngredientService.sendLowStockEmailToSupplier(
           token: UserSession.token,
-          supplierId: selectedSupplier.id,
+          supplierId: selectedSupplier!.id,
           ingredientIds: _selectedIngredientIds.toList(),
         );
         if (mounted) {
@@ -129,7 +121,6 @@ class _IngredientManagementScreenState extends State<IngredientManagementScreen>
             content: Text(l10n.ingredientSuccessEmailSent),
             backgroundColor: Colors.green,
           ));
-          // İşlem sonrası seçimi temizle
           setState(() {
             _selectedIngredientIds.clear();
           });
@@ -431,7 +422,7 @@ class _IngredientManagementScreenState extends State<IngredientManagementScreen>
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          _isSelectionMode ? l10n.ingredientSelectItems : l10n.ingredientManagementTitle,
+          _isSelectionMode ? l10n.ingredientSelectItems : l10n.inventoryManagementTitle,
           style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
@@ -490,7 +481,7 @@ class _IngredientManagementScreenState extends State<IngredientManagementScreen>
                     child: Column(
                       children: [
                         Icon(
-                          Icons.inventory_2,
+                          Icons.inventory_2_outlined,
                           size: 64,
                           color: Colors.white.withOpacity(0.7),
                         ),

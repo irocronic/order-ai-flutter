@@ -3745,6 +3745,8 @@
         }
     },
     "ingredientNotificationSent": "Tedarikçiye bildirildi",
+    "sendButton": "Gönder",
+    "ingredientSelectItems": "Malzeme Seç",
     "ingredientSendEmailToSupplier": "Tedarikçiye Bildir",
     "ingredientSelectSupplierTitle": "Tedarikçi Seç",
     "ingredientSelectSupplierContent": "Seçili malzemeler için bildirim gönderilecek tedarikçiyi seçin.",
@@ -3752,5 +3754,25 @@
     "ingredientErrorNoSuppliers": "Sistemde kayıtlı tedarikçi bulunamadı.",
     "ingredientSuccessEmailSent": "Malzeme talebi başarıyla tedarikçiye gönderildi.",
     "ingredientErrorEmailSending": "E-posta gönderilirken bir hata oluştu: {error}",
-    "ingredientErrorNoItemsSelected": "Lütfen en az bir malzeme seçin."
+    "ingredientErrorNoItemsSelected": "Lütfen en az bir malzeme seçin.",
+    "inventoryManagementTitle": "Envanter Yönetimi",
+    "@inventoryManagementTitle": {
+        "description": "Title for the inventory management screen"
+    },
+    "menuItemIsFromRecipeLabel": "Bu ürün reçete ile mi hazırlanıyor?",
+    "@menuItemIsFromRecipeLabel": {
+        "description": "Label for the switch to determine if a menu item is made from ingredients"
+    },
+    "menuItemIsFromRecipeSubtitleYes": "Evet, envanterdeki malzemelerden üretilecek.",
+    "@menuItemIsFromRecipeSubtitleYes": {
+        "description": "Subtitle when the recipe switch is on"
+    },
+    "menuItemIsFromRecipeSubtitleNo": "Hayır, doğrudan satılan bir ürün (örn: Kutu Kola).",
+    "@menuItemIsFromRecipeSubtitleNo": {
+        "description": "Subtitle when the recipe switch is off"
+    },
+    "menuItemPriceLabel": "Satış Fiyatı",
+    "@menuItemPriceLabel": {
+        "description": "Label for the price of a non-recipe menu item"
+    }
 }

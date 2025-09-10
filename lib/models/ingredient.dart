@@ -6,7 +6,9 @@ class Ingredient {
   final double stockQuantity;
   final String unitAbbreviation;
   final double? alertThreshold;
+  // +++ YENİ ALAN +++
   final bool lowStockNotificationSent;
+  final bool trackStock; // --- BU SATIR EKLENDİ ---
 
   Ingredient({
     required this.id,
@@ -14,7 +16,9 @@ class Ingredient {
     required this.stockQuantity,
     required this.unitAbbreviation,
     this.alertThreshold,
+    // +++ CONSTRUCTOR'A EKLENDİ +++
     this.lowStockNotificationSent = false,
+    required this.trackStock, // --- BU SATIR EKLENDİ ---
   });
 
   factory Ingredient.fromJson(Map<String, dynamic> json) {
@@ -25,8 +29,8 @@ class Ingredient {
       unitAbbreviation: json['unit']?['abbreviation'] ?? 'Birim',
       alertThreshold: json['alert_threshold'] != null ? double.tryParse(json['alert_threshold'].toString()) : null,
       // +++ JSON'DAN OKUMA EKLENDİ +++
-      // Backend'den gelen 'low_stock_notification_sent' alanını okur.
       lowStockNotificationSent: json['low_stock_notification_sent'] as bool? ?? false,
+      trackStock: json['track_stock'] as bool? ?? true, // --- BU SATIR EKLENDİ ---
     );
   }
 }

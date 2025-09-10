@@ -3743,5 +3743,6 @@
                 "type": "String"
             }
         }
-    }
+    },
+    "ingredientNotificationSent": "Tedarikçiye bildirildi"
 }

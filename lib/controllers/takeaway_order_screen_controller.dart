@@ -6,7 +6,6 @@ import '../services/connectivity_service.dart';
 import '../services/cache_service.dart';
 import '../models/order.dart' as AppOrder;
 import '../models/paginated_response.dart';
-// --- YENİ: Gerekli importlar ---
 import '../models/menu_item.dart';
 
 /// TakeawayOrderScreen için state ve iş mantığını yönetir.
@@ -15,11 +14,9 @@ class TakeawayOrderScreenController {
   final int businessId;
   final VoidCallback onStateUpdate;
 
-  // --- YENİ: Menü ve kategori listeleri eklendi ---
   List<AppOrder.Order> takeawayOrders = [];
   List<MenuItem> menuItems = [];
   List<dynamic> categories = [];
-  // --- /YENİ ---
   
   int currentPage = 1;
   bool hasNextPage = true;
@@ -33,14 +30,12 @@ class TakeawayOrderScreenController {
     required this.onStateUpdate,
   });
 
-  // --- GÜNCELLEME: Artık menü ve kategorileri de çekiyor ---
   Future<void> loadFirstPage() async {
     isFirstLoadRunning = true;
     _notifyUI();
 
     errorMessage = '';
     
-    // Hem siparişleri hem de menü verilerini aynı anda çek
     try {
       final results = await Future.wait([
         OrderService.fetchTakeawayOrdersPaginated(token: token, page: 1),
@@ -66,14 +61,12 @@ class TakeawayOrderScreenController {
     _notifyUI();
   }
 
-  // loadMore metodu sadece siparişleri çekmeye devam edecek, bu doğru.
   Future<void> loadMore() async {
     if (hasNextPage && !isFirstLoadRunning && !isLoadMoreRunning) {
       isLoadMoreRunning = true;
       _notifyUI();
 
       currentPage++;
-      // Burada sadece siparişleri çekmeye devam ediyoruz, bu kısım doğru.
       await _fetchOrdersOnly(page: currentPage);
 
       isLoadMoreRunning = false;
@@ -81,7 +74,32 @@ class TakeawayOrderScreenController {
     }
   }
 
-  // loadMore için sadece siparişleri çeken yardımcı metot
+  // 🔥 ÇÖZÜM 8: Enhanced refresh with immediate UI update
+  Future<void> refreshCurrentPage() async {
+    debugPrint("🔄 [REFRESH] Starting immediate refresh of current page");
+    
+    try {
+      final response = await OrderService.fetchTakeawayOrdersPaginated(
+        token: token,
+        page: 1,
+      );
+      
+      takeawayOrders = response.results;
+      hasNextPage = response.next != null;
+      currentPage = 1;
+      errorMessage = '';
+      
+      debugPrint("🔄 [REFRESH] Refresh completed, ${takeawayOrders.length} orders loaded");
+      
+      // 🔥 Immediate UI notification
+      _notifyUI();
+      
+    } catch (e) {
+      errorMessage = e.toString().replaceFirst("Exception: ", "");
+      debugPrint("🔄 [REFRESH] Refresh failed: $errorMessage");
+    }
+  }
+
   Future<void> _fetchOrdersOnly({required int page}) async {
     try {
       final response = await OrderService.fetchTakeawayOrdersPaginated(

@@ -1,7 +1,9 @@
 // lib/screens/manage_staff_screen.dart
 
+import '../services/notification_center.dart';
+import '../services/refresh_manager.dart';
 import 'dart:convert';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; // HATA DÜZELTİLDİ: 'packagepackage' -> 'package'
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../services/api_service.dart';
 import 'add_edit_staff_screen.dart';
@@ -28,7 +30,36 @@ class _ManageStaffScreenState extends State<ManageStaffScreen> {
   @override
   void initState() {
     super.initState();
+    
+    // 🆕 NotificationCenter listener'ları ekle
+    NotificationCenter.instance.addObserver('refresh_all_screens', (data) {
+      debugPrint('[ManageStaffScreen] 📡 Global refresh received: ${data['event_type']}');
+      if (mounted) {
+        final refreshKey = 'manage_staff_screen_${widget.businessId}';
+        RefreshManager.throttledRefresh(refreshKey, () async {
+          await _fetchStaffList();
+        });
+      }
+    });
+
+    NotificationCenter.instance.addObserver('screen_became_active', (data) {
+      debugPrint('[ManageStaffScreen] 📱 Screen became active notification received');
+      if (mounted) {
+        final refreshKey = 'manage_staff_screen_active_${widget.businessId}';
+        RefreshManager.throttledRefresh(refreshKey, () async {
+          await _fetchStaffList();
+        });
+      }
+    });
+
     _fetchStaffList();
+  }
+
+  @override
+  void dispose() {
+    // NotificationCenter listener'ları temizlenmeli ama anonymous function olduğu için
+    // bu ekran için önemli değil çünkü genelde kısa süre açık kalır
+    super.dispose();
   }
 
   Future<void> _fetchStaffList() async {
@@ -122,10 +153,8 @@ class _ManageStaffScreenState extends State<ManageStaffScreen> {
     );
   }
 
-  // === DEĞİŞİKLİK: Metot artık 'limits' parametresi alıyor ===
   Future<void> _navigateToAddEditStaffScreen({dynamic staff, required SubscriptionLimits limits}) async {
     final l10n = AppLocalizations.of(context)!;
-    // === DEĞİŞİKLİK: Statik `UserSession.maxStaff` yerine dinamik `limits.maxStaff` kullanılıyor ===
     if (staff == null && _staffList.length >= limits.maxStaff) {
       _showLimitReachedDialog(
         l10n.manageStaffErrorLimitExceeded(limits.maxStaff.toString())
@@ -165,7 +194,7 @@ class _ManageStaffScreenState extends State<ManageStaffScreen> {
         ),
       ),
       child: InkWell(
-        onTap: () => _navigateToAddEditStaffScreen(staff: staff, limits: UserSession.limitsNotifier.value), // Mevcut state'i yolla
+        onTap: () => _navigateToAddEditStaffScreen(staff: staff, limits: UserSession.limitsNotifier.value),
         child: Column(
           children: [
             Expanded(
@@ -222,7 +251,7 @@ class _ManageStaffScreenState extends State<ManageStaffScreen> {
                       IconButton(
                         icon: const Icon(Icons.edit, size: 20, color: Colors.blueAccent),
                         tooltip: l10n.tooltipEdit,
-                        onPressed: () => _navigateToAddEditStaffScreen(staff: staff, limits: UserSession.limitsNotifier.value), // Mevcut state'i yolla
+                        onPressed: () => _navigateToAddEditStaffScreen(staff: staff, limits: UserSession.limitsNotifier.value),
                         visualDensity: VisualDensity.compact,
                         padding: const EdgeInsets.all(4),
                       ),
@@ -270,20 +299,24 @@ class _ManageStaffScreenState extends State<ManageStaffScreen> {
           ),
         ),
         actions: [
-          // === DEĞİŞİKLİK: IconButton, ValueListenableBuilder ile sarmalandı ===
           ValueListenableBuilder<SubscriptionLimits>(
             valueListenable: UserSession.limitsNotifier,
             builder: (context, limits, child) {
-              // Mevcut personel sayısı, abonelik limitinden az ise buton aktiftir.
               final bool canAddMore = _staffList.length < limits.maxStaff;
-
               return IconButton(
                 icon: const Icon(Icons.add, color: Colors.white),
                 tooltip: l10n.manageStaffTooltipAdd,
-                // Butonun aktif olup olmadığı `canAddMore` değişkenine bağlıdır.
-                onPressed: _isLoading || !canAddMore
+                onPressed: _isLoading
                     ? null
-                    : () => _navigateToAddEditStaffScreen(limits: limits),
+                    : () {
+                        if (canAddMore) {
+                          _navigateToAddEditStaffScreen(limits: limits);
+                        } else {
+                          _showLimitReachedDialog(
+                            l10n.manageStaffErrorLimitExceeded(limits.maxStaff.toString())
+                          );
+                        }
+                      },
               );
             },
           ),

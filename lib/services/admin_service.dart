@@ -138,4 +138,48 @@ class AdminService {
       throw Exception('Kullanıcı onaylanırken hata: $e');
     }
   }
+
+  // === YENİ METOTLAR ===
+
+  /// Tüm bildirim ayarlarını listeler.
+  static Future<List<dynamic>> fetchNotificationSettings(String token) async {
+    final url = ApiService.getUrl('/admin-panel/notification-settings/');
+    debugPrint("AdminService: Fetching notification settings from $url");
+    try {
+      final response = await http.get(
+        url,
+        headers: {"Authorization": "Bearer $token"},
+      );
+      if (response.statusCode == 200) {
+        return jsonDecode(utf8.decode(response.bodyBytes));
+      } else {
+        throw Exception('Bildirim ayarları alınamadı: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Bildirim ayarları çekilirken hata: $e');
+    }
+  }
+
+  /// Belirli bir bildirim ayarının aktiflik durumunu günceller.
+  static Future<Map<String, dynamic>> updateNotificationSetting(String token, String eventType, bool isActive) async {
+    final url = ApiService.getUrl('/admin-panel/notification-settings/$eventType/');
+    debugPrint("AdminService: Setting status for event $eventType to $isActive");
+    try {
+      final response = await http.patch(
+        url,
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $token"
+        },
+        body: jsonEncode({'is_active': isActive}),
+      );
+      if (response.statusCode == 200) {
+        return jsonDecode(utf8.decode(response.bodyBytes));
+      } else {
+        throw Exception('Bildirim ayarı güncellenemedi: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Bildirim ayarı güncellenirken hata: $e');
+    }
+  }
 }

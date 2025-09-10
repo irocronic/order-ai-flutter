@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../services/api_service.dart';
 import '../../services/user_session.dart';
+import '../../services/setup_wizard_audio_service.dart'; // 🎵 YENİ EKLENEN
 import '../../screens/subscription_screen.dart';
 
 class StepTablesWidget extends StatefulWidget {
@@ -34,6 +35,9 @@ class StepTablesWidgetState extends State<StepTablesWidget> {
   late final AppLocalizations l10n;
   bool _didFetchData = false;
 
+  // 🎵 YENİ EKLENEN: Audio servis referansı
+  final SetupWizardAudioService _audioService = SetupWizardAudioService.instance;
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -41,7 +45,20 @@ class StepTablesWidgetState extends State<StepTablesWidget> {
       l10n = AppLocalizations.of(context)!;
       _fetchCurrentTableCount();
       _didFetchData = true;
+      
+      // 🎵 YENİ EKLENEN: Sesli rehberliği başlat
+      _startVoiceGuidance();
     }
+  }
+
+  // 🎵 YENİ EKLENEN: Sesli rehberlik başlatma
+  void _startVoiceGuidance() {
+    // Biraz bekle ki kullanıcı ekranı görsün
+    Future.delayed(const Duration(milliseconds: 2000), () {
+      if (mounted) {
+        _audioService.playTablesStepAudio(context: context);
+      }
+    });
   }
 
   Future<void> _fetchCurrentTableCount() async {
@@ -92,7 +109,6 @@ class StepTablesWidgetState extends State<StepTablesWidget> {
     if (!_formKey.currentState!.validate()) return;
     if (!mounted) return;
     
-    // *** DEĞİŞİKLİK BURADA: Artık `UserSession.limitsNotifier`'dan gelen anlık veriyi kullanıyoruz. ***
     final currentLimits = UserSession.limitsNotifier.value;
     final int countToAdd = _tableCount;
     if (createdTableCount + countToAdd > currentLimits.maxTables) {
@@ -213,6 +229,94 @@ class StepTablesWidgetState extends State<StepTablesWidget> {
     );
   }
 
+  // 🎵 YENİ EKLENEN: Ses kontrol butonu
+  Widget _buildAudioControlButton() {
+    return ValueListenableBuilder<bool>(
+      valueListenable: ValueNotifier(_audioService.isMuted),
+      builder: (context, isMuted, child) {
+        return Container(
+          margin: const EdgeInsets.only(right: 8),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Ses durumu göstergesi
+              if (_audioService.isPlaying)
+                Container(
+                  margin: const EdgeInsets.only(right: 8),
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: Colors.green.withOpacity(0.2),
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: Colors.green.withOpacity(0.3)),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(Icons.volume_up, color: Colors.green, size: 16),
+                      const SizedBox(width: 4),
+                      Text(
+                        'Sesli Rehber Aktif',
+                        style: TextStyle(
+                          color: Colors.green.shade700,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              
+              // Sessizlik/Açma butonu
+              IconButton(
+                icon: Icon(
+                  isMuted ? Icons.volume_off : Icons.volume_up,
+                  color: Colors.white.withOpacity(0.9),
+                  size: 24,
+                ),
+                onPressed: () {
+                  setState(() {
+                    _audioService.toggleMute();
+                  });
+                },
+                tooltip: isMuted ? 'Sesi Aç' : 'Sesi Kapat',
+                style: IconButton.styleFrom(
+                  backgroundColor: isMuted 
+                    ? Colors.red.withOpacity(0.2) 
+                    : Colors.blue.withOpacity(0.2),
+                  padding: const EdgeInsets.all(12),
+                ),
+              ),
+              
+              // Tekrar çal butonu
+              IconButton(
+                icon: Icon(
+                  Icons.replay,
+                  color: Colors.white.withOpacity(0.9),
+                  size: 20,
+                ),
+                onPressed: _audioService.isMuted ? null : () {
+                  _audioService.playTablesStepAudio(context: context);
+                },
+                tooltip: 'Rehberi Tekrar Çal',
+                style: IconButton.styleFrom(
+                  backgroundColor: Colors.orange.withOpacity(0.2),
+                  padding: const EdgeInsets.all(8),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    // Sesli rehberliği durdur
+    _audioService.stopAudio();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -220,6 +324,15 @@ class StepTablesWidgetState extends State<StepTablesWidget> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
+          // 🎵 YENİ EKLENEN: Sesli rehber kontrolleri
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              _buildAudioControlButton(),
+            ],
+          ),
+          const SizedBox(height: 16),
+          
           Text(
             l10n.setupTablesDescription,
             textAlign: TextAlign.center,
@@ -290,7 +403,6 @@ class StepTablesWidgetState extends State<StepTablesWidget> {
                 ),
               ),
             const SizedBox(height: 10),
-            // === DEĞİŞİKLİK BURADA: Metin, ValueListenableBuilder ile sarmalandı ===
             ValueListenableBuilder<SubscriptionLimits>(
               valueListenable: UserSession.limitsNotifier,
               builder: (context, limits, child) {

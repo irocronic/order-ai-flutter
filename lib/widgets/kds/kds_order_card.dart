@@ -29,6 +29,9 @@ class KdsOrderCard extends StatefulWidget {
 class _KdsOrderCardState extends State<KdsOrderCard> {
     Timer? _timer;
     int _elapsedSeconds = 0;
+    
+    // YENİ: Her bir kartın kendi içindeki aksiyonlar için yüklenme durumu
+    bool _isUpdatingItem = false;
 
     static const String KDS_ITEM_STATUS_PENDING = 'pending_kds';
     static const String KDS_ITEM_STATUS_PREPARING = 'preparing_kds';
@@ -56,11 +59,9 @@ class _KdsOrderCardState extends State<KdsOrderCard> {
         super.dispose();
     }
     
-    // === GÜNCELLENEN METOT: Veri tipini kontrol ediyor ===
     void _startTimerIfNeeded() {
         final statusData = widget.orderData['kds_screen_specific_status_display'];
         
-        // Gelen verinin bir Map olup olmadığını ve doğru anahtarları içerip içermediğini kontrol et
         final bool isKitchenProcessOngoing = statusData is Map<String, dynamic> && 
                                              (statusData['status_key'] == 'sent_to_kitchen' || statusData['status_key'] == 'preparing');
 
@@ -116,11 +117,35 @@ class _KdsOrderCardState extends State<KdsOrderCard> {
             SnackBar(content: Text(message), backgroundColor: Colors.redAccent),
         );
     }
+    
+    // YENİ: API isteklerini yönetmek için merkezi ve güvenli bir yardımcı metot
+    Future<void> _handleApiAction(Future<void> Function() action) async {
+      if (_isUpdatingItem || !mounted) return;
 
+      setState(() {
+        _isUpdatingItem = true;
+      });
+
+      try {
+        await action();
+      } catch (e) {
+        if (mounted) {
+          final l10n = AppLocalizations.of(context)!;
+          _showErrorSnackbar(l10n.errorGeneral(e.toString()));
+        }
+      } finally {
+        if (mounted) {
+          setState(() {
+            _isUpdatingItem = false;
+          });
+        }
+      }
+    }
+
+    // GÜNCELLENDİ: Hazırlamaya başla aksiyonu artık merkezi metodu kullanıyor
     Future<void> _handleStartPreparingItem(int orderItemId) async {
-        if (widget.isLoadingAction || !mounted) return;
         final l10n = AppLocalizations.of(context)!;
-        try {
+        await _handleApiAction(() async {
             final response = await KdsService.startPreparingItem(widget.token, orderItemId);
             if (!mounted) return;
             if (response.statusCode == 200) {
@@ -128,15 +153,13 @@ class _KdsOrderCardState extends State<KdsOrderCard> {
             } else {
                 _showErrorSnackbar(l10n.kdsCouldNotMarkPreparing(response.statusCode.toString()));
             }
-        } catch (e) {
-            _showErrorSnackbar(l10n.errorGeneral(e.toString()));
-        }
+        });
     }
 
+    // GÜNCELLENDİ: Hazır olarak işaretle aksiyonu artık merkezi metodu kullanıyor
     Future<void> _handleMarkItemReady(int orderItemId) async {
-        if (widget.isLoadingAction || !mounted) return;
         final l10n = AppLocalizations.of(context)!;
-        try {
+        await _handleApiAction(() async {
             final response = await KdsService.markItemReady(widget.token, orderItemId);
             if (!mounted) return;
             if (response.statusCode == 200) {
@@ -144,14 +167,10 @@ class _KdsOrderCardState extends State<KdsOrderCard> {
             } else {
                 _showErrorSnackbar(l10n.kdsCouldNotMarkReady(response.statusCode.toString()));
             }
-        } catch (e) {
-            _showErrorSnackbar(l10n.errorGeneral(e.toString()));
-        }
+        });
     }
     
-    // === GÜNCELLENEN METOT: Gelen verinin tipini kontrol ediyor ===
     String _getLocalizedKdsStatus(AppLocalizations l10n, dynamic statusData) {
-        // Gelen veri Map değilse veya null ise, genel durumu göster.
         if (statusData is! Map<String, dynamic>) {
             return getLocalizedOrderStatus(context, widget.orderData['status']);
         }
@@ -188,7 +207,6 @@ class _KdsOrderCardState extends State<KdsOrderCard> {
         final String? customerName = widget.orderData['customer_name'];
         final List<dynamic> items = widget.orderData['order_items'] as List<dynamic>? ?? [];
 
-        // === GÜNCELLENEN BÖLÜM: statusData ve statusKey daha güvenli alınıyor ===
         final statusData = widget.orderData['kds_screen_specific_status_display'];
         final String cardHeaderStatusDisplay = _getLocalizedKdsStatus(l10n, statusData);
         final String statusKey = (statusData is Map<String, dynamic> ? statusData['status_key'] : null) ?? 'unknown';
@@ -290,6 +308,7 @@ class _KdsOrderCardState extends State<KdsOrderCard> {
         );
     }
 
+    // GÜNCELLENDİ: Butonlar artık _isUpdatingItem durumuna göre yüklenme göstergesi gösterecek
     Widget _buildKdsItemRow(Map<String, dynamic> item, AppLocalizations l10n) {
         final String itemKdsStatus = item['kds_status'] ?? KDS_ITEM_STATUS_PENDING;
         final bool isItemReady = itemKdsStatus == KDS_ITEM_STATUS_READY;
@@ -313,7 +332,18 @@ class _KdsOrderCardState extends State<KdsOrderCard> {
                         ),
                     ),
                     const SizedBox(width: 8),
-                    if (canStartPreparing)
+
+                    // YENİ: Butonların yerine işlem sırasında gösterilecek anlık yükleme animasyonu
+                    if (_isUpdatingItem)
+                        const SizedBox(
+                          width: 22,
+                          height: 22,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2.0,
+                            valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                          ),
+                        )
+                    else if (canStartPreparing)
                         IconButton(
                             icon: const Icon(Icons.play_circle_fill_outlined, color: Colors.white),
                             iconSize: 22,

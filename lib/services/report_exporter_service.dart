@@ -16,21 +16,27 @@ class ReportExporterService {
     var excel = Excel.createExcel();
     Sheet sheetObject = excel['Satış Raporu'];
 
-    // Başlık Stilini Oluştur
+    // DÜZELTME: Parametre adı '...Hex' olarak kaldı, ancak değer olarak String veya int yerine ExcelColor nesnesi verildi.
     CellStyle headerStyle = CellStyle(
       bold: true,
-      backgroundColorHex: "#FF1E88E5", // Koyu Mavi
-      fontColorHex: "#FFFFFFFF",
+      backgroundColorHex: ExcelColor.fromHexString("#FF1E88E5"), // Koyu Mavi
+      fontColorHex: ExcelColor.fromHexString("#FFFFFFFF"),
       verticalAlign: VerticalAlign.Center,
       horizontalAlign: HorizontalAlign.Center,
     );
-
-    // Başlıkları Ekle
-    List<String> headers = [
-      'Sipariş ID', 'Tarih', 'Saat', 'Sipariş Tipi', 'Masa/Müşteri',
-      'Ürün Adı', 'Varyant', 'Adet', 'Birim Fiyat', 'Toplam Tutar'
-    ];
     
+    List<CellValue> headers = [
+      TextCellValue('Sipariş ID'),
+      TextCellValue('Tarih'),
+      TextCellValue('Saat'),
+      TextCellValue('Sipariş Tipi'),
+      TextCellValue('Masa/Müşteri'),
+      TextCellValue('Ürün Adı'),
+      TextCellValue('Varyant'),
+      TextCellValue('Adet'),
+      TextCellValue('Birim Fiyat'),
+      TextCellValue('Toplam Tutar')
+    ];
     sheetObject.appendRow(headers);
 
     for (var i = 0; i < headers.length; i++) {
@@ -41,12 +47,8 @@ class ReportExporterService {
     // Verileri Satırlara Ekle
     double grandTotal = 0.0;
     for (var rowData in salesData) {
-
-      // === HATA DÜZELTMESİ BURADA ===
-      // Gelen String değerler double.tryParse ile sayıya çevriliyor.
       final double lineTotal = double.tryParse(rowData['line_total']?.toString() ?? '0.0') ?? 0.0;
       final double unitPrice = double.tryParse(rowData['unit_price']?.toString() ?? '0.0') ?? 0.0;
-      // ==============================
 
       grandTotal += lineTotal;
 
@@ -56,26 +58,32 @@ class ReportExporterService {
       }
 
       sheetObject.appendRow([
-        rowData['order_id'] ?? 0,
-        createdAt != null ? DateFormat('dd.MM.yyyy').format(createdAt) : '-',
-        createdAt != null ? DateFormat('HH:mm').format(createdAt) : '-',
-        rowData['order_type'] == 'table' ? 'Masa' : 'Paket',
-        rowData['order_type'] == 'table' ? (rowData['table_number']?.toString() ?? '-') : (rowData['customer_name'] ?? '-'),
-        rowData['item_name'] ?? '',
-        rowData['variant_name'] ?? '-',
-        rowData['quantity'] ?? 0,
-        unitPrice, // Düzeltilmiş değer kullanılıyor
-        lineTotal,   // Düzeltilmiş değer kullanılıyor
+        IntCellValue(rowData['order_id'] ?? 0),
+        TextCellValue(createdAt != null ? DateFormat('dd.MM.yyyy').format(createdAt) : '-'),
+        TextCellValue(createdAt != null ? DateFormat('HH:mm').format(createdAt) : '-'),
+        TextCellValue(rowData['order_type'] == 'table' ? 'Masa' : 'Paket'),
+        TextCellValue(rowData['order_type'] == 'table' ? (rowData['table_number']?.toString() ?? '-') : (rowData['customer_name'] ?? '-')),
+        TextCellValue(rowData['item_name'] ?? ''),
+        TextCellValue(rowData['variant_name'] ?? '-'),
+        IntCellValue(rowData['quantity'] ?? 0),
+        DoubleCellValue(unitPrice),
+        DoubleCellValue(lineTotal),
       ]);
     }
     
-    // Genel Toplam Satırını Ekle
     sheetObject.appendRow([
-      '', '', '', '', '', '', '', '', 
-      'GENEL TOPLAM',
-      grandTotal,
+      TextCellValue(''),
+      TextCellValue(''),
+      TextCellValue(''),
+      TextCellValue(''),
+      TextCellValue(''),
+      TextCellValue(''),
+      TextCellValue(''),
+      TextCellValue(''),
+      TextCellValue('GENEL TOPLAM'),
+      DoubleCellValue(grandTotal),
     ]);
-
+    
     var fileBytes = excel.save();
 
     if (fileBytes != null) {

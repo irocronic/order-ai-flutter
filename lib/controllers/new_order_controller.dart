@@ -1,4 +1,5 @@
 // lib/controllers/new_order_controller.dart
+
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:collection/collection.dart';
@@ -12,13 +13,14 @@ import '../utils/notifiers.dart';
 import '../main.dart';
 import 'package:flutter/foundation.dart'; // debugPrint için
 
-/// NewOrderScreen'in state'ini ve iş mantığını yönetir.
 class NewOrderController {
   final String token;
   final int businessId;
   final Function(VoidCallback fn) onStateUpdate;
   final Function(String message, {bool isError}) showSnackBarCallback;
-  final Function(bool success) popScreenCallback;
+  
+  // DEĞİŞİKLİK 1: popScreenCallback kaldırıldı.
+  // final Function(bool success) popScreenCallback; 
 
   List<MenuItem> menuItems = [];
   List<dynamic> categories = [];
@@ -35,9 +37,9 @@ class NewOrderController {
     required this.table,
     required this.onStateUpdate,
     required this.showSnackBarCallback,
-    required this.popScreenCallback,
+    // DEĞİŞİKLİK 2: popScreenCallback constructor'dan kaldırıldı.
+    // required this.popScreenCallback,
   });
-
   final dynamic table;
 
   Future<bool> initializeScreen() async {
@@ -48,13 +50,11 @@ class NewOrderController {
   Future<bool> fetchInitialData() async {
     _setLoading(true);
     errorMessage = '';
-
     try {
       final results = await Future.wait([
         OrderService.fetchMenuItems(token),
         OrderService.fetchCategories(token),
       ]);
-
       final menuData = results[0];
       final categoryData = results[1];
       
@@ -62,9 +62,8 @@ class NewOrderController {
       categories = categoryData;
       
       errorMessage = '';
-      onStateUpdate(() {}); // UI'ı yeni verilerle güncelle
+      onStateUpdate(() {}); 
       return true;
-
     } catch (e) {
       errorMessage = "Veriler alınamadı: ${e.toString().replaceFirst("Exception: ", "")}";
       return false;
@@ -87,11 +86,9 @@ class NewOrderController {
 
   void addToBasket(MenuItem item, MenuItemVariant? variant, List<MenuItemVariant> extras, String? tableUser, int quantity) {
     String? currentTableUser = (isSplitTable == true) ? tableUser : null;
-
     double effectiveUnitPrice;
     List<OrderItemExtra> orderItemExtras = [];
     MenuItemVariant? finalVariant = variant;
-
     if (item.isCampaignBundle) {
       effectiveUnitPrice = item.price ?? 0.0;
       finalVariant = null;
@@ -108,7 +105,6 @@ class NewOrderController {
         ));
       }
     }
-
     final index = basket.indexWhere((orderItem) {
       bool sameItem = orderItem.menuItem.id == item.id;
       bool sameVariantLogic;
@@ -128,7 +124,6 @@ class NewOrderController {
       }
       return sameItem && sameVariantLogic && sameTableUserLogic && sameExtrasLogic;
     });
-
     if (index != -1) {
       basket[index].quantity += quantity;
     } else {
@@ -157,14 +152,15 @@ class NewOrderController {
     return total;
   }
 
-  Future<void> handleCreateOrder() async {
+  // DEĞİŞİKLİK 3: Metot artık void yerine Future<bool> döndürüyor.
+  Future<bool> handleCreateOrder() async {
     if (basket.isEmpty) {
       showSnackBarCallback("Lütfen en az bir ürün ekleyin.", isError: true);
-      return;
+      return false;
     }
     if (isSplitTable == true && tableOwners.where((name) => name.trim().isNotEmpty).length < 2) {
       showSnackBarCallback("Bölünmüş masa için en az 2 masa sahibi adı girilmelidir.", isError: true);
-      return;
+      return false;
     }
 
     _setLoading(true);
@@ -181,8 +177,7 @@ class NewOrderController {
       customerPhone: null,
       orderType: 'table',
     );
-
-    debugPrint('NewOrderController: handleCreateOrder - Sipariş gönderiliyor: ${jsonEncode(newOrder.toJson())}');
+    debugPrint('[NewOrderController] handleCreateOrder - Sipariş gönderiliyor: ${jsonEncode(newOrder.toJson())}');
 
     try {
       debugPrint("[Controller] 1. OrderService.createOrder çağrılacak.");
@@ -191,41 +186,33 @@ class NewOrderController {
         order: newOrder,
       );
       debugPrint("[Controller] 2. OrderService.createOrder yanıt verdi. StatusCode: ${response.statusCode}");
-
-      final responseBodyBytes = response.bodyBytes;
-      debugPrint("[Controller] 3. Yanıtın bodyBytes alındı. Uzunluk: ${responseBodyBytes.length}");
-
-      final decodedString = utf8.decode(responseBodyBytes);
-      debugPrint("[Controller] 4. Yanıt body'si utf8.decode ile çözüldü.");
       
+      final responseBodyBytes = response.bodyBytes;
+      final decodedString = utf8.decode(responseBodyBytes);
       if (response.statusCode == 201) {
-        debugPrint("[Controller] 5. StatusCode 201, başarı bloğuna girildi.");
         String successMessage = "Sipariş başarıyla oluşturuldu.";
-        bool isOffline = false;
-        
         try {
-          debugPrint("[Controller] 6. Yanıt gövdesi jsonDecode ile parse ediliyor...");
           final decodedBody = jsonDecode(decodedString);
-          debugPrint("[Controller] 7. Yanıt gövdesi başarıyla parse edildi.");
           if(decodedBody is Map && decodedBody['offline'] == true) {
-            isOffline = true;
             successMessage = decodedBody['detail'] ?? successMessage;
           }
         } catch(jsonError) {
           debugPrint("[Controller] UYARI: Offline yanıtı parse edilemedi, ancak devam ediliyor. Hata: $jsonError");
         }
         
-        debugPrint("[Controller] 8. SnackBar gösterilecek: '$successMessage'");
         showSnackBarCallback(successMessage, isError: false);
         await Future.delayed(const Duration(milliseconds: 500));
-        debugPrint("[Controller] 9. Ekran pop ediliyor.");
-        popScreenCallback(true);
-
+        
+        // DEĞİŞİKLİK 4: popScreenCallback yerine 'true' döndürerek başarıyı bildir.
+        debugPrint("[Controller] 9. İşlem başarılı, 'true' döndürülüyor.");
+        return true;
       } else {
         errorMessage = "Sipariş oluşturulurken hata oluştu (${response.statusCode}): ${utf8.decode(response.bodyBytes)}";
         showSnackBarCallback(errorMessage, isError: true);
+        // Hata durumunda 'false' döndür
+        return false;
       }
-    } catch (e, s) { // Stack trace de yakala
+    } catch (e, s) {
       debugPrint("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
       debugPrint("[Controller] KRİTİK HATA: _handleCreateOrder CATCH bloğuna düşüldü.");
       debugPrint("Hata Türü: ${e.runtimeType}");
@@ -234,14 +221,24 @@ class NewOrderController {
       debugPrint("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
       errorMessage = "Sipariş oluşturma hatası (detaylı log): $e";
       showSnackBarCallback(errorMessage, isError: true);
+      // Hata durumunda 'false' döndür
+      return false;
     } finally {
+      // DEĞİŞİKLİK 5: `finally` bloğu sadece `_setLoading(false)` çağırmak için kullanılıyor.
+      // Başarılı durumda ekran zaten kapanacağı için bu sorun olmaz.
       _setLoading(false);
+      debugPrint('[Controller] finally bloğu çalıştı, isLoading false olarak ayarlandı.');
     }
   }
 
   void _setLoading(bool value) {
     if (isLoading == value) return;
     isLoading = value;
+    debugPrint('[Controller] _setLoading çağrıldı: $value'); // EKSTRA LOG
     onStateUpdate(() {});
+  }
+
+  void dispose() {
+    debugPrint('NewOrderController disposed.');
   }
 }

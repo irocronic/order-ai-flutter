@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../services/api_service.dart';
+import '../../services/setup_wizard_audio_service.dart'; // 🎵 YENİ EKLENEN
 import '../../models/staff_permission_keys.dart';
 import '../../services/user_session.dart';
 import '../../screens/subscription_screen.dart';
@@ -36,8 +37,10 @@ class StepStaffWidgetState extends State<StepStaffWidget> {
   List<KdsScreenModel> _availableKdsScreens = [];
   late final AppLocalizations l10n;
   bool _didFetchData = false;
-
   final Map<int, bool> _staffShiftAssignmentStatus = {};
+
+  // 🎵 YENİ EKLENEN: Audio servis referansı
+  final SetupWizardAudioService _audioService = SetupWizardAudioService.instance;
 
   bool areAllStaffShiftsAssigned() {
     if (_addedStaff.isEmpty) return true;
@@ -53,7 +56,27 @@ class StepStaffWidgetState extends State<StepStaffWidget> {
       l10n = AppLocalizations.of(context)!;
       _fetchInitialData();
       _didFetchData = true;
+      
+      // 🎵 YENİ EKLENEN: Sesli rehberliği başlat
+      _startVoiceGuidance();
     }
+  }
+
+  // 🎵 YENİ EKLENEN: Sesli rehberlik başlatma
+  void _startVoiceGuidance() {
+    // Biraz bekle ki kullanıcı ekranı görsün
+    Future.delayed(const Duration(milliseconds: 2000), () {
+      if (mounted) {
+        _audioService.playStaffStepAudio(context: context);
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    // Sesli rehberliği durdur
+    _audioService.stopAudio();
+    super.dispose();
   }
 
   Future<void> _fetchInitialData() async {
@@ -94,17 +117,14 @@ class StepStaffWidgetState extends State<StepStaffWidget> {
 
   Future<void> _navigateToShiftAssignment(dynamic newStaff) async {
     if (!mounted) return;
-
     final staffId = newStaff['id'] as int;
     final staffName = "${newStaff['first_name'] ?? ''} ${newStaff['last_name'] ?? ''}".trim().isNotEmpty
         ? "${newStaff['first_name']} ${newStaff['last_name']}"
         : newStaff['username'];
-
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text(l10n.setupStaffRedirectingToSchedule(staffName)), duration: const Duration(seconds: 2)),
     );
     await Future.delayed(const Duration(seconds: 1));
-
     final bool? shiftAssigned = await Navigator.push<bool>(
       context,
       MaterialPageRoute(
@@ -116,7 +136,6 @@ class StepStaffWidgetState extends State<StepStaffWidget> {
         ),
       ),
     );
-
     if (mounted) {
       setState(() {
         _staffShiftAssignmentStatus[staffId] = shiftAssigned ?? false;
@@ -149,8 +168,8 @@ class StepStaffWidgetState extends State<StepStaffWidget> {
   }
 
   Future<void> _showAddStaffDialog() async {
-    if (_addedStaff.length >= UserSession.maxStaff) {
-      _showLimitReachedDialog(l10n.manageStaffErrorLimitExceeded(UserSession.maxStaff.toString()));
+    if (_addedStaff.length >= UserSession.limitsNotifier.value.maxStaff) {
+      _showLimitReachedDialog(l10n.manageStaffErrorLimitExceeded(UserSession.limitsNotifier.value.maxStaff.toString()));
       return;
     }
 
@@ -159,6 +178,10 @@ class StepStaffWidgetState extends State<StepStaffWidget> {
     final passwordController = TextEditingController();
     final firstNameController = TextEditingController();
     final lastNameController = TextEditingController();
+    // ==================== YENİ KOD (1/3): E-posta için Controller ====================
+    final emailController = TextEditingController();
+    // =============================================================================
+
     String selectedRole = 'staff';
     final Set<int> _selectedKdsScreenIds = {};
     bool isSubmitting = false;
@@ -168,7 +191,7 @@ class StepStaffWidgetState extends State<StepStaffWidget> {
       barrierDismissible: false,
       builder: (dialogContext) {
         return StatefulBuilder(builder: (context, setDialogState) {
-          // Karanlık tema için ortak input stili
+          final dialogL10n = AppLocalizations.of(context)!;
           final inputDecorationTheme = InputDecoration(
             labelStyle: TextStyle(color: Colors.white.withOpacity(0.8)),
             hintStyle: TextStyle(color: Colors.white.withOpacity(0.6)),
@@ -193,8 +216,8 @@ class StepStaffWidgetState extends State<StepStaffWidget> {
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     colors: [
-                      const Color(0xFF1A237E).withOpacity(0.98), // Indigo 900
-                      const Color(0xFF303F9F).withOpacity(0.95), // Indigo 600
+                      const Color(0xFF1A237E).withOpacity(0.98),
+                      const Color(0xFF303F9F).withOpacity(0.95),
                     ],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
@@ -233,6 +256,26 @@ class StepStaffWidgetState extends State<StepStaffWidget> {
                             validator: (value) => (value == null || value.trim().isEmpty) ? l10n.usernameHintRequired : null,
                           ),
                           const SizedBox(height: 16),
+                          
+                          // ==================== YENİ KOD (2/3): E-posta TextFormField ====================
+                          TextFormField(
+                            controller: emailController,
+                            style: const TextStyle(color: Colors.white),
+                            decoration: inputDecorationTheme.copyWith(labelText: l10n.emailLabel),
+                            keyboardType: TextInputType.emailAddress,
+                            validator: (value) {
+                              if (value == null || value.trim().isEmpty) {
+                                return l10n.emailHintRequired;
+                              }
+                              if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value.trim())) {
+                                return l10n.emailHintInvalid;
+                              }
+                              return null;
+                            },
+                          ),
+                          const SizedBox(height: 16),
+                          // ============================================================================
+
                           TextFormField(
                             controller: passwordController,
                             style: const TextStyle(color: Colors.white),
@@ -339,21 +382,29 @@ class StepStaffWidgetState extends State<StepStaffWidget> {
                                     setDialogState(() => isSubmitting = true);
                                     
                                     List<String> permissions = [];
+                                    List<String> notificationPermissions = [];
+                                    
                                     if(selectedRole == 'staff') {
                                         permissions = PermissionKeys.DEFAULT_STAFF_PERMISSIONS;
+                                        notificationPermissions = PermissionKeys.DEFAULT_STAFF_NOTIFICATION_PERMISSIONS; 
                                     } else { 
                                         permissions = PermissionKeys.DEFAULT_KITCHEN_PERMISSIONS;
+                                        notificationPermissions = PermissionKeys.DEFAULT_KITCHEN_NOTIFICATION_PERMISSIONS;
                                     }
 
+                                    // ==================== YENİ KOD (3/3): Payload'a email ekleniyor ====================
                                     final staffData = {
                                       'username': usernameController.text.trim(),
+                                      'email': emailController.text.trim(), // EKLENDİ
                                       'password': passwordController.text.trim(),
                                       'first_name': firstNameController.text.trim(),
                                       'last_name': lastNameController.text.trim(),
                                       'user_type': selectedRole,
                                       'staff_permissions': permissions,
+                                      'notification_permissions': notificationPermissions,
                                       'accessible_kds_screen_ids': _selectedKdsScreenIds.toList(),
                                     };
+                                    // ===============================================================================
 
                                     try {
                                       final newStaff = await ApiService.createStaff(widget.token, staffData);
@@ -368,7 +419,7 @@ class StepStaffWidgetState extends State<StepStaffWidget> {
                                       }
                                     } finally {
                                       if(mounted) {
-                                       setDialogState(() => isSubmitting = false);
+                                        setDialogState(() => isSubmitting = false);
                                       }
                                     }
                                   }
@@ -394,6 +445,92 @@ class StepStaffWidgetState extends State<StepStaffWidget> {
         });
       },
     );
+    usernameController.dispose();
+    passwordController.dispose();
+    firstNameController.dispose();
+    lastNameController.dispose();
+    emailController.dispose(); // Controller'ı dispose et
+  }
+
+  // 🎵 YENİ EKLENEN: Ses kontrol butonu
+  Widget _buildAudioControlButton() {
+    return ValueListenableBuilder<bool>(
+      valueListenable: ValueNotifier(_audioService.isMuted),
+      builder: (context, isMuted, child) {
+        return Container(
+          margin: const EdgeInsets.only(right: 8),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Ses durumu göstergesi
+              if (_audioService.isPlaying)
+                Container(
+                  margin: const EdgeInsets.only(right: 8),
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: Colors.green.withOpacity(0.2),
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: Colors.green.withOpacity(0.3)),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(Icons.volume_up, color: Colors.green, size: 16),
+                      const SizedBox(width: 4),
+                      Text(
+                        'Sesli Rehber Aktif',
+                        style: TextStyle(
+                          color: Colors.green.shade700,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              
+              // Sessizlik/Açma butonu
+              IconButton(
+                icon: Icon(
+                  isMuted ? Icons.volume_off : Icons.volume_up,
+                  color: Colors.white.withOpacity(0.9),
+                  size: 24,
+                ),
+                onPressed: () {
+                  setState(() {
+                    _audioService.toggleMute();
+                  });
+                },
+                tooltip: isMuted ? 'Sesi Aç' : 'Sesi Kapat',
+                style: IconButton.styleFrom(
+                  backgroundColor: isMuted 
+                    ? Colors.red.withOpacity(0.2) 
+                    : Colors.blue.withOpacity(0.2),
+                  padding: const EdgeInsets.all(12),
+                ),
+              ),
+              
+              // Tekrar çal butonu
+              IconButton(
+                icon: Icon(
+                  Icons.replay,
+                  color: Colors.white.withOpacity(0.9),
+                  size: 20,
+                ),
+                onPressed: _audioService.isMuted ? null : () {
+                  _audioService.playStaffStepAudio(context: context);
+                },
+                tooltip: 'Rehberi Tekrar Çal',
+                style: IconButton.styleFrom(
+                  backgroundColor: Colors.orange.withOpacity(0.2),
+                  padding: const EdgeInsets.all(8),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 
   @override
@@ -407,6 +544,15 @@ class StepStaffWidgetState extends State<StepStaffWidget> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
+          // 🎵 YENİ EKLENEN: Sesli rehber kontrolleri
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              _buildAudioControlButton(),
+            ],
+          ),
+          const SizedBox(height: 16),
+
           Text(
             l10n.setupStaffDescription,
             textAlign: TextAlign.center,
@@ -484,7 +630,7 @@ class StepStaffWidgetState extends State<StepStaffWidget> {
                 ),
           const SizedBox(height: 10),
           Text(
-            l10n.setupStaffTotalCreatedWithLimit(_addedStaff.length.toString(), UserSession.maxStaff.toString()),
+            l10n.setupStaffTotalCreatedWithLimit(_addedStaff.length.toString(), UserSession.limitsNotifier.value.maxStaff.toString()),
             textAlign: TextAlign.center,
             style: TextStyle(
                 fontSize: 18,

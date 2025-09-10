@@ -3159,5 +3159,589 @@
   "planMonthly": "Ay",
   "planYearly": "Yıl",
   "subscriptionRestoring": "Satın alımlar geri yükleniyor...",
-  "subscriptionRestoreButton": "Geri Yükle"
+  "subscriptionRestoreButton": "Geri Yükle",
+  "manageStaffErrorLimitExceeded": "Personel limitinize ({limit}) ulaştınız. Lütfen paketinizi yükseltin.",
+  "@manageStaffErrorLimitExceeded": {
+    "description": "Subscription staff limit reached error message",
+    "placeholders": {
+      "limit": {
+        "type": "String",
+        "example": "5"
+      }
+    }
+  },
+  "takeawayOrderDetailsTitle": "Paket Sipariş Detayları #{orderId}",
+  "@takeawayOrderDetailsTitle": {
+    "description": "Paket sipariş detayları modal başlığı",
+    "placeholders": {
+      "orderId": {
+        "type": "String"
+      }
+    }
+  },
+  "shiftEndedDialogTitle": "Vardiya Sonu",
+  "@shiftEndedDialogTitle": {
+    "description": "Title for the dialog shown when a staff member's shift ends."
+  },
+  "shiftEndedDialogContent": "Aktif çalışma vardiyanız sona ermiştir. Lütfen çıkış yapınız. Artık yeni işlem yapamazsınız.",
+  "@shiftEndedDialogContent": {
+    "description": "Content for the shift end dialog."
+  },
+  "logoutButtonText": "Çıkış Yap",
+  "@logoutButtonText": {
+    "description": "Text for the logout button."
+  },
+  "shiftEndedLabel": "Vardiya Bitti",
+  "shiftCountdownLabel": "{minutes} dk {seconds} sn kaldı",
+  "@shiftCountdownLabel": {
+    "placeholders": {
+      "minutes": {},
+      "seconds": {}
+    }
+  },
+  "shiftLabel": "Mesai",
+  "setupCategoriesAddFromTemplateButton": "Şablonlardan Ekle",
+  "setupCategoriesTemplateDialogTitle": "Kategori Şablonları",
+  "setupCategoriesTemplateAddButton": "{count} şablon seçildi - Oluştur",
+  "setupCategoriesSelectFromTemplate": "Şablondan Kategori Seç",
+  "setupCategoriesNoTemplatesFound": "Şablon bulunamadı",
+  "kdsScreenLabelRequired": "KDS Ekranı (Gerekli)",
+  "kdsScreenValidator": "Lütfen bir KDS ekranı seçin",
+  "kdsScreenNotSelected": "KDS Ekranı Seçilmedi",
+  "setupMenuItemsAddFromTemplateButton": "Şablonlardan Ekle",
+  "@setupMenuItemsAddFromTemplateButton": {
+    "description": "Button text for adding menu items from templates"
+  },
+  "setupMenuItemsErrorCategoryNotFound": "Kategori adı bulunamadı.",
+  "@setupMenuItemsErrorCategoryNotFound": {
+    "description": "Error message when category name cannot be found"
+  },
+  "setupMenuItemsErrorNoTemplatesForCategory": "Bu kategori için uygun ürün şablonu bulunamadı.",
+  "@setupMenuItemsErrorNoTemplatesForCategory": {
+    "description": "Error message when no templates are found for the selected category"
+  },
+  "setupMenuItemsSuccessAddedFromTemplate": "Şablonlardan {count} ürün başarıyla eklendi!",
+  "@setupMenuItemsSuccessAddedFromTemplate": {
+    "description": "Success message when products are added from templates",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "5"
+      }
+    }
+  },
+  "setupMenuItemsErrorLoadingTemplates": "Şablonlar yüklenirken hata: {error}",
+  "@setupMenuItemsErrorLoadingTemplates": {
+    "description": "Error message when loading templates fails",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Network error"
+      }
+    }
+  },
+  "setupMenuItemsTemplateDialogTitle": "Ürün Şablonları Seç",
+  "@setupMenuItemsTemplateDialogTitle": {
+    "description": "Title for the template selection dialog"
+  },
+  "setupMenuItemsTemplateSearchLabel": "Ürün ara...",
+  "@setupMenuItemsTemplateSearchLabel": {
+    "description": "Label for the template search field"
+  },
+  "setupMenuItemsTemplateSearchHint": "Ürün adını yazın",
+  "@setupMenuItemsTemplateSearchHint": {
+    "description": "Hint text for the template search field"
+  },
+  "setupMenuItemsTemplateSelectAll": "Tümünü Seç",
+  "@setupMenuItemsTemplateSelectAll": {
+    "description": "Text for select all checkbox when not all visible items are selected"
+  },
+  "setupMenuItemsTemplateDeselectAll": "Tümünü Bırak",
+  "@setupMenuItemsTemplateDeselectAll": {
+    "description": "Text for select all checkbox when all visible items are selected"
+  },
+  "setupMenuItemsTemplateItemsShowing": "{count} ürün gösteriliyor",
+  "@setupMenuItemsTemplateItemsShowing": {
+    "description": "Subtitle showing how many items are displayed",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "15"
+      }
+    }
+  },
+  "setupMenuItemsTemplateNoTemplatesFound": "Uygun şablon bulunamadı.",
+  "@setupMenuItemsTemplateNoTemplatesFound": {
+    "description": "Message when no templates are available"
+  },
+  "setupMenuItemsTemplateNoSearchResults": "Arama kriterinize uygun ürün bulunamadı.",
+  "@setupMenuItemsTemplateNoSearchResults": {
+    "description": "Message when search returns no results"
+  },
+  "setupMenuItemsTemplateUnnamedTemplate": "İsimsiz Şablon",
+  "@setupMenuItemsTemplateUnnamedTemplate": {
+    "description": "Default name for templates without a name"
+  },
+  "setupMenuItemsTemplateAddSelectedButton": "Seçilenleri Ekle ({count})",
+  "@setupMenuItemsTemplateAddSelectedButton": {
+    "description": "Button text showing how many templates are selected for adding",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "3"
+      }
+    }
+  },
+  "setupMenuItemsTemplateLimitInfo": "Mevcut: {current}, Seçilen: {selected}, Limit: {limit}",
+  "@setupMenuItemsTemplateLimitInfo": {
+    "description": "Limit bilgi metni - mevcut ürün sayısı, seçilen şablon sayısı ve toplam limit",
+    "placeholders": {
+      "current": {
+        "type": "int",
+        "example": "5"
+      },
+      "selected": {
+        "type": "int", 
+        "example": "3"
+      },
+      "limit": {
+        "type": "int",
+        "example": "20"
+      }
+    }
+  },
+  "setupMenuItemsTemplateLimitExceeded": "Limit aşılacak",
+  "@setupMenuItemsTemplateLimitExceeded": {
+    "description": "Şablon seçildiğinde limiti aşacağını belirten uyarı metni"
+  },
+  "notificationDefault": "Yeni bir bildiriminiz var!",
+  "@notificationDefault": {
+    "description": "Herhangi bir özel metin tanımlanmamış bildirimler için gösterilecek varsayılan mesaj."
+  },
+  "notificationTableInfo": " (Masa {tableNumber})",
+  "@notificationTableInfo": {
+    "description": "Bildirim metinlerinde masa numarasını göstermek için kullanılan ek metin.",
+    "placeholders": {
+      "tableNumber": {
+        "type": "String",
+        "example": "12"
+      }
+    }
+  },
+  "notificationOrderApprovedForKitchen": "🍳 Yeni Sipariş #{orderId}{tableInfo} mutfağa gönderildi!",
+  "@notificationOrderApprovedForKitchen": {
+    "description": "Onaylanan bir siparişin mutfağa gönderildiğini bildiren mesaj.",
+    "placeholders": {
+      "orderId": {
+        "type": "String"
+      },
+      "tableInfo": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationOrderPreparing": "⏳ Sipariş #{orderId} hazırlanıyor...",
+  "@notificationOrderPreparing": {
+    "description": "Bir siparişin mutfakta hazırlanmaya başlandığını bildiren mesaj.",
+    "placeholders": {
+      "orderId": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationOrderReadyForPickup": "🔔 Sipariş #{orderId} hazır - garson bekleniyor!",
+  "@notificationOrderReadyForPickup": {
+    "description": "Bir siparişin mutfakta hazır olduğunu ve garson tarafından alınmayı beklediğini bildiren mesaj.",
+    "placeholders": {
+      "orderId": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationOrderItemAdded": "➕ Sipariş #{orderId}'e yeni ürün eklendi!",
+  "@notificationOrderItemAdded": {
+    "description": "Mevcut bir siparişe yeni bir ürün eklendiğini bildiren mesaj.",
+    "placeholders": {
+      "orderId": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationGuestOrderPending": "⏰ Misafir siparişi onay bekliyor: #{orderId}",
+  "@notificationGuestOrderPending": {
+    "description": "Bir misafirin (QR kod ile) verdiği siparişin personel onayı beklediğini bildiren mesaj.",
+    "placeholders": {
+      "orderId": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationOrderNeedsReapproval": "🔄 Sipariş #{orderId} yeniden onay bekliyor!",
+  "@notificationOrderNeedsReapproval": {
+    "description": "Mevcut bir siparişe yeni ürün eklendiği için yeniden onay gerektiğini bildiren mesaj.",
+    "placeholders": {
+      "orderId": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationNewOrder": "🆕 Yeni sipariş geldi: #{orderId}{tableInfo}",
+  "@notificationNewOrder": {
+    "description": "Genel yeni sipariş bildirimi için fallback metni.",
+    "placeholders": {
+      "orderId": {
+        "type": "String"
+      },
+      "tableInfo": {
+        "type": "String"
+      }
+    }
+  },
+    "ingredientManagementTitle": "Malzeme Stok Yönetimi",
+    "ingredientAddTitle": "Yeni Malzeme Ekle",
+    "ingredientNameLabel": "Malzeme Adı",
+    "ingredientInitialStockLabel": "Başlangıç Stoğu",
+    "validatorInvalidNumber": "Lütfen geçerli bir sayı girin.",
+    "addButton": "Ekle",
+    "ingredientSuccessAdd": "Malzeme başarıyla eklendi",
+    "ingredientNoItems": "Hiç malzeme bulunamadı.",
+    "ingredientStockLabel": "Stok: {stock} {unit}",
+    "@ingredientStockLabel": {
+        "description": "Bir malzemenin stok miktarını gösterir.",
+        "placeholders": {
+            "stock": {
+                "type": "String",
+                "example": "150.5"
+            },
+            "unit": {
+                "type": "String",
+                "example": "gr"
+            }
+        }
+    },
+    "errorTitle": "Hata",
+    "ingredientErrorFetchUnits": "Ölçü birimleri yüklenirken bir hata oluştu: {error}",
+    "@ingredientErrorFetchUnits": {
+        "description": "API'den ölçü birimleri çekilirken hata oluştuğunda gösterilen mesaj.",
+        "placeholders": {
+            "error": {
+                "type": "String",
+                "example": "Ağ bağlantısı yok"
+            }
+        }
+    },
+    "ingredientUnitLabel": "Ölçü Birimi",
+    "ingredientErrorSelectUnit": "Lütfen bir ölçü birimi seçin.",
+    "validatorRequiredField": "Bu alan zorunludur.",
+    "dialogButtonCancel": "İptal",
+    "errorGeneral": "Bir hata oluştu: {error}",
+    "@errorGeneral": {
+        "placeholders": {
+            "error": {
+                "type": "String"
+            }
+        }
+    },
+    "dialogButtonClose": "Kapat",
+    "recipeFor": "{variantName} için Reçete",
+    "@recipeFor": {
+        "description": "Reçete yönetim ekranının başlığı",
+        "placeholders": {
+            "variantName": {
+                "type": "String",
+                "example": "Büyük Boy"
+            }
+        }
+    },
+    "recipeTitle": "Reçete",
+    "ingredientAddToRecipe": "Reçeteye Malzeme Ekle",
+    "ingredientSelect": "Malzeme Seçin...",
+    "quantity": "Miktar",
+    "addButton": "Ekle",
+    "recipeNoIngredients": "Bu varyant için henüz malzeme eklenmemiş.",
+    "ingredientManagementTitle": "Malzeme Stok Yönetimi",
+    "@ingredientManagementTitle": {},
+    "ingredientNoItems": "Henüz hiç malzeme eklenmemiş.\nBaşlamak için '+' butonuna dokunun.",
+    "@ingredientNoItems": {},
+    "ingredientAddTitle": "Yeni Malzeme Ekle",
+    "@ingredientAddTitle": {},
+    "ingredientNameLabel": "Malzeme Adı",
+    "@ingredientNameLabel": {},
+    "ingredientInitialStockLabel": "Başlangıç Stok Miktarı",
+    "@ingredientInitialStockLabel": {},
+    "ingredientUnitLabel": "Ölçü Birimi",
+    "@ingredientUnitLabel": {},
+    "ingredientErrorFetchUnits": "Ölçü birimleri alınamadı: {error}",
+    "@ingredientErrorFetchUnits": {
+        "placeholders": {
+            "error": {}
+        }
+    },
+    "ingredientErrorSelectUnit": "Lütfen bir birim seçin.",
+    "@ingredientErrorSelectUnit": {},
+    "ingredientSuccessAdd": "Malzeme başarıyla eklendi.",
+    "@ingredientSuccessAdd": {},
+    "ingredientStockLabel": "Stok: {quantity} {unit}",
+    "@ingredientStockLabel": {
+        "placeholders": {
+            "quantity": {},
+            "unit": {}
+        }
+    },
+    "ingredientAdjustStockTitle": "{ingredientName} Stoğunu Düzenle",
+    "@ingredientAdjustStockTitle": {
+        "placeholders": {
+            "ingredientName": {}
+        }
+    },
+    "stockMovementTypeLabel": "Hareket Tipi",
+    "@stockMovementTypeLabel": {},
+    "quantity": "Miktar",
+    "@quantity": {},
+    "descriptionLabel": "Açıklama",
+    "@descriptionLabel": {},
+    "descriptionHintOptional": "Açıklama (Opsiyonel)",
+    "@descriptionHintOptional": {},
+    "validatorInvalidPositiveNumber": "Lütfen 0'dan büyük geçerli bir sayı girin.",
+    "@validatorInvalidPositiveNumber": {},
+    "ingredientSuccessStockUpdate": "Stok başarıyla güncellendi.",
+    "@ingredientSuccessStockUpdate": {},
+    "ingredientMenuTooltip": "İşlemler",
+    "@ingredientMenuTooltip": {},
+    "ingredientMenuAdjustStock": "Stok Ayarla",
+    "@ingredientMenuAdjustStock": {},
+    "ingredientMenuHistory": "Geçmişi Görüntüle",
+    "@ingredientMenuHistory": {},
+    "ingredientHistoryTitle": "{ingredientName} - Stok Geçmişi",
+    "@ingredientHistoryTitle": {
+        "placeholders": {
+            "ingredientName": {}
+        }
+    },
+    "ingredientHistoryNoMovements": "Bu malzeme için stok hareketi bulunamadı.",
+    "@ingredientHistoryNoMovements": {},
+    "ingredientHistoryStockBefore": "Önceki Miktar",
+    "@ingredientHistoryStockBefore": {},
+    "ingredientHistoryStockAfter": "Sonraki Miktar",
+    "@ingredientHistoryStockAfter": {},
+    "stockMovementAddition": "Stok Girişi (Alım)",
+    "@stockMovementAddition": {},
+    "stockMovementWastage": "Zayiat/Fire",
+    "@stockMovementWastage": {},
+    "stockMovementAdjustmentIn": "Sayım Düzeltme (Fazla)",
+    "@stockMovementAdjustmentIn": {},
+    "stockMovementAdjustmentOut": "Sayım Düzeltme (Eksik)",
+    "@stockMovementAdjustmentOut": {},
+    "systemUser": "Sistem",
+    "@systemUser": {},
+    "stockMovementAddition": "Stok Girişi (Alım)",
+    "@stockMovementAddition": {},
+    "stockMovementWastage": "Zayiat/Fire",
+    "@stockMovementWastage": {},
+    "stockMovementAdjustmentIn": "Sayım Düzeltme (Fazla)",
+    "@stockMovementAdjustmentIn": {},
+    "stockMovementAdjustmentOut": "Sayım Düzeltme (Eksik)",
+    "@stockMovementAdjustmentOut": {},
+    "ingredientAdjustStockTitle": "{ingredientName} Stoğunu Düzenle",
+    "@ingredientAdjustStockTitle": {
+        "placeholders": {
+            "ingredientName": {}
+        }
+    },
+    "stockMovementTypeLabel": "Hareket Tipi",
+    "@stockMovementTypeLabel": {},
+    "quantity": "Miktar",
+    "@quantity": {},
+    "descriptionLabel": "Açıklama",
+    "@descriptionLabel": {},
+    "descriptionHintOptional": "Açıklama (Opsiyonel)",
+    "@descriptionHintOptional": {},
+    "validatorInvalidPositiveNumber": "Lütfen 0'dan büyük geçerli bir sayı girin.",
+    "@validatorInvalidPositiveNumber": {},
+    "ingredientSuccessStockUpdate": "Stok başarıyla güncellendi.",
+    "@ingredientSuccessStockUpdate": {},
+    "ingredientMenuTooltip": "İşlemler",
+    "@ingredientMenuTooltip": {},
+    "ingredientMenuAdjustStock": "Stok Ayarla",
+    "@ingredientMenuAdjustStock": {},
+    "ingredientMenuHistory": "Geçmişi Görüntüle",
+    "@ingredientMenuHistory": {},
+    "ingredientHistoryTitle": "{ingredientName} - Stok Geçmişi",
+    "@ingredientHistoryTitle": {
+        "placeholders": {
+            "ingredientName": {}
+        }
+    },
+    "ingredientHistoryNoMovements": "Bu malzeme için stok hareketi bulunamadı.",
+    "@ingredientHistoryNoMovements": {},
+    "ingredientHistoryStockBefore": "Önceki Miktar",
+    "@ingredientHistoryStockBefore": {},
+    "ingredientHistoryStockAfter": "Sonraki Miktar",
+    "@ingredientHistoryStockAfter": {},
+    "homeMenuManageIngredientsAndRecipes": "Malzeme ve Reçete Yönetimi",
+    "@homeMenuManageIngredientsAndRecipes": {
+        "description": "Ana ekranda malzeme ve reçete yönetimi menü öğesi başlığı"
+    },
+    "homeMenuSupplierManagement": "Tedarikçi Yönetimi",
+    "@homeMenuSupplierManagement": {
+        "description": "Ana ekranda tedarikçi yönetimi menü öğesi başlığı"
+    },
+    "homeMenuPurchaseOrders": "Alım Siparişleri",
+    "@homeMenuPurchaseOrders": {
+        "description": "Ana ekranda alım siparişleri menü öğesi başlığı"
+    },
+    "supplierDeleteTitle": "Tedarikçiyi Sil",
+    "@supplierDeleteTitle": {
+        "description": "Tedarikçi silme onayı dialog başlığı"
+    },
+    "supplierDeleteConfirmation": "{supplierName} adlı tedarikçiyi silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.",
+    "@supplierDeleteConfirmation": {
+        "description": "Tedarikçi silme onayı içeriği",
+        "placeholders": {
+            "supplierName": {
+                "type": "String",
+                "example": "Ana Gıda A.Ş."
+            }
+        }
+    },
+    "supplierDeleteSuccess": "{supplierName} adlı tedarikçi başarıyla silindi.",
+    "@supplierDeleteSuccess": {
+        "description": "Tedarikçi silme başarılı mesajı",
+        "placeholders": {
+             "supplierName": {
+                "type": "String"
+            }
+        }
+    },
+    "supplierManagementTitle": "Tedarikçi Yönetimi",
+    "@supplierManagementTitle": {
+        "description": "Tedarikçi yönetimi ekranının başlığı"
+    },
+    "supplierNoItems": "Henüz tedarikçi eklenmemiş.",
+    "@supplierNoItems": {
+        "description": "Tedarikçi listesi boş olduğunda gösterilecek mesaj"
+    },
+    "supplierNoContactPerson": "Yetkili belirtilmemiş",
+    "@supplierNoContactPerson": {
+        "description": "Tedarikçi kartında yetkili kişi olmadığında gösterilecek metin"
+    },
+    "purchaseOrderListTitle": "Alım Siparişleri",
+    "@purchaseOrderListTitle": {
+        "description": "Alım siparişleri listesi ekranının başlığı"
+    },
+    "purchaseOrderNoItems": "Henüz alım siparişi oluşturulmamış.",
+    "@purchaseOrderNoItems": {
+        "description": "Alım siparişi listesi boş olduğunda gösterilecek mesaj"
+    },
+    "purchaseOrderLabel": "Alım No",
+    "@purchaseOrderLabel": {
+        "description": "Alım siparişi kartındaki etiket"
+    },
+    "purchaseOrderStatusLabel": "Durum",
+    "@purchaseOrderStatusLabel": {
+        "description": "Alım siparişi kartındaki durum etiketi"
+    },
+    "purchaseOrderDateLabel": "Tarih",
+    "@purchaseOrderDateLabel": {
+        "description": "Alım siparişi kartındaki tarih etiketi"
+    },
+    "purchaseOrderAddButton": "Yeni Alım Siparişi",
+    "@purchaseOrderAddButton": {
+        "description": "Yeni alım siparişi oluşturma butonu metni"
+    },
+    "ingredientAddToOrder": "Siparişe Malzeme Ekle",
+    "@ingredientAddToOrder": {
+        "description": "Alım siparişine malzeme ekleme dialog başlığı"
+    },
+    "purchaseOrderUnitPrice": "Birim Alış Fiyatı",
+    "@purchaseOrderUnitPrice": {
+        "description": "Alım siparişindeki birim fiyat alanı etiketi"
+    },
+    "purchaseOrderValidationError": "Lütfen bir tedarikçi seçin ve en az bir ürün ekleyin.",
+    "@purchaseOrderValidationError": {
+        "description": "Alım siparişi gönderme formunda validasyon hatası"
+    },
+    "purchaseOrderCreateTitle": "Yeni Alım Siparişi Oluştur",
+    "@purchaseOrderCreateTitle": {
+        "description": "Yeni alım siparişi oluşturma ekranının başlığı"
+    },
+    "purchaseOrderSelectSupplier": "Tedarikçi Seçin",
+    "@purchaseOrderSelectSupplier": {
+        "description": "Tedarikçi seçimi dropdown menüsü için ipucu metni"
+    },
+    "purchaseOrderTotalCost": "Toplam Maliyet",
+    "@purchaseOrderTotalCost": {
+        "description": "Alım siparişi toplam maliyet etiketi"
+    },
+    "purchaseOrderAddItemButton": "Malzeme Ekle",
+    "@purchaseOrderAddItemButton": {
+        "description": "Alım siparişine yeni malzeme ekleme butonu metni"
+    },
+    "purchaseOrderSaveButton": "Alım Siparişini Kaydet",
+    "@purchaseOrderSaveButton": {
+        "description": "Alım siparişini kaydetme butonu metni"
+    },
+    "supplierAddButton": "Tedarikçi Ekle",
+    "@supplierAddButton": {
+        "description": "Yeni tedarikçi ekleme butonu"
+    },
+    "supplierAddDialogTitle": "Yeni Tedarikçi Ekle",
+    "@supplierAddDialogTitle": {
+        "description": "Yeni tedarikçi ekleme diyalog başlığı"
+    },
+    "supplierEditDialogTitle": "{supplierName} Düzenle",
+    "@supplierEditDialogTitle": {
+        "description": "Tedarikçi düzenleme diyalog başlığı",
+        "placeholders": {
+            "supplierName": {
+                "type": "String"
+            }
+        }
+    },
+    "supplierNameLabel": "Tedarikçi Adı",
+    "@supplierNameLabel": {
+        "description": "Tedarikçi adı giriş alanı etiketi"
+    },
+    "supplierContactPersonLabel": "Yetkili Kişi",
+    "@supplierContactPersonLabel": {
+        "description": "Tedarikçi yetkili kişi giriş alanı etiketi"
+    },
+    "phoneLabel": "Telefon",
+    "@phoneLabel": {
+        "description": "Telefon numarası giriş alanı etiketi"
+    },
+    "addressLabel": "Adres",
+    "@addressLabel": {
+        "description": "Adres giriş alanı etiketi"
+    },
+    "dialogButtonCancelOrder": "Siparişi İptal Et",
+    "@dialogButtonCancelOrder": {
+        "description": "Siparişi iptal etme menü butonu"
+    },
+    "purchaseOrderCancelDialogTitle": "Siparişi İptal Et",
+    "@purchaseOrderCancelDialogTitle": {
+        "description": "Alım siparişini iptal etme onay diyalog başlığı"
+    },
+    "purchaseOrderCancelDialogContent": "#{orderId} numaralı alım siparişini iptal etmek istediğinizden emin misiniz?",
+    "@purchaseOrderCancelDialogContent": {
+        "description": "Alım siparişini iptal etme onay diyalog içeriği",
+        "placeholders": {
+            "orderId": {
+                "type": "String"
+            }
+        }
+    },
+    "dialogButtonYesCancel": "Evet, İptal Et",
+    "@dialogButtonYesCancel": {
+        "description": "İptal işlemini onaylama butonu"
+    },
+    "purchaseOrderSuccessCancel": "#{orderId} numaralı alım siparişi başarıyla iptal edildi.",
+    "@purchaseOrderSuccessCancel": {
+        "description": "Alım siparişi iptal edildiğinde gösterilen başarı mesajı",
+        "placeholders": {
+            "orderId": {
+                "type": "String"
+            }
+        }
+    }
 }

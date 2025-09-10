@@ -1,5 +1,7 @@
 // lib/screens/new_order_screen.dart
 
+import '../services/notification_center.dart';
+import '../services/refresh_manager.dart';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:collection/collection.dart';
@@ -18,13 +20,17 @@ import '../widgets/new_order/dialogs/new_order_dialogs.dart';
 import '../widgets/categorized_menu_list_view.dart';
 import '../widgets/new_order_basket_view.dart';
 
-
 class NewOrderScreen extends StatefulWidget {
   final String token;
   final dynamic table;
   final int businessId;
 
-  const NewOrderScreen({Key? key, required this.token, required this.table, required this.businessId}) : super(key: key);
+  const NewOrderScreen({
+    Key? key,
+    required this.token,
+    required this.table,
+    required this.businessId,
+  }) : super(key: key);
 
   @override
   _NewOrderScreenState createState() => _NewOrderScreenState();
@@ -33,19 +39,34 @@ class NewOrderScreen extends StatefulWidget {
 class _NewOrderScreenState extends State<NewOrderScreen> {
   late NewOrderController _controller;
   late AppLocalizations _l10n;
-  bool _didChangeDependenciesRun = false; // State içinde doğru değişken tanımı
+  bool _didChangeDependenciesRun = false;
 
   @override
   void initState() {
     super.initState();
-    // Controller ve l10n, context gerektirdiği için didChangeDependencies içinde başlatılacak.
+    NotificationCenter.instance.addObserver('refresh_all_screens', (data) {
+      debugPrint('[NewOrderScreen] 📡 Global refresh received: ${data['event_type']}');
+      if (mounted && _didChangeDependenciesRun && !_controller.isLoading) {
+        final refreshKey = 'new_order_screen_${widget.table['id']}_${widget.businessId}';
+        RefreshManager.throttledRefresh(refreshKey, () async {
+          await _refreshMenuData();
+        });
+      }
+    });
+    NotificationCenter.instance.addObserver('screen_became_active', (data) {
+      debugPrint('[NewOrderScreen] 📱 Screen became active notification received');
+      if (mounted && _didChangeDependenciesRun && !_controller.isLoading) {
+        final refreshKey = 'new_order_screen_active_${widget.table['id']}_${widget.businessId}';
+        RefreshManager.throttledRefresh(refreshKey, () async {
+          await _refreshMenuData();
+        });
+      }
+    });
   }
   
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    
-    // Bu bloğun sadece bir kez çalışmasını sağla
     if (!_didChangeDependenciesRun) {
       _l10n = AppLocalizations.of(context)!;
       _controller = NewOrderController(
@@ -69,13 +90,7 @@ class _NewOrderScreenState extends State<NewOrderScreen> {
               );
             }
         },
-        popScreenCallback: (bool success) {
-            if (mounted) {
-              Navigator.of(context).pop(success);
-            }
-        },
       );
-
       _controller.initializeScreen().then((success) {
           if (mounted && success && _controller.isSplitTable == null) {
             _promptTableType();
@@ -83,17 +98,26 @@ class _NewOrderScreenState extends State<NewOrderScreen> {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(content: Text(_controller.errorMessage.isNotEmpty ? _controller.errorMessage : _l10n.newOrderLoadingInitialData)),
               );
-          }
+           }
       });
-      _didChangeDependenciesRun = true; // Bayrağı ayarla
+      _didChangeDependenciesRun = true;
+    }
+  }
+
+  Future<void> _refreshMenuData() async {
+    if (mounted && !_controller.isLoading) {
+      try {
+        await _controller.initializeScreen();
+        if (mounted) setState(() {});
+      } catch (e) {
+        debugPrint('[NewOrderScreen] Menu refresh error: $e');
+      }
     }
   }
 
   void _promptTableType() {
     NewOrderDialogs.promptTableType(
       context: context,
-      // l10n parametresi dialogun tanımında olmadığı için kaldırıldı.
-      // Dialog içindeki metinlerin yerelleştirilmesi dialog widget'ının kendi içinde yapılmalıdır.
       onSelected: (isSplit, owners) {
           _controller.handleTableTypeSelected(isSplit, owners);
       },
@@ -108,84 +132,23 @@ class _NewOrderScreenState extends State<NewOrderScreen> {
   void _promptTableOwners() {
     NewOrderDialogs.promptTableOwners(
       context: context,
-       // l10n parametresi dialogun tanımında olmadığı için kaldırıldı.
       initialOwners: _controller.tableOwners,
       onConfirm: _controller.handleTableOwnersUpdated,
     );
   }
+  
+  Future<void> _submitOrder() async {
+    if (_controller.isLoading) return;
 
-  Future<void> _handleCreateOrder() async {
-    if (_controller.basket.isEmpty) {
-      _controller.showSnackBarCallback(_l10n.newOrderErrorAddAtLeastOneProduct, isError: true);
-      return;
-    }
-    if (_controller.isSplitTable == true && _controller.tableOwners.where((name) => name.trim().isNotEmpty).length < 2) {
-      _controller.showSnackBarCallback(_l10n.newOrderErrorMinOwnersForSplit, isError: true);
-      return;
-    }
+    debugPrint("[NewOrderScreen] _submitOrder çağrıldı. Controller'dan sonuç bekleniyor...");
+    final bool success = await _controller.handleCreateOrder();
+    debugPrint("[NewOrderScreen] Controller'dan sonuç geldi: $success");
 
-    _controller.isLoading = true;
-    _controller.errorMessage = '';
-    if (mounted) setState(() {});
-
-    Order newOrder = Order(
-      table: widget.table['id'],
-      business: widget.businessId,
-      orderItems: _controller.basket,
-      tableUsers: (_controller.isSplitTable == true && _controller.tableOwners.isNotEmpty)
-          ? _controller.tableOwners.map((name) => {'name': name}).toList()
-          : null,
-      customerName: null,
-      customerPhone: null,
-      orderType: 'table',
-      isSplitTable: _controller.isSplitTable ?? false,
-    );
-    
-    debugPrint('NewOrderScreen: handleCreateOrder - Sipariş gönderiliyor: ${jsonEncode(newOrder.toJson())}');
-
-    try {
-      final response = await OrderService.createOrder(
-        token: _controller.token,
-        order: newOrder,
-        offlineTableData: widget.table,
-      );
-      
-      final decodedString = utf8.decode(response.bodyBytes);
-      
-      if (response.statusCode == 201) {
-        String successMessage = _l10n.newOrderSuccess;
-        
-        try {
-          final decodedBody = jsonDecode(decodedString);
-          if(decodedBody is Map && decodedBody['offline'] == true) {
-            successMessage = decodedBody['detail'] ?? _l10n.newOrderSuccessOffline;
-          }
-        } catch(jsonError) {
-          debugPrint("[Controller] UYARI: Offline yanıtı parse edilemedi, ancak devam ediliyor. Hata: $jsonError");
-        }
-        
-        _controller.showSnackBarCallback(successMessage, isError: false);
-        await Future.delayed(const Duration(milliseconds: 500));
-        _controller.popScreenCallback(true);
-
-      } else {
-        _controller.errorMessage = _l10n.newOrderErrorGeneric(response.statusCode.toString(), decodedString);
-        _controller.showSnackBarCallback(_controller.errorMessage, isError: true);
-      }
-    } catch (e, s) {
-      debugPrint("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-      debugPrint("[Controller] KRİTİK HATA: _handleCreateOrder CATCH bloğuna düşüldü.");
-      debugPrint("Hata Türü: ${e.runtimeType}");
-      debugPrint("Hata Mesajı: $e");
-      debugPrint("Stack Trace:\n$s");
-      debugPrint("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-      _controller.errorMessage = _l10n.newOrderErrorCatch(e.toString());
-      _controller.showSnackBarCallback(_controller.errorMessage, isError: true);
-    } finally {
-      if(mounted) {
-        _controller.isLoading = false;
-        setState(() {});
-      }
+    if (success && mounted) {
+      debugPrint("[NewOrderScreen] Sipariş başarılı, ana ekrana popUntil ile kesin gidiliyor!");
+      Navigator.of(context).popUntil((route) => route.isFirst); // GARANTİ NAVİGASYON!
+    } else if (mounted) {
+      debugPrint("[NewOrderScreen] İşlem başarısız oldu, ekranda kalınıyor.");
     }
   }
 
@@ -217,22 +180,23 @@ class _NewOrderScreenState extends State<NewOrderScreen> {
         ),
         centerTitle: true,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Navigator.pop(context),
+           icon: const Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: _controller.isLoading ? null : () => Navigator.pop(context),
         ),
         actions: [
-          TextButton.icon(
-            style: TextButton.styleFrom(foregroundColor: Colors.white),
-            icon: Icon(_controller.isSplitTable! ? Icons.people : Icons.person),
-            label: Text(_controller.isSplitTable! ? _l10n.newOrderTableTypeSplit : _l10n.newOrderTableTypeSingle),
-            onPressed: () {
-                _controller.isSplitTable = null;
-                _controller.tableOwners = [];
-                _controller.basket.clear();
-                _controller.onStateUpdate(() {});
-                _promptTableType();
-            },
-          )
+          if (!_controller.isLoading && _controller.isSplitTable != null)
+            TextButton.icon(
+              style: TextButton.styleFrom(foregroundColor: Colors.white),
+              icon: Icon(_controller.isSplitTable == true ? Icons.people : Icons.person),
+              label: Text(_controller.isSplitTable == true ? _l10n.newOrderTableTypeSplit : _l10n.newOrderTableTypeSingle),
+              onPressed: _controller.isLoading ? null : () {
+                  _controller.isSplitTable = null;
+                  _controller.tableOwners = [];
+                  _controller.basket.clear();
+                  _controller.onStateUpdate(() {});
+                  _promptTableType();
+              },
+            )
         ],
         flexibleSpace: Container(
           decoration: const BoxDecoration(
@@ -257,12 +221,12 @@ class _NewOrderScreenState extends State<NewOrderScreen> {
         child: SafeArea(
           child: Column(
             children: [
-              if (_controller.errorMessage.isNotEmpty && _controller.isSplitTable != null)
+              if (_controller.errorMessage.isNotEmpty && _controller.isSplitTable != null && !_controller.isLoading)
                 Padding(
                   padding: const EdgeInsets.all(8),
                   child: Text(_controller.errorMessage, style: const TextStyle(color: Colors.redAccent)),
                 ),
-              if (_controller.isSplitTable == true)
+              if (_controller.isSplitTable == true && !_controller.isLoading)
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
                   child: Row(
@@ -271,7 +235,7 @@ class _NewOrderScreenState extends State<NewOrderScreen> {
                       Expanded(
                         child: Text(
                           _controller.tableOwners.where((o) => o.isNotEmpty).isEmpty 
-                            ? _l10n.newOrderNoOwnersEntered 
+                           ? _l10n.newOrderNoOwnersEntered 
                             : _l10n.newOrderOwnersList(_controller.tableOwners.join(', ')),
                           style: TextStyle(fontWeight: FontWeight.bold, color: _controller.tableOwners.where((o) => o.isNotEmpty).isEmpty ? Colors.orangeAccent : Colors.white70),
                           overflow: TextOverflow.ellipsis,
@@ -280,7 +244,7 @@ class _NewOrderScreenState extends State<NewOrderScreen> {
                       IconButton(
                         icon: const Icon(Icons.edit, color: Colors.white70, size: 20,),
                         tooltip: _l10n.newOrderEditOwnersTooltip,
-                        onPressed: _promptTableOwners,
+                        onPressed: _controller.isLoading ? null : _promptTableOwners,
                       )
                     ],
                   ),
@@ -290,36 +254,38 @@ class _NewOrderScreenState extends State<NewOrderScreen> {
                   menuItems: _controller.menuItems,
                   categories: _controller.categories,
                   tableUsers: _controller.tableOwners,
-                  onItemSelected: _controller.addToBasket,
+                  onItemSelected: _controller.isLoading ? (_, __, ___, ____, _____) {} : _controller.addToBasket,
                 ),
               ),
-              const Divider(color: Colors.white70),
-              NewOrderBasketView(
-                basket: _controller.basket,
-                allMenuItems: _controller.menuItems,
-                onRemoveItem: (item) => _controller.removeFromBasket(item),
-                totalAmount: _controller.basketTotal,
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                child: SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.white.withOpacity(0.8),
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                      disabledBackgroundColor: Colors.grey.withOpacity(0.5)
+              if (!_controller.isLoading) ...[
+                const Divider(color: Colors.white70),
+                NewOrderBasketView(
+                  basket: _controller.basket,
+                  allMenuItems: _controller.menuItems,
+                  onRemoveItem: _controller.isLoading ? (_) {} : _controller.removeFromBasket,
+                  totalAmount: _controller.basketTotal,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                  child: SizedBox(
+                     width: double.infinity,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white.withOpacity(0.8),
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                        disabledBackgroundColor: Colors.grey.withOpacity(0.5)
+                      ),
+                      onPressed: _controller.isLoading || _controller.basket.isEmpty || (_controller.isSplitTable == true && _controller.tableOwners.where((o) => o.isNotEmpty).length < 2)
+                          ? null
+                          : _submitOrder,
+                      child: _controller.isLoading
+                          ? const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 3, color: Colors.black))
+                          : Text(_l10n.newOrderCreateOrderButton, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black)),
                     ),
-                    onPressed: _controller.isLoading || _controller.basket.isEmpty || (_controller.isSplitTable == true && _controller.tableOwners.where((o) => o.isNotEmpty).length < 2)
-                        ? null
-                        : _handleCreateOrder,
-                    child: _controller.isLoading
-                        ? const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 3, color: Colors.black))
-                        : Text(_l10n.newOrderCreateOrderButton, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black)),
                   ),
                 ),
-              ),
+              ],
             ],
           ),
         ),
@@ -339,7 +305,7 @@ class _NewOrderScreenState extends State<NewOrderScreen> {
             style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
           ),
           centerTitle: true,
-          flexibleSpace: Container(
+           flexibleSpace: Container(
            decoration: const BoxDecoration(
               gradient: LinearGradient(
                 colors: [ Color(0xFF283593), Color(0xFF455A64), Color(0xFF455A64)],
@@ -355,7 +321,7 @@ class _NewOrderScreenState extends State<NewOrderScreen> {
       body: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: [
+               colors: [
                 Colors.blue.shade900.withOpacity(0.9),
                 Colors.blue.shade400.withOpacity(0.8),
               ],

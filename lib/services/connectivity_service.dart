@@ -14,7 +14,9 @@ class ConnectivityService {
   static final ConnectivityService instance = ConnectivityService._privateConstructor();
 
   final Connectivity _connectivity = Connectivity();
-  late StreamSubscription<List<ConnectivityResult>> _connectivitySubscription;
+  
+  // DEĞİŞİKLİK: StreamSubscription tipi List<ConnectivityResult> yerine ConnectivityResult oldu.
+  late StreamSubscription<ConnectivityResult> _connectivitySubscription;
   Timer? _webHeartbeatTimer;
 
   final ValueNotifier<bool> isOnlineNotifier = ValueNotifier(true);
@@ -25,10 +27,8 @@ class ConnectivityService {
 
     // Durum değişikliklerini dinle
     _connectivitySubscription = _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
-
     // Başlangıç durumunu hemen kontrol et
     _performRealConnectivityCheck();
-
     // Sadece web platformunda periyodik kontrolü başlat
     if (kIsWeb) {
       _startPeriodicWebCheck();
@@ -50,7 +50,8 @@ class ConnectivityService {
     });
   }
 
-  void _updateConnectionStatus(List<ConnectivityResult> result) async {
+  // DEĞİŞİKLİK: Metodun parametresi List<ConnectivityResult> yerine ConnectivityResult oldu.
+  void _updateConnectionStatus(ConnectivityResult result) async {
     _performRealConnectivityCheck();
   }
 
@@ -58,7 +59,6 @@ class ConnectivityService {
   Future<void> _performRealConnectivityCheck() async {
     bool wasOnline = isOnlineNotifier.value;
     bool isNowOnline;
-
     if (kIsWeb) {
       // Web için, bilinen bir adrese HEAD isteği atarak gerçek bağlantıyı test et.
       isNowOnline = await _checkWebConnectivity();
@@ -79,7 +79,8 @@ class ConnectivityService {
     try {
       // Django projesindeki root path'e (örn: 'https://example.com/') bir istek atıyoruz.
       // Bu, sadece sunucunun ayakta olup olmadığını kontrol eder.
-      final url = Uri.parse(ApiService.baseUrl.replaceAll('/api', '/')); // Ana adrese istek at
+      final url = Uri.parse(ApiService.baseUrl.replaceAll('/api', '/'));
+      // Ana adrese istek at
       await http.head(url).timeout(const Duration(seconds: 4));
       debugPrint("[ConnectivityService-WebCheck] Backend'e ulaşıldı (çevrimiçi).");
       return true;

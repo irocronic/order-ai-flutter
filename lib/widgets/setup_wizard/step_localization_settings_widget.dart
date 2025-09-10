@@ -10,6 +10,7 @@ import 'package:flutter/foundation.dart'; // debugPrint için eklendi
 import '../../providers/language_provider.dart';
 import '../../services/api_service.dart';
 import '../../services/user_session.dart';
+import '../../services/setup_wizard_audio_service.dart'; // 🎵 YENİ EKLENEN
 
 class StepLocalizationSettingsWidget extends StatefulWidget {
   final String token;
@@ -36,6 +37,9 @@ class _StepLocalizationSettingsWidgetState
 
   late final AppLocalizations l10n;
   bool _isInitialized = false;
+
+  // 🎵 YENİ EKLENEN: Audio servis referansı
+  final SetupWizardAudioService _audioService = SetupWizardAudioService.instance;
 
   final Map<String, String> _supportedLanguages = {
     'tr': 'Türkçe',
@@ -81,12 +85,43 @@ class _StepLocalizationSettingsWidgetState
       _selectedCurrency ??= UserSession.currencyCode ?? 'TRY';
       _selectedTimezone ??= 'Europe/Istanbul';
       _isInitialized = true;
+      
+      // 🎵 YENİ EKLENEN: Sesli rehberliği başlat
+      _startVoiceGuidance();
     }
+  }
+
+  // 🎵 YENİ EKLENEN: Sesli rehberlik başlatma
+  void _startVoiceGuidance() {
+    // Biraz bekle ki kullanıcı ekranı görsün
+    Future.delayed(const Duration(milliseconds: 2000), () {
+      if (mounted) {
+        _audioService.playLocalizationStepAudio(context: context);
+      }
+    });
   }
 
   @override
   void dispose() {
+    // Sesli rehberliği durdur
+    _audioService.stopAudio();
     super.dispose();
+  }
+
+  // 🎵 YENİ EKLENEN: Dil değiştiğinde ses dilini güncelle
+  void _onLanguageChanged(String? newLanguageCode) async {
+    if (newLanguageCode != null) {
+      setState(() => _selectedLanguageCode = newLanguageCode);
+      
+      // 🎵 ÖNEMLİ: Dil değiştiğinde yeni dilde rehber çal
+      Future.delayed(const Duration(milliseconds: 500), () {
+        if (mounted) {
+          _audioService.playLocalizationStepAudio(context: context);
+        }
+      });
+      
+      await _saveSettings();
+    }
   }
 
   Future<void> _saveSettings() async {
@@ -137,6 +172,87 @@ class _StepLocalizationSettingsWidgetState
     }
   }
 
+  // 🎵 YENİ EKLENEN: Ses kontrol butonu
+  Widget _buildAudioControlButton() {
+    return ValueListenableBuilder<bool>(
+      valueListenable: ValueNotifier(_audioService.isMuted),
+      builder: (context, isMuted, child) {
+        return Container(
+          margin: const EdgeInsets.only(right: 8),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Ses durumu göstergesi
+              if (_audioService.isPlaying)
+                Container(
+                  margin: const EdgeInsets.only(right: 8),
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: Colors.green.withOpacity(0.2),
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: Colors.green.withOpacity(0.3)),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(Icons.volume_up, color: Colors.green, size: 16),
+                      const SizedBox(width: 4),
+                      Text(
+                        'Sesli Rehber Aktif',
+                        style: TextStyle(
+                          color: Colors.green.shade700,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              
+              // Sessizlik/Açma butonu
+              IconButton(
+                icon: Icon(
+                  isMuted ? Icons.volume_off : Icons.volume_up,
+                  color: Colors.white.withOpacity(0.9),
+                  size: 24,
+                ),
+                onPressed: () {
+                  setState(() {
+                    _audioService.toggleMute();
+                  });
+                },
+                tooltip: isMuted ? 'Sesi Aç' : 'Sesi Kapat',
+                style: IconButton.styleFrom(
+                  backgroundColor: isMuted 
+                    ? Colors.red.withOpacity(0.2) 
+                    : Colors.blue.withOpacity(0.2),
+                  padding: const EdgeInsets.all(12),
+                ),
+              ),
+              
+              // Tekrar çal butonu
+              IconButton(
+                icon: Icon(
+                  Icons.replay,
+                  color: Colors.white.withOpacity(0.9),
+                  size: 20,
+                ),
+                onPressed: _audioService.isMuted ? null : () {
+                  _audioService.playLocalizationStepAudio(context: context);
+                },
+                tooltip: 'Rehberi Tekrar Çal',
+                style: IconButton.styleFrom(
+                  backgroundColor: Colors.orange.withOpacity(0.2),
+                  padding: const EdgeInsets.all(8),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     const welcomeTextStyle = TextStyle(
@@ -155,12 +271,20 @@ class _StepLocalizationSettingsWidgetState
       prefixIconColor: Colors.white.withOpacity(0.7),
     );
 
-
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
+          // 🎵 YENİ EKLENEN: Sesli rehber kontrolleri
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              _buildAudioControlButton(),
+            ],
+          ),
+          const SizedBox(height: 16),
+
           Text(
             l10n.setupLocalizationDescription,
             textAlign: TextAlign.center,
@@ -179,6 +303,7 @@ class _StepLocalizationSettingsWidgetState
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
+                  // 🎵 ÖNEMLİ: Dil seçicisi - özel callback ile
                   DropdownButtonFormField<String>(
                     value: _selectedLanguageCode,
                     dropdownColor: Colors.blue.shade800,
@@ -199,12 +324,7 @@ class _StepLocalizationSettingsWidgetState
                         return Text(item, style: const TextStyle(color: Colors.white));
                       }).toList();
                     },
-                    onChanged: (String? newValue) {
-                      if (newValue != null) {
-                        setState(() => _selectedLanguageCode = newValue);
-                        _saveSettings();
-                      }
-                    },
+                    onChanged: _onLanguageChanged, // 🎵 Özel callback kullanıldı
                   ),
                   const SizedBox(height: 20),
                   DropdownButtonFormField<String>(
@@ -268,6 +388,34 @@ class _StepLocalizationSettingsWidgetState
             ),
           ),
           const SizedBox(height: 48),
+          
+          // 🎵 YENİ EKLENEN: Dil değişikliği bilgi kartı
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: Colors.blue.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: Colors.blue.withOpacity(0.3)),
+            ),
+            child: Row(
+              children: [
+                Icon(Icons.info_outline, color: Colors.blue.shade300, size: 24),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Text(
+                    'Dil seçiminizi değiştirdiğinizde sesli rehber de yeni dilde çalacaktır.',
+                    style: TextStyle(
+                      color: Colors.blue.shade300,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 24),
+          
           SizedBox(
             height: 60,
             child: AnimatedTextKit(

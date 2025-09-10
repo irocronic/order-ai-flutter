@@ -1,251 +1,390 @@
 // lib/services/user_session.dart
 
-import 'package:flutter/foundation.dart' show debugPrint, ValueNotifier;
+import 'dart:convert';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../models/kds_screen_model.dart';
-import 'api_service.dart';
+import 'socket_service.dart';
+import 'connection_manager.dart';
+import 'global_notification_handler.dart';
+import '../screens/login_screen.dart';
 
-// YENİ: Abonelik limitlerini bir arada tutan yardımcı sınıf.
+// Abonelik limitlerini tutmak için basit bir sınıf
 class SubscriptionLimits {
   final int maxTables;
+  final int maxStaff;
   final int maxKdsScreens;
   final int maxCategories;
   final int maxMenuItems;
   final int maxVariants;
-  final int maxStaff;
 
-  SubscriptionLimits({
-    required this.maxTables,
-    required this.maxKdsScreens,
-    required this.maxCategories,
-    required this.maxMenuItems,
-    required this.maxVariants,
-    required this.maxStaff,
+  const SubscriptionLimits({
+    this.maxTables = 10,
+    this.maxStaff = 2,
+    this.maxKdsScreens = 1,
+    this.maxCategories = 5,
+    this.maxMenuItems = 20,
+    this.maxVariants = 40,
   });
+
+  factory SubscriptionLimits.fromJson(Map<String, dynamic>? json) {
+    if (json == null) {
+      return const SubscriptionLimits();
+    }
+    return SubscriptionLimits(
+      maxTables: json['max_tables'] ?? 10,
+      maxStaff: json['max_staff'] ?? 2,
+      maxKdsScreens: json['max_kds_screens'] ?? 1,
+      maxCategories: json['max_categories'] ?? 5,
+      maxMenuItems: json['max_menu_items'] ?? 20,
+      maxVariants: json['max_variants'] ?? 50,
+    );
+  }
 }
 
 class UserSession {
-  // Mevcut Değişkenler
+  static SharedPreferences? _preferences;
+
+  // Anahtar isimleri
+  static const _tokenKey = 'auth_token';
+  static const _refreshTokenKey = 'refresh_token';
+  static const _userIdKey = 'user_id';
+  static const _usernameKey = 'username';
+  static const _userTypeKey = 'user_type';
+  static const _businessIdKey = 'business_id';
+  static const _isSetupCompleteKey = 'is_setup_complete';
+  static const _staffPermissionsKey = 'staff_permissions';
+  static const _notificationPermissionsKey = 'notification_permissions';
+  static const _accessibleKdsScreensKey = 'accessible_kds_screens';
+  static const _profileImageUrlKey = 'profile_image_url';
+  static const _subscriptionStatusKey = 'subscription_status';
+  static const _subscriptionLimitsKey = 'subscription_limits';
+  static const _currencyCodeKey = 'currency_code';
+  static const _trialEndsAtKey = 'trial_ends_at';
+
+  // Oturum verileri
   static String _token = '';
+  static String _refreshToken = '';
+  static int? _userId;
+  static String _username = '';
   static String _userType = '';
-  static List<String> _staffPermissions = [];
-  static List<String> _notificationPermissions = [];
   static int? _businessId;
   static bool _isSetupComplete = false;
-  static String _username = '';
-  static int? _userId;
+  static List<String> _staffPermissions = [];
+  static List<String> _notificationPermissions = [];
   static List<KdsScreenModel> _userAccessibleKdsScreens = [];
   static String? _profileImageUrl;
-  static String? _currencyCode;
   static String? _subscriptionStatus;
+  static String? _currencyCode;
   static String? _trialEndsAt;
 
-  // Statik limit değişkenleri, doğrudan erişim için hala tutulabilir.
-  static int _maxTables = 10;
-  static int _maxKdsScreens = 2;
-  static int _maxCategories = 4;
-  static int _maxMenuItems = 20;
-  static int _maxVariants = 50;
-  static int _maxStaff = 2;
+  // ValueNotifier'lar
+  static final ValueNotifier<SubscriptionLimits> limitsNotifier = ValueNotifier(const SubscriptionLimits());
+  static final ValueNotifier<String?> subscriptionStatusNotifier = ValueNotifier(null);
 
-  static final ValueNotifier<String?> subscriptionStatusNotifier =
-      ValueNotifier(_subscriptionStatus);
-
-  // === YENİ: Abonelik limitlerini tutacak reaktif notifier ===
-  static final ValueNotifier<SubscriptionLimits> limitsNotifier = ValueNotifier(
-    SubscriptionLimits( // Başlangıç/varsayılan değerler
-      maxTables: 10,
-      maxKdsScreens: 2,
-      maxCategories: 4,
-      maxMenuItems: 20,
-      maxVariants: 50,
-      maxStaff: 2,
-    ),
-  );
-  // ==========================================================
-
-  // GETTER'LAR
+  // Getter'lar
   static String get token => _token;
+  static String get refreshToken => _refreshToken;
+  static int? get userId => _userId;
+  static String get username => _username;
   static String get userType => _userType;
-  static List<String> get staffPermissions => _staffPermissions;
-  static List<String> get notificationPermissions => _notificationPermissions;
   static int? get businessId => _businessId;
   static bool get isSetupComplete => _isSetupComplete;
-  static String get username => _username;
-  static int? get userId => _userId;
-  static List<KdsScreenModel> get userAccessibleKdsScreens =>
-      _userAccessibleKdsScreens;
+  static List<String> get staffPermissions => _staffPermissions;
+  static List<String> get notificationPermissions => _notificationPermissions;
+  static List<KdsScreenModel> get userAccessibleKdsScreens => _userAccessibleKdsScreens;
   static String? get profileImageUrl => _profileImageUrl;
-  static String? get currencyCode => _currencyCode;
   static String? get subscriptionStatus => _subscriptionStatus;
+  static String? get currencyCode => _currencyCode;
   static String? get trialEndsAt => _trialEndsAt;
 
-  // Statik getter'lar uyumluluk için korunuyor.
-  static int get maxTables => _maxTables;
-  static int get maxKdsScreens => _maxKdsScreens;
-  static int get maxCategories => _maxCategories;
-  static int get maxMenuItems => _maxMenuItems;
-  static int get maxVariants => _maxVariants;
-  static int get maxStaff => _maxStaff;
-
-  static void updateProfileImageUrl(String? url) {
-    _profileImageUrl = url;
-    debugPrint("[UserSession] Profil fotoğrafı URL'si güncellendi: $url");
+  static Future<void> init() async {
+    _preferences = await SharedPreferences.getInstance();
+    _loadSessionData();
   }
 
-  static void updateCurrencyCode(String? newCurrencyCode) {
-    _currencyCode = newCurrencyCode;
-    debugPrint("[UserSession] İşletme para birimi güncellendi: $_currencyCode");
-  }
-
-  static void storeLoginData(Map<String, dynamic> loginOrTokenPayload) {
-    _token = loginOrTokenPayload['access'] ?? loginOrTokenPayload['token'] ?? _token;
-    _userType = loginOrTokenPayload['user_type'] ?? _userType;
-    _businessId = loginOrTokenPayload['business_id'] as int? ?? _businessId;
-    _isSetupComplete =
-        loginOrTokenPayload['is_setup_complete'] as bool? ?? _isSetupComplete;
-    _username = loginOrTokenPayload['username'] ?? _username;
-    _userId = loginOrTokenPayload['user_id'] as int? ?? _userId;
-    _profileImageUrl =
-        loginOrTokenPayload['profile_image_url'] as String? ?? _profileImageUrl;
-    _currencyCode = loginOrTokenPayload['currency_code'] as String? ?? 'TRY';
-    _subscriptionStatus =
-        loginOrTokenPayload['subscription_status'] as String? ?? _subscriptionStatus;
-    _trialEndsAt =
-        loginOrTokenPayload['trial_ends_at'] as String? ?? _trialEndsAt;
+  static Future<void> storeLoginData(Map<String, dynamic> data) async {
+    _token = data['access'] ?? '';
+    _refreshToken = data['refresh'] ?? '';
+    _userId = data['user_id'];
+    _username = data['username'] ?? '';
+    _userType = data['user_type'] ?? '';
+    _businessId = data['business_id'];
+    _isSetupComplete = data['is_setup_complete'] ?? false;
+    _profileImageUrl = data['profile_image_url'];
+    _subscriptionStatus = data['subscription_status'];
+    _currencyCode = data['currency_code'];
+    _trialEndsAt = data['trial_ends_at'];
 
     subscriptionStatusNotifier.value = _subscriptionStatus;
 
-    // === GÜNCELLENDİ: Abonelik Limitlerini Yükleme ve Notifier'ı Tetikleme ===
-    if (loginOrTokenPayload['subscription'] != null &&
-        loginOrTokenPayload['subscription'] is Map) {
-      final subData = loginOrTokenPayload['subscription'];
-      _maxTables = subData['max_tables'] ?? 10;
-      _maxKdsScreens = subData['max_kds_screens'] ?? 2;
-      _maxCategories = subData['max_categories'] ?? 4;
-      _maxMenuItems = subData['max_menu_items'] ?? 20;
-      _maxVariants = subData['max_variants'] ?? 50;
-      _maxStaff = subData['max_staff'] ?? 2;
+    if (data['staff_permissions'] is List) {
+      _staffPermissions = List<String>.from(data['staff_permissions']);
     } else {
-      // Abonelik bilgisi yoksa varsayılan değerlere dön
-      _maxTables = 10;
-      _maxKdsScreens = 2;
-      _maxCategories = 4;
-      _maxMenuItems = 20;
-      _maxVariants = 50;
-      _maxStaff = 2;
-    }
-    
-    // Yeni limitlerle notifier'ın değerini güncelle. Bu, dinleyen tüm widget'ları tetikleyecektir.
-    limitsNotifier.value = SubscriptionLimits(
-      maxTables: _maxTables,
-      maxKdsScreens: _maxKdsScreens,
-      maxCategories: _maxCategories,
-      maxMenuItems: _maxMenuItems,
-      maxVariants: _maxVariants,
-      maxStaff: _maxStaff,
-    );
-    // =======================================================================
-
-    if (loginOrTokenPayload['staff_permissions'] is List) {
-      _staffPermissions = List<String>.from(
-          loginOrTokenPayload['staff_permissions'].map((p) => p.toString()));
-    } else if (loginOrTokenPayload['staff_permissions'] == null &&
-        _token.isNotEmpty &&
-        _userType != 'business_owner') {
       _staffPermissions = [];
     }
-    if (loginOrTokenPayload['notification_permissions'] is List) {
-      _notificationPermissions = List<String>.from(
-          loginOrTokenPayload['notification_permissions'].map((p) => p.toString()));
-    } else if (loginOrTokenPayload['notification_permissions'] == null &&
-        _token.isNotEmpty) {
+    
+    if (data['notification_permissions'] is List) {
+      _notificationPermissions = List<String>.from(data['notification_permissions']);
+    } else {
       _notificationPermissions = [];
     }
-    if (loginOrTokenPayload['accessible_kds_screens_details'] is List) {
+
+    if (data['accessible_kds_screens_details'] is List) {
       try {
-        _userAccessibleKdsScreens =
-            (loginOrTokenPayload['accessible_kds_screens_details'] as List)
-                .map((kdsJson) =>
-                    KdsScreenModel.fromJson(kdsJson as Map<String, dynamic>))
-                .toList();
-      } catch (e) {
-        debugPrint("[UserSession] KDS ekran detayları parse edilirken hata: $e");
+        _userAccessibleKdsScreens = (data['accessible_kds_screens_details'] as List)
+            .map((kdsJson) => KdsScreenModel.fromJson(kdsJson))
+            .toList();
+      } catch(e) {
+        debugPrint("KDS ekranları parse edilirken hata: $e");
         _userAccessibleKdsScreens = [];
       }
     } else {
       _userAccessibleKdsScreens = [];
     }
+    
+    if (data['subscription'] is Map<String, dynamic>) {
+      limitsNotifier.value = SubscriptionLimits.fromJson(data['subscription']);
+    } else {
+      limitsNotifier.value = const SubscriptionLimits();
+    }
+
+    // Verileri SharedPreferences'e kaydet
+    await _preferences?.setString(_tokenKey, _token);
+    await _preferences?.setString(_refreshTokenKey, _refreshToken);
+    await _preferences?.setInt(_userIdKey, _userId ?? 0);
+    await _preferences?.setString(_usernameKey, _username);
+    await _preferences?.setString(_userTypeKey, _userType);
+    if (_businessId != null) {
+      await _preferences?.setInt(_businessIdKey, _businessId!);
+    } else {
+      await _preferences?.remove(_businessIdKey);
+    }
+    await _preferences?.setBool(_isSetupCompleteKey, _isSetupComplete);
+    await _preferences?.setStringList(_staffPermissionsKey, _staffPermissions);
+    await _preferences?.setStringList(_notificationPermissionsKey, _notificationPermissions);
+    if (_profileImageUrl != null) {
+      await _preferences?.setString(_profileImageUrlKey, _profileImageUrl!);
+    } else {
+      await _preferences?.remove(_profileImageUrlKey);
+    }
+    if (_subscriptionStatus != null) {
+      await _preferences?.setString(_subscriptionStatusKey, _subscriptionStatus!);
+    } else {
+      await _preferences?.remove(_subscriptionStatusKey);
+    }
+    if (data['subscription'] is Map) {
+      await _preferences?.setString(_subscriptionLimitsKey, jsonEncode(data['subscription']));
+    } else {
+      await _preferences?.remove(_subscriptionLimitsKey);
+    }
+    if (_currencyCode != null) {
+      await _preferences?.setString(_currencyCodeKey, _currencyCode!);
+    } else {
+      await _preferences?.remove(_currencyCodeKey);
+    }
+    if (_trialEndsAt != null) {
+      await _preferences?.setString(_trialEndsAtKey, _trialEndsAt!);
+    } else {
+      await _preferences?.remove(_trialEndsAtKey);
+    }
   }
 
-  static void clearSession() {
+  static void _loadSessionData() {
+    _token = _preferences?.getString(_tokenKey) ?? '';
+    _refreshToken = _preferences?.getString(_refreshTokenKey) ?? '';
+    _userId = _preferences?.getInt(_userIdKey);
+    _username = _preferences?.getString(_usernameKey) ?? '';
+    _userType = _preferences?.getString(_userTypeKey) ?? '';
+    _businessId = _preferences?.getInt(_businessIdKey);
+    _isSetupComplete = _preferences?.getBool(_isSetupCompleteKey) ?? false;
+    _staffPermissions = _preferences?.getStringList(_staffPermissionsKey) ?? [];
+    _notificationPermissions = _preferences?.getStringList(_notificationPermissionsKey) ?? [];
+    _profileImageUrl = _preferences?.getString(_profileImageUrlKey);
+    _subscriptionStatus = _preferences?.getString(_subscriptionStatusKey);
+    _currencyCode = _preferences?.getString(_currencyCodeKey);
+    _trialEndsAt = _preferences?.getString(_trialEndsAtKey);
+
+    subscriptionStatusNotifier.value = _subscriptionStatus;
+
+    final limitsJsonString = _preferences?.getString(_subscriptionLimitsKey);
+    if (limitsJsonString != null) {
+      try {
+        limitsNotifier.value = SubscriptionLimits.fromJson(jsonDecode(limitsJsonString));
+      } catch (e) {
+        limitsNotifier.value = const SubscriptionLimits();
+      }
+    } else {
+      limitsNotifier.value = const SubscriptionLimits();
+    }
+  }
+
+  // 🆕 GÜÇLENDIRILEN clearSession metodunu ekle
+  static Future<void> clearSession() async {
+    debugPrint('[UserSession] Oturum temizleme başlatılıyor...');
+    
+    // 🆕 CRITICAL: SocketService'i kesin olarak temizle
+    SocketService.blockInitialization();
+    
+    // Kısa bir bekleme ver ki blocking etkili olsun
+    await Future.delayed(const Duration(milliseconds: 100));
+    
+    SocketService.disposeInstance();
+    
+    // Memory'deki tüm değişkenleri temizle
     _token = '';
+    _refreshToken = '';
+    _userId = null;
+    _username = '';
     _userType = '';
-    _staffPermissions = [];
-    _notificationPermissions = [];
     _businessId = null;
     _isSetupComplete = false;
-    _username = '';
-    _userId = null;
+    _staffPermissions = [];
+    _notificationPermissions = [];
     _userAccessibleKdsScreens = [];
     _profileImageUrl = null;
-    _currencyCode = null;
     _subscriptionStatus = null;
+    _currencyCode = null;
     _trialEndsAt = null;
+    limitsNotifier.value = const SubscriptionLimits();
     subscriptionStatusNotifier.value = null;
 
-    // === GÜNCELLENDİ: Oturum kapatıldığında limitleri ve notifier'ı varsayılana döndür ===
-    _maxTables = 10;
-    _maxKdsScreens = 2;
-    _maxCategories = 4;
-    _maxMenuItems = 20;
-    _maxVariants = 50;
-    _maxStaff = 2;
-    limitsNotifier.value = SubscriptionLimits(
-      maxTables: _maxTables,
-      maxKdsScreens: _maxKdsScreens,
-      maxCategories: _maxCategories,
-      maxMenuItems: _maxMenuItems,
-      maxVariants: _maxVariants,
-      maxStaff: _maxStaff,
-    );
-    // ===================================================================================
-
-    debugPrint("UserSession Temizlendi.");
+    // SharedPreferences'i temizle
+    try {
+      await _preferences?.clear();
+    } catch (e) {
+      debugPrint('[UserSession] SharedPreferences temizleme hatası: $e');
+    }
+    
+    debugPrint('[UserSession] Oturum temizlendi.');
+    
+    // 🆕 ENHANCED: Kısa delay sonra initialization'a izin ver
+    Future.delayed(const Duration(milliseconds: 500), () {
+      SocketService.allowInitialization();
+      debugPrint('[UserSession] SocketService initialization yeniden etkinleştirildi.');
+    });
   }
 
-  static bool hasPagePermission(String permissionKey) {
+  static bool hasPagePermission(String key) {
     if (_userType == 'business_owner') return true;
-    return _staffPermissions.contains(permissionKey);
+    return _staffPermissions.contains(key);
   }
 
   static bool hasNotificationPermission(String eventTypeKey) {
-    if (_userType == 'business_owner') {
-      if (_notificationPermissions.isEmpty) return true;
-      return _notificationPermissions.contains(eventTypeKey);
-    }
-    if (_notificationPermissions.isEmpty) {
-      return false;
-    }
+    if (_userType == 'business_owner' || _userType == 'admin') return true;
     return _notificationPermissions.contains(eventTypeKey);
   }
 
-  static void updateSubscriptionStatus(String? newStatus, String? newTrialEndsAt) {
-    _trialEndsAt = newTrialEndsAt;
-    _subscriptionStatus = newStatus;
-    subscriptionStatusNotifier.value = newStatus;
-    debugPrint(
-        "[UserSession] Abonelik durumu harici olarak güncellendi: $_subscriptionStatus");
+  static Future<void> updateAccessToken(String newAccessToken) async {
+    await _preferences?.setString(_tokenKey, newAccessToken);
+    _token = newAccessToken;
   }
 
-  static Future<void> refreshSessionData() async {
-    if (token.isEmpty) return;
+  static Future<void> updateTokens({required String accessToken, String? refreshToken}) async {
+    await _preferences?.setString(_tokenKey, accessToken);
+    _token = accessToken;
+    if (refreshToken != null && refreshToken.isNotEmpty) {
+      await _preferences?.setString(_refreshTokenKey, refreshToken);
+      _refreshToken = refreshToken;
+      debugPrint("[UserSession] Access ve Refresh token güncellendi.");
+    } else {
+      debugPrint("[UserSession] Sadece Access token güncellendi.");
+    }
+  }
+
+  static Future<void> updateProfileImageUrl(String? url) async {
+    _profileImageUrl = url;
+    if (url != null) {
+      await _preferences?.setString(_profileImageUrlKey, url);
+    } else {
+      await _preferences?.remove(_profileImageUrlKey);
+    }
+  }
+
+  static Future<void> updateCurrencyCode(String? code) async {
+    _currencyCode = code;
+    if (code != null) {
+      await _preferences?.setString(_currencyCodeKey, code);
+    } else {
+      await _preferences?.remove(_currencyCodeKey);
+    }
+  }
+}
+
+// 🆕 GÜÇLENDIRILEN GLOBAL LOGOUT CLASS
+class GlobalLogout {
+  static Future<void> performGlobalLogout(BuildContext? context) async {
+    debugPrint('[GlobalLogout] Kapsamlı logout işlemi başlatılıyor...');
+    
     try {
-      final refreshedData = await ApiService.fetchMyUser(token);
-      refreshedData['access'] = token;
-      storeLoginData(refreshedData);
-      debugPrint("[UserSession] Oturum verileri başarıyla yenilendi.");
+      // 🔧 STEP 1: SocketService'i tamamen engelle ve temizle
+      SocketService.blockInitialization();
+      debugPrint('[GlobalLogout] SocketService initialization engellendi');
+      
+      // 🆕 CRITICAL: Disposal'ın tamamlanması için bekle
+      await Future.delayed(const Duration(milliseconds: 200));
+      
+      // 🔧 STEP 2: Diğer servisleri temizle
+      try {
+        ConnectionManager().stopMonitoring();
+        debugPrint('[GlobalLogout] ConnectionManager durduruldu');
+      } catch (e) {
+        debugPrint('[GlobalLogout] ConnectionManager durdurma hatası: $e');
+      }
+      
+      try {
+        GlobalNotificationHandler.cleanup();
+        debugPrint('[GlobalLogout] GlobalNotificationHandler temizlendi');
+      } catch (e) {
+        debugPrint('[GlobalLogout] GlobalNotificationHandler temizleme hatası: $e');
+      }
+      
+      // 🔧 STEP 3: SocketService'i tamamen dispose et
+      try {
+        SocketService.disposeInstance();
+        debugPrint('[GlobalLogout] SocketService disposed');
+      } catch (e) {
+        debugPrint('[GlobalLogout] SocketService dispose hatası: $e');
+      }
+      
+      // 🆕 CRITICAL: Disposal'ın etkili olması için uzun bekleme
+      await Future.delayed(const Duration(milliseconds: 800)); // 500ms'den 800ms'ye çıkarıldı
+      
+      // 🔧 STEP 4: UserSession'ı temizle (içinde SocketService allowInitialization var)
+      await UserSession.clearSession();
+      debugPrint('[GlobalLogout] UserSession temizlendi');
+      
+      debugPrint('[GlobalLogout] Tüm servisler temizlendi, yönlendirme yapılıyor...');
+      
+      // 🔧 STEP 5: Login ekranına yönlendir
+      if (context != null && context.mounted) {
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (_) => const LoginScreen()),
+          (route) => false,
+        );
+      }
+      
+      debugPrint('[GlobalLogout] Logout tamamlandı ve LoginScreen\'e yönlendirildi.');
+      
     } catch (e) {
-      debugPrint("[UserSession] Oturum verileri yenilenirken hata: $e");
+      debugPrint('[GlobalLogout] Logout sırasında hata: $e');
+      
+      // 🔧 CRITICAL FIX: Hata durumunda da flag'i temizle
+      try {
+        SocketService.allowInitialization();
+        debugPrint('[GlobalLogout] Hata durumunda SocketService initialization etkinleştirildi');
+      } catch (socketError) {
+        debugPrint('[GlobalLogout] SocketService allowInitialization hatası: $socketError');
+      }
+      
+      // Yine de login ekranına yönlendir
+      if (context != null && context.mounted) {
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (_) => const LoginScreen()),
+          (route) => false,
+        );
+      }
     }
   }
 }

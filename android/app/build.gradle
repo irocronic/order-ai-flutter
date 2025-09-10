@@ -24,7 +24,6 @@ if (keystorePropertiesFile.exists()) {
 }
 // --- /HATA DÜZELTMESİ ---
 
-
 android {
     namespace = "com.example.makarna_app"
     compileSdk = flutter.compileSdkVersion
@@ -52,10 +51,11 @@ android {
 
     defaultConfig {
         applicationId "com.orderai.app"
-        minSdk = flutter.minSdkVersion
+        // 🔴 BURADA düzeltildi: flutter.minSdkVersion yerine sabit 23 yazdık
+        minSdk = 23
         targetSdk = flutter.targetSdkVersion
 
-        // --- BURADA sabit versiyon bilgileri ---
+        // --- Sabit versiyon bilgileri ---
         versionCode 6
         versionName "1.0.2"
     }
@@ -72,5 +72,6 @@ flutter {
 }
 
 dependencies {
-    // Gerekirse bağımlılıklarınızı buraya ekleyebilirsiniz.
+    // Firebase bağımlılıkları FlutterFire paketlerinden otomatik gelir
+    // Gerekirse ek kütüphaneleri buraya yazabilirsin
 }

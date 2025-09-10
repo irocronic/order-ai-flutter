@@ -1,5 +1,4 @@
 // lib/screens/setup_wizard_screen.dart
-
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -9,8 +8,8 @@ import '../widgets/setup_wizard/step_localization_settings_widget.dart';
 import '../widgets/setup_wizard/step_tables_widget.dart';
 import '../widgets/setup_wizard/step_kds_widget.dart';
 import '../widgets/setup_wizard/step_staff_widget.dart';
-import '../widgets/setup_wizard/step_categories_widget.dart';
-import '../widgets/setup_wizard/step_menu_items_widget.dart';
+import '../widgets/setup_wizard/categories/step_categories_widget.dart';
+import '../widgets/setup_wizard/menu_items/step_menu_items_widget.dart';
 import '../widgets/setup_wizard/step_variants_widget.dart';
 import '../widgets/setup_wizard/step_stock_widget.dart';
 
@@ -36,31 +35,92 @@ class SetupWizardScreen extends StatefulWidget {
   _SetupWizardScreenState createState() => _SetupWizardScreenState();
 }
 
-class _SetupWizardScreenState extends State<SetupWizardScreen> {
+class _SetupWizardScreenState extends State<SetupWizardScreen>
+    with SingleTickerProviderStateMixin {
   final PageController _pageController = PageController();
   int _currentPage = 0;
   bool _isSubmittingFinal = false;
 
   late List<Widget> _wizardPages;
 
+  // --- Animasyon değişkenleri ---
+  late AnimationController _animationController;
+  late Animation<Offset> _slideAnimation;
+  late Animation<double> _fadeAnimation;
+
   @override
   void initState() {
     super.initState();
     _wizardPages = [
-      StepLocalizationSettingsWidget(token: widget.token, businessId: widget.businessId, onNext: () => _handleNext()),
-      StepTablesWidget(key: _tablesStepKey, token: widget.token, businessId: widget.businessId, onNext: () {}),
-      StepKdsWidget(key: _kdsStepKey, token: widget.token, businessId: widget.businessId, onNext: () {}),
-      StepStaffWidget(key: _staffStepKey, token: widget.token, businessId: widget.businessId, onNext: () => _handleNext()),
-      StepCategoriesWidget(key: _categoriesStepKey, token: widget.token, businessId: widget.businessId, onNext: () {}),
-      StepMenuItemsWidget(key: _menuItemsStepKey, token: widget.token, businessId: widget.businessId, onNext: () {}),
-      StepVariantsWidget(key: _variantsStepKey, token: widget.token, businessId: widget.businessId, onNext: () {}),
-      StepStockWidget(token: widget.token, businessId: widget.businessId, onNext: () => _handleNext(isOptional: true), onSkip: _skipPage),
+      StepLocalizationSettingsWidget(
+          key: const PageStorageKey("localization"),
+          token: widget.token,
+          businessId: widget.businessId,
+          onNext: () => _handleNext()),
+      StepTablesWidget(
+          key: _tablesStepKey,
+          token: widget.token,
+          businessId: widget.businessId,
+          onNext: () {}),
+      StepKdsWidget(
+          key: _kdsStepKey,
+          token: widget.token,
+          businessId: widget.businessId,
+          onNext: () {}),
+      StepStaffWidget(
+          key: _staffStepKey,
+          token: widget.token,
+          businessId: widget.businessId,
+          onNext: () => _handleNext()),
+      StepCategoriesWidget(
+          key: _categoriesStepKey,
+          token: widget.token,
+          businessId: widget.businessId,
+          onNext: () {}),
+      StepMenuItemsWidget(
+          key: _menuItemsStepKey,
+          token: widget.token,
+          businessId: widget.businessId,
+          onNext: () {}),
+      StepVariantsWidget(
+          key: _variantsStepKey,
+          token: widget.token,
+          businessId: widget.businessId,
+          onNext: () {}),
+      StepStockWidget(
+          key: const PageStorageKey("stock"),
+          token: widget.token,
+          businessId: widget.businessId,
+          onNext: () => _handleNext(isOptional: true),
+          onSkip: _skipPage),
     ];
+
+    // --- Animasyon ayarları ---
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 400),
+    );
+
+    _slideAnimation = Tween<Offset>(
+      begin: const Offset(0, 0.05),
+      end: Offset.zero,
+    ).animate(CurvedAnimation(
+      parent: _animationController,
+      curve: Curves.easeOutExpo,
+    ));
+
+    _fadeAnimation = CurvedAnimation(
+      parent: _animationController,
+      curve: Curves.easeIn,
+    );
+
+    _animationController.forward();
   }
 
   @override
   void dispose() {
     _pageController.dispose();
+    _animationController.dispose();
     super.dispose();
   }
 
@@ -76,19 +136,27 @@ class _SetupWizardScreenState extends State<SetupWizardScreen> {
     switch (_currentPage) {
       case 1: // Masa
         if (_tablesStepKey.currentState?.createdTableCount == 0) {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.setupTablesErrorNoTablesCreated), backgroundColor: Colors.orangeAccent));
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(l10n.setupTablesErrorNoTablesCreated),
+            backgroundColor: Colors.orangeAccent,
+          ));
           canProceed = false;
         }
         break;
       case 2: // KDS
         if (_kdsStepKey.currentState?.createdKdsScreens.isEmpty ?? true) {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.setupKdsErrorNoScreensCreated), backgroundColor: Colors.orangeAccent));
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(l10n.setupKdsErrorNoScreensCreated),
+            backgroundColor: Colors.orangeAccent,
+          ));
           canProceed = false;
         }
         break;
       case 3:
         final staffState = _staffStepKey.currentState;
-        if (staffState != null && staffState.createdStaffCount > 0 && !staffState.areAllStaffShiftsAssigned()) {
+        if (staffState != null &&
+            staffState.createdStaffCount > 0 &&
+            !staffState.areAllStaffShiftsAssigned()) {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text(l10n.setupStaffErrorAssignShift),
             backgroundColor: Colors.orangeAccent,
@@ -98,20 +166,31 @@ class _SetupWizardScreenState extends State<SetupWizardScreen> {
         break;
       case 4: // Kategoriler
         if (_categoriesStepKey.currentState?.categories.isEmpty ?? true) {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.setupCategoriesErrorNoCategoriesCreated), backgroundColor: Colors.orangeAccent));
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(l10n.setupCategoriesErrorNoCategoriesCreated),
+            backgroundColor: Colors.orangeAccent,
+          ));
           canProceed = false;
         }
         break;
       case 5: // Menü Ürünleri
         if (_menuItemsStepKey.currentState?.addedMenuItems.isEmpty ?? true) {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.setupMenuItemsErrorNoItemsCreated), backgroundColor: Colors.orangeAccent));
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(l10n.setupMenuItemsErrorNoItemsCreated),
+            backgroundColor: Colors.orangeAccent,
+          ));
           canProceed = false;
         }
         break;
       case 6: // Varyantlar
         final variantsWidgetState = _variantsStepKey.currentState;
-        if (variantsWidgetState != null && variantsWidgetState.menuItems.any((item) => (item.variants?.isEmpty ?? true) && !item.isCampaignBundle)) {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.setupVariantsErrorNoVariantsCreated), backgroundColor: Colors.orangeAccent));
+        if (variantsWidgetState != null &&
+            variantsWidgetState.menuItems.any((item) =>
+                (item.variants?.isEmpty ?? true) && !item.isCampaignBundle)) {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(l10n.setupVariantsErrorNoVariantsCreated),
+            backgroundColor: Colors.orangeAccent,
+          ));
           canProceed = false;
         }
         break;
@@ -123,20 +202,20 @@ class _SetupWizardScreenState extends State<SetupWizardScreen> {
   }
 
   void _moveToNextPage() {
-      if (_currentPage < _wizardPages.length - 1) {
-        _pageController.nextPage(
-          duration: const Duration(milliseconds: 400),
-          curve: Curves.easeInOut,
-        );
-      } else {
-        _finishSetup();
-      }
+    if (_currentPage < _wizardPages.length - 1) {
+      _pageController.nextPage(
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+      );
+    } else {
+      _finishSetup();
+    }
   }
 
   void _previousPage() {
     if (_currentPage > 0) {
       _pageController.previousPage(
-        duration: const Duration(milliseconds: 400),
+        duration: const Duration(milliseconds: 300),
         curve: Curves.easeInOut,
       );
     }
@@ -158,18 +237,33 @@ class _SetupWizardScreenState extends State<SetupWizardScreen> {
       if (mounted) {
         final l10n = AppLocalizations.of(context)!;
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(l10n.setupWizardSuccessMessage), backgroundColor: Colors.green),
+          SnackBar(
+            content: Text(l10n.setupWizardSuccessMessage),
+            backgroundColor: Colors.green,
+          ),
         );
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (_) => BusinessOwnerHome(token: widget.token, businessId: widget.businessId)),
+          MaterialPageRoute(
+            builder: (_) => BusinessOwnerHome(
+              token: widget.token,
+              businessId: widget.businessId,
+            ),
+          ),
         );
       }
     } catch (e) {
       if (mounted) {
         final l10n = AppLocalizations.of(context)!;
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(l10n.setupWizardErrorMessage(e.toString().replaceFirst("Exception: ", ""))), backgroundColor: Colors.redAccent),
+          SnackBar(
+            content: Text(
+              l10n.setupWizardErrorMessage(
+                e.toString().replaceFirst("Exception: ", ""),
+              ),
+            ),
+            backgroundColor: Colors.redAccent,
+          ),
         );
         setState(() => _isSubmittingFinal = false);
       }
@@ -192,17 +286,30 @@ class _SetupWizardScreenState extends State<SetupWizardScreen> {
     ];
 
     bool isLastStep = _currentPage == _wizardPages.length - 1;
-    bool currentStepIsOptional = isLastStep || _currentPage == 3 || _currentPage == 7;
+    bool currentStepIsOptional =
+        isLastStep || _currentPage == 3 || _currentPage == 7;
 
     return Scaffold(
+      // 🎨 DÜZELTİLDİ: AppBar backgroundColor ve elevation kaldırıldı
       appBar: AppBar(
-        title: Text(l10n.setupWizardTitle((_currentPage + 1).toString(), _wizardPages.length.toString()), style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+        title: Text(
+          l10n.setupWizardTitle(
+            (_currentPage + 1).toString(),
+            _wizardPages.length.toString(),
+          ),
+          style: const TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         centerTitle: true,
         automaticallyImplyLeading: false,
-        flexibleSpace: Container(
-          decoration: BoxDecoration(
+        backgroundColor: Colors.transparent, // 🎨 EKLENDI: Şeffaf arka plan
+        elevation: 0, // 🎨 EKLENDI: Gölge kaldırıldı
+        flexibleSpace: Container( // 🎨 DÜZELTİLDİ: DecoratedBox yerine Container
+          decoration: const BoxDecoration(
             gradient: LinearGradient(
-              colors: [Colors.deepPurple.shade700, Colors.blue.shade700],
+              colors: [Color(0xFF512DA8), Color(0xFF1976D2)],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
@@ -210,11 +317,11 @@ class _SetupWizardScreenState extends State<SetupWizardScreen> {
         ),
       ),
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           gradient: LinearGradient(
             colors: [
-              Colors.blue.shade900.withOpacity(0.9),
-              Colors.blue.shade400.withOpacity(0.8),
+              Color(0xFF0D47A1),
+              Color(0xFF42A5F5),
             ],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
@@ -222,39 +329,123 @@ class _SetupWizardScreenState extends State<SetupWizardScreen> {
         ),
         child: Column(
           children: [
-            Padding(
+            // 🎨 DÜZELTİLDİ: Step title container'ı gradient background ile
+            Container(
+              width: double.infinity,
               padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 8.0),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    const Color(0xFF1976D2).withOpacity(0.9), // 🎨 EKLENDI: Mavi gradient
+                    const Color(0xFF0D47A1).withOpacity(0.8), // 🎨 EKLENDI: Koyu mavi
+                  ],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                ),
+                // 🎨 EKLENDI: Alt köşeleri yuvarlatma
+                borderRadius: const BorderRadius.only(
+                  bottomLeft: Radius.circular(16),
+                  bottomRight: Radius.circular(16),
+                ),
+                // 🎨 EKLENDI: Hafif gölge efekti
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.1),
+                    blurRadius: 8,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
+              ),
               child: Text(
                 pageTitles[_currentPage],
-                style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: Colors.white),
+                style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.white,
+                  // 🎨 EKLENDI: Text shadow
+                  shadows: [
+                    Shadow(
+                      color: Colors.black26,
+                      offset: Offset(0, 1),
+                      blurRadius: 2,
+                    ),
+                  ],
+                ),
                 textAlign: TextAlign.center,
               ),
             ),
-            LinearProgressIndicator(
-              value: (_currentPage + 1) / _wizardPages.length,
-              backgroundColor: Colors.white.withOpacity(0.3),
-              valueColor: const AlwaysStoppedAnimation<Color>(Colors.white),
-              minHeight: 6,
-            ),
-            Expanded(
-              child: PageView(
-                controller: _pageController,
-                onPageChanged: (index) {
-                  setState(() {
-                    _currentPage = index;
-                  });
-                },
-                physics: const NeverScrollableScrollPhysics(),
-                children: _wizardPages,
+            
+            // 🎨 DÜZELTİLDİ: Progress bar styling
+            Container(
+              margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8), // 🎨 EKLENDI: Margin
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8), // 🎨 EKLENDI: Rounded corners
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.1),
+                    blurRadius: 4,
+                    offset: const Offset(0, 1),
+                  ),
+                ],
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(8), // 🎨 EKLENDI: Clip rounded corners
+                child: LinearProgressIndicator(
+                  value: (_currentPage + 1) / _wizardPages.length,
+                  backgroundColor: Colors.white.withOpacity(0.3),
+                  valueColor: const AlwaysStoppedAnimation<Color>(Colors.white),
+                  minHeight: 8, // 🎨 DÜZELTİLDİ: Biraz daha kalın
+                ),
               ),
             ),
+            
+            Expanded(
+              child: FadeTransition(
+                opacity: _fadeAnimation,
+                child: SlideTransition(
+                  position: _slideAnimation,
+                  child: PageView(
+                    controller: _pageController,
+                    onPageChanged: (index) {
+                      setState(() {
+                        _currentPage = index;
+                        _animationController.forward(from: 0);
+                      });
+                    },
+                    physics: const NeverScrollableScrollPhysics(),
+                    children: _wizardPages,
+                  ),
+                ),
+              ),
+            ),
+            
+            // 🎨 DÜZELTİLDİ: Footer styling
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 16.0,
+                vertical: 12.0,
+              ),
               decoration: BoxDecoration(
-                // --- DEĞİŞİKLİKLER BURADA ---
-                color: Colors.transparent, // Arka planı şeffaf yap
-                border: Border(top: BorderSide(color: Colors.white.withOpacity(0.2), width: 1.0)), // Üst kenarlık ekle
-                // Gölge (boxShadow) kaldırıldı
+                // 🎨 EKLENDI: Footer gradient
+                gradient: LinearGradient(
+                  colors: [
+                    const Color(0xFF0D47A1).withOpacity(0.8),
+                    const Color(0xFF1976D2).withOpacity(0.9),
+                  ],
+                  begin: Alignment.bottomCenter,
+                  end: Alignment.topCenter,
+                ),
+                border: Border(
+                  top: BorderSide(
+                    color: Colors.white.withOpacity(0.2),
+                    width: 1.0,
+                  ),
+                ),
+                // 🎨 EKLENDI: Üst köşeleri yuvarlatma
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(16),
+                  topRight: Radius.circular(16),
+                ),
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -262,45 +453,79 @@ class _SetupWizardScreenState extends State<SetupWizardScreen> {
                   if (_currentPage > 0)
                     TextButton.icon(
                       icon: const Icon(Icons.arrow_back_ios_new, size: 18),
-                      label: Text(l10n.setupWizardBackButton, overflow: TextOverflow.ellipsis),
+                      label: Text(
+                        l10n.setupWizardBackButton,
+                        overflow: TextOverflow.ellipsis,
+                      ),
                       onPressed: _isSubmittingFinal ? null : _previousPage,
-                      // Buton rengini beyaz yap
-                      style: TextButton.styleFrom(foregroundColor: Colors.white70), 
+                      style: TextButton.styleFrom(
+                        foregroundColor: Colors.white70,
+                      ),
                     )
                   else
-                    // Boşluk bırakmak için, hizalamayı korur
                     Opacity(
                       opacity: 0,
-                      child: TextButton.icon(onPressed: null, icon: const Icon(Icons.arrow_back_ios_new), label: Text(l10n.setupWizardBackButton)),
+                      child: TextButton.icon(
+                        onPressed: null,
+                        icon: const Icon(Icons.arrow_back_ios_new),
+                        label: const Text(""),
+                      ),
                     ),
-
                   if (currentStepIsOptional)
                     Flexible(
                       child: TextButton(
                         onPressed: _isSubmittingFinal ? null : _skipPage,
-                        child: Text(l10n.setupWizardSkipButton, overflow: TextOverflow.ellipsis),
-                        // Buton rengini beyaz yap
-                        style: TextButton.styleFrom(foregroundColor: Colors.white),
+                        child: Text(
+                          l10n.setupWizardSkipButton,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        style: TextButton.styleFrom(
+                          foregroundColor: Colors.white,
+                        ),
                       ),
                     ),
-                  
                   ElevatedButton.icon(
                     icon: _isSubmittingFinal
-                        ? const SizedBox(width: 18, height: 18, child: CircularProgressIndicator(strokeWidth: 2.5, color: Colors.white))
-                        : Icon(isLastStep ? Icons.check_circle_outline : Icons.arrow_forward_ios, size: 18),
+                        ? const SizedBox(
+                            width: 18,
+                            height: 18,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2.5,
+                              color: Colors.white,
+                            ),
+                          )
+                        : Icon(
+                            isLastStep
+                                ? Icons.check_circle_outline
+                                : Icons.arrow_forward_ios,
+                            size: 18,
+                          ),
                     label: Text(
-                      isLastStep ? l10n.setupWizardFinishButton : l10n.setupWizardNextButton,
+                      isLastStep
+                          ? l10n.setupWizardFinishButton
+                          : l10n.setupWizardNextButton,
                       overflow: TextOverflow.ellipsis,
                     ),
                     onPressed: _isSubmittingFinal
                         ? null
-                        : () => _handleNext(isOptional: currentStepIsOptional && _currentPage != 3),
+                        : () => _handleNext(
+                              isOptional:
+                                  currentStepIsOptional && _currentPage != 3,
+                            ),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.blue.shade700,
                       foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                      textStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 12,
+                      ),
+                      textStyle: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
                     ),
                   ),
                 ],

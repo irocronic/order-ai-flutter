@@ -1,5 +1,7 @@
 // lib/screens/reports_screen.dart
 
+import '../services/notification_center.dart';
+import '../services/refresh_manager.dart';
 import 'dart:convert';
 import 'dart:math';
 import 'package:fl_chart/fl_chart.dart';
@@ -37,6 +39,25 @@ class _ReportsScreenState extends State<ReportsScreen> {
   @override
   void initState() {
     super.initState();
+    
+    NotificationCenter.instance.addObserver('refresh_all_screens', (data) {
+      debugPrint('[ReportsScreen] 📡 Global refresh received: ${data['event_type']}');
+      if (mounted && !_isInit) {
+        final refreshKey = 'reports_screen';
+        RefreshManager.throttledRefresh(refreshKey, () async {
+          await fetchReport();
+        });
+      }
+    });
+    NotificationCenter.instance.addObserver('screen_became_active', (data) {
+      debugPrint('[ReportsScreen] 📱 Screen became active notification received');
+      if (mounted && !_isInit) {
+        final refreshKey = 'reports_screen_active';
+        RefreshManager.throttledRefresh(refreshKey, () async {
+          await fetchReport();
+        });
+      }
+    });
   }
 
   @override
@@ -50,6 +71,11 @@ class _ReportsScreenState extends State<ReportsScreen> {
     }
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   Future<void> fetchReport() async {
     if (!mounted) return;
     setState(() {
@@ -57,7 +83,6 @@ class _ReportsScreenState extends State<ReportsScreen> {
       errorMessage = '';
       chartData = [];
     });
-
     final l10n = AppLocalizations.of(context)!;
     final locale = l10n.localeName;
 
@@ -65,7 +90,6 @@ class _ReportsScreenState extends State<ReportsScreen> {
       Uri url;
       const String reportEndpoint = '/reports/general/';
       Map<String, String> queryParams = {};
-
       if (selectedFilter == 'custom') {
         if (customDateRange == null) {
           if (mounted) {
@@ -85,7 +109,6 @@ class _ReportsScreenState extends State<ReportsScreen> {
       }
       url = ApiService.getUrl(reportEndpoint)
           .replace(queryParameters: queryParams);
-
       final response = await http.get(
         url,
         headers: {
@@ -93,7 +116,6 @@ class _ReportsScreenState extends State<ReportsScreen> {
           "Authorization": "Bearer ${widget.token}"
         },
       );
-
       if (!mounted) return;
 
       if (response.statusCode == 200) {
@@ -188,7 +210,6 @@ class _ReportsScreenState extends State<ReportsScreen> {
             ? DateFormat('yyyy-MM-dd').format(customDateRange!.end)
             : null,
       );
-
       if (detailedData.isEmpty) {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -242,7 +263,6 @@ class _ReportsScreenState extends State<ReportsScreen> {
   Widget _buildTurnoverChart() {
     final l10n = AppLocalizations.of(context)!;
     final locale = l10n.localeName;
-
     if (chartData.isEmpty) {
       return Center(
           child: Text(chartTitle,
@@ -251,7 +271,6 @@ class _ReportsScreenState extends State<ReportsScreen> {
     List<BarChartGroupData> barGroups = [];
     int index = 0;
     double maxY = 0;
-
     for (var item in chartData) {
       final turnover = (item['turnover'] as num?)?.toDouble() ?? 0.0;
       maxY = max(maxY, turnover);
@@ -263,7 +282,8 @@ class _ReportsScreenState extends State<ReportsScreen> {
     }
 
     for (var item in chartData) {
-      final turnover = (item['turnover'] as num?)?.toDouble() ?? 0.0;
+      final turnover = (item['turnover'] as num?)?.toDouble() ??
+          0.0;
       barGroups.add(
         BarChartGroupData(
           x: index,
@@ -302,8 +322,8 @@ class _ReportsScreenState extends State<ReportsScreen> {
               maxY: maxY * 1.2,
               barTouchData: BarTouchData(
                 touchTooltipData: BarTouchTooltipData(
-                  getTooltipColor: (barChartGroupData) =>
-                      Colors.blueGrey.shade700,
+                  // DEĞİŞİKLİK: 'getTooltipColor' parametresi 'tooltipBgColor' olarak değiştirildi.
+                  tooltipBgColor: Colors.blueGrey.shade700,
                   getTooltipItem: (group, groupIndex, rod, rodIndex) {
                     String label = '';
                     if (activeChartType == 'daily' &&
@@ -352,7 +372,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
                       if (value > 0 &&
                           value < meta.max &&
                           (maxY > 0 &&
-                              (value % (meta.max / 4).ceilToDouble() < 1) ||
+                                  (value % (meta.max / 4).ceilToDouble() < 1) ||
                               value % (meta.max / 3).ceilToDouble() < 1)) {
                         return Text(NumberFormat.compact().format(value),
                             style: const TextStyle(fontSize: 10));
@@ -481,7 +501,6 @@ class _ReportsScreenState extends State<ReportsScreen> {
       'year': l10n.reportsFilterThisYear,
       'custom': l10n.reportsFilterCustom,
     };
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,

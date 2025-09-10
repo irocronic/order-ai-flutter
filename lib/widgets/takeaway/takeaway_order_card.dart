@@ -19,7 +19,6 @@ class TakeawayOrderCardWidget extends StatefulWidget {
   final VoidCallback onAssignPager;
   final VoidCallback onApprove;
   final VoidCallback onReject;
-  // --- GÜNCELLEME: onTap callback'i eklendi ---
   final VoidCallback onTap;
 
   const TakeawayOrderCardWidget({
@@ -31,7 +30,7 @@ class TakeawayOrderCardWidget extends StatefulWidget {
     required this.onAssignPager,
     required this.onApprove,
     required this.onReject,
-    required this.onTap, // Constructor'a eklendi
+    required this.onTap,
   }) : super(key: key);
 
   @override
@@ -45,6 +44,9 @@ class _TakeawayOrderCardWidgetState extends State<TakeawayOrderCardWidget> {
   String? _assignedPagerDeviceId;
   String? _assignedPagerName;
 
+  // 🔥 YENİ: Item-specific loading states
+  final Map<int, bool> _itemProcessingStates = {};
+  
   // Durum ve KDS durum sabitleri
   static const String STATUS_PENDING_APPROVAL = 'pending_approval';
   static const String STATUS_PENDING_SYNC = 'pending_sync';
@@ -149,42 +151,130 @@ class _TakeawayOrderCardWidgetState extends State<TakeawayOrderCardWidget> {
         SnackBar(content: Text(message), backgroundColor: Colors.redAccent));
   }
 
+  // 🔥 ÇÖZÜM 1: Garson teslim alma işlemi tamamen yeniden yazıldı
   Future<void> _handleItemPickup(OrderItem item, AppLocalizations l10n) async {
-    if (!mounted || _isProcessingAction || item.id == null) return;
-    setState(() => _isProcessingAction = true);
+    if (!mounted || item.id == null) return;
+    
+    // 🔥 Duplicate click prevention
+    if (_itemProcessingStates[item.id!] == true) {
+      debugPrint("🔄 [PICKUP] Item ${item.id} already being processed, skipping...");
+      return;
+    }
+
+    debugPrint("🔄 [PICKUP] Starting pickup process for item ${item.id}");
+    
+    setState(() {
+      _itemProcessingStates[item.id!] = true;
+    });
+
     try {
       final response = await OrderService.markItemPickedUpByWaiter(token: widget.token, orderItemId: item.id!);
+      debugPrint("🔄 [PICKUP] Backend response: ${response.statusCode}");
+      
       if (mounted) {
         if (response.statusCode == 200) {
+          debugPrint("🔄 [PICKUP] Success - triggering immediate refresh");
+          
+          // 🔥 ÇÖZÜM 2: Immediate callback trigger
           widget.onOrderUpdated();
+          
+          // 🔥 ÇÖZÜM 3: Force UI rebuild after small delay
+          await Future.delayed(const Duration(milliseconds: 100));
+          if (mounted) {
+            setState(() {
+              // Force rebuild to show updated state
+            });
+          }
+          
+          // 🔥 ÇÖZÜM 4: Success feedback - basit mesaj
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text("İşlem başarılı"),
+              backgroundColor: Colors.green,
+              duration: const Duration(seconds: 2),
+            ),
+          );
+          
         } else {
-          _showErrorSnackbar(l10n.takeawayCardErrorItemPickup(response.statusCode.toString()));
+          _showErrorSnackbar("Hata: ${response.statusCode}");
         }
       }
     } catch (e) {
-      _showErrorSnackbar(l10n.takeawayCardErrorItemPickupGeneric(e.toString()));
+      debugPrint("🔄 [PICKUP] Error: $e");
+      if (mounted) {
+        _showErrorSnackbar("Hata: $e");
+      }
     } finally {
-      if (mounted) setState(() => _isProcessingAction = false);
+      if (mounted) {
+        setState(() {
+          _itemProcessingStates[item.id!] = false;
+        });
+      }
+      debugPrint("🔄 [PICKUP] Process completed for item ${item.id}");
     }
   }
 
+  // 🔥 ÇÖZÜM 5: Teslimat işlemi de güncellendi
   Future<void> _handleDeliverOrderItem(OrderItem item, AppLocalizations l10n) async {
-    if (!mounted || _isProcessingAction || widget.order.id == null || item.id == null) return;
-    setState(() => _isProcessingAction = true);
+    if (!mounted || widget.order.id == null || item.id == null) return;
+    
+    // 🔥 Duplicate click prevention
+    if (_itemProcessingStates[item.id!] == true) {
+      debugPrint("🔄 [DELIVER] Item ${item.id} already being processed, skipping...");
+      return;
+    }
+
+    debugPrint("🔄 [DELIVER] Starting delivery process for item ${item.id}");
+    
+    setState(() {
+      _itemProcessingStates[item.id!] = true;
+    });
+
     try {
       final response = await OrderService.markOrderItemDelivered(
           token: widget.token, orderId: widget.order.id!, orderItemId: item.id!);
+      debugPrint("🔄 [DELIVER] Backend response: ${response.statusCode}");
+      
       if (mounted) {
         if (response.statusCode == 200) {
+          debugPrint("🔄 [DELIVER] Success - triggering immediate refresh");
+          
+          // 🔥 Immediate callback trigger
           widget.onOrderUpdated();
+          
+          // 🔥 Force UI rebuild after small delay
+          await Future.delayed(const Duration(milliseconds: 100));
+          if (mounted) {
+            setState(() {
+              // Force rebuild to show updated state
+            });
+          }
+          
+          // 🔥 Success feedback - basit mesaj
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text("Teslimat başarılı"),
+              backgroundColor: Colors.green,
+              duration: const Duration(seconds: 2),
+            ),
+          );
+          
         } else {
-          _showErrorSnackbar(l10n.errorDeliveringItem(response.statusCode.toString()));
+          _showErrorSnackbar("Teslimat hatası: ${response.statusCode}");
         }
       }
     } catch (e) {
-      _showErrorSnackbar(l10n.errorDeliveringItemGeneral(e.toString()));
+      debugPrint("🔄 [DELIVER] Error: $e");
+      if (mounted) {
+        _showErrorSnackbar("Teslimat hatası: $e");
+      }
     } finally {
-      if (mounted) setState(() => _isProcessingAction = false);
+      if (mounted) {
+        setState(() {
+          _itemProcessingStates[item.id!] = false;
+        });
+      }
+      debugPrint("🔄 [DELIVER] Process completed for item ${item.id}");
     }
   }
 
@@ -217,18 +307,57 @@ class _TakeawayOrderCardWidgetState extends State<TakeawayOrderCardWidget> {
   Widget _buildItemRow(OrderItem item, AppLocalizations l10n) {
     final bool isDelivered = item.waiterPickedUpAt != null;
     final String kdsStatus = item.kdsStatus ?? KDS_ITEM_STATUS_PENDING;
+    final bool isProcessing = _itemProcessingStates[item.id] ?? false;
+    
     Widget actionWidget;
 
     if (isDelivered) {
-      actionWidget = Tooltip(message: l10n.takeawayCardTooltipDelivered, child: Icon(Icons.check_circle, size: 28, color: Colors.green.shade600));
+      actionWidget = Tooltip(
+        message: "Teslim edildi",
+        child: Icon(Icons.check_circle, size: 28, color: Colors.green.shade600)
+      );
     } else if (kdsStatus == KDS_ITEM_STATUS_READY) {
-      actionWidget = IconButton(icon: const Icon(Icons.pan_tool_alt_outlined, size: 28), color: Colors.purple.shade600, padding: EdgeInsets.zero, constraints: const BoxConstraints(), tooltip: l10n.takeawayCardTooltipMarkAsPickedUp, onPressed: _isProcessingAction ? null : () => _handleItemPickup(item, l10n));
+      // 🔥 ÇÖZÜM 6: Loading state ile button güncellendi
+      actionWidget = isProcessing 
+        ? const SizedBox(
+            width: 28, 
+            height: 28,
+            child: CircularProgressIndicator(strokeWidth: 2)
+          )
+        : IconButton(
+            icon: const Icon(Icons.pan_tool_alt_outlined, size: 28),
+            color: Colors.purple.shade600,
+            padding: EdgeInsets.zero,
+            constraints: const BoxConstraints(),
+            tooltip: "Teslim Al",
+            onPressed: () => _handleItemPickup(item, l10n),
+          );
     } else if (kdsStatus == KDS_ITEM_STATUS_PICKED_UP) {
-      actionWidget = IconButton(icon: const Icon(Icons.room_service_outlined, size: 28), color: Colors.blue.shade600, padding: EdgeInsets.zero, constraints: const BoxConstraints(), tooltip: l10n.takeawayCardTooltipDeliverToCustomer, onPressed: _isProcessingAction ? null : () => _handleDeliverOrderItem(item, l10n));
+      // 🔥 ÇÖZÜM 7: Loading state ile button güncellendi
+      actionWidget = isProcessing
+        ? const SizedBox(
+            width: 28,
+            height: 28,
+            child: CircularProgressIndicator(strokeWidth: 2)
+          )
+        : IconButton(
+            icon: const Icon(Icons.room_service_outlined, size: 28),
+            color: Colors.blue.shade600,
+            padding: EdgeInsets.zero,
+            constraints: const BoxConstraints(),
+            tooltip: "Müşteriye Teslim Et",
+            onPressed: () => _handleDeliverOrderItem(item, l10n),
+          );
     } else if (kdsStatus == KDS_ITEM_STATUS_PREPARING) {
-      actionWidget = Tooltip(message: l10n.kdsStatusPreparing, child: Icon(Icons.whatshot, size: 24, color: Colors.orange.shade800));
+      actionWidget = Tooltip(
+        message: l10n.kdsStatusPreparing,
+        child: Icon(Icons.whatshot, size: 24, color: Colors.orange.shade800)
+      );
     } else {
-      actionWidget = Tooltip(message: l10n.kdsStatusWaitingForApproval, child: Icon(Icons.hourglass_empty, size: 22, color: Colors.grey.shade600));
+      actionWidget = Tooltip(
+        message: l10n.kdsStatusWaitingForApproval,
+        child: Icon(Icons.hourglass_empty, size: 22, color: Colors.grey.shade600)
+      );
     }
 
     final String variantNameDisplay = (item.variant?.name != null && item.variant!.name.isNotEmpty) ? ' (${item.variant!.name})' : '';
@@ -282,103 +411,115 @@ class _TakeawayOrderCardWidgetState extends State<TakeawayOrderCardWidget> {
     }
 
     return GestureDetector(
-      // --- GÜNCELLEME: onTap artık doğrudan widget'tan gelen callback'i çağırıyor ---
       onTap: (isPaid || isCancelled || isCompleted || isRejected) ? null : widget.onTap,
       child: Card(
         color: cardColor,
         elevation: 6,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16), side: BorderSide(color: cardColor.withBlue(180).withGreen(150), width: 2)),
-        child: Stack(
+        // +++ DEĞİŞİKLİK BURADA BAŞLIYOR: Layout yeniden düzenlendi +++
+        child: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _buildStatusHeader(l10n),
-                  Text(
-                    getLocalizedOrderStatus(context, widget.order.status),
-                    style: TextStyle(color: Colors.black.withOpacity(0.7), fontWeight: FontWeight.w500),
-                  ),
-                  const Divider(height: 12, thickness: 0.5, color: Colors.black38),
-                  Expanded(
-                    child: widget.order.orderItems.isEmpty
-                        ? Center(child: Text(l10n.errorNoOrderItems))
-                        : ListView.builder(
-                            padding: EdgeInsets.zero,
-                            itemCount: widget.order.orderItems.length,
-                            itemBuilder: (context, index) => _buildItemRow(widget.order.orderItems[index], l10n),
-                          ),
-                  ),
-                ],
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildStatusHeader(l10n),
+                    Text(
+                      getLocalizedOrderStatus(context, widget.order.status),
+                      style: TextStyle(color: Colors.black.withOpacity(0.7), fontWeight: FontWeight.w500),
+                    ),
+                    const Divider(height: 12, thickness: 0.5, color: Colors.black38),
+                    Expanded(
+                      child: widget.order.orderItems.isEmpty
+                          ? Center(child: Text(l10n.errorNoOrderItems))
+                          : ListView.builder(
+                              padding: EdgeInsets.zero,
+                              itemCount: widget.order.orderItems.length,
+                              itemBuilder: (context, index) => _buildItemRow(widget.order.orderItems[index], l10n),
+                            ),
+                    ),
+                  ],
+                ),
               ),
             ),
-            Positioned(
-              bottom: 0,
-              left: 0,
-              right: 0,
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
-                decoration: BoxDecoration(
-                  color: Colors.black.withOpacity(0.1),
-                  borderRadius: const BorderRadius.only(
-                    bottomLeft: Radius.circular(14),
-                    bottomRight: Radius.circular(14),
-                  ),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+              decoration: BoxDecoration(
+                color: Colors.black.withOpacity(0.1),
+                borderRadius: const BorderRadius.only(
+                  bottomLeft: Radius.circular(14),
+                  bottomRight: Radius.circular(14),
                 ),
-                child: isPendingSync
-                    ? Center(child: Row(mainAxisSize: MainAxisSize.min, children: [const Icon(Icons.sync, size: 16, color: Colors.black54), const SizedBox(width: 8), Text(l10n.takeawayCardStatusSyncPending, style: const TextStyle(color: Colors.black54))]))
-                    : isPendingApproval
-                        // ♻️ DEĞİŞİKLİK BAŞLANGICI: Butonlar sadece ikon gösterecek ve Tooltip içerecek şekilde güncellendi.
-                        ? Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              Expanded(
-                                child: Tooltip(
-                                  message: l10n.buttonApprove,
-                                  child: ElevatedButton(
-                                    onPressed: widget.onApprove,
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.green.shade700,
-                                      foregroundColor: Colors.white,
-                                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                                      padding: EdgeInsets.zero, // İç boşluğu sıfırla
-                                    ),
-                                    child: const Icon(Icons.check_circle, size: 18),
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(width: 8),
-                              Expanded(
-                                child: Tooltip(
-                                  message: l10n.buttonReject,
-                                  child: ElevatedButton(
-                                    onPressed: widget.onReject,
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.red.shade700,
-                                      foregroundColor: Colors.white,
-                                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                                      padding: EdgeInsets.zero, // İç boşluğu sıfırla
-                                    ),
-                                    child: const Icon(Icons.cancel, size: 18),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          )
-                        // ♻️ DEĞİŞİKLİK SONU
-                        : Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              const Spacer(),
-                              IconButton(icon: const Icon(Icons.cancel_outlined), iconSize: 22, color: Colors.red.shade800, tooltip: l10n.tooltipCancelOrder, onPressed: widget.onCancel),
-                              IconButton(icon: Icon(Icons.phonelink_ring_outlined, color: (_assignedPagerDeviceId != null && _assignedPagerDeviceId!.isNotEmpty) ? Colors.blue.shade800 : Colors.black54, size: 22), tooltip: _assignedPagerDeviceId != null && _assignedPagerDeviceId!.isNotEmpty ? l10n.takeawayCardTooltipPagerInfo(_assignedPagerName ?? _assignedPagerDeviceId!) : l10n.takeawayCardTooltipAssignPager, onPressed: widget.onAssignPager),
-                            ],
-                          ),
               ),
+              child: isPendingSync
+                  ? Center(child: Row(mainAxisSize: MainAxisSize.min, children: [const Icon(Icons.sync, size: 16, color: Colors.black54), const SizedBox(width: 8), Text("Senkronizasyon bekleniyor", style: const TextStyle(color: Colors.black54))]))
+                  : isPendingApproval
+                      ? Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Expanded(
+                              child: Tooltip(
+                                message: l10n.buttonApprove,
+                                child: ElevatedButton(
+                                  onPressed: widget.onApprove,
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.green.shade700,
+                                    foregroundColor: Colors.white,
+                                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                    padding: EdgeInsets.zero,
+                                  ),
+                                  child: const Icon(Icons.check_circle, size: 18),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: Tooltip(
+                                message: l10n.buttonReject,
+                                child: ElevatedButton(
+                                  onPressed: widget.onReject,
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.red.shade700,
+                                    foregroundColor: Colors.white,
+                                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                    padding: EdgeInsets.zero,
+                                  ),
+                                  child: const Icon(Icons.cancel, size: 18),
+                                ),
+                              ),
+                            ),
+                          ],
+                        )
+                      : Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            const Spacer(),
+                            IconButton(
+                              icon: const Icon(Icons.cancel_outlined), 
+                              iconSize: 22, 
+                              color: Colors.red.shade800, 
+                              tooltip: l10n.tooltipCancelOrder, 
+                              onPressed: widget.onCancel
+                            ),
+                            IconButton(
+                              icon: Icon(
+                                Icons.phonelink_ring_outlined, 
+                                color: (_assignedPagerDeviceId != null && _assignedPagerDeviceId!.isNotEmpty) ? Colors.blue.shade800 : Colors.black54, 
+                                size: 22
+                              ), 
+                              tooltip: (_assignedPagerDeviceId != null && _assignedPagerDeviceId!.isNotEmpty) 
+                                ? "Pager: ${_assignedPagerName ?? _assignedPagerDeviceId!}" 
+                                : "Pager Ata", 
+                              onPressed: widget.onAssignPager
+                            ),
+                          ],
+                        ),
             ),
           ],
         ),
+        // +++ DEĞİŞİKLİK BURADA BİTİYOR +++
       ),
     );
   }

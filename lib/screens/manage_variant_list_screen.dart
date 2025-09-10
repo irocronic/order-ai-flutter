@@ -2,6 +2,8 @@
 
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import '../services/notification_center.dart';
+import '../services/refresh_manager.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../services/api_service.dart';
@@ -10,13 +12,11 @@ import 'manage_variant_screen.dart';
 class ManageVariantListScreen extends StatefulWidget {
   final String token;
   final int businessId;
-
   const ManageVariantListScreen({
     Key? key,
     required this.token,
     required this.businessId,
   }) : super(key: key);
-
   @override
   _ManageVariantListScreenState createState() => _ManageVariantListScreenState();
 }
@@ -30,13 +30,34 @@ class _ManageVariantListScreenState extends State<ManageVariantListScreen> {
   @override
   void initState() {
     super.initState();
-    // initState içinde fetchMenuItems çağrısı kaldırıldı.
+    NotificationCenter.instance.addObserver('refresh_all_screens', (data) {
+      debugPrint('[ManageVariantListScreen] 📡 Global refresh received: ${data['event_type']}');
+      if (mounted) {
+        final refreshKey = 'manage_variant_list_screen_${widget.businessId}';
+        RefreshManager.throttledRefresh(refreshKey, () async {
+          await fetchMenuItems();
+        });
+      }
+    });
+    NotificationCenter.instance.addObserver('screen_became_active', (data) {
+      debugPrint('[ManageVariantListScreen] 📱 Screen became active notification received');
+      if (mounted) {
+        final refreshKey = 'manage_variant_list_screen_active_${widget.businessId}';
+        RefreshManager.throttledRefresh(refreshKey, () async {
+          await fetchMenuItems();
+        });
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    // Bu metodun sadece bir kez çalışmasını sağlamak için kontrol ekliyoruz.
     if (!_didFetchData) {
       fetchMenuItems();
       _didFetchData = true;
@@ -61,13 +82,12 @@ class _ManageVariantListScreenState extends State<ManageVariantListScreen> {
         if (response.statusCode == 200) {
           final List<dynamic> data = jsonDecode(utf8.decode(response.bodyBytes));
           setState(() {
-            // Sadece varyantı olan ürünleri listele
-            menuItems = data.where((item) => item['business'] == widget.businessId && (item['variants'] as List).isNotEmpty).toList();
+            menuItems = data.where((item) => item['business'] == widget.businessId && item['is_campaign_bundle'] != true).toList();
             isLoading = false;
           });
         } else {
           setState(() {
-            errorMessage = l10n.manageVariantListErrorLoading;
+            errorMessage = "FETCH_ERROR|${response.statusCode}";
             isLoading = false;
           });
         }
@@ -75,7 +95,7 @@ class _ManageVariantListScreenState extends State<ManageVariantListScreen> {
     } catch (e) {
       if(mounted) {
         setState(() {
-          errorMessage = l10n.errorGeneral(e.toString());
+          errorMessage = "GENERAL_ERROR|${e.toString()}";
           isLoading = false;
         });
       }
@@ -88,7 +108,6 @@ class _ManageVariantListScreenState extends State<ManageVariantListScreen> {
           ? menuItem['image'] 
           : ApiService.baseUrl + menuItem['image']
         : null;
-
     return Card(
       color: Colors.white.withOpacity(0.85),
       elevation: 4,
@@ -108,17 +127,17 @@ class _ManageVariantListScreenState extends State<ManageVariantListScreen> {
           fetchMenuItems();
         },
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
+           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Expanded(
               child: imageUrl != null
                   ? Image.network(
                       imageUrl,
-                      fit: BoxFit.cover,
+                       fit: BoxFit.cover,
                       errorBuilder: (context, error, stackTrace) =>
                           const Icon(Icons.broken_image, size: 40, color: Colors.grey),
                     )
-                  : Icon(Icons.restaurant_menu, size: 50, color: Colors.grey.shade700),
+                   : Icon(Icons.restaurant_menu, size: 50, color: Colors.grey.shade700),
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
@@ -139,8 +158,20 @@ class _ManageVariantListScreenState extends State<ManageVariantListScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    String displayErrorMessage = errorMessage; // Hata mesajı zaten lokalize
-
+    String displayErrorMessage = '';
+    if (errorMessage.isNotEmpty) {
+      final parts = errorMessage.split('|');
+      if (parts.length == 2) {
+        if (parts[0] == 'FETCH_ERROR') {
+          displayErrorMessage = l10n.errorFetchingMenuItems(parts[1]);
+        } else if (parts[0] == 'GENERAL_ERROR') {
+          displayErrorMessage = l10n.errorGeneral(parts[1]);
+        }
+      } else {
+        displayErrorMessage = errorMessage;
+      }
+    }
+    
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -160,7 +191,7 @@ class _ManageVariantListScreenState extends State<ManageVariantListScreen> {
         flexibleSpace: Container(
           decoration: const BoxDecoration(
             gradient: LinearGradient(
-              colors: [
+               colors: [
                 Color(0xFF283593),
                 Color(0xFF455A64),
               ],
@@ -190,14 +221,14 @@ class _ManageVariantListScreenState extends State<ManageVariantListScreen> {
                       child: Text(displayErrorMessage, style: const TextStyle(color: Colors.orangeAccent, fontSize: 16), textAlign: TextAlign.center),
                     ))
                   : RefreshIndicator(
-                      onRefresh: fetchMenuItems,
+                       onRefresh: fetchMenuItems,
                       color: Colors.white,
                       backgroundColor: Colors.blue.shade700,
                       child: GridView.builder(
-                        padding: const EdgeInsets.all(16),
+                             padding: const EdgeInsets.all(16),
                         gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                          maxCrossAxisExtent: 200, // Her bir kartın maksimum genişliği
-                          childAspectRatio: 0.9,   // En/boy oranı
+                                maxCrossAxisExtent: 200, 
+                              childAspectRatio: 0.9, 
                           crossAxisSpacing: 16,
                           mainAxisSpacing: 16
                         ),

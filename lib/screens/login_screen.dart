@@ -8,6 +8,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../services/api_service.dart';
 import '../services/socket_service.dart';
 import '../services/user_session.dart';
+import '../services/global_notification_handler.dart';
 import 'business_owner_home.dart';
 import 'admin_home.dart';
 import 'register_screen.dart';
@@ -17,7 +18,6 @@ import 'subscription_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
-
   @override
   State<LoginScreen> createState() => _LoginScreenState();
 }
@@ -28,7 +28,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _passwordController = TextEditingController();
   String _errorMessageKey = '';
   bool _isLoading = false;
-
+  
   @override
   void dispose() {
     _usernameController.dispose();
@@ -43,26 +43,36 @@ class _LoginScreenState extends State<LoginScreen> {
     if (!mounted) return;
     
     final l10n = AppLocalizations.of(context)!;
-
     setState(() {
       _isLoading = true;
       _errorMessageKey = '';
     });
-
+    
     try {
       final data = await ApiService.login(
           _usernameController.text.trim(), _passwordController.text.trim());
       
-      UserSession.storeLoginData(data);
-      SocketService.instance.connectAndListen();
+      await UserSession.storeLoginData(data);
+
+      // 🔧 FIX 3: Login sonrası doğru sıralama
+      // 🆕 CRITICAL: İkinci bir güvence daha ekleyelim
+      SocketService.allowInitialization();
+      debugPrint('[LoginScreen] SocketService initialization allowed after login');
+      
+      // 🆕 CRITICAL: Kısa bir delay ekle ki önceki bağlantılar tamamen temizlensin
+      await Future.delayed(const Duration(milliseconds: 800)); // 500ms'den 800ms'ye çıkarıldı
+      
+      // GlobalNotificationHandler yeniden başlat
+      GlobalNotificationHandler.initialize();
+      debugPrint('[LoginScreen] GlobalNotificationHandler initialized after login');
 
       if (!mounted) return;
-
+      
       final userType = UserSession.userType;
       final businessId = UserSession.businessId;
       final isSetupComplete = UserSession.isSetupComplete;
       final subscriptionStatus = UserSession.subscriptionStatus;
-
+      
       if (userType == 'business_owner') {
         if (businessId == null) {
           Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const LoginScreen()));
@@ -86,15 +96,14 @@ class _LoginScreenState extends State<LoginScreen> {
       }
 
     } catch (e) {
+      debugPrint('[LoginScreen] Login error: $e');
       if (mounted) {
-        String errorKey = 'loginErrorInvalidCredentials'; 
+        String errorKey = 'loginErrorInvalidCredentials';
         String exceptionString = e.toString().toLowerCase();
 
-        // +++ GÜNCELLEME BAŞLANGICI: Yeni hata kodları kontrolü +++
         if (exceptionString.contains('no_shift_scheduled') || exceptionString.contains('no_shift_assigned') || exceptionString.contains('no_active_shift_at_login')) {
           errorKey = 'loginErrorNoActiveShift';
         }
-        // --- Mevcut hata kontrolleri ---
         else if (exceptionString.contains("account_not_approved")) {
           errorKey = 'loginErrorAccountNotApproved';
         } else if (exceptionString.contains("account_inactive")) {
@@ -102,7 +111,6 @@ class _LoginScreenState extends State<LoginScreen> {
         } else if (exceptionString.contains("subscription_expired")) {
           errorKey = 'loginErrorSubscriptionExpired';
         }
-        // +++ GÜNCELLEME SONU +++
         
         setState(() {
           _errorMessageKey = errorKey;
@@ -119,11 +127,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
     if (_errorMessageKey.isNotEmpty) {
       switch (_errorMessageKey) {
-        // +++ YENİ CASE EKLENDİ +++
         case 'loginErrorNoActiveShift':
           errorMessageText = l10n.loginErrorNoActiveShift;
           break;
-        // --- Mevcut case'ler ---
         case 'loginErrorInvalidCredentials':
           errorMessageText = l10n.loginErrorInvalidCredentials;
           break;

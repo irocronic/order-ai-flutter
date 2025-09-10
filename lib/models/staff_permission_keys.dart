@@ -1,6 +1,7 @@
 // lib/models/staff_permission_keys.dart
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'notification_event_types.dart';
 
 class PermissionKeys {
   static const String viewReports = 'view_reports';
@@ -36,9 +37,7 @@ class PermissionKeys {
     manageCampaigns,
     manageKdsScreens,
   ];
-
-  // --- YENİ EKLENEN BÖLÜM: Varsayılan Rol İzinleri ---
-  // Kurulum sihirbazında "Garson" rolü seçildiğinde atanacak izinler.
+  
   static const List<String> DEFAULT_STAFF_PERMISSIONS = [
     takeOrders,
     viewPendingOrders,
@@ -47,12 +46,34 @@ class PermissionKeys {
     viewAccountSettings,
   ];
 
-  // Kurulum sihirbazında "Mutfak Personeli" rolü seçildiğinde atanacak izinler.
   static const List<String> DEFAULT_KITCHEN_PERMISSIONS = [
     manageKds,
     viewAccountSettings,
   ];
-  // --- YENİ EKLENEN BÖLÜM SONU ---
+
+  // ==================== GÜNCELLEME BURADA BAŞLIYOR ====================
+  // Django'daki core/models.py dosyasındaki varsayılanlarla eşleşir
+  static const List<String> DEFAULT_STAFF_NOTIFICATION_PERMISSIONS = [
+    // YENİ EKLENEN İZİNLER
+    'guest_order_pending_approval',
+    'order_pending_approval',
+    'existing_order_needs_reapproval',
+    'new_approved_order',
+    // MEVCUT İZİNLER
+    'order_ready_for_pickup_update',
+    'order_picked_up_by_waiter',
+    'order_out_for_delivery_update',
+    'order_item_delivered',
+    'waiting_customer_seated',
+    'pager_status_updated',
+  ];
+
+  static const List<String> DEFAULT_KITCHEN_NOTIFICATION_PERMISSIONS = [
+    'order_approved_for_kitchen',
+    'order_item_added',
+    'order_updated',
+  ];
+  // ==================== GÜNCELLEME BURADA BİTİYOR ====================
 }
 
 Map<String, String> getStaffPermissionDisplayNames(AppLocalizations l10n) {

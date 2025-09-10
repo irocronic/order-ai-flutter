@@ -4,6 +4,7 @@ import '../services/admin_service.dart';
 import '../widgets/admin/business_owner_admin_card.dart';
 import '../widgets/admin/admin_confirmation_dialog.dart';
 import 'admin_user_approval_screen.dart'; // Onay ekranı
+import 'admin_notification_settings_screen.dart';
 
 class AdminHome extends StatefulWidget {
   final String token;
@@ -14,13 +15,10 @@ class AdminHome extends StatefulWidget {
 }
 
 class _AdminHomeState extends State<AdminHome> {
-  int _currentIndex = 0; // BottomNavigationBar için aktif sekme indeksi
+  int _currentIndex = 0;
   bool _isLoadingBusinessOwners = true;
   List<dynamic> _businessOwners = [];
   String _errorMessageBusinessOwners = '';
-
-  // Sayfaları tutacak liste
-  late List<Widget> _adminPages;
 
   // AppBar başlıkları
   final List<String> _appBarTitles = [
@@ -31,16 +29,13 @@ class _AdminHomeState extends State<AdminHome> {
   @override
   void initState() {
     super.initState();
-    _adminPages = [
-      _buildBusinessOwnersPage(), // İlk sekme için içerik
-      UserApprovalScreen(token: widget.token), // İkinci sekme için içerik
-    ];
     _fetchBusinessOwners();
   }
 
   Future<void> _fetchBusinessOwners() async {
     if (!mounted) return;
-    // Sadece ilk sekme aktifken veya veri boşken yükleme yap
+    
+    // Yalnızca ilk sekme aktifken veya veri boşken tam yükleme yap
     if (_currentIndex == 0 || _businessOwners.isEmpty) {
       setState(() {
         _isLoadingBusinessOwners = true;
@@ -65,6 +60,7 @@ class _AdminHomeState extends State<AdminHome> {
     }
   }
 
+  // ==================== GÜNCELLENMİŞ FONKSİYON ====================
   Future<void> _toggleUserActiveStatus(int userId, bool currentStatus, {bool isStaff = false}) async {
     final bool? confirm = await showDialog<bool>(
       context: context,
@@ -77,17 +73,28 @@ class _AdminHomeState extends State<AdminHome> {
 
     if (confirm == true && mounted) {
       try {
-        await AdminService.setUserActiveStatus(widget.token, userId, !currentStatus);
+        // API'den dönen güncellenmiş kullanıcı verisini bir değişkene ata
+        final updatedUserData = await AdminService.setUserActiveStatus(widget.token, userId, !currentStatus);
+        
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text("Kullanıcı durumu güncellendi."), backgroundColor: Colors.green),
           );
-          // Aktif sekme kullanıcı listesi ise listeyi yenile
-          if (_currentIndex == 0) {
+
+          // Eğer güncellenen kişi bir işletme sahibi ise listeyi anında güncelle
+          if (!isStaff) {
+            setState(() {
+              final index = _businessOwners.indexWhere((owner) => owner['id'] == userId);
+              if (index != -1) {
+                _businessOwners[index] = updatedUserData;
+              }
+            });
+          } else {
+            // Eğer güncellenen bir personel ise, o personelin ait olduğu
+            // işletme kartının güncel veriyi (örn. aktif personel sayısı)
+            // göstermesi için tüm listeyi yeniden çekmek en basit ve garantili yoldur.
             _fetchBusinessOwners();
           }
-          // Eğer onay ekranındaysak ve bir kullanıcıyı buradan (yanlışlıkla) (de)aktive ettiysek,
-          // o ekran kendi listesini yenilemeli. Bu metot şu an sadece _AdminHomeState'ten çağrılıyor.
         }
       } catch (e) {
         if (mounted) {
@@ -98,6 +105,7 @@ class _AdminHomeState extends State<AdminHome> {
       }
     }
   }
+  // ==================== GÜNCELLEME SONU ====================
 
   Future<void> _deleteUser(int userId, String username, String userType) async {
     String warningMessage = userType == 'business_owner'
@@ -121,7 +129,7 @@ class _AdminHomeState extends State<AdminHome> {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text("'$username' kullanıcısı silindi."), backgroundColor: Colors.orangeAccent),
           );
-          if (_currentIndex == 0) { // Sadece işletme sahipleri listesi aktifse yenile
+          if (_currentIndex == 0) {
             _fetchBusinessOwners();
           }
         }
@@ -155,6 +163,7 @@ class _AdminHomeState extends State<AdminHome> {
                         itemBuilder: (context, index) {
                           final owner = _businessOwners[index];
                           return BusinessOwnerAdminCard(
+                            key: ValueKey(owner['id']), // Performans ve doğru rebuild için Key eklemek iyidir.
                             owner: owner,
                             token: widget.token,
                             onToggleActive: () => _toggleUserActiveStatus(owner['id'], owner['is_active']),
@@ -167,16 +176,16 @@ class _AdminHomeState extends State<AdminHome> {
               );
   }
 
-
   @override
   Widget build(BuildContext context) {
-    // _adminPages initState içinde doldurulduğu için burada tekrar oluşturmaya gerek yok.
-    // Sadece _currentIndex değiştiğinde içeriğin yenilenmesi için _buildBusinessOwnersPage'i güncelledik.
-    // Eğer UserApprovalScreen'in de bir refresh mekanizması varsa o da kendi içinde halledecektir.
-    if (_currentIndex == 0 && _adminPages[0] is! RefreshIndicator) { // İlk sayfa içeriğini güncelle (eğer değiştiyse)
-        _adminPages[0] = _buildBusinessOwnersPage();
-    }
-
+    // ==================== GÜNCELLENMİŞ BÖLÜM ====================
+    // Sayfa listesi artık build metodu içinde dinamik olarak oluşturuluyor.
+    // Bu, setState çağrıldığında arayüzün doğru şekilde yeniden çizilmesini garantiler.
+    final List<Widget> adminPages = [
+      _buildBusinessOwnersPage(),
+      UserApprovalScreen(token: widget.token),
+    ];
+    // ==================== GÜNCELLEME SONU ====================
 
     return Scaffold(
       appBar: AppBar(
@@ -185,25 +194,40 @@ class _AdminHomeState extends State<AdminHome> {
         flexibleSpace: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: [Colors.blue.shade700, Colors.blue.shade900], // Mavi tonları
+              colors: [Colors.blue.shade700, Colors.blue.shade900],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
           ),
         ),
         elevation: 0,
+        actions: [
+          IconButton(
+           icon: const Icon(Icons.settings, color: Colors.white),
+            tooltip: "Bildirim Ayarları",
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => AdminNotificationSettingsScreen(token: widget.token),
+                ),
+              );
+            },
+          ),
+        ],
       ),
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [Colors.blue.shade900.withOpacity(0.95), Colors.blue.shade500.withOpacity(0.85)], // Mavi tonları
+            colors: [Colors.blue.shade900.withOpacity(0.95), Colors.blue.shade500.withOpacity(0.85)],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           ),
         ),
-        child: IndexedStack( // Sayfalar arası geçiş için IndexedStack
+        // IndexedStack artık doğrudan build'de oluşturulan listeyi kullanıyor.
+        child: IndexedStack(
           index: _currentIndex,
-          children: _adminPages,
+          children: adminPages,
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -212,16 +236,16 @@ class _AdminHomeState extends State<AdminHome> {
           setState(() {
             _currentIndex = index;
           });
-          // Eğer "Kullanıcılar" sekmesine geri dönülüyorsa ve o an yüklenmiyorsa, listeyi yenileyebiliriz.
-          if (index == 0 && !_isLoadingBusinessOwners) {
+          // Not: UserApprovalScreen kendi veri çekme mantığına sahip olduğu için
+          // burada sadece _currentIndex == 0 durumunu kontrol etmek yeterlidir.
+          if (index == 0) {
             _fetchBusinessOwners();
           }
-          // UserApprovalScreen zaten kendi initState'inde veya görünür olduğunda veri çeker.
         },
-        backgroundColor: Colors.blue.shade800, // Navbar arka planı
+        backgroundColor: Colors.blue.shade800,
         selectedItemColor: Colors.white,
         unselectedItemColor: Colors.white.withOpacity(0.6),
-        type: BottomNavigationBarType.fixed, // İkiden fazla item için
+        type: BottomNavigationBarType.fixed,
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.business_center_outlined),
@@ -231,7 +255,7 @@ class _AdminHomeState extends State<AdminHome> {
           BottomNavigationBarItem(
             icon: Icon(Icons.how_to_reg_outlined),
             activeIcon: Icon(Icons.how_to_reg),
-            label: 'Üyelik Talepleri', // İsim "Üyelik Talepleri" olarak güncellendi
+            label: 'Üyelik Talepleri',
           ),
         ],
       ),

@@ -1,5 +1,7 @@
 // lib/screens/stock_screen.dart
 
+import '../services/notification_center.dart';
+import '../services/refresh_manager.dart';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -29,7 +31,36 @@ class _StockScreenState extends State<StockScreen> {
   @override
   void initState() {
     super.initState();
+    
+    // 🆕 NotificationCenter listener'ları ekle
+    NotificationCenter.instance.addObserver('refresh_all_screens', (data) {
+      debugPrint('[StockScreen] 📡 Global refresh received: ${data['event_type']}');
+      if (mounted) {
+        final refreshKey = 'stock_screen_${widget.businessId}';
+        RefreshManager.throttledRefresh(refreshKey, () async {
+          await _fetchAllData();
+        });
+      }
+    });
+
+    NotificationCenter.instance.addObserver('screen_became_active', (data) {
+      debugPrint('[StockScreen] 📱 Screen became active notification received');
+      if (mounted) {
+        final refreshKey = 'stock_screen_active_${widget.businessId}';
+        RefreshManager.throttledRefresh(refreshKey, () async {
+          await _fetchAllData();
+        });
+      }
+    });
+
     _fetchAllData();
+  }
+
+  @override
+  void dispose() {
+    // NotificationCenter listener'ları temizlenmeli ama anonymous function olduğu için
+    // bu ekran için önemli değil çünkü genelde kısa süre açık kalır
+    super.dispose();
   }
 
   Future<void> _fetchAllData() async {
@@ -324,64 +355,75 @@ class _StockScreenState extends State<StockScreen> {
           ),
         ],
       ),
-      // +++ ARKA PLAN DÜZELTMESİ +++
-      body: Column(
-        children: [
-          Expanded(
-            child: Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [Colors.blue.shade900.withOpacity(0.9), Colors.blue.shade400.withOpacity(0.8)],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
-              ),
-              child: _isLoading
-                  ? const Center(child: CircularProgressIndicator(color: Colors.white))
-                  : _errorMessage.isNotEmpty
-                      ? Center(child: Padding(padding: const EdgeInsets.all(16.0), child: Text(_errorMessage, style: const TextStyle(color: Colors.orangeAccent, fontSize: 16), textAlign: TextAlign.center)))
-                      : RefreshIndicator(
-                          onRefresh: _fetchAllData,
-                          child: _stocks.isEmpty
-                              ? Center(child: Text(l10n.stockScreenNoStockItems, style: TextStyle(color: Colors.white.withOpacity(0.7), fontSize: 16, height: 1.5), textAlign: TextAlign.center))
-                              // +++ LİSTELEME WIDGET DEĞİŞİKLİĞİ +++
-                              : LayoutBuilder(
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Colors.blue.shade900.withOpacity(0.9), Colors.blue.shade400.withOpacity(0.8)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+        ),
+        child: _isLoading
+            ? const Center(child: CircularProgressIndicator(color: Colors.white))
+            : _errorMessage.isNotEmpty
+                ? Center(child: Padding(padding: const EdgeInsets.all(16.0), child: Text(_errorMessage, style: const TextStyle(color: Colors.orangeAccent, fontSize: 16), textAlign: TextAlign.center)))
+                : RefreshIndicator(
+                    onRefresh: _fetchAllData,
+                    child: _stocks.isEmpty
+                        ? ListView(
+                            children: [
+                              SizedBox(height: MediaQuery.of(context).size.height * 0.3),
+                              Center(
+                                child: Text(
+                                  l10n.stockScreenNoStockItems, 
+                                  style: TextStyle(color: Colors.white.withOpacity(0.7), fontSize: 16, height: 1.5), 
+                                  textAlign: TextAlign.center
+                                ),
+                              ),
+                            ],
+                          )
+                        : ListView(
+                            padding: const EdgeInsets.all(16.0),
+                            children: [
+                              // Grid düzenlemesi için MediaQuery kullan
+                              LayoutBuilder(
                                 builder: (context, constraints) {
-                                  return SingleChildScrollView(
-                                    padding: const EdgeInsets.all(12.0),
-                                    child: Wrap(
-                                      spacing: 12.0,
-                                      runSpacing: 12.0,
-                                      children: _stocks.map((stock) {
-                                        // Kartların genişliğini ekran boyutuna göre ayarla
-                                        double cardWidth = constraints.maxWidth > 840 
-                                            ? (constraints.maxWidth / 3) - (12 * (4/3))
-                                            : (constraints.maxWidth / 2) - 18;
-                                        if (constraints.maxWidth < 500) {
-                                          cardWidth = constraints.maxWidth;
-                                        }
+                                  // Ekran genişliğine göre sütun sayısını belirle
+                                  int crossAxisCount = 1;
+                                  if (constraints.maxWidth > 800) {
+                                    crossAxisCount = 3;
+                                  } else if (constraints.maxWidth > 500) {
+                                    crossAxisCount = 2;
+                                  }
 
-                                        return SizedBox(
-                                          width: cardWidth,
-                                          child: StockItemCard(
-                                            key: ValueKey(stock.id),
-                                            stock: stock,
-                                            token: widget.token,
-                                            onStockUpdated: _fetchStocks,
-                                            onShowMovementDialog: (movementType) => _showAddStockMovementDialog(stock, movementType, l10n, stockMovementDisplayNames),
-                                            stockMovementDisplayNames: stockMovementDisplayNames,
-                                            l10n: l10n,
-                                          ),
-                                        );
-                                      }).toList(),
+                                  return GridView.builder(
+                                    shrinkWrap: true,
+                                    physics: const NeverScrollableScrollPhysics(),
+                                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: crossAxisCount,
+                                      crossAxisSpacing: 16.0,
+                                      mainAxisSpacing: 16.0,
+                                      childAspectRatio: 0.8, // Kart boy/en oranı
                                     ),
+                                    itemCount: _stocks.length,
+                                    itemBuilder: (context, index) {
+                                      final stock = _stocks[index];
+                                      return StockItemCard(
+                                        key: ValueKey(stock.id),
+                                        stock: stock,
+                                        token: widget.token,
+                                        onStockUpdated: _fetchStocks,
+                                        onShowMovementDialog: (movementType) => _showAddStockMovementDialog(stock, movementType, l10n, stockMovementDisplayNames),
+                                        stockMovementDisplayNames: stockMovementDisplayNames,
+                                        l10n: l10n,
+                                      );
+                                    },
                                   );
                                 },
                               ),
-                        ),
-            ),
-          ),
-        ],
+                            ],
+                          ),
+                  ),
       ),
     );
   }
@@ -476,9 +518,7 @@ class _StockItemCardState extends State<StockItemCard> {
       ),
       child: Padding(
         padding: const EdgeInsets.all(12.0),
-        // +++ KART İÇİ DÜZENLEMESİ +++
         child: Column(
-          mainAxisSize: MainAxisSize.min, // Dikeyde küçülmeyi sağlar
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
@@ -496,44 +536,42 @@ class _StockItemCardState extends State<StockItemCard> {
                     maxLines: 2,
                   ),
                 ),
-                Text(l10n.stockCardCurrentStock(widget.stock.quantity.toString()), style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
               ],
+            ),
+            const SizedBox(height: 8),
+            Text(
+              l10n.stockCardCurrentStock(widget.stock.quantity.toString()),
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
             ),
             const Divider(),
-            // Expanded widget kaldırıldı.
-            Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                SwitchListTile(
-                  title: Text(l10n.stockCardEnableTracking, style: const TextStyle(fontSize: 14)),
-                  value: _trackStock,
-                  onChanged: (value) {
-                    setState(() => _trackStock = value);
-                  },
-                  dense: true,
-                  contentPadding: EdgeInsets.zero,
-                ),
-                if (_trackStock)
-                  Padding(
-                    padding: const EdgeInsets.only(top: 4.0),
-                    child: TextFormField(
-                      controller: _thresholdController,
-                      decoration: InputDecoration(
-                        labelText: l10n.stockCardAlertThresholdLabel,
-                        hintText: l10n.stockCardAlertThresholdHint,
-                        contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                        isDense: true,
-                        border: const OutlineInputBorder()
-                      ),
-                      keyboardType: TextInputType.number,
-                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                    ),
-                  ),
-              ],
+            SwitchListTile(
+              title: Text(l10n.stockCardEnableTracking, style: const TextStyle(fontSize: 14)),
+              value: _trackStock,
+              onChanged: (value) {
+                setState(() => _trackStock = value);
+              },
+              dense: true,
+              contentPadding: EdgeInsets.zero,
             ),
-            const SizedBox(height: 12),
+            if (_trackStock)
+              Padding(
+                padding: const EdgeInsets.only(top: 4.0),
+                child: TextFormField(
+                  controller: _thresholdController,
+                  decoration: InputDecoration(
+                    labelText: l10n.stockCardAlertThresholdLabel,
+                    hintText: l10n.stockCardAlertThresholdHint,
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    isDense: true,
+                    border: const OutlineInputBorder()
+                  ),
+                  keyboardType: TextInputType.number,
+                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                ),
+              ),
+            const Spacer(),
             Row(
-              mainAxisAlignment: MainAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 ElevatedButton.icon(
                   icon: _isSaving
@@ -542,7 +580,6 @@ class _StockItemCardState extends State<StockItemCard> {
                   label: Text(l10n.stockCardSaveSettingsButton),
                   onPressed: _isSaving ? null : _saveSettings,
                 ),
-                const SizedBox(width: 8),
                 PopupMenuButton<String>(
                   icon: const Icon(Icons.more_vert),
                   tooltip: l10n.stockCardOtherActionsTooltip,

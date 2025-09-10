@@ -47,7 +47,7 @@ class _TakeawayOrderFormScreenState extends State<TakeawayOrderFormScreen> {
     _customerPhoneController.dispose();
     super.dispose();
   }
-  
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -176,12 +176,16 @@ class _TakeawayOrderFormScreenState extends State<TakeawayOrderFormScreen> {
 
   Future<void> _handleCreateOrder() async {
     final l10n = AppLocalizations.of(context)!;
+
     if (!_formKey.currentState!.validate()) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(l10n.takeawayOrderFormErrorCustomerInfo), backgroundColor: Colors.orangeAccent),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(l10n.takeawayOrderFormErrorCustomerInfo), backgroundColor: Colors.orangeAccent),
+        );
+      }
       return;
     }
+
     if (basket.isEmpty) {
       if(mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -192,6 +196,7 @@ class _TakeawayOrderFormScreenState extends State<TakeawayOrderFormScreen> {
     }
 
     if(!mounted) return;
+
     setState(() {
       isLoading = true;
       errorMessage = '';
@@ -216,6 +221,8 @@ class _TakeawayOrderFormScreenState extends State<TakeawayOrderFormScreen> {
         offlineTableData: null,
       );
 
+      if (!mounted) return;
+
       final decodedString = utf8.decode(response.bodyBytes);
 
       if (response.statusCode == 201) {
@@ -227,12 +234,14 @@ class _TakeawayOrderFormScreenState extends State<TakeawayOrderFormScreen> {
           }
         } catch(_) {}
 
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(successMessage), backgroundColor: Colors.green),
-          );
-          Navigator.pop(context, true);
-        }
+        // Başarı mesajı göster ve navigation stack ile ilgili assertion hatasını önlemek için postFrameCallback ile ana ekrana dön
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(successMessage), backgroundColor: Colors.green),
+        );
+
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (mounted) Navigator.of(context).popUntil((route) => route.isFirst);
+        });
 
       } else {
         String errorMsg;
@@ -246,7 +255,10 @@ class _TakeawayOrderFormScreenState extends State<TakeawayOrderFormScreen> {
         } catch (_) {
           errorMsg = l10n.takeawayOrderFormErrorCreatingWithCode(response.statusCode.toString());
         }
-        if (mounted) setState(() => errorMessage = errorMsg);
+
+        setState(() {
+          errorMessage = errorMsg;
+        });
       }
     } catch (e) {
       if (mounted) {
@@ -380,7 +392,7 @@ class _TakeawayOrderFormScreenState extends State<TakeawayOrderFormScreen> {
                               padding: const EdgeInsets.symmetric(vertical: 16),
                               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                             ),
-                            onPressed: isLoading || basket.isEmpty
+                            onPressed: (isLoading || basket.isEmpty)
                                 ? null
                                 : _handleCreateOrder,
                             child: isLoading

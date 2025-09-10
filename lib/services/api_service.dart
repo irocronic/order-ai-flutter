@@ -6,7 +6,10 @@ import 'dart:async'; // TimeoutException için
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'api_exception.dart'; // YENİ: Oluşturduğumuz özel exception sınıfı
+import 'package:jwt_decoder/jwt_decoder.dart';
+import 'api_exception.dart'; // Özel exception sınıfı
+import 'user_session.dart';
+import 'notification_center.dart';
 
 class ApiService {
   static final String baseUrl = dotenv.env['API_BASE_URL'] ?? 'https://order-ai-7bd2c97ec9ef.herokuapp.com/api';
@@ -16,6 +19,132 @@ class ApiService {
       return Uri.parse('$baseUrl$endpoint');
     }
     return Uri.parse('$baseUrl/$endpoint');
+  }
+
+  // 🆕 CRITICAL: Her HTTP request öncesi token kontrolü
+  static Future<Map<String, String>> _getValidHeaders() async {
+    // Token kontrolü
+    if (UserSession.token.isEmpty) {
+      throw Exception('Token bulunamadı');
+    }
+    
+    // Token süresi kontrolü
+    bool isExpired = false;
+    try {
+      isExpired = JwtDecoder.isExpired(UserSession.token);
+    } catch (e) {
+      debugPrint('[ApiService] Token parse error: $e');
+      isExpired = true;
+    }
+    
+    // Expired ise yenile
+    if (isExpired) {
+      debugPrint('[ApiService] Token expired, refreshing...');
+      if (UserSession.refreshToken.isEmpty) {
+        throw Exception('Refresh token bulunamadı');
+      }
+      
+      try {
+        final newTokens = await refreshToken(UserSession.refreshToken);
+        final newAccess = newTokens['access'];
+        final newRefresh = newTokens['refresh'] ?? UserSession.refreshToken;
+        
+        if (newAccess != null) {
+          await UserSession.updateTokens(accessToken: newAccess, refreshToken: newRefresh);
+          debugPrint('[ApiService] Token successfully refreshed');
+        } else {
+          throw Exception('Token refresh response invalid');
+        }
+      } catch (e) {
+        debugPrint('[ApiService] Token refresh failed: $e');
+        // Logout trigger
+        NotificationCenter.instance.postNotification('auth_refresh_failed', {
+          'reason': 'api_token_refresh_failed',
+          'error': e.toString()
+        });
+        throw Exception('Token refresh failed: $e');
+      }
+    }
+    
+    return {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ${UserSession.token}',
+    };
+  }
+  
+  // 🆕 Tüm HTTP metodlarını güncelle:
+  static Future<http.Response> _makeRequest(
+    String method,
+    String url, {
+    Map<String, dynamic>? body,
+    int retryCount = 0,
+  }) async {
+    try {
+      final headers = await _getValidHeaders();
+      
+      http.Response response;
+      switch (method.toUpperCase()) {
+        case 'GET':
+          response = await http.get(Uri.parse(url), headers: headers);
+          break;
+        case 'POST':
+          response = await http.post(
+            Uri.parse(url),
+            headers: headers,
+            body: body != null ? jsonEncode(body) : null,
+          );
+          break;
+        case 'PUT':
+          response = await http.put(
+            Uri.parse(url),
+            headers: headers,
+            body: body != null ? jsonEncode(body) : null,
+          );
+          break;
+        case 'PATCH':
+          response = await http.patch(
+            Uri.parse(url),
+            headers: headers,
+            body: body != null ? jsonEncode(body) : null,
+          );
+          break;
+        case 'DELETE':
+          response = await http.delete(Uri.parse(url), headers: headers);
+          break;
+        default:
+          throw Exception('Unsupported HTTP method: $method');
+      }
+      
+      // 401 durumunda bir kez daha token refresh dene
+      if (response.statusCode == 401 && retryCount == 0) {
+        debugPrint('[ApiService] 401 received, forcing token refresh and retry...');
+        
+        // Force token refresh
+        if (UserSession.refreshToken.isNotEmpty) {
+          try {
+            final newTokens = await refreshToken(UserSession.refreshToken);
+            final newAccess = newTokens['access'];
+            if (newAccess != null) {
+              await UserSession.updateTokens(accessToken: newAccess);
+              debugPrint('[ApiService] Force token refresh successful, retrying request...');
+              return _makeRequest(method, url, body: body, retryCount: 1);
+            }
+          } catch (e) {
+            debugPrint('[ApiService] Force token refresh failed: $e');
+          }
+        }
+        
+        // Token refresh başarısızsa logout trigger
+        NotificationCenter.instance.postNotification('auth_refresh_failed', {
+          'reason': 'api_401_token_refresh_failed'
+        });
+      }
+      
+      return response;
+    } catch (e) {
+      debugPrint('[ApiService] Request failed: $e');
+      rethrow;
+    }
   }
 
   static Future<http.Response> postJson(String endpoint, Map<String, dynamic> payload, String token) {
@@ -30,7 +159,6 @@ class ApiService {
     );
   }
 
-  // +++ GÜNCELLENMİŞ LOGIN METODU +++
   static Future<Map<String, dynamic>> login(String username, String password) async {
     final url = getUrl('/token/');
     try {
@@ -49,25 +177,51 @@ class ApiService {
       if (response.statusCode == 200) {
         return responseData;
       } else {
-        // Hatalı durumda her zaman ApiException fırlat
         String detail = responseData['detail'] ?? 'Bilinmeyen bir giriş hatası.';
         String code = responseData['code'] ?? 'generic_error';
         throw ApiException(detail, code: code, statusCode: response.statusCode);
       }
     } on SocketException {
-      // Ağ hatası durumunda özel ApiException fırlat
       throw ApiException('İnternet bağlantısı kurulamadı. Lütfen ağ ayarlarınızı kontrol edin.', code: 'network_error');
     } on TimeoutException {
-      // Zaman aşımı durumunda özel ApiException fırlat
       throw ApiException('Sunucuya bağlanırken zaman aşımı yaşandı. Lütfen daha sonra tekrar deneyin.', code: 'timeout_error');
     } catch (e) {
-      // Zaten bir ApiException ise tekrar fırlat, değilse genel bir hata olarak sar
       if (e is ApiException) rethrow;
       debugPrint('Login sırasında beklenmedik hata: $e');
       throw ApiException('Giriş sırasında beklenmedik bir sorun oluştu.', code: 'unknown_error');
     }
   }
-  // +++ GÜNCELLEME SONU +++
+  
+  static Future<Map<String, dynamic>> refreshToken(String refreshToken) async {
+    final url = getUrl('/token/refresh/');
+    debugPrint("ApiService: Refreshing token...");
+    try {
+      final response = await http.post(
+        url,
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({'refresh': refreshToken}),
+      ).timeout(const Duration(seconds: 10));
+
+      if (response.statusCode == 200) {
+        debugPrint("ApiService: Token successfully refreshed.");
+        return jsonDecode(utf8.decode(response.bodyBytes));
+      } else {
+        throw ApiException(
+          'Oturum süresi doldu. Lütfen tekrar giriş yapın.', 
+          code: 'token_not_valid', 
+          statusCode: response.statusCode
+        );
+      }
+    } on SocketException {
+      throw ApiException('İnternet bağlantısı kurulamadı.', code: 'network_error');
+    } on TimeoutException {
+      throw ApiException('Sunucuya bağlanırken zaman aşımı yaşandı.', code: 'timeout_error');
+    } catch (e) {
+      if (e is ApiException) rethrow;
+      debugPrint('Token refresh sırasında beklenmedik hata: $e');
+      throw ApiException('Oturum yenilenirken bir sorun oluştu.', code: 'unknown_error');
+    }
+  }
 
   static Future<Map<String, dynamic>> register(String username, String email, String password, String userType) async {
     final url = getUrl('/register/');
@@ -82,7 +236,6 @@ class ApiService {
           'user_type': userType,
         }),
       );
-
       if (response.statusCode == 201) {
         return jsonDecode(utf8.decode(response.bodyBytes));
       } else {
@@ -122,13 +275,7 @@ class ApiService {
   static Future<Map<String, dynamic>> fetchMyUser(String token) async {
     final url = getUrl('/account/');
     try {
-      final response = await http.get(
-        url,
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": "Bearer $token",
-        },
-      );
+      final response = await _makeRequest('GET', url.toString());
       if (response.statusCode == 200) {
         return jsonDecode(utf8.decode(response.bodyBytes));
       } else {
@@ -150,15 +297,7 @@ class ApiService {
     final url = getUrl('/account/');
     debugPrint("ApiService: updateMyUser payload: ${jsonEncode(data)}");
     try {
-      final response = await http.put(
-        url,
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": "Bearer $token",
-        },
-        body: jsonEncode(data),
-      );
-
+      final response = await _makeRequest('PUT', url.toString(), body: data);
       if (response.statusCode == 200) {
         return jsonDecode(utf8.decode(response.bodyBytes));
       } else {
@@ -196,10 +335,7 @@ class ApiService {
   static Future<List<dynamic>> getStaffList(String token) async {
     final url = getUrl('/staff-users/');
     try {
-      final response = await http.get(
-        url,
-        headers: {"Authorization": "Bearer $token"},
-      );
+      final response = await _makeRequest('GET', url.toString());
       if (response.statusCode == 200) {
         return jsonDecode(utf8.decode(response.bodyBytes));
       } else {
@@ -216,14 +352,7 @@ class ApiService {
     final url = getUrl('/staff-users/');
     debugPrint("ApiService: createStaff payload: ${jsonEncode(staffData)}");
     try {
-      final response = await http.post(
-        url,
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": "Bearer $token",
-        },
-        body: jsonEncode(staffData),
-      );
+      final response = await _makeRequest('POST', url.toString(), body: staffData);
       if (response.statusCode == 201) {
         return jsonDecode(utf8.decode(response.bodyBytes));
       } else {
@@ -242,14 +371,7 @@ class ApiService {
     final url = getUrl('/staff-users/$staffId/');
     debugPrint("ApiService: updateStaff payload for staff $staffId: ${jsonEncode(staffData)}");
     try {
-      final response = await http.put(
-        url,
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": "Bearer $token",
-        },
-        body: jsonEncode(staffData),
-      );
+      final response = await _makeRequest('PUT', url.toString(), body: staffData);
       if (response.statusCode == 200) {
         return jsonDecode(utf8.decode(response.bodyBytes));
       } else {
@@ -268,14 +390,7 @@ class ApiService {
     final url = getUrl('/staff-users/$staffId/permissions/');
     debugPrint("ApiService: updateStaffPermissions payload for staff $staffId: ${jsonEncode({'staff_permissions': permissions})}");
     try {
-      final response = await http.put(
-        url,
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": "Bearer $token",
-        },
-        body: jsonEncode({'staff_permissions': permissions}),
-      );
+      final response = await _makeRequest('PUT', url.toString(), body: {'staff_permissions': permissions});
       if (response.statusCode == 200) {
         return jsonDecode(utf8.decode(response.bodyBytes));
       } else {
@@ -292,14 +407,7 @@ class ApiService {
     final url = getUrl('/staff-users/$staffId/notification-permissions/');
     debugPrint("ApiService: updateStaffNotificationPermissions payload for staff $staffId: ${jsonEncode({'notification_permissions': notificationPermissions})}");
     try {
-      final response = await http.put(
-        url,
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": "Bearer $token",
-        },
-        body: jsonEncode({'notification_permissions': notificationPermissions}),
-      );
+      final response = await _makeRequest('PUT', url.toString(), body: {'notification_permissions': notificationPermissions});
       if (response.statusCode == 200) {
         return jsonDecode(utf8.decode(response.bodyBytes));
       } else {
@@ -315,10 +423,7 @@ class ApiService {
   static Future<void> deleteStaff(String token, int staffId) async {
     final url = getUrl('/staff-users/$staffId/');
     try {
-      final response = await http.delete(
-        url,
-        headers: {"Authorization": "Bearer $token"},
-      );
+      final response = await _makeRequest('DELETE', url.toString());
       if (response.statusCode != 204) {
         throw Exception('Personel silinemedi: ${response.statusCode} - ${utf8.decode(response.bodyBytes)}');
       }
@@ -349,11 +454,7 @@ class ApiService {
     final url = getUrl('/reports/staff-performance/').replace(queryParameters: queryParams.isNotEmpty ? queryParams : null);
     debugPrint("Fetching staff performance from: $url");
     try {
-      final response = await http.get(
-        url,
-        headers: {"Authorization": "Bearer $token"},
-      );
-
+      final response = await _makeRequest('GET', url.toString());
       if (response.statusCode == 200) {
         return jsonDecode(utf8.decode(response.bodyBytes));
       } else {
@@ -386,13 +487,8 @@ class ApiService {
 
     final url = getUrl('/reports/detailed-sales/').replace(queryParameters: queryParams.isNotEmpty ? queryParams : null);
     debugPrint("Fetching detailed sales report from: $url");
-
     try {
-      final response = await http.get(
-        url,
-        headers: {"Authorization": "Bearer $token"},
-      );
-
+      final response = await _makeRequest('GET', url.toString());
       if (response.statusCode == 200) {
         return jsonDecode(utf8.decode(response.bodyBytes));
       } else {
@@ -410,14 +506,7 @@ class ApiService {
     final url = getUrl('/businesses/$businessId/');
     debugPrint("Fetching business details from: $url");
     try {
-      final response = await http.get(
-        url,
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": "Bearer $token",
-        },
-      );
-
+      final response = await _makeRequest('GET', url.toString());
       if (response.statusCode == 200) {
         return jsonDecode(utf8.decode(response.bodyBytes));
       } else {
@@ -438,15 +527,7 @@ class ApiService {
     final url = getUrl('/businesses/$businessId/');
     debugPrint("ApiService: Updating business $businessId with payload: ${jsonEncode(data)}");
     try {
-      final response = await http.patch(
-        url,
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": "Bearer $token",
-        },
-        body: jsonEncode(data),
-      );
-
+      final response = await _makeRequest('PATCH', url.toString(), body: data);
       if (response.statusCode == 200) {
         return jsonDecode(utf8.decode(response.bodyBytes));
       } else {
@@ -465,10 +546,7 @@ class ApiService {
     final url = getUrl('/businesses/$businessId/complete-setup/');
     debugPrint("ApiService: Marking setup complete for business $businessId via $url");
     try {
-      final response = await http.post(
-        url,
-        headers: {"Authorization": "Bearer $token"},
-      );
+      final response = await _makeRequest('POST', url.toString());
       if (response.statusCode != 200) {
         String errorBody = utf8.decode(response.bodyBytes);
         debugPrint('markSetupComplete API hatası (${response.statusCode}): $errorBody');
@@ -486,10 +564,7 @@ class ApiService {
     final url = getUrl('/tables/');
     debugPrint("ApiService: Fetching tables from $url");
     try {
-      final response = await http.get(
-        url,
-        headers: {"Authorization": "Bearer $token"},
-      );
+      final response = await _makeRequest('GET', url.toString());
       if (response.statusCode == 200) {
         return jsonDecode(utf8.decode(response.bodyBytes));
       } else {
@@ -506,14 +581,7 @@ class ApiService {
     final url = getUrl('/tables/bulk-create/');
     debugPrint("ApiService: Bulk creating $count tables for business $businessId via $url");
     try {
-      final response = await http.post(
-        url,
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": "Bearer $token",
-        },
-        body: jsonEncode({'count': count}),
-      );
+      final response = await _makeRequest('POST', url.toString(), body: {'count': count});
       if (response.statusCode == 201) {
         return jsonDecode(utf8.decode(response.bodyBytes));
       } else {
@@ -532,17 +600,10 @@ class ApiService {
     final url = getUrl('/tables/');
     debugPrint("ApiService: Creating table for business $businessId with number $tableNumber via $url");
     try {
-      final response = await http.post(
-        url,
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": "Bearer $token",
-        },
-        body: jsonEncode({
-          'business': businessId,
-          'table_number': tableNumber,
-        }),
-      );
+      final response = await _makeRequest('POST', url.toString(), body: {
+        'business': businessId,
+        'table_number': tableNumber,
+      });
       if (response.statusCode == 201) {
         return jsonDecode(utf8.decode(response.bodyBytes));
       } else {
@@ -569,7 +630,7 @@ class ApiService {
     final url = getUrl('/tables/$tableId/');
     debugPrint("ApiService: Deleting table $tableId via $url");
     try {
-      final response = await http.delete(url, headers: {"Authorization": "Bearer $token"});
+      final response = await _makeRequest('DELETE', url.toString());
       if (response.statusCode != 204) {
         throw Exception('Masa silinemedi: ${response.statusCode} - ${response.body}');
       }
@@ -584,10 +645,7 @@ class ApiService {
     final url = getUrl('/categories/');
     debugPrint("ApiService: Fetching categories from $url");
     try {
-      final response = await http.get(
-        url,
-        headers: {"Authorization": "Bearer $token"},
-      );
+      final response = await _makeRequest('GET', url.toString());
       if (response.statusCode == 200) {
         return jsonDecode(utf8.decode(response.bodyBytes));
       } else {
@@ -629,15 +687,7 @@ class ApiService {
 
     debugPrint("ApiService: Creating category with payload: ${jsonEncode(payload)} via $url");
     try {
-      final response = await http.post(
-        url,
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": "Bearer $token",
-        },
-        body: jsonEncode(payload),
-      );
-
+      final response = await _makeRequest('POST', url.toString(), body: payload);
       final String responseBody = utf8.decode(response.bodyBytes);
 
       if (response.statusCode == 201) {
@@ -658,7 +708,7 @@ class ApiService {
     final url = getUrl('/categories/$categoryId/');
     debugPrint("ApiService: Deleting category $categoryId via $url");
     try {
-      final response = await http.delete(url, headers: {"Authorization": "Bearer $token"});
+      final response = await _makeRequest('DELETE', url.toString());
       if (response.statusCode != 204) {
         throw Exception('Kategori silinemedi: ${response.statusCode} - ${response.body}');
       }
@@ -669,11 +719,78 @@ class ApiService {
     }
   }
 
+  // YENİ METOTLAR
+  static Future<List<dynamic>> fetchCategoryTemplates() async {
+    final url = getUrl('/templates/category-templates/');
+    debugPrint("ApiService: Fetching category templates from $url");
+    try {
+      final response = await _makeRequest('GET', url.toString());
+      if (response.statusCode == 200) {
+        return jsonDecode(utf8.decode(response.bodyBytes));
+      } else {
+        throw Exception('Kategori şablonları alınamadı: ${response.statusCode}');
+      }
+    } catch (e) {
+      debugPrint('fetchCategoryTemplates sırasında ağ hatası: $e');
+      if (e is Exception) throw e;
+      throw Exception('Kategori şablonları alınırken bir sorun oluştu.');
+    }
+  }
+
+  // GÜNCELLENEN METOT: createCategoriesFromTemplates
+  static Future<List<dynamic>> createCategoriesFromTemplates(
+    String token, // YENİ: Token parametresi eklendi  
+    List<int> templateIds,
+    int? assignedKdsId, // YENİ: KDS ID parametresi eklendi
+  ) async {
+    final url = getUrl('/categories/create-from-template/');
+    debugPrint("ApiService: Creating categories from templates with IDs: $templateIds and KDS ID: $assignedKdsId");
+    
+    // YENİ: Payload KDS ID'sini içerecek şekilde güncellendi
+    final Map<String, dynamic> payload = {
+      'template_ids': templateIds,
+    };
+    if (assignedKdsId != null) {
+      payload['assigned_kds_id'] = assignedKdsId;
+    }
+
+    try {
+      // GÜNCELLEME: Artık _makeRequest helper'ını kullanıyoruz
+      final response = await _makeRequest(
+        'POST',
+        url.toString(),
+        body: payload,
+      );
+
+      final String responseBody = utf8.decode(response.bodyBytes);
+      if (response.statusCode == 201) {
+        return jsonDecode(responseBody);
+      } else {
+        String errorDetail = "Bilinmeyen sunucu hatası.";
+        try {
+          final decodedBody = jsonDecode(responseBody);
+          if (decodedBody is Map && decodedBody.containsKey('detail')) {
+            errorDetail = decodedBody['detail'];
+          } else {
+            errorDetail = responseBody;
+          }
+        } catch(_) {
+          errorDetail = responseBody.isNotEmpty ? responseBody : "Kategoriler oluşturulamadı.";
+        }
+        throw Exception('Şablondan kategori oluşturulamadı: $errorDetail');
+      }
+    } catch (e) {
+      debugPrint('createCategoriesFromTemplates sırasında ağ hatası: $e');
+      if (e is Exception) throw e;
+      throw Exception('Şablondan kategori oluşturulurken bir sorun oluştu.');
+    }
+  }
+
   static Future<List<dynamic>> fetchMenuItemsForBusiness(String token) async {
     final url = getUrl('/menu-items/');
     debugPrint("ApiService: Fetching menu items from $url");
     try {
-      final response = await http.get(url, headers: {"Authorization": "Bearer $token"});
+      final response = await _makeRequest('GET', url.toString());
       if (response.statusCode == 200) {
         return jsonDecode(utf8.decode(response.bodyBytes));
       } else {
@@ -713,15 +830,7 @@ class ApiService {
 
     debugPrint("ApiService: Creating menu item with payload: ${jsonEncode(payload)} via $url");
     try {
-      final response = await http.post(
-        url,
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": "Bearer $token",
-        },
-        body: jsonEncode(payload),
-      );
-      
+      final response = await _makeRequest('POST', url.toString(), body: payload);
       String responseBody = utf8.decode(response.bodyBytes);
 
       if (response.statusCode == 201) {
@@ -742,7 +851,7 @@ class ApiService {
     final url = getUrl('/menu-items/$menuItemId/');
     debugPrint("ApiService: Deleting menu item $menuItemId via $url");
     try {
-      final response = await http.delete(url, headers: {"Authorization": "Bearer $token"});
+      final response = await _makeRequest('DELETE', url.toString());
       if (response.statusCode != 204) {
         throw Exception('Menü öğesi silinemedi: ${response.statusCode} - ${response.body}');
       }
@@ -753,11 +862,100 @@ class ApiService {
     }
   }
 
+  // === YENİ METOT BAŞLANGICI: Menü Öğesi Şablonlarını Getir (GÜNCELLENDİ) ===
+  static Future<List<dynamic>> fetchMenuItemTemplates(String token, {required String categoryTemplateName}) async {
+    final url = getUrl('/templates/menu-item-templates/').replace(queryParameters: {
+      'category_template_name': categoryTemplateName, // ID yerine NAME gönderiyoruz
+    });
+    debugPrint("ApiService: Fetching menu item templates for category name '$categoryTemplateName' from $url");
+    try {
+      final response = await _makeRequest('GET', url.toString());
+      if (response.statusCode == 200) {
+        return jsonDecode(utf8.decode(response.bodyBytes));
+      } else {
+        throw Exception('Ürün şablonları alınamadı: ${response.statusCode}');
+      }
+    } catch (e) {
+      debugPrint('fetchMenuItemTemplates sırasında ağ hatası: $e');
+      if (e is Exception) throw e;
+      throw Exception('Ürün şablonları alınırken bir sorun oluştu.');
+    }
+  }
+  // === YENİ METOT SONU ===
+
+  // === YENİ METOT BAŞLANGICI: Şablonlardan Menü Öğesi Oluştur ===
+  static Future<List<dynamic>> createMenuItemsFromTemplates(
+    String token, {
+    required List<int> templateIds,
+    required int targetCategoryId,
+  }) async {
+    final url = getUrl('/menu-items/create-from-template/');
+    final payload = {
+      'template_ids': templateIds,
+      'target_category_id': targetCategoryId,
+    };
+    debugPrint("ApiService: Creating menu items from templates. Payload: ${jsonEncode(payload)}");
+    try {
+      final response = await _makeRequest('POST', url.toString(), body: payload);
+      final String responseBody = utf8.decode(response.bodyBytes);
+      if (response.statusCode == 201) {
+        return jsonDecode(responseBody);
+      } else {
+        String errorDetail = "Bilinmeyen sunucu hatası.";
+        try {
+          final decodedBody = jsonDecode(responseBody);
+          if (decodedBody is Map && decodedBody.containsKey('detail')) {
+            errorDetail = decodedBody['detail'];
+          } else {
+            errorDetail = responseBody;
+          }
+        } catch (_) {
+          errorDetail = responseBody.isNotEmpty ? responseBody : "Ürünler oluşturulamadı.";
+        }
+        throw Exception('Şablondan ürün oluşturulamadı: $errorDetail');
+      }
+    } catch (e) {
+      debugPrint('createMenuItemsFromTemplates sırasında ağ hatası: $e');
+      if (e is Exception) throw e;
+      throw Exception('Şablondan ürün oluşturulurken bir sorun oluştu.');
+    }
+  }
+  // === YENİ METOT SONU ===
+
+  // === YENİ METOT BAŞLANGICI: Varyant Şablonları ===
+  static Future<List<dynamic>> fetchVariantTemplates(String token, {String? categoryTemplateName}) async {
+    try {
+      String url = '$baseUrl/templates/variant-templates/';
+      if (categoryTemplateName != null) {
+        url += '?category_template_name=${Uri.encodeComponent(categoryTemplateName)}';
+      }
+      
+      final response = await http.get(
+        Uri.parse(url),
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
+          'Accept-Language': 'tr',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final List<dynamic> data = jsonDecode(response.body);
+        return data;
+      } else {
+        throw Exception('Varyant şablonları yüklenemedi: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Varyant şablonları yüklenirken hata: $e');
+    }
+  }
+  // === YENİ METOT SONU ===
+
   static Future<List<dynamic>> fetchVariantsForMenuItem(String token, int menuItemId) async {
     final url = getUrl('/menu-item-variants/').replace(queryParameters: {'menu_item': menuItemId.toString()});
     debugPrint("ApiService: Fetching variants for menu item $menuItemId from $url");
     try {
-      final response = await http.get(url, headers: {"Authorization": "Bearer $token"});
+      final response = await _makeRequest('GET', url.toString());
       if (response.statusCode == 200) {
         return jsonDecode(utf8.decode(response.bodyBytes));
       } else {
@@ -791,14 +989,7 @@ class ApiService {
 
     debugPrint("ApiService: Creating menu item variant with payload: ${jsonEncode(payload)} via $url");
     try {
-      final response = await http.post(
-        url,
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": "Bearer $token",
-        },
-        body: jsonEncode(payload),
-      );
+      final response = await _makeRequest('POST', url.toString(), body: payload);
       if (response.statusCode == 201) {
         return jsonDecode(utf8.decode(response.bodyBytes));
       } else {
@@ -830,7 +1021,7 @@ class ApiService {
     final url = getUrl('/menu-item-variants/$variantId/');
     debugPrint("ApiService: Deleting menu item variant $variantId via $url");
     try {
-      final response = await http.delete(url, headers: {"Authorization": "Bearer $token"});
+      final response = await _makeRequest('DELETE', url.toString());
       if (response.statusCode != 204) {
         throw Exception('Varyant silinemedi: ${response.statusCode} - ${response.body}');
       }
@@ -845,7 +1036,7 @@ class ApiService {
     final url = getUrl('/stocks/');
     debugPrint("ApiService: Fetching business stock from $url");
     try {
-      final response = await http.get(url, headers: {"Authorization": "Bearer $token"});
+      final response = await _makeRequest('GET', url.toString());
       if (response.statusCode == 200) {
         return jsonDecode(utf8.decode(response.bodyBytes));
       } else {
@@ -868,7 +1059,6 @@ class ApiService {
       'variant': variantId,
       'quantity': quantity,
     };
-
     http.Response response;
     String debugAction = "";
 
@@ -877,26 +1067,12 @@ class ApiService {
         final url = getUrl('/stocks/$stockId/');
         debugAction = "Updating stock $stockId";
         debugPrint("ApiService: $debugAction with payload: ${jsonEncode(payload)} via PUT to $url");
-        response = await http.put(
-          url,
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": "Bearer $token",
-          },
-          body: jsonEncode(payload),
-        );
+        response = await _makeRequest('PUT', url.toString(), body: payload);
       } else {
         final url = getUrl('/stocks/');
         debugAction = "Creating stock";
         debugPrint("ApiService: $debugAction with payload: ${jsonEncode(payload)} via POST to $url");
-        response = await http.post(
-          url,
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": "Bearer $token",
-          },
-          body: jsonEncode(payload),
-        );
+        response = await _makeRequest('POST', url.toString(), body: payload);
       }
 
       if (response.statusCode == 201 || response.statusCode == 200) {
@@ -1016,6 +1192,24 @@ class ApiService {
       debugPrint('Confirm Password Reset sırasında ağ hatası: $e');
       if (e is Exception) throw e;
       throw Exception('Şifre sıfırlama onaylanırken bir sorun oluştu.');
+    }
+  }
+
+  static Future<Map<String, dynamic>> fetchCurrentShift(String token) async {
+    final url = getUrl('/staff-users/current-shift/');
+    debugPrint("ApiService: Fetching current shift from $url");
+    try {
+      final response = await _makeRequest('GET', url.toString());
+      if (response.statusCode == 200) {
+        return jsonDecode(utf8.decode(response.bodyBytes));
+      } else if (response.statusCode == 404) {
+        throw Exception('Aktif vardiya bulunamadı.');
+      } else {
+        throw Exception('Vardiya bilgisi alınamadı: ${response.statusCode}');
+      }
+    } catch (e) {
+      if (e is Exception) rethrow;
+      throw Exception('Vardiya bilgisi alınırken bir sorun oluştu: $e');
     }
   }
 }

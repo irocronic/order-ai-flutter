@@ -403,6 +403,10 @@ class _IngredientManagementScreenState extends State<IngredientManagementScreen>
                   final bool isStockLow = ingredient.alertThreshold != null &&
                       ingredient.stockQuantity <= ingredient.alertThreshold!;
                   
+                  // <<< YENİ BÖLÜM BAŞLANGICI >>>
+                  final bool notificationSent = ingredient.lowStockNotificationSent;
+                  // <<< YENİ BÖLÜM SONU >>>
+                  
                   return Card(
                     color: Colors.white.withOpacity(0.92),
                     elevation: 3,
@@ -436,16 +440,40 @@ class _IngredientManagementScreenState extends State<IngredientManagementScreen>
                       ),
                       subtitle: Padding(
                         padding: const EdgeInsets.only(top: 4),
-                        child: Text(
-                          l10n.ingredientStockLabel(
-                            ingredient.stockQuantity.toString(),
-                            ingredient.unitAbbreviation,
-                          ),
-                          style: TextStyle(
-                            color: isStockLow ? Colors.red.shade600 : Colors.grey.shade600,
-                            fontSize: 14,
-                            fontWeight: isStockLow ? FontWeight.w600 : FontWeight.normal,
-                          ),
+                        child: Column( // <<< YENİ: Column ile birden fazla satır için
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              l10n.ingredientStockLabel(
+                                ingredient.stockQuantity.toString(),
+                                ingredient.unitAbbreviation,
+                              ),
+                              style: TextStyle(
+                                color: isStockLow ? Colors.red.shade600 : Colors.grey.shade600,
+                                fontSize: 14,
+                                fontWeight: isStockLow ? FontWeight.w600 : FontWeight.normal,
+                              ),
+                            ),
+                            // <<< YENİ BÖLÜM BAŞLANGICI >>>
+                            if (isStockLow && notificationSent) ...[
+                              const SizedBox(height: 4),
+                              Row(
+                                children: [
+                                  Icon(Icons.mark_email_read_outlined, size: 14, color: Colors.grey.shade600),
+                                  const SizedBox(width: 4),
+                                  Text(
+                                    l10n.ingredientNotificationSent,
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      fontStyle: FontStyle.italic,
+                                      color: Colors.grey.shade700,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                            // <<< YENİ BÖLÜM SONU >>>
+                          ],
                         ),
                       ),
                       trailing: PopupMenuButton<String>(

@@ -48,3 +48,5 @@ app.*.map.json
 # Bu dosyayı versiyon kontrolüne dahil etme!
 .env
 /android/key.properties
+
+/firebase_options.dart

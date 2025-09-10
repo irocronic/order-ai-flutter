@@ -1002,6 +1002,30 @@ class SocketService extends ChangeNotifier {
       }
     });
 
+    // === YENİ EKLENEN: STOCK EVENT LISTENER ===
+    _socket!.on('stock_event', (data) {
+      if (data is Map<String, dynamic>) {
+        final String? eventType = data['event_type'] as String?;
+        debugPrint("[SocketService] 📡 Stok olayı alındı: '$eventType'");
+        
+        // Stok olayı için notification history'ye ekle
+        _addNotificationToHistory(
+          data['message'] ?? 'Stok durumu güncellendi.', 
+          eventType ?? 'stock_event'
+        );
+        
+        // Bu olayı genel bir yenileme mekanizmasına bağlayabiliriz.
+        // Örneğin, stok ekranının yenilenmesi gerektiğini bildirebiliriz.
+        NotificationCenter.instance.postNotification('refresh_all_screens', {
+          'eventType': eventType, 
+          'data': data
+        });
+        
+        // Özel stok bildirimi için de kullanılabilir
+        NotificationCenter.instance.postNotification('stock_status_update', data);
+      }
+    });
+
     debugPrint("[SocketService] Tüm socket listener'ları kaydedildi.");
   }
 

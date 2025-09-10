@@ -1,11 +1,14 @@
 // lib/screens/ingredient_management_screen.dart
 
 import 'package:flutter/material.dart';
+import 'package.intl/intl.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../models/ingredient.dart';
 import '../services/ingredient_service.dart';
+import '../services/procurement_service.dart'; // YENİ: Tedarikçi servisi
 import '../services/user_session.dart';
 import '../models/unit_of_measure.dart';
+import '../models/supplier.dart'; // YENİ: Tedarikçi modeli
 import 'ingredient_history_screen.dart';
 
 class IngredientManagementScreen extends StatefulWidget {
@@ -18,6 +21,11 @@ class IngredientManagementScreen extends StatefulWidget {
 
 class _IngredientManagementScreenState extends State<IngredientManagementScreen> {
   late Future<List<Ingredient>> _ingredientsFuture;
+  
+  // +++ YENİ STATE DEĞİŞKENLERİ +++
+  final Set<int> _selectedIngredientIds = {};
+  bool get _isSelectionMode => _selectedIngredientIds.isNotEmpty;
+  // +++++++++++++++++++++++++++++++
 
   @override
   void initState() {
@@ -28,8 +36,114 @@ class _IngredientManagementScreenState extends State<IngredientManagementScreen>
   void _refreshIngredients() {
     if (!mounted) return;
     setState(() {
+      // Seçim modunu sıfırla ve verileri yeniden çek
+      _selectedIngredientIds.clear();
       _ingredientsFuture = IngredientService.fetchIngredients(UserSession.token);
     });
+  }
+
+  // +++ YENİ METOT: Seçimi değiştirir +++
+  void _toggleSelection(int ingredientId) {
+    if (!mounted) return;
+    setState(() {
+      if (_selectedIngredientIds.contains(ingredientId)) {
+        _selectedIngredientIds.remove(ingredientId);
+      } else {
+        _selectedIngredientIds.add(ingredientId);
+      }
+    });
+  }
+  
+  // +++ YENİ METOT: Tedarikçi seçme ve e-posta gönderme +++
+  Future<void> _showSupplierSelectionAndSendEmail() async {
+    final l10n = AppLocalizations.of(context)!;
+    
+    if (_selectedIngredientIds.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(l10n.ingredientErrorNoItemsSelected),
+        backgroundColor: Colors.orange,
+      ));
+      return;
+    }
+
+    try {
+      // Tedarikçileri çek
+      final suppliers = await ProcurementService.fetchSuppliers(UserSession.token);
+      if (!mounted) return;
+
+      if (suppliers.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(l10n.ingredientErrorNoSuppliers),
+          backgroundColor: Colors.orange,
+        ));
+        return;
+      }
+      
+      Supplier? selectedSupplier;
+      
+      // Tedarikçi seçme diyalogunu göster
+      final bool? shouldSend = await showDialog<bool>(
+        context: context,
+        builder: (dialogContext) {
+          return StatefulBuilder(
+            builder: (context, setDialogState) {
+              return AlertDialog(
+                title: Text(l10n.ingredientSelectSupplierTitle),
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(l10n.ingredientSelectSupplierContent),
+                    const SizedBox(height: 16),
+                    DropdownButtonFormField<Supplier>(
+                      value: selectedSupplier,
+                      hint: Text(l10n.ingredientSelectSupplierHint),
+                      isExpanded: true,
+                      items: suppliers.map((s) => DropdownMenuItem(value: s, child: Text(s.name))).toList(),
+                      onChanged: (val) => setDialogState(() => selectedSupplier = val),
+                    ),
+                  ],
+                ),
+                actions: [
+                  TextButton(onPressed: () => Navigator.pop(dialogContext, false), child: Text(l10n.dialogButtonCancel)),
+                  ElevatedButton(
+                    onPressed: selectedSupplier == null ? null : () => Navigator.pop(dialogContext, true),
+                    child: Text(l10n.sendButton),
+                  ),
+                ],
+              );
+            }
+          );
+        },
+      );
+
+      // E-postayı gönder
+      if (shouldSend == true && selectedSupplier != null) {
+        await IngredientService.sendLowStockEmailToSupplier(
+          token: UserSession.token,
+          supplierId: selectedSupplier.id,
+          ingredientIds: _selectedIngredientIds.toList(),
+        );
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(l10n.ingredientSuccessEmailSent),
+            backgroundColor: Colors.green,
+          ));
+          // İşlem sonrası seçimi temizle
+          setState(() {
+            _selectedIngredientIds.clear();
+          });
+        }
+      }
+      
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(l10n.ingredientErrorEmailSending(e.toString())),
+          backgroundColor: Colors.red,
+        ));
+      }
+    }
   }
 
   Future<void> _showAdjustStockDialog(Ingredient ingredient) async {
@@ -118,7 +232,7 @@ class _IngredientManagementScreenState extends State<IngredientManagementScreen>
                         Navigator.pop(dialogContext);
                         _refreshIngredients();
                         if (mounted) {
-                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.ingredientSuccessStockUpdate), backgroundColor: Colors.green));
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.ingredientSuccessStockUpdate), backgroundColor: Colors.green));
                         }
                       } catch (e) {
                          if (mounted) {
@@ -317,16 +431,21 @@ class _IngredientManagementScreenState extends State<IngredientManagementScreen>
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          l10n.ingredientManagementTitle,
+          _isSelectionMode ? l10n.ingredientSelectItems : l10n.ingredientManagementTitle,
           style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
         backgroundColor: Colors.transparent,
         elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
+        leading: _isSelectionMode
+            ? IconButton(
+                icon: const Icon(Icons.close, color: Colors.white),
+                onPressed: () => setState(() => _selectedIngredientIds.clear()),
+              )
+            : IconButton(
+                icon: const Icon(Icons.arrow_back, color: Colors.white),
+                onPressed: () => Navigator.of(context).pop(),
+              ),
         flexibleSpace: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
@@ -400,25 +519,24 @@ class _IngredientManagementScreenState extends State<IngredientManagementScreen>
                 itemCount: ingredients.length,
                 itemBuilder: (context, index) {
                   final ingredient = ingredients[index];
+                  final isSelected = _selectedIngredientIds.contains(ingredient.id);
                   final bool isStockLow = ingredient.alertThreshold != null &&
                       ingredient.stockQuantity <= ingredient.alertThreshold!;
-                  
-                  // <<< YENİ BÖLÜM BAŞLANGICI >>>
                   final bool notificationSent = ingredient.lowStockNotificationSent;
-                  // <<< YENİ BÖLÜM SONU >>>
-                  
+
                   return Card(
-                    color: Colors.white.withOpacity(0.92),
+                    color: isSelected ? Colors.blue.shade100.withOpacity(0.95) : Colors.white.withOpacity(0.92),
                     elevation: 3,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                       side: BorderSide(
-                        color: isStockLow ? Colors.red.shade400 : Colors.transparent,
+                        color: isStockLow ? Colors.red.shade400 : (isSelected ? Colors.blue.shade700 : Colors.transparent),
                         width: 2,
                       ),
                     ),
                     margin: const EdgeInsets.only(bottom: 12),
                     child: ListTile(
+                      onTap: () => _toggleSelection(ingredient.id),
                       contentPadding: const EdgeInsets.all(16),
                       leading: Container(
                         padding: const EdgeInsets.all(8),
@@ -440,7 +558,7 @@ class _IngredientManagementScreenState extends State<IngredientManagementScreen>
                       ),
                       subtitle: Padding(
                         padding: const EdgeInsets.only(top: 4),
-                        child: Column( // <<< YENİ: Column ile birden fazla satır için
+                        child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
@@ -454,7 +572,6 @@ class _IngredientManagementScreenState extends State<IngredientManagementScreen>
                                 fontWeight: isStockLow ? FontWeight.w600 : FontWeight.normal,
                               ),
                             ),
-                            // <<< YENİ BÖLÜM BAŞLANGICI >>>
                             if (isStockLow && notificationSent) ...[
                               const SizedBox(height: 4),
                               Row(
@@ -472,36 +589,41 @@ class _IngredientManagementScreenState extends State<IngredientManagementScreen>
                                 ],
                               ),
                             ],
-                            // <<< YENİ BÖLÜM SONU >>>
                           ],
                         ),
                       ),
-                      trailing: PopupMenuButton<String>(
-                        icon: const Icon(Icons.more_vert),
-                        tooltip: l10n.ingredientMenuTooltip,
-                        onSelected: (value) {
-                          if (value == 'adjust') {
-                            _showAdjustStockDialog(ingredient);
-                          } else if (value == 'history') {
-                            Navigator.push(context, MaterialPageRoute(
-                              builder: (_) => IngredientHistoryScreen(
-                                ingredientId: ingredient.id,
-                                ingredientName: ingredient.name,
-                              )
-                            ));
-                          }
-                        },
-                        itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
-                          PopupMenuItem<String>(
-                            value: 'adjust',
-                            child: Row(children: [const Icon(Icons.tune, color: Colors.black54), const SizedBox(width: 8), Text(l10n.ingredientMenuAdjustStock)]),
-                          ),
-                          PopupMenuItem<String>(
-                            value: 'history',
-                            child: Row(children: [const Icon(Icons.history, color: Colors.black54), const SizedBox(width: 8), Text(l10n.ingredientMenuHistory)]),
-                          ),
-                        ],
-                      ),
+                      trailing: _isSelectionMode
+                          ? Checkbox(
+                              value: isSelected,
+                              onChanged: (bool? value) => _toggleSelection(ingredient.id),
+                              activeColor: Colors.blue.shade700,
+                            )
+                          : PopupMenuButton<String>(
+                              icon: const Icon(Icons.more_vert),
+                              tooltip: l10n.ingredientMenuTooltip,
+                              onSelected: (value) {
+                                if (value == 'adjust') {
+                                  _showAdjustStockDialog(ingredient);
+                                } else if (value == 'history') {
+                                  Navigator.push(context, MaterialPageRoute(
+                                    builder: (_) => IngredientHistoryScreen(
+                                      ingredientId: ingredient.id,
+                                      ingredientName: ingredient.name,
+                                    )
+                                  ));
+                                }
+                              },
+                              itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+                                PopupMenuItem<String>(
+                                  value: 'adjust',
+                                  child: Row(children: [const Icon(Icons.tune, color: Colors.black54), const SizedBox(width: 8), Text(l10n.ingredientMenuAdjustStock)]),
+                                ),
+                                PopupMenuItem<String>(
+                                  value: 'history',
+                                  child: Row(children: [const Icon(Icons.history, color: Colors.black54), const SizedBox(width: 8), Text(l10n.ingredientMenuHistory)]),
+                                ),
+                              ],
+                            ),
                     ),
                   );
                 },
@@ -510,15 +632,24 @@ class _IngredientManagementScreenState extends State<IngredientManagementScreen>
           },
         ),
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: _showAddIngredientDialog,
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.blue.shade700,
-        tooltip: l10n.ingredientAddTitle,
-        icon: const Icon(Icons.add),
-        label: Text(l10n.addButton),
-        elevation: 6,
-      ),
+      floatingActionButton: _isSelectionMode
+          ? FloatingActionButton.extended(
+              onPressed: _showSupplierSelectionAndSendEmail,
+              backgroundColor: Colors.teal.shade400,
+              foregroundColor: Colors.white,
+              tooltip: l10n.ingredientSendEmailToSupplier,
+              icon: const Icon(Icons.email_outlined),
+              label: Text(l10n.sendButton),
+            )
+          : FloatingActionButton.extended(
+              onPressed: _showAddIngredientDialog,
+              backgroundColor: Colors.white,
+              foregroundColor: Colors.blue.shade700,
+              tooltip: l10n.ingredientAddTitle,
+              icon: const Icon(Icons.add),
+              label: Text(l10n.addButton),
+              elevation: 6,
+            ),
     );
   }
 }

@@ -3744,5 +3744,13 @@
             }
         }
     },
-    "ingredientNotificationSent": "Tedarikçiye bildirildi"
+    "ingredientNotificationSent": "Tedarikçiye bildirildi",
+    "ingredientSendEmailToSupplier": "Tedarikçiye Bildir",
+    "ingredientSelectSupplierTitle": "Tedarikçi Seç",
+    "ingredientSelectSupplierContent": "Seçili malzemeler için bildirim gönderilecek tedarikçiyi seçin.",
+    "ingredientSelectSupplierHint": "Bir tedarikçi seçin...",
+    "ingredientErrorNoSuppliers": "Sistemde kayıtlı tedarikçi bulunamadı.",
+    "ingredientSuccessEmailSent": "Malzeme talebi başarıyla tedarikçiye gönderildi.",
+    "ingredientErrorEmailSending": "E-posta gönderilirken bir hata oluştu: {error}",
+    "ingredientErrorNoItemsSelected": "Lütfen en az bir malzeme seçin."
 }

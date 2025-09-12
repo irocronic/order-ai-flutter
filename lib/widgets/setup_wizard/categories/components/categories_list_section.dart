@@ -261,7 +261,7 @@ class CategoriesListSection extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
-              // 📱 YENİ TASARIM: Üst kısım - Sadece resim (delete butonu kaldırıldı)
+              // 📱 YENİ TASARIM: Üst kısım - Sadece resim
               Center(
                 child: Container(
                   width: 60,
@@ -398,7 +398,7 @@ class CategoriesListSection extends StatelessWidget {
                 ),
               ),
               
-              // 🔧 YENİ: Delete butonu - En altta, KDV'nin altında
+              // 🎨 YENİ TASARIM: Daha görünür sil butonu
               if (categoryId != null) ...[
                 const SizedBox(height: 8),
                 Center(
@@ -408,30 +408,31 @@ class CategoriesListSection extends StatelessWidget {
                     child: ElevatedButton.icon(
                       icon: Icon(
                         Icons.delete_outline,
-                        color: Colors.red,
-                        size: 16,
+                        color: Colors.white, // 🎨 Beyaz icon
+                        size: 14,
                       ),
                       label: Text(
                         'Sil',
                         style: TextStyle(
-                          color: Colors.red,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w500,
+                          color: Colors.white, // 🎨 Beyaz yazı
+                          fontSize: 11,
+                          fontWeight: FontWeight.bold, // 🎨 Kalın yazı
                         ),
                       ),
                       onPressed: () => _deleteCategory(context, categoryId, categoryName),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.red.withOpacity(0.1),
-                        foregroundColor: Colors.red,
-                        elevation: 0,
+                        backgroundColor: Colors.red.shade600, // 🎨 Daha koyu kırmızı arka plan
+                        foregroundColor: Colors.white,
+                        elevation: 2, // 🎨 Hafif gölge
+                        shadowColor: Colors.red.withOpacity(0.3),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8),
                           side: BorderSide(
-                            color: Colors.red.withOpacity(0.3),
+                            color: Colors.red.shade700, // 🎨 Daha koyu border
                             width: 1,
                           ),
                         ),
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
                       ),
                     ),
                   ),

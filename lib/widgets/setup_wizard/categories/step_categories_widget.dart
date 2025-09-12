@@ -208,89 +208,6 @@ class StepCategoriesWidgetState extends State<StepCategoriesWidget> {
     );
   }
 
-  // 🎵 YENİ EKLENEN: Kategori bilgi kartı
-  Widget _buildCategoryInfoCard() {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 16),
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.teal.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.teal.withOpacity(0.3)),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Icon(Icons.category, color: Colors.teal, size: 20),
-              const SizedBox(width: 8),
-              Text(
-                'Kategoriler Hakkında',
-                style: TextStyle(
-                  color: Colors.teal,
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 12),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Icon(Icons.flash_on, color: Colors.teal.shade300, size: 16),
-              const SizedBox(width: 8),
-              Expanded(
-                child: Text(
-                  'Hızlı başlangıç ile popüler kategorileri tek tıkla ekleyebilirsiniz.',
-                  style: TextStyle(
-                    color: Colors.teal.shade300,
-                    fontSize: 13,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 8),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Icon(Icons.palette, color: Colors.teal.shade300, size: 16),
-              const SizedBox(width: 8),
-              Expanded(
-                child: Text(
-                  'Her kategori için özel renk ve ikon seçebilirsiniz.',
-                  style: TextStyle(
-                    color: Colors.teal.shade300,
-                    fontSize: 13,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 8),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Icon(Icons.tv, color: Colors.teal.shade300, size: 16),
-              const SizedBox(width: 8),
-              Expanded(
-                child: Text(
-                  'Kategorileri KDS ekranlarında gösterilecek şekilde ayarlayabilirsiniz.',
-                  style: TextStyle(
-                    color: Colors.teal.shade300,
-                    fontSize: 13,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final textStyle = const TextStyle(color: Colors.white);
@@ -316,8 +233,7 @@ class StepCategoriesWidgetState extends State<StepCategoriesWidget> {
           ),
           const SizedBox(height: 24),
           
-          // 🎵 YENİ EKLENEN: Kategori bilgi kartı
-          _buildCategoryInfoCard(),
+          // ✅ KALDIRILAN: _buildCategoryInfoCard() - Artık çağrılmıyor
           
           // Hızlı Başlangıç Bölümü
           QuickStartSection(

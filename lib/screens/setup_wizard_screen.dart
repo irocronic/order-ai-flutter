@@ -10,16 +10,13 @@ import '../widgets/setup_wizard/step_kds_widget.dart';
 import '../widgets/setup_wizard/step_staff_widget.dart';
 import '../widgets/setup_wizard/categories/step_categories_widget.dart';
 import '../widgets/setup_wizard/menu_items/step_menu_items_widget.dart';
-import '../widgets/setup_wizard/step_variants_widget.dart';
-import '../widgets/setup_wizard/step_stock_widget.dart';
 
-// Key'ler aynı kalıyor
+// Key'ler güncellendi
 final GlobalKey<StepTablesWidgetState> _tablesStepKey = GlobalKey();
 final GlobalKey<StepKdsWidgetState> _kdsStepKey = GlobalKey();
 final GlobalKey<StepStaffWidgetState> _staffStepKey = GlobalKey();
 final GlobalKey<StepCategoriesWidgetState> _categoriesStepKey = GlobalKey();
 final GlobalKey<StepMenuItemsWidgetState> _menuItemsStepKey = GlobalKey();
-final GlobalKey<StepVariantsWidgetState> _variantsStepKey = GlobalKey();
 
 class SetupWizardScreen extends StatefulWidget {
   final String token;
@@ -82,17 +79,6 @@ class _SetupWizardScreenState extends State<SetupWizardScreen>
           token: widget.token,
           businessId: widget.businessId,
           onNext: () {}),
-      StepVariantsWidget(
-          key: _variantsStepKey,
-          token: widget.token,
-          businessId: widget.businessId,
-          onNext: () {}),
-      StepStockWidget(
-          key: const PageStorageKey("stock"),
-          token: widget.token,
-          businessId: widget.businessId,
-          onNext: () => _handleNext(isOptional: true),
-          onSkip: _skipPage),
     ];
 
     // --- Animasyon ayarları ---
@@ -173,22 +159,10 @@ class _SetupWizardScreenState extends State<SetupWizardScreen>
           canProceed = false;
         }
         break;
-      case 5: // Menü Ürünleri
+      case 5: // Menü Ürünleri - Son adım
         if (_menuItemsStepKey.currentState?.addedMenuItems.isEmpty ?? true) {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text(l10n.setupMenuItemsErrorNoItemsCreated),
-            backgroundColor: Colors.orangeAccent,
-          ));
-          canProceed = false;
-        }
-        break;
-      case 6: // Varyantlar
-        final variantsWidgetState = _variantsStepKey.currentState;
-        if (variantsWidgetState != null &&
-            variantsWidgetState.menuItems.any((item) =>
-                (item.variants?.isEmpty ?? true) && !item.isCampaignBundle)) {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text(l10n.setupVariantsErrorNoVariantsCreated),
             backgroundColor: Colors.orangeAccent,
           ));
           canProceed = false;
@@ -281,13 +255,10 @@ class _SetupWizardScreenState extends State<SetupWizardScreen>
       l10n.setupWizardStepStaffTitle,
       l10n.setupWizardStep3Title, // Kategoriler
       l10n.setupWizardStep4Title, // Ürünler
-      l10n.setupWizardStep5Title, // Varyantlar
-      l10n.setupWizardStep6Title, // Stok
     ];
 
     bool isLastStep = _currentPage == _wizardPages.length - 1;
-    bool currentStepIsOptional =
-        isLastStep || _currentPage == 3 || _currentPage == 7;
+    bool currentStepIsOptional = _currentPage == 3;
 
     return Scaffold(
       // 🎨 DÜZELTİLDİ: AppBar backgroundColor ve elevation kaldırıldı

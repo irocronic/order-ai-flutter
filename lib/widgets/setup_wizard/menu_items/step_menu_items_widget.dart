@@ -4,7 +4,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../models/menu_item.dart';
 import '../../../services/user_session.dart';
-import '../../../services/setup_wizard_audio_service.dart'; // 🎵 YENİ EKLENEN
+import '../../../services/setup_wizard_audio_service.dart';
 import 'components/quick_start_section.dart';
 import 'components/manual_form_section.dart';
 import 'components/menu_items_list_section.dart';
@@ -226,89 +226,6 @@ class StepMenuItemsWidgetState extends State<StepMenuItemsWidget> {
     );
   }
 
-  // 🎵 YENİ EKLENEN: Menü öğeleri için özel bilgi kartı
-  Widget _buildMenuItemsInfoCard() {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 16),
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.purple.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.purple.withOpacity(0.3)),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Icon(Icons.restaurant_menu, color: Colors.purple, size: 20),
-              const SizedBox(width: 8),
-              Text(
-                'Menü Öğeleri Hakkında',
-                style: TextStyle(
-                  color: Colors.purple,
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 12),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Icon(Icons.tips_and_updates, color: Colors.purple.shade300, size: 16),
-              const SizedBox(width: 8),
-              Expanded(
-                child: Text(
-                  'Hızlı Başlangıç ile popüler kategoriler için hazır ürünler ekleyebilirsiniz.',
-                  style: TextStyle(
-                    color: Colors.purple.shade300,
-                    fontSize: 13,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 8),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Icon(Icons.add_circle_outline, color: Colors.purple.shade300, size: 16),
-              const SizedBox(width: 8),
-              Expanded(
-                child: Text(
-                  'Manuel form ile kendi özel ürünlerinizi tek tek ekleyebilirsiniz.',
-                  style: TextStyle(
-                    color: Colors.purple.shade300,
-                    fontSize: 13,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 8),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Icon(Icons.edit, color: Colors.purple.shade300, size: 16),
-              const SizedBox(width: 8),
-              Expanded(
-                child: Text(
-                  'Eklenen ürünleri daha sonra düzenleyebilir ve varyantlarını ekleyebilirsiniz.',
-                  style: TextStyle(
-                    color: Colors.purple.shade300,
-                    fontSize: 13,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final textStyle = const TextStyle(color: Colors.white);
@@ -334,16 +251,14 @@ class StepMenuItemsWidgetState extends State<StepMenuItemsWidget> {
           ),
           const SizedBox(height: 24),
           
-          // 🎵 YENİ EKLENEN: Menü öğeleri bilgi kartı
-          _buildMenuItemsInfoCard(),
-          
-          // Hızlı Başlangıç Bölümü
+          // ✅ GÜNCELLENME: Hızlı Başlangıç Bölümü - businessId eklendi
           QuickStartSection(
             token: widget.token,
             availableCategories: _availableCategories,
             currentMenuItemCount: addedMenuItems.length,
             onMenuItemsAdded: _onMenuItemAdded,
-            onMessageChanged: _showMessage, // ✅ Callback doğru bağlandı
+            onMessageChanged: _showMessage,
+            businessId: widget.businessId, // ✅ GÜNCELLENME: businessId eklendi!
           ),
           
           // Manuel Form Bölümü
@@ -358,14 +273,15 @@ class StepMenuItemsWidgetState extends State<StepMenuItemsWidget> {
           
           const SizedBox(height: 24),
           
-          // Mevcut Ürünler Listesi - Grid Layout
+          // 🆕 GÜNCELLENME: MenuItemsListSection'a businessId parametresi eklendi
           MenuItemsListSection(
             token: widget.token,
             menuItems: addedMenuItems,
             availableCategories: _availableCategories,
             isLoading: _isLoadingScreenData,
             onMenuItemDeleted: _onMenuItemDeleted,
-            onMessageChanged: _showMessage, // ✅ Callback doğru bağlandı
+            onMessageChanged: _showMessage,
+            businessId: widget.businessId, // 🆕 YENİ EKLENEN: businessId parametresi
           ),
           
           const SizedBox(height: 10),

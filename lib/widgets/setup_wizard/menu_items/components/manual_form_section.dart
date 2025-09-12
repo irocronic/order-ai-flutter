@@ -40,6 +40,10 @@ class _ManualFormSectionState extends State<ManualFormSection>
   
   bool _isSubmitting = false;
   bool _isExpanded = false; // 🔽 EKLENDI: Collapse/expand state
+  
+  // --- YENİ EKLENEN: Reçeteli ürün özelliği için değişkenler ---
+  bool _isFromRecipe = true; // Varsayılan olarak ürünün reçeteli olduğunu varsayalım
+  final TextEditingController _priceController = TextEditingController(); // Reçetesiz ürün fiyatı için
 
   // 🔽 EKLENDI: Animation controller
   late AnimationController _animationController;
@@ -63,6 +67,7 @@ class _ManualFormSectionState extends State<ManualFormSection>
   @override
   void dispose() {
     _formData.dispose();
+    _priceController.dispose(); // --- YENİ EKLENEN: Price controller dispose
     _animationController.dispose(); // 🔽 EKLENDI
     super.dispose();
   }
@@ -97,6 +102,15 @@ class _ManualFormSectionState extends State<ManualFormSection>
     });
   }
 
+  // --- YENİ EKLENEN: Form temizleme metodu güncellemesi ---
+  void _clearForm() {
+    _formData.clear();
+    _priceController.clear();
+    setState(() {
+      _isFromRecipe = true; // Varsayılan değere dön
+    });
+  }
+
   Future<void> _addMenuItem() async {
     if (!_formKey.currentState!.validate()) return;
     if (_formData.selectedCategoryId == null && widget.availableCategories.isNotEmpty) {
@@ -123,16 +137,19 @@ class _ManualFormSectionState extends State<ManualFormSection>
     setState(() => _isSubmitting = true);
 
     try {
-      await _menuItemService.createMenuItem(
+      // --- YENİ EKLENEN: Reçeteli/reçetesiz ürün için farklı servis çağrıları ---
+      await _menuItemService.createMenuItemSmart(
         token: widget.token,
         businessId: widget.businessId,
         formData: _formData,
+        isFromRecipe: _isFromRecipe,
+        price: _isFromRecipe ? null : double.tryParse(_priceController.text.replaceAll(',', '.')),
       );
 
       if (mounted) {
         final l10n = AppLocalizations.of(context)!;
         widget.onMessageChanged(l10n.setupMenuItemsSuccessAdded(_formData.nameController.text.trim()));
-        _formData.clear();
+        _clearForm(); // --- GÜNCELLENDİ: Yeni form temizleme metodu
         FocusScope.of(context).unfocus();
         widget.onMenuItemAdded();
       }
@@ -293,6 +310,79 @@ class _ManualFormSectionState extends State<ManualFormSection>
                         }
                         return null;
                       },
+                    ),
+                    const SizedBox(height: 16),
+                    
+                    // --- YENİ EKLENEN: Reçeteli/Reçetesiz ürün seçimi ---
+                    Container(
+                      padding: const EdgeInsets.all(12.0),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(color: Colors.white.withOpacity(0.2)),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SwitchListTile(
+                            title: Text(
+                              l10n.menuItemIsFromRecipeLabel,
+                              style: textStyle.copyWith(fontWeight: FontWeight.w600),
+                            ),
+                            subtitle: Text(
+                              _isFromRecipe
+                                  ? l10n.menuItemIsFromRecipeSubtitleYes
+                                  : l10n.menuItemIsFromRecipeSubtitleNo,
+                              style: TextStyle(
+                                color: Colors.white.withOpacity(0.7),
+                                fontSize: 12,
+                              ),
+                            ),
+                            value: _isFromRecipe,
+                            onChanged: (bool value) {
+                              setState(() {
+                                _isFromRecipe = value;
+                                if (value) {
+                                  // Reçeteli ürüne geçerken fiyat alanını temizle
+                                  _priceController.clear();
+                                }
+                              });
+                            },
+                            activeColor: Colors.lightBlueAccent,
+                            inactiveTrackColor: Colors.white.withOpacity(0.3),
+                            contentPadding: EdgeInsets.zero,
+                          ),
+                          
+                          // Reçetesiz ürün için fiyat alanı
+                          if (!_isFromRecipe) ...[
+                            const SizedBox(height: 12),
+                            TextFormField(
+                              controller: _priceController,
+                              style: textStyle,
+                              decoration: inputDecoration.copyWith(
+                                labelText: l10n.menuItemPriceLabel,
+                                prefixText: '₺ ',
+                                prefixIcon: const Icon(Icons.monetization_on_outlined),
+                                hintText: 'Örn: 25.50',
+                              ),
+                              keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                              inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'^\d*[\.,]?\d{0,2}'))],
+                              validator: (value) {
+                                if (!_isFromRecipe && (value == null || value.trim().isEmpty)) {
+                                  return l10n.validatorRequiredField;
+                                }
+                                if (value != null && value.isNotEmpty) {
+                                  final price = double.tryParse(value.trim().replaceAll(',', '.'));
+                                  if (price == null || price < 0) {
+                                    return l10n.validatorInvalidNumber;
+                                  }
+                                }
+                                return null;
+                              },
+                            ),
+                          ],
+                        ],
+                      ),
                     ),
                     const SizedBox(height: 16),
                     

@@ -3,20 +3,28 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:collection/collection.dart';
 
-import '../../../../services/api_service.dart';
 import '../../../../services/user_session.dart';
 import '../../../../screens/subscription_screen.dart';
+import '../../../../models/menu_item_variant.dart';
+import '../models/variant_template_config.dart';
+import '../services/template_selection_service.dart';
+import '../components/template_selection_header.dart';
+import '../components/template_selection_content.dart';
+import '../components/template_selection_footer.dart';
+import 'variant_management_dialog.dart';
 
 class TemplateSelectionDialog extends StatefulWidget {
   final String token;
   final List<dynamic> availableCategories;
   final int currentMenuItemCount;
+  final int businessId; // ✅ YENİ EKLENEN
 
   const TemplateSelectionDialog({
     Key? key,
     required this.token,
     required this.availableCategories,
     required this.currentMenuItemCount,
+    required this.businessId, // ✅ YENİ EKLENEN
   }) : super(key: key);
 
   @override
@@ -24,10 +32,27 @@ class TemplateSelectionDialog extends StatefulWidget {
 }
 
 class _TemplateSelectionDialogState extends State<TemplateSelectionDialog> {
+  late final TemplateSelectionService _service;
+  
+  // State variables
   List<int> selectedTemplateIds = [];
   List<dynamic> allTemplates = [];
   List<dynamic> filteredTemplates = [];
   final TextEditingController _searchController = TextEditingController();
+  
+  // ✅ YENİ: Scroll controller ekle
+  final ScrollController _scrollController = ScrollController();
+  
+  // Reçete özelliği için state'ler
+  Map<int, bool> templateRecipeStatus = {}; // templateId -> isFromRecipe
+  Map<int, TextEditingController> templatePriceControllers = {}; // templateId -> price controller
+  
+  // Varyant yönetimi için state'ler
+  Map<int, VariantTemplateConfig> templateVariantConfigs = {}; // templateId -> variant config
+  
+  // YENİ: Hızlı varyant ekleme için state'ler
+  List<dynamic> _variantTemplates = [];
+  bool _isLoadingVariantTemplates = false;
   
   String? _selectedCategoryName;
   int? _targetCategoryId;
@@ -38,6 +63,7 @@ class _TemplateSelectionDialogState extends State<TemplateSelectionDialog> {
   @override
   void initState() {
     super.initState();
+    _service = TemplateSelectionService(widget.token);
     _searchController.addListener(_filterTemplates);
   }
 
@@ -45,6 +71,17 @@ class _TemplateSelectionDialogState extends State<TemplateSelectionDialog> {
   void dispose() {
     _searchController.removeListener(_filterTemplates);
     _searchController.dispose();
+    _scrollController.dispose(); // ✅ YENİ: Scroll controller dispose
+    
+    // Price controller'ları dispose et
+    for (var controller in templatePriceControllers.values) {
+      controller.dispose();
+    }
+    
+    // Variant config'leri dispose et
+    for (var config in templateVariantConfigs.values) {
+      config.dispose();
+    }
     super.dispose();
   }
 
@@ -67,10 +104,7 @@ class _TemplateSelectionDialogState extends State<TemplateSelectionDialog> {
     setState(() => _isLoadingTemplates = true);
     
     try {
-      final templates = await ApiService.fetchMenuItemTemplates(
-        widget.token,
-        categoryTemplateName: categoryName,
-      );
+      final templates = await _service.fetchTemplatesForCategory(categoryName);
       
       if (mounted) {
         setState(() {
@@ -78,7 +112,35 @@ class _TemplateSelectionDialogState extends State<TemplateSelectionDialog> {
           filteredTemplates = templates;
           selectedTemplateIds.clear();
           _searchController.clear();
+          
+          // Her template için varsayılan değerleri ayarla
+          templateRecipeStatus.clear();
+          for (var controller in templatePriceControllers.values) {
+            controller.dispose();
+          }
+          templatePriceControllers.clear();
+          
+          // Varyant config'lerini temizle
+          for (var config in templateVariantConfigs.values) {
+            config.dispose();
+          }
+          templateVariantConfigs.clear();
+          
+          for (var template in templates) {
+            final templateId = template['id'] as int;
+            final templateName = template['name'] as String? ?? 'İsimsiz Ürün';
+            
+            templateRecipeStatus[templateId] = true; // Varsayılan olarak reçeteli
+            templatePriceControllers[templateId] = TextEditingController();
+            templateVariantConfigs[templateId] = VariantTemplateConfig(
+              templateId: templateId,
+              templateName: templateName,
+            );
+          }
         });
+        
+        // YENİ: Varyant şablonlarını da yükle
+        _loadVariantTemplatesForCategory(categoryName);
       }
     } catch (e) {
       if (mounted) {
@@ -91,6 +153,40 @@ class _TemplateSelectionDialogState extends State<TemplateSelectionDialog> {
       }
     } finally {
       if (mounted) setState(() => _isLoadingTemplates = false);
+    }
+  }
+
+  // YENİ: Varyant şablonlarını yükle
+  Future<void> _loadVariantTemplatesForCategory(String categoryName) async {
+    if (!mounted) return;
+    setState(() => _isLoadingVariantTemplates = true);
+    
+    try {
+      final variantTemplates = await _service.fetchVariantTemplatesForCategory(categoryName);
+      
+      if (mounted) {
+        setState(() {
+          _variantTemplates = variantTemplates;
+        });
+      }
+    } catch (e) {
+      // Kategoriye özel varyant şablonu yoksa genel şablonları dene
+      try {
+        final defaultTemplates = await _service.fetchDefaultVariantTemplates();
+        if (mounted) {
+          setState(() {
+            _variantTemplates = defaultTemplates.take(8).toList(); // İlk 8 tanesi
+          });
+        }
+      } catch (e2) {
+        if (mounted) {
+          setState(() {
+            _variantTemplates = [];
+          });
+        }
+      }
+    } finally {
+      if (mounted) setState(() => _isLoadingVariantTemplates = false);
     }
   }
 
@@ -109,6 +205,17 @@ class _TemplateSelectionDialogState extends State<TemplateSelectionDialog> {
         }
         
         selectedTemplateIds.add(templateId);
+      }
+    });
+  }
+
+  void _toggleRecipeStatus(int templateId) {
+    setState(() {
+      templateRecipeStatus[templateId] = !(templateRecipeStatus[templateId] ?? true);
+      
+      // Reçeteli ürüne geçerken fiyat alanını temizle
+      if (templateRecipeStatus[templateId] == true) {
+        templatePriceControllers[templateId]?.clear();
       }
     });
   }
@@ -161,6 +268,387 @@ class _TemplateSelectionDialogState extends State<TemplateSelectionDialog> {
     );
   }
 
+  bool _validatePrices() {
+    for (int templateId in selectedTemplateIds) {
+      final isFromRecipe = templateRecipeStatus[templateId] ?? true;
+      if (!isFromRecipe) {
+        final priceText = templatePriceControllers[templateId]?.text.trim() ?? '';
+        if (priceText.isEmpty) {
+          return false;
+        }
+        final price = double.tryParse(priceText.replaceAll(',', '.'));
+        if (price == null || price < 0) {
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+
+  // ✅ GÜNCELLENME: Validation metodunu güncelle
+  bool _validateVariants() {
+    print('🔍 Starting variant validation...');
+    
+    for (int templateId in selectedTemplateIds) {
+      final variantConfig = templateVariantConfigs[templateId];
+      print('  - Checking template $templateId:');
+      print('    - variantConfig exists: ${variantConfig != null}');
+      
+      if (variantConfig != null && variantConfig.hasVariantImageEnabled) {
+        print('    - hasVariantImageEnabled: ${variantConfig.hasVariantImageEnabled}');
+        print('    - variants count: ${variantConfig.variants.length}');
+        print('    - hasVariantImage: ${variantConfig.hasVariantImage}');
+        print('    - XFile: ${variantConfig.variantImageXFile?.path}');
+        print('    - WebBytes: ${variantConfig.variantWebImageBytes?.length}');
+        
+        // ✅ GÜNCELLENME: Artık gerçek validation yap
+        if (variantConfig.variants.isNotEmpty) {
+          // Varyantlar varsa, en az birinin fotoğrafının upload edilmiş olması gerekiyor
+          bool hasValidVariant = variantConfig.variants.any((variant) => variant.image.isNotEmpty);
+          
+          if (hasValidVariant) {
+            print('    ✅ Variant has uploaded image URL');
+          } else {
+            print('    ❌ Variant image enabled but no uploaded image found!');
+            return false; // ✅ Artık gerçek validation yap
+          }
+        }
+      } else {
+        print('    ✅ No image validation needed for template $templateId');
+      }
+    }
+    
+    print('✅ All variants validated successfully');
+    return true;
+  }
+
+  // ✅ GÜNCELLENME: VariantManagementDialog çağrısını güncelle
+  Future<void> _openVariantManagementDialog(int templateId) async {
+    final variantConfig = templateVariantConfigs[templateId];
+    if (variantConfig == null) return;
+
+    final result = await showDialog<bool>(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => VariantManagementDialog(
+        templateId: templateId,
+        variantConfig: variantConfig,
+        variantTemplates: _variantTemplates,
+        isLoadingVariantTemplates: _isLoadingVariantTemplates,
+        businessId: widget.businessId, // ✅ YENİ EKLENEN
+        onVariantTemplateSelected: (variantTemplate) {
+          _addQuickVariant(templateId, variantTemplate);
+        },
+      ),
+    );
+
+    // DÜZELTİLDİ: Modal'dan döndükten sonra her zaman state'i güncelle
+    if (mounted) {
+      setState(() {
+        // Varyant config güncellendiği için state'i yenile
+        // Bu, _isButtonEnabled getter'ının doğru çalışmasını sağlar
+      });
+    }
+  }
+
+  // Hızlı varyant ekleme - Form alanlarını da dolduruyor
+  void _addQuickVariant(int templateId, Map<String, dynamic> variantTemplate) {
+    final variantConfig = templateVariantConfigs[templateId];
+    if (variantConfig == null) return;
+
+    final variantName = variantTemplate['name'] as String;
+    
+    // Aynı isimde varyant varsa ekleme
+    if (variantConfig.variants.any((v) => v.name.toLowerCase() == variantName.toLowerCase())) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('$variantName varyantı zaten eklenmiş'),
+          backgroundColor: Colors.orange,
+          duration: const Duration(seconds: 2),
+        ),
+      );
+      return;
+    }
+
+    // Fiyat hesaplama - String'i Number'a güvenli çevirme
+    double multiplier = 1.0;
+    try {
+      final multiplierValue = variantTemplate['price_multiplier'];
+      if (multiplierValue != null) {
+        if (multiplierValue is String) {
+          multiplier = double.tryParse(multiplierValue) ?? 1.0;
+        } else if (multiplierValue is num) {
+          multiplier = multiplierValue.toDouble();
+        }
+      }
+    } catch (e) {
+      debugPrint('Price multiplier conversion error: $e');
+      multiplier = 1.0;
+    }
+
+    // Hesaplanan fiyat
+    final basePrice = 25.0; // Varsayılan base price
+    final calculatedPrice = basePrice * multiplier;
+
+    // is_extra alanını güvenli çevirme
+    bool isExtra = false;
+    try {
+      final isExtraValue = variantTemplate['is_extra'];
+      if (isExtraValue != null) {
+        if (isExtraValue is bool) {
+          isExtra = isExtraValue;
+        } else if (isExtraValue is String) {
+          isExtra = isExtraValue.toLowerCase() == 'true';
+        } else if (isExtraValue is num) {
+          isExtra = isExtraValue != 0;
+        }
+      }
+    } catch (e) {
+      debugPrint('is_extra conversion error: $e');
+      isExtra = false;
+    }
+
+    setState(() {
+      // Manuel varyant alanlarını doldur
+      variantConfig.variantNameController.text = variantName;
+      variantConfig.variantPriceController.text = calculatedPrice.toStringAsFixed(2);
+      variantConfig.isVariantExtra = isExtra;
+    });
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('$variantName bilgileri forma eklendi - düzenleyip ekleyebilirsiniz'),
+        backgroundColor: Colors.blue,
+        duration: const Duration(seconds: 3),
+      ),
+    );
+  }
+
+  // ✅ GÜNCELLENME: Özel ürün ekleme callback'i - scroll eklendi
+  void _onCustomProductAdded(Map<String, dynamic> customProductData) {
+    final int customTemplateId = customProductData['templateId'];
+    final String productName = customProductData['productName'];
+    final bool isFromRecipe = customProductData['isFromRecipe'];
+    final double? price = customProductData['price'];
+    final List<dynamic> variants = customProductData['variants'] ?? [];
+    
+    setState(() {
+      // Özel ürünü seçili listeye ekle
+      selectedTemplateIds.add(customTemplateId);
+      
+      // Template recipe status ayarla
+      templateRecipeStatus[customTemplateId] = isFromRecipe;
+      
+      // Fiyat controller oluştur
+      final priceController = TextEditingController();
+      if (!isFromRecipe && price != null) {
+        priceController.text = price.toStringAsFixed(2);
+      }
+      templatePriceControllers[customTemplateId] = priceController;
+      
+      // Varyant config oluştur
+      final variantConfig = VariantTemplateConfig(
+        templateId: customTemplateId,
+        templateName: productName,
+      );
+      
+      // Varyantları ekle
+      for (var variantData in variants) {
+        final variant = MenuItemVariant(
+          id: -DateTime.now().millisecondsSinceEpoch,
+          menuItem: 0,
+          name: variantData['name'] ?? '',
+          price: (variantData['price'] ?? 0.0).toDouble(),
+          isExtra: variantData['isExtra'] ?? false,
+          image: variantData['image'] ?? '',
+        );
+        variantConfig.addVariant(variant);
+      }
+      
+      templateVariantConfigs[customTemplateId] = variantConfig;
+      
+      // ✅ YENİ: Özel ürünü template listesine en başa ekle (yeni olduğu belli olsun)
+      allTemplates.insert(0, {
+        'id': customTemplateId,
+        'name': productName,
+        'isCustomProduct': true,
+      });
+      
+      // ✅ YENİ: Filtered templates'i de güncelle
+      _filterTemplates(); // Mevcut arama kriterlerine göre yeniden filtrele
+    });
+    
+    print('🆕 Custom product added to template list: $productName (ID: $customTemplateId)');
+    
+    // ✅ YENİ: Yeni eklenen ürüne scroll et
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _scrollToNewlyAddedItem(customTemplateId);
+    });
+    
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Özel ürün "$productName" eklendi ve seçildi'),
+        backgroundColor: Colors.green,
+        duration: const Duration(seconds: 3),
+        action: SnackBarAction(
+          label: 'GÖSTER',
+          textColor: Colors.white,
+          onPressed: () => _scrollToNewlyAddedItem(customTemplateId),
+        ),
+      ),
+    );
+  }
+
+  // ✅ YENİ: Yeni eklenen ürüne scroll etme metodu
+  void _scrollToNewlyAddedItem(int templateId) {
+    try {
+      // Ürünün listede hangi indexte olduğunu bul
+      final itemIndex = filteredTemplates.indexWhere((template) => template['id'] == templateId);
+      
+      if (itemIndex != -1 && _scrollController.hasClients) {
+        // Her template item yaklaşık 80px yüksekliğinde + padding
+        const double itemHeight = 80.0;
+        const double headerHeight = 200.0; // Header ve diğer sabit elementler
+        
+        final double targetOffset = headerHeight + (itemIndex * itemHeight);
+        final double maxScrollExtent = _scrollController.position.maxScrollExtent;
+        
+        // Hedef offset'i sınırla
+        final double safeOffset = targetOffset > maxScrollExtent ? maxScrollExtent : targetOffset;
+        
+        print('🎯 Scrolling to item $templateId at index $itemIndex');
+        print('   - Target offset: $targetOffset, Safe offset: $safeOffset');
+        print('   - Max scroll extent: $maxScrollExtent');
+        
+        // Smooth scroll animation
+        _scrollController.animateTo(
+          safeOffset,
+          duration: const Duration(milliseconds: 800),
+          curve: Curves.easeInOut,
+        );
+        
+        // 1 saniye sonra yine bir kez daha scroll et (emin olmak için)
+        Future.delayed(const Duration(milliseconds: 1200), () {
+          if (_scrollController.hasClients && mounted) {
+            _scrollController.animateTo(
+              safeOffset,
+              duration: const Duration(milliseconds: 400),
+              curve: Curves.easeOut,
+            );
+          }
+        });
+      } else {
+        print('❌ Could not scroll to item $templateId: itemIndex=$itemIndex, hasClients=${_scrollController.hasClients}');
+      }
+    } catch (e) {
+      print('❌ Error scrolling to newly added item: $e');
+    }
+  }
+
+  // ✅ YENİ: Seçili ürünün görünür olup olmadığını kontrol et
+  void _ensureSelectedItemVisible(int templateId) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _scrollToNewlyAddedItem(templateId);
+    });
+  }
+
+  // ✅ GÜNCELLENME: _prepareResultData metodunu güncelle
+  Map<String, dynamic> _prepareResultData() {
+    final List<int> templateIds = selectedTemplateIds.toList();
+    final List<Map<String, dynamic>> templatesWithOptions = [];
+    
+    for (int templateId in selectedTemplateIds) {
+      final isFromRecipe = templateRecipeStatus[templateId] ?? true;
+      final priceText = templatePriceControllers[templateId]?.text.trim() ?? '';
+      final variantConfig = templateVariantConfigs[templateId];
+      
+      // ✅ YENİ: Varyant listesini doğru şekilde hazırla - artık gerçek URL'ler var
+      final variantList = variantConfig?.variants.map((v) {
+        print('🔗 Varyant "${v.name}" için fotoğraf URL: ${v.image}');
+        
+        return {
+          'name': v.name,
+          'price': v.price,
+          'isExtra': v.isExtra,
+          'image': v.image, // ✅ Artık gerçek Firebase URL
+        };
+      }).toList() ?? [];
+      
+      // ✅ YENİ: Özel ürün kontrolü
+      final template = allTemplates.firstWhere(
+        (t) => t['id'] == templateId,
+        orElse: () => {'id': templateId, 'name': 'Unknown', 'isCustomProduct': false},
+      );
+      
+      // Fotoğraf verilerini de ekle (artık gerek yok ama geriye uyumluluk için)
+      templatesWithOptions.add({
+        'templateId': templateId,
+        'isFromRecipe': isFromRecipe,
+        'price': isFromRecipe ? null : double.tryParse(priceText.replaceAll(',', '.')),
+        'variants': variantList,
+        'hasVariantImage': variantConfig?.hasVariantImage ?? false,
+        'variantImageEnabled': variantConfig?.hasVariantImageEnabled ?? false,
+        'variantImageData': null, // ✅ Artık gerek yok çünkü URL'ler hazır
+        'isCustomProduct': template['isCustomProduct'] ?? false, // ✅ YENİ: Özel ürün işareti
+        'productName': template['isCustomProduct'] == true ? template['name'] : null, // ✅ YENİ: Özel ürün adı
+      });
+    }
+    
+    print('🔍 Hazırlanan veri (güncellenmiş):');
+    for (var template in templatesWithOptions) {
+      print('Template ${template['templateId']}:');
+      print('  - Variants: ${template['variants']?.length ?? 0}');
+      print('  - Is Custom: ${template['isCustomProduct']}');
+      if (template['isCustomProduct'] == true) {
+        print('  - Product Name: ${template['productName']}');
+      }
+      for (var variant in (template['variants'] as List? ?? [])) {
+        print('    * ${variant['name']}: imageUrl=${variant['image']}');
+      }
+      print('  - Has image: ${template['hasVariantImage']}');
+      print('  - Image enabled: ${template['variantImageEnabled']}');
+    }
+    
+    return {
+      'selectedTemplateIds': templateIds,
+      'targetCategoryId': _targetCategoryId,
+      'count': selectedTemplateIds.length,
+      'selectedTemplates': templatesWithOptions,
+    };
+  }
+
+  bool get _isButtonEnabled {
+    final hasSelection = selectedTemplateIds.isNotEmpty;
+    final hasCategory = _targetCategoryId != null;
+    final pricesValid = _validatePrices();
+    final variantsValid = _validateVariants();
+    
+    // Debug için log ekle
+    print('🔍 Button enabled check:');
+    print('  - hasSelection: $hasSelection (${selectedTemplateIds.length} items)');
+    print('  - hasCategory: $hasCategory ($_targetCategoryId)');
+    print('  - pricesValid: $pricesValid');
+    print('  - variantsValid: $variantsValid');
+    
+    final isEnabled = hasSelection && hasCategory && pricesValid && variantsValid;
+    print('  - FINAL RESULT: $isEnabled');
+    
+    return isEnabled;
+  }
+
+  void _onCategoryChanged(String? categoryName) {
+    if (categoryName != null) {
+      final selectedCategory = widget.availableCategories.firstWhereOrNull(
+        (cat) => cat['name'] == categoryName,
+      );
+      setState(() {
+        _selectedCategoryName = categoryName;
+        _targetCategoryId = selectedCategory?['id'];
+      });
+      _loadTemplatesForCategory(categoryName);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
@@ -169,7 +657,7 @@ class _TemplateSelectionDialogState extends State<TemplateSelectionDialog> {
     final keyboardHeight = mediaQuery.viewInsets.bottom;
     
     final availableHeight = screenHeight - keyboardHeight - 100.0;
-    final dialogHeight = availableHeight > 300.0 ? availableHeight : 300.0;
+    final dialogHeight = availableHeight > 400.0 ? availableHeight : 400.0;
     
     return Dialog(
       insetPadding: EdgeInsets.symmetric(
@@ -177,481 +665,70 @@ class _TemplateSelectionDialogState extends State<TemplateSelectionDialog> {
         vertical: keyboardHeight > 0 ? 20.0 : 40.0,
       ),
       child: Container(
-        width: screenWidth > 600 ? 500 : double.infinity,
+        width: screenWidth > 600 ? 600 : double.infinity,
         height: dialogHeight,
         child: Column(
           children: [
-            // Header - Sabit yükseklik
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
-              decoration: BoxDecoration(
-                color: Theme.of(context).primaryColor.withOpacity(0.1),
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(4.0),
-                  topRight: Radius.circular(4.0),
-                ),
-              ),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                      'Şablondan Ürün Ekle',
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                  IconButton(
-                    onPressed: () => Navigator.of(context).pop(),
-                    icon: const Icon(Icons.close),
-                    padding: EdgeInsets.zero,
-                    constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
-                  ),
-                ],
-              ),
+            // Header
+            TemplateSelectionHeader(
+              onClose: () => Navigator.of(context).pop(),
             ),
             
-            // Content - Scrollable area
+            // ✅ GÜNCELLENME: Content'e scroll controller geçir ve onEnsureItemVisible kaldırıldı
             Expanded(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    // Limit bilgisi
-                    Container(
-                      padding: const EdgeInsets.all(8.0),
-                      margin: const EdgeInsets.only(bottom: 12.0),
-                      decoration: BoxDecoration(
-                        color: Colors.blue.withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(6.0),
-                        border: Border.all(color: Colors.blue.withOpacity(0.3)),
-                      ),
-                      child: Row(
-                        children: [
-                          Icon(Icons.info_outline, color: Colors.blue, size: 16),
-                          const SizedBox(width: 6),
-                          Expanded(
-                            child: Text(
-                              'Mevcut: ${widget.currentMenuItemCount}, Seçilen: ${selectedTemplateIds.length}',
-                              style: TextStyle(
-                                fontSize: 11,
-                                color: Colors.blue.shade700,
-                                fontWeight: FontWeight.w500,
-                              ),
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    
-                    // 🎨 DÜZELTİLDİ: Kategori seçimi - Renk sorunu çözüldü
-                    DropdownButtonFormField<String>(
-                      value: _selectedCategoryName,
-                      isExpanded: true,
-                      // 🎨 EKLENDI: Dropdown menu renkleri
-                      dropdownColor: Colors.white, // Dropdown arka plan beyaz
-                      iconEnabledColor: Colors.grey.shade600, // Icon rengi
-                      decoration: const InputDecoration(
-                        labelText: 'Kategori Seçin',
-                        border: OutlineInputBorder(),
-                        contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 12),
-                        isDense: true,
-                        // 🎨 EKLENDI: Label ve border renkleri
-                        labelStyle: TextStyle(color: Colors.grey),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.blue, width: 2),
-                        ),
-                      ),
-                      // 🎨 DÜZELTİLDİ: Seçili item text rengi
-                      style: const TextStyle(
-                        fontSize: 14,
-                        color: Colors.black87, // Ana text siyah
-                        fontWeight: FontWeight.w500,
-                      ),
-                      items: widget.availableCategories.map<DropdownMenuItem<String>>((category) {
-                        return DropdownMenuItem<String>(
-                          value: category['name'],
-                          child: Container(
-                            // 🎨 EKLENDI: Item container styling
-                            padding: const EdgeInsets.symmetric(vertical: 4),
-                            child: Text(
-                              category['name'] ?? 'Bilinmeyen Kategori',
-                              overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(
-                                fontSize: 14,
-                                color: Colors.black87, // 🎨 DÜZELTİLDİ: Text rengi siyah
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ),
-                        );
-                      }).toList(),
-                      onChanged: (categoryName) {
-                        if (categoryName != null) {
-                          final selectedCategory = widget.availableCategories.firstWhereOrNull(
-                            (cat) => cat['name'] == categoryName,
-                          );
-                          setState(() {
-                            _selectedCategoryName = categoryName;
-                            _targetCategoryId = selectedCategory?['id'];
-                          });
-                          _loadTemplatesForCategory(categoryName);
-                        }
-                      },
-                      // 🎨 EKLENDI: Dropdown buton renk ayarları
-                      hint: const Text(
-                        'Kategori seçiniz...',
-                        style: TextStyle(
-                          color: Colors.grey,
-                          fontSize: 14,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 12),
-                    
-                    // 🎨 DÜZELTİLDİ: Arama alanı - Renk iyileştirmesi
-                    if (_selectedCategoryName != null) ...[
-                      TextField(
-                        controller: _searchController,
-                        decoration: InputDecoration(
-                          labelText: 'Ürün Ara',
-                          hintText: 'Ürün adı ile ara...',
-                          prefixIcon: Icon(Icons.search, size: 18, color: Colors.grey.shade600), // 🎨 EKLENDI
-                          border: const OutlineInputBorder(),
-                          contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
-                          isDense: true,
-                          // 🎨 EKLENDI: Label ve border renkleri
-                          labelStyle: const TextStyle(color: Colors.grey),
-                          hintStyle: TextStyle(color: Colors.grey.shade500),
-                          enabledBorder: const OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.grey),
-                          ),
-                          focusedBorder: const OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.blue, width: 2),
-                          ),
-                          suffixIcon: _searchController.text.isNotEmpty
-                              ? IconButton(
-                                  icon: Icon(Icons.clear, size: 16, color: Colors.grey.shade600), // 🎨 EKLENDI
-                                  onPressed: () => _searchController.clear(),
-                                )
-                              : null,
-                        ),
-                        // 🎨 DÜZELTİLDİ: Arama text rengi
-                        style: const TextStyle(
-                          fontSize: 14,
-                          color: Colors.black87,
-                        ),
-                      ),
-                      const SizedBox(height: 12),
-                    ],
-                    
-                    // Template listesi container
-                    Container(
-                      height: keyboardHeight > 0 ? 150.0 : 250.0,
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey.shade300),
-                        borderRadius: BorderRadius.circular(6.0),
-                        // 🎨 EKLENDI: Liste arka plan rengi
-                        color: Colors.grey.shade50,
-                      ),
-                      child: _buildTemplateList(),
-                    ),
-                  ],
-                ),
+              child: TemplateSelectionContent(
+                currentMenuItemCount: widget.currentMenuItemCount,
+                selectedTemplateIds: selectedTemplateIds,
+                templateVariantConfigs: templateVariantConfigs,
+                availableCategories: widget.availableCategories,
+                selectedCategoryName: _selectedCategoryName,
+                searchController: _searchController,
+                isLoadingTemplates: _isLoadingTemplates,
+                allTemplates: allTemplates,
+                filteredTemplates: filteredTemplates,
+                templateRecipeStatus: templateRecipeStatus,
+                templatePriceControllers: templatePriceControllers,
+                targetCategoryId: _targetCategoryId,
+                businessId: widget.businessId,
+                token: widget.token,
+                scrollController: _scrollController, // ✅ YENİ: Scroll controller ekle
+                onCategoryChanged: _onCategoryChanged,
+                onToggleSelectAll: _toggleSelectAll,
+                onToggleTemplateSelection: _toggleTemplateSelection,
+                onToggleRecipeStatus: _toggleRecipeStatus,
+                onOpenVariantManagement: _openVariantManagementDialog,
+                onShowLimitReached: _showLimitReachedDialog,
+                onCustomProductAdded: _onCustomProductAdded,
+                // ✅ KALDIRILDI: onEnsureItemVisible callback'i
               ),
             ),
             
-            // Footer - Sabit yükseklik
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-              decoration: BoxDecoration(
-                color: Colors.grey.shade50,
-                borderRadius: const BorderRadius.only(
-                  bottomLeft: Radius.circular(4.0),
-                  bottomRight: Radius.circular(4.0),
-                ),
-                border: Border(top: BorderSide(color: Colors.grey.shade300)),
-              ),
-              child: Row(
-                children: [
-                  TextButton(
-                    onPressed: () => Navigator.of(context).pop(),
-                    child: Text(
-                      l10n.dialogButtonCancel,
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: Colors.grey.shade700, // 🎨 EKLENDI
-                      ),
+            // Footer
+            TemplateSelectionFooter(
+              isButtonEnabled: _isButtonEnabled,
+              selectedTemplateIds: selectedTemplateIds,
+              templateVariantConfigs: templateVariantConfigs,
+              onCancel: () => Navigator.of(context).pop(),
+              onConfirm: () {
+                // Önce validation kontrolü yap
+                if (!_validateVariants()) {
+                  // Validation hatası varsa snackbar göster
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Varyant fotoğrafları eksik. Lütfen kontrol edin.'),
+                      backgroundColor: Colors.red,
                     ),
-                  ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: ElevatedButton(
-                      onPressed: selectedTemplateIds.isNotEmpty && _targetCategoryId != null
-                          ? () => Navigator.of(context).pop({
-                              'selectedTemplateIds': selectedTemplateIds,
-                              'targetCategoryId': _targetCategoryId,
-                              'count': selectedTemplateIds.length,
-                            })
-                          : null,
-                      // 🎨 EKLENDI: Button styling
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blue,
-                        foregroundColor: Colors.white,
-                        elevation: 2,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(6),
-                        ),
-                      ),
-                      child: Text(
-                        '${selectedTemplateIds.length} ürün - Ekle',
-                        style: const TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white, // 🎨 EKLENDI
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+                  );
+                  return;
+                }
+                
+                final result = _prepareResultData();
+                Navigator.of(context).pop(result);
+              },
             ),
           ],
         ),
       ),
-    );
-  }
-
-  // 🎨 DÜZELTİLDİ: Template list renk iyileştirmeleri
-  Widget _buildTemplateList() {
-    if (_selectedCategoryName == null) {
-      return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(Icons.category_outlined, size: 32, color: Colors.grey.shade500), // 🎨 EKLENDI
-            const SizedBox(height: 8),
-            Text(
-              'Önce bir kategori seçin',
-              style: TextStyle(
-                fontSize: 12,
-                color: Colors.grey.shade600, // 🎨 DÜZELTİLDİ
-                fontWeight: FontWeight.w500,
-              ),
-              textAlign: TextAlign.center,
-            ),
-          ],
-        ),
-      );
-    }
-
-    if (_isLoadingTemplates) {
-      return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SizedBox(
-              width: 24,
-              height: 24,
-              child: CircularProgressIndicator(
-                strokeWidth: 2,
-                valueColor: AlwaysStoppedAnimation<Color>(Colors.blue), // 🎨 EKLENDI
-              ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              'Şablonlar yükleniyor...',
-              style: TextStyle(
-                fontSize: 12,
-                color: Colors.grey.shade600, // 🎨 DÜZELTİLDİ
-              ),
-            ),
-          ],
-        ),
-      );
-    }
-
-    if (allTemplates.isEmpty) {
-      return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(Icons.inventory_2_outlined, size: 32, color: Colors.grey.shade500), // 🎨 EKLENDI
-            const SizedBox(height: 8),
-            Text(
-              'Bu kategori için şablon bulunamadı',
-              style: TextStyle(
-                fontSize: 12,
-                color: Colors.grey.shade600, // 🎨 DÜZELTİLDİ
-              ),
-              textAlign: TextAlign.center,
-            ),
-          ],
-        ),
-      );
-    }
-
-    if (filteredTemplates.isEmpty) {
-      return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(Icons.search_off, size: 24, color: Colors.grey.shade500), // 🎨 EKLENDI
-            const SizedBox(height: 6),
-            Text(
-              'Arama kriterlerinize uygun\nürün bulunamadı.',
-              style: TextStyle(
-                fontSize: 11,
-                color: Colors.grey.shade600, // 🎨 DÜZELTİLDİ
-              ),
-              textAlign: TextAlign.center,
-            ),
-          ],
-        ),
-      );
-    }
-
-    final bool hasVisibleItems = filteredTemplates.isNotEmpty;
-    final bool allVisibleSelected = hasVisibleItems && 
-        filteredTemplates.every((template) => selectedTemplateIds.contains(template['id']));
-
-    return Column(
-      children: [
-        // 🎨 DÜZELTİLDİ: Tümünü seç butonu renk iyileştirmesi
-        if (hasVisibleItems)
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-            decoration: BoxDecoration(
-              color: Colors.white, // 🎨 EKLENDI: Beyaz arka plan
-              border: Border(
-                bottom: BorderSide(color: Colors.grey.shade300), // 🎨 EKLENDI
-              ),
-            ),
-            child: Row(
-              children: [
-                SizedBox(
-                  width: 24,
-                  height: 24,
-                  child: Checkbox(
-                    value: allVisibleSelected,
-                    onChanged: (_) => _toggleSelectAll(),
-                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                    // 🎨 EKLENDI: Checkbox renkleri
-                    activeColor: Colors.blue,
-                    checkColor: Colors.white,
-                  ),
-                ),
-                const SizedBox(width: 6),
-                Expanded(
-                  child: Text(
-                    allVisibleSelected ? 'Tümünü Bırak' : 'Tümünü Seç',
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 12,
-                      color: Colors.black87, // 🎨 DÜZELTİLDİ
-                    ),
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 1,
-                  ),
-                ),
-                const SizedBox(width: 4),
-                Container(
-                  // 🎨 EKLENDI: Sayı badge
-                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                  decoration: BoxDecoration(
-                    color: Colors.blue.shade100,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Text(
-                    '${filteredTemplates.length}',
-                    style: TextStyle(
-                      fontSize: 10,
-                      color: Colors.blue.shade700, // 🎨 DÜZELTİLDİ
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        
-        // Template listesi
-        Expanded(
-          child: ListView.builder(
-            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
-            itemCount: filteredTemplates.length,
-            itemBuilder: (context, index) {
-              final template = filteredTemplates[index];
-              final templateId = template['id'] as int;
-              final isSelected = selectedTemplateIds.contains(templateId);
-              
-              final currentLimits = UserSession.limitsNotifier.value;
-              int totalAfterThisSelection = widget.currentMenuItemCount + selectedTemplateIds.length + (isSelected ? 0 : 1);
-              bool wouldExceedLimit = !isSelected && totalAfterThisSelection > currentLimits.maxMenuItems;
-              
-              return Container(
-                // 🎨 EKLENDI: List item container styling
-                margin: const EdgeInsets.symmetric(vertical: 1),
-                decoration: BoxDecoration(
-                  color: isSelected ? Colors.blue.shade50 : Colors.white,
-                  border: Border.all(
-                    color: isSelected ? Colors.blue.shade200 : Colors.transparent,
-                  ),
-                  borderRadius: BorderRadius.circular(4),
-                ),
-                child: CheckboxListTile(
-                  title: Text(
-                    template['name'] ?? 'İsimsiz Ürün',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w500,
-                      fontSize: 12,
-                      color: wouldExceedLimit 
-                          ? Colors.grey.shade500 
-                          : Colors.black87, // 🎨 DÜZELTİLDİ
-                    ),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  subtitle: wouldExceedLimit 
-                    ? const Text(
-                        'Limit aşılacak',
-                        style: TextStyle(
-                          color: Colors.red,
-                          fontSize: 9,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      )
-                    : null,
-                  value: isSelected,
-                  onChanged: wouldExceedLimit ? null : (bool? value) {
-                    if (value != null) {
-                      _toggleTemplateSelection(templateId);
-                    }
-                  },
-                  controlAffinity: ListTileControlAffinity.leading,
-                  dense: true,
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 0),
-                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                  visualDensity: VisualDensity.compact,
-                  // 🎨 EKLENDI: Checkbox renkleri
-                  activeColor: Colors.blue,
-                  checkColor: Colors.white,
-                ),
-              );
-            },
-          ),
-        ),
-      ],
     );
   }
 }

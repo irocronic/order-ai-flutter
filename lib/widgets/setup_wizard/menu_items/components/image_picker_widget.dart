@@ -9,12 +9,14 @@ class ImagePickerWidget extends StatefulWidget {
   final Function(XFile?, Uint8List?) onImageChanged;
   final XFile? initialImageFile;
   final Uint8List? initialImageBytes;
+  final bool isCompact; // YENİ: Kompakt mod parametresi eklendi
 
   const ImagePickerWidget({
     Key? key,
     required this.onImageChanged,
     this.initialImageFile,
     this.initialImageBytes,
+    this.isCompact = false, // YENİ: Varsayılan false
   }) : super(key: key);
 
   @override
@@ -57,26 +59,44 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
   }
 
   Widget _buildImagePreview() {
+    // YENİ: Kompakt mod için daha küçük boyutlar
+    final double size = widget.isCompact ? 60 : 100;
+    final double iconSize = widget.isCompact ? 24 : 40;
+    
     Widget placeholder = Container(
-      width: 100,
-      height: 100,
+      width: size,
+      height: size,
       decoration: BoxDecoration(
         color: Colors.black.withOpacity(0.2),
         borderRadius: BorderRadius.circular(8),
         border: Border.all(color: Colors.white38),
       ),
-      child: const Icon(Icons.add_photo_alternate_outlined, color: Colors.white70, size: 40),
+      child: Icon(
+        Icons.add_photo_alternate_outlined, 
+        color: Colors.white70, 
+        size: iconSize
+      ),
     );
 
     if (kIsWeb && _webImageBytes != null) {
       return ClipRRect(
         borderRadius: BorderRadius.circular(8),
-        child: Image.memory(_webImageBytes!, height: 100, width: 100, fit: BoxFit.cover),
+        child: Image.memory(
+          _webImageBytes!, 
+          height: size, 
+          width: size, 
+          fit: BoxFit.cover
+        ),
       );
     } else if (!kIsWeb && _pickedImageXFile != null) {
       return ClipRRect(
         borderRadius: BorderRadius.circular(8),
-        child: Image.file(File(_pickedImageXFile!.path), height: 100, width: 100, fit: BoxFit.cover),
+        child: Image.file(
+          File(_pickedImageXFile!.path), 
+          height: size, 
+          width: size, 
+          fit: BoxFit.cover
+        ),
       );
     }
     return placeholder;
@@ -84,6 +104,33 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
 
   @override
   Widget build(BuildContext context) {
+    // YENİ: Kompakt mod için farklı layout
+    if (widget.isCompact) {
+      return Column(
+        children: [
+          _buildImagePreview(),
+          const SizedBox(height: 8),
+          SizedBox(
+            width: double.infinity,
+            child: TextButton.icon(
+              style: TextButton.styleFrom(
+                foregroundColor: Colors.blue,
+                side: BorderSide(color: Colors.blue.withOpacity(0.3)),
+                padding: const EdgeInsets.symmetric(vertical: 8),
+              ),
+              onPressed: _pickImage,
+              icon: Icon(Icons.photo_library_outlined, size: 16),
+              label: Text(
+                'Resim Seç',
+                style: TextStyle(fontSize: 12),
+              ),
+            ),
+          ),
+        ],
+      );
+    }
+    
+    // Normal mod (orijinal layout)
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [

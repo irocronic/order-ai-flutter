@@ -3774,5 +3774,72 @@
     "menuItemPriceLabel": "Satış Fiyatı",
     "@menuItemPriceLabel": {
         "description": "Label for the price of a non-recipe menu item"
-    }
+    },
+    "homeMenuManageWebsite": "Web Sitemi Yönet",
+    "@homeMenuManageWebsite": {
+        "description": "Ana menüdeki web sitesi yönetimi butonu"
+        },
+    "homeMenuCompletedOrders": "Tamamlanan Siparişler",
+    "@homeMenuCompletedOrders": {},
+    "homeMenuReports": "Raporlar",
+    "@homeMenuReports": {},
+    "homeMenuShiftSchedule": "Vardiya Atamaları",
+    "@homeMenuShiftSchedule": {},
+    "homeMenuShiftTemplates": "Vardiya Şablonları",
+    "@homeMenuShiftTemplates": {},
+    "homeMenuManageTables": "Masa Yönetimi",
+    "@homeMenuManageTables": {},
+    "websiteSettingsSuccessSave": "Web sitesi ayarları başarıyla kaydedildi.",
+    "@websiteSettingsSuccessSave": {},
+    "websiteSettingsErrorSave": "Web sitesi ayarları kaydedilirken hata oluştu: {details}",
+    "@websiteSettingsErrorSave": {
+        "placeholders": {
+            "details": {
+                "type": "String"
+            }
+        }
+    },
+    "websiteSettingsPickColor": "Renk Seçin",
+    "@websiteSettingsPickColor": {},
+    "dialogButtonDone": "Tamam",
+    "@dialogButtonDone": {},
+    "homeMenuWebsiteSettings": "Web Sitesi Ayarları",
+    "@homeMenuWebsiteSettings": {},
+    "websiteSettingsSectionAbout": "Hakkımızda Bölümü",
+    "@websiteSettingsSectionAbout": {},
+    "websiteSettingsLabelAboutTitle": "Hakkımızda Başlığı",
+    "@websiteSettingsLabelAboutTitle": {},
+    "websiteSettingsLabelAboutDesc": "Hakkımızda Açıklaması",
+    "@websiteSettingsLabelAboutDesc": {},
+    "websiteSettingsLabelAboutImage": "Hakkımızda Görseli (URL)",
+    "@websiteSettingsLabelAboutImage": {},
+    "websiteSettingsSectionContact": "İletişim Bilgileri",
+    "@websiteSettingsSectionContact": {},
+    "websiteSettingsLabelPhone": "İletişim Telefonu",
+    "@websiteSettingsLabelPhone": {},
+    "websiteSettingsLabelEmail": "İletişim E-postası",
+    "@websiteSettingsLabelEmail": {},
+    "websiteSettingsLabelAddress": "İletişim Adresi",
+    "@websiteSettingsLabelAddress": {},
+    "websiteSettingsLabelWorkingHours": "Çalışma Saatleri",
+    "@websiteSettingsLabelWorkingHours": {},
+    "websiteSettingsSectionAppearance": "Görünüm ve Tema",
+    "@websiteSettingsSectionAppearance": {},
+    "websiteSettingsLabelPrimaryColor": "Ana Renk",
+    "@websiteSettingsLabelPrimaryColor": {},
+    "websiteSettingsLabelSecondaryColor": "İkincil Renk",
+    "@websiteSettingsLabelSecondaryColor": {},
+    "websiteSettingsSectionSocial": "Sosyal Medya",
+    "@websiteSettingsSectionSocial": {},
+    "websiteSettingsSectionVisibility": "Görünürlük Ayarları",
+    "@websiteSettingsSectionVisibility": {},
+    "websiteSettingsToggleShowMenu": "Menüyü Göster",
+    "@websiteSettingsToggleShowMenu": {},
+    "websiteSettingsToggleShowContact": "İletişim Bilgilerini Göster",
+    "@websiteSettingsToggleShowContact": {},
+    "websiteSettingsToggleShowMap": "Haritayı Göster",
+    "@websiteSettingsToggleShowMap": {},
+    "buttonSaveChanges": "Değişiklikleri Kaydet",
+    "@buttonSaveChanges": {},
+    "homeMenuShiftAssignment": "Vardiya Atama"
 }

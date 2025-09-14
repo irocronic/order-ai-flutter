@@ -12,6 +12,20 @@ import 'user_session.dart';
 import 'notification_center.dart';
 
 class ApiService {
+
+
+
+  // EKLENECEK YENİ METOT
+  static Map<String, String> getHeaders(String token) {
+    return {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer $token",
+    };
+  }
+
+
+
+
   static final String baseUrl = dotenv.env['API_BASE_URL'] ?? 'https://order-ai-7bd2c97ec9ef.herokuapp.com/api';
 
   static Uri getUrl(String endpoint) {

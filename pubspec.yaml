@@ -55,6 +55,7 @@ dependencies:
   excel: ^4.0.3
   open_file_plus: ^3.4.1
   flutter_blue_plus: ^1.31.20
+  webview_flutter: ^4.7.0
   
   # YENİ EKLENDİ: Özel ses dosyalarını çalmak için.
   audioplayers: ^6.5.0

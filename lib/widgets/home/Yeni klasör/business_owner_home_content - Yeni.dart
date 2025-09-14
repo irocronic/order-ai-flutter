@@ -2,12 +2,12 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import '../../screens/credit_sales_screen.dart';
-import '../../screens/manage_campaigns_screen.dart';
-import '../../screens/manage_kds_screens_screen.dart';
-import '../../screens/manage_shifts_screen.dart';
-import '../../screens/schedule_management_screen.dart';
-import '../../screens/manage_website_screen.dart';
+import 'package:makarna_app/screens/credit_sales_screen.dart';
+import 'package:makarna_app/screens/manage_campaigns_screen.dart';
+import 'package:makarna_app/screens/manage_kds_screens_screen.dart';
+import '../../screens/pager_management_screen.dart';
+import 'package:makarna_app/screens/manage_shifts_screen.dart';
+import 'package:makarna_app/screens/schedule_management_screen.dart';
 import '../../models/home_menu_item.dart';
 import '../../models/home_menu_section.dart';
 import '../../models/staff_permission_keys.dart';
@@ -19,18 +19,20 @@ import '../../screens/manage_menu_screen.dart';
 import '../../screens/manage_staff_screen.dart';
 import '../../screens/manage_table_screen.dart';
 import '../../screens/manage_variant_list_screen.dart';
-import '../../screens/pager_management_screen.dart';
-import '../../screens/printer_settings_screen.dart';
-import '../../screens/purchase_order_list_screen.dart';
 import '../../screens/reports_screen.dart';
 import '../../screens/staff_performance_screen.dart';
 import '../../screens/ingredient_management_screen.dart';
-import '../../screens/supplier_management_screen.dart';
 import '../../services/user_session.dart';
-import '../../utils/notifiers.dart';
 import '../../widgets/waiting_customers_modal.dart';
-import 'home_grid_view.dart';
+import '../../utils/notifiers.dart';
+import '../../screens/printer_settings_screen.dart';
 import 'subscription_status_card.dart';
+// YENİ EKLENEN EKRANLAR
+import '../../screens/supplier_management_screen.dart';
+import '../../screens/purchase_order_list_screen.dart';
+// === WEB SİTESİ EKRANI İÇİN YENİ IMPORT ===
+import '../../screens/manage_website_screen.dart';
+import 'home_grid_view.dart'; // Bu dosyanın var olduğunu varsayıyoruz
 
 class BusinessOwnerHomeContent extends StatefulWidget {
   final String token;
@@ -122,8 +124,7 @@ class _BusinessOwnerHomeContentState extends State<BusinessOwnerHomeContent> {
     return UserSession.hasPagePermission(permissionKey);
   }
 
-  List<HomeMenuSection> _getAccessibleSections(
-      List<HomeMenuSection> allSections) {
+  List<HomeMenuSection> _getAccessibleSections(List<HomeMenuSection> allSections) {
     return allSections.map((section) {
       final accessibleItems = section.items.where((item) {
         return _canAccess(item.permissionKey, item.requiresBusinessOwner);
@@ -320,6 +321,7 @@ class _BusinessOwnerHomeContentState extends State<BusinessOwnerHomeContent> {
     );
   }
 
+  // Menü seçeneklerinin tanımlandığı ana metot
   List<HomeMenuSection> _getMenuOptions(
       BuildContext context, AppLocalizations l10n) {
     return [
@@ -366,22 +368,6 @@ class _BusinessOwnerHomeContentState extends State<BusinessOwnerHomeContent> {
                       builder: (_) => CreditSalesScreen(
                           token: widget.token,
                           businessId: widget.businessId)))),
-          HomeMenuItem(
-              icon: Icons.groups_outlined,
-              title: l10n.homeMenuWaitingCustomers,
-              baseColor: Colors.lime.shade700,
-              permissionKey: PermissionKeys.manageWaitingCustomers,
-              onTapBuilder: (ctx) => () {
-                    showModalBottomSheet(
-                        context: ctx,
-                        isScrollControlled: true,
-                        backgroundColor: Colors.transparent,
-                        builder: (_) => WaitingCustomersModal(
-                            token: widget.token,
-                            onCustomerListUpdated: () {
-                              shouldRefreshWaitingCountNotifier.value = true;
-                            }));
-                  }),
         ],
       ),
       HomeMenuSection(
@@ -425,7 +411,6 @@ class _BusinessOwnerHomeContentState extends State<BusinessOwnerHomeContent> {
             title: l10n.homeMenuManageIngredientsAndRecipes,
             baseColor: Colors.brown.shade600,
             permissionKey: PermissionKeys.manageStock,
-            hasAlert: widget.hasStockAlerts,
             onTapBuilder: (ctx) => () => Navigator.push(
               ctx,
               MaterialPageRoute(
@@ -479,7 +464,6 @@ class _BusinessOwnerHomeContentState extends State<BusinessOwnerHomeContent> {
               title: l10n.homeMenuStaffPerformance,
               baseColor: Colors.purpleAccent.shade400,
               permissionKey: PermissionKeys.viewReports,
-              requiresBusinessOwner: true,
               onTapBuilder: (ctx) => () => Navigator.push(
                   ctx,
                   MaterialPageRoute(
@@ -495,7 +479,7 @@ class _BusinessOwnerHomeContentState extends State<BusinessOwnerHomeContent> {
               icon: Icons.store_mall_directory_outlined,
               title: l10n.homeMenuBusinessSettings,
               baseColor: Colors.brown.shade500,
-              permissionKey: PermissionKeys.manageStaff,
+              permissionKey: PermissionKeys.manageStaff, // Owner check handles this
               requiresBusinessOwner: true,
               onTapBuilder: (ctx) => () => Navigator.push(
                   ctx,
@@ -503,14 +487,18 @@ class _BusinessOwnerHomeContentState extends State<BusinessOwnerHomeContent> {
                       builder: (_) => BusinessSettingsScreen(
                           token: widget.token,
                           businessId: widget.businessId)))),
+          // === YENİ EKLENEN MENÜ ÖĞESİ ===
           HomeMenuItem(
               icon: Icons.web_outlined,
               title: l10n.homeMenuManageWebsite,
               baseColor: Colors.cyan.shade600,
               requiresBusinessOwner: true,
-              permissionKey: '',
-              onTapBuilder: (ctx) => () => Navigator.push(ctx,
-                  MaterialPageRoute(builder: (_) => const ManageWebsiteScreen()))),
+              permissionKey: '', // Sadece owner kontrolü yeterli
+              onTapBuilder: (ctx) => () => Navigator.push(
+                  ctx,
+                  MaterialPageRoute(
+                      builder: (_) => const ManageWebsiteScreen()))),
+          // ==============================
           HomeMenuItem(
               icon: Icons.group_add_outlined,
               title: l10n.homeMenuStaffManagement,
@@ -535,17 +523,6 @@ class _BusinessOwnerHomeContentState extends State<BusinessOwnerHomeContent> {
                       builder: (_) => ScheduleManagementScreen(
                           token: widget.token,
                           businessId: widget.businessId)))),
-          HomeMenuItem(
-              icon: Icons.more_time,
-              title: l10n.homeMenuShiftTemplates,
-              baseColor: Colors.lightBlue.shade300,
-              permissionKey: PermissionKeys.manageStaff,
-              requiresBusinessOwner: true,
-              onTapBuilder: (ctx) => () => Navigator.push(
-                  ctx,
-                  MaterialPageRoute(builder: (_) => const ManageShiftsScreen()),
-                ),
-          ),
           HomeMenuItem(
               icon: Icons.view_compact_alt_outlined,
               title: l10n.homeMenuManageTables,
@@ -583,7 +560,7 @@ class _BusinessOwnerHomeContentState extends State<BusinessOwnerHomeContent> {
               icon: Icons.print_outlined,
               title: l10n.homeMenuPrinterSettings,
               baseColor: Colors.blueGrey.shade400,
-              permissionKey: '',
+              permissionKey: '', // Let owner check handle it
               requiresBusinessOwner: true,
               onTapBuilder: (ctx) => () => Navigator.push(ctx,
                   MaterialPageRoute(builder: (_) => const PrinterSettingsScreen()))),
@@ -595,8 +572,7 @@ class _BusinessOwnerHomeContentState extends State<BusinessOwnerHomeContent> {
               onTapBuilder: (ctx) => () => Navigator.push(
                   ctx,
                   MaterialPageRoute(
-                      builder: (_) =>
-                          AccountSettingsScreen(token: widget.token)))),
+                      builder: (_) => AccountSettingsScreen(token: widget.token)))),
         ],
       )
     ];

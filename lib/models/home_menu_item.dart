@@ -11,6 +11,7 @@ class HomeMenuItem {
   final Color baseColor;
   final String permissionKey;
   final bool requiresBusinessOwner;
+  final bool hasAlert; // EKLENDİ
 
   const HomeMenuItem({
     required this.icon,
@@ -19,5 +20,6 @@ class HomeMenuItem {
     required this.baseColor,
     this.permissionKey = '', // Varsayılan olarak boş, yani herkese açık
     this.requiresBusinessOwner = false,
+    this.hasAlert = false, // EKLENDİ
   });
 }

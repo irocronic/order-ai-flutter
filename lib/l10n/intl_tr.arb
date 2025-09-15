@@ -22,7 +22,7 @@
   "registerTypeLabel": "Kayıt Türü",
   "registerTypeBusinessOwner": "İşletme Sahibi",
   "registerButtonText": "Kayıt Ol",
-  "registerSuccessMessage": "Kayıt başarılı! 🎉 Uygulamayı 14 gün boyunca ücretsiz kullanabilirsiniz.",
+  "registerSuccessMessage": "Kayıt başarılı! 🎉 Uygulamayı test süresi boyunca ücretsiz olarak kullanabilirsiniz.",
   "registerErrorUsernameExists": "Bu kullanıcı adı zaten mevcut.",
   "registerErrorEmailExists": "Bu e-posta adresi zaten kayıtlı.",
   "registerErrorPasswordCommon": "Şifre çok yaygın, lütfen daha güçlü bir şifre seçin.",

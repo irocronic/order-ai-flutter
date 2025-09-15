@@ -34,6 +34,10 @@ class _ManageWebsiteScreenState extends State<ManageWebsiteScreen> {
     'facebook_url': TextEditingController(),
     'instagram_url': TextEditingController(),
     'twitter_url': TextEditingController(),
+    // === YENİ: Harita koordinatları için controller'lar ===
+    'map_latitude': TextEditingController(),
+    'map_longitude': TextEditingController(),
+    'map_zoom_level': TextEditingController(),
   };
 
   // Switch States
@@ -43,10 +47,8 @@ class _ManageWebsiteScreenState extends State<ManageWebsiteScreen> {
   bool _allowReservations = false;
   bool _allowOnlineOrdering = false;
 
-  // === HATA DÜZELTME: EKSİK DEĞİŞKENLER EKLENDİ ===
   Color _primaryColor = const Color(0xFF3B82F6);
   Color _secondaryColor = const Color(0xFF10B981);
-  // ===============================================
 
   @override
   void initState() {
@@ -95,6 +97,11 @@ class _ManageWebsiteScreenState extends State<ManageWebsiteScreen> {
     _controllers['facebook_url']?.text = data.facebookUrl ?? '';
     _controllers['instagram_url']?.text = data.instagramUrl ?? '';
     _controllers['twitter_url']?.text = data.twitterUrl ?? '';
+    // === YENİ: Harita koordinatları değerlerini doldur ===
+    _controllers['map_latitude']?.text = data.mapLatitude?.toString() ?? '';
+    _controllers['map_longitude']?.text = data.mapLongitude?.toString() ?? '';
+    _controllers['map_zoom_level']?.text = data.mapZoomLevel.toString();
+    
     _showMenu = data.showMenu;
     _showContact = data.showContact;
     _showMap = data.showMap;
@@ -130,6 +137,10 @@ class _ManageWebsiteScreenState extends State<ManageWebsiteScreen> {
         allowReservations: _allowReservations,
         allowOnlineOrdering: _allowOnlineOrdering,
         isActive: _websiteData?.isActive ?? true,
+        // === YENİ: Harita koordinatlarını ekle ===
+        mapLatitude: _controllers['map_latitude']!.text.isNotEmpty ? double.parse(_controllers['map_latitude']!.text) : null,
+        mapLongitude: _controllers['map_longitude']!.text.isNotEmpty ? double.parse(_controllers['map_longitude']!.text) : null,
+        mapZoomLevel: int.parse(_controllers['map_zoom_level']!.text),
       );
 
       await WebsiteService.updateWebsiteDetails(
@@ -153,6 +164,9 @@ class _ManageWebsiteScreenState extends State<ManageWebsiteScreen> {
             showMap: updatedData.showMap,
             allowReservations: updatedData.allowReservations,
             allowOnlineOrdering: updatedData.allowOnlineOrdering,
+            mapLatitude: updatedData.mapLatitude,
+            mapLongitude: updatedData.mapLongitude,
+            mapZoomLevel: updatedData.mapZoomLevel,
           ));
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -243,6 +257,56 @@ class _ManageWebsiteScreenState extends State<ManageWebsiteScreen> {
                       _buildTextField('contact_address', l10n.websiteSettingsLabelAddress, icon: Icons.location_on_outlined, maxLines: 2),
                       _buildTextField('contact_working_hours', l10n.websiteSettingsLabelWorkingHours, icon: Icons.access_time),
 
+                      // === YENİ: Harita Ayarları Bölümü ===
+                      _buildSectionHeader("Harita Ayarları", Icons.map_outlined),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: _buildTextField('map_latitude', "Enlem (Latitude)", 
+                              keyboardType: TextInputType.numberWithOptions(decimal: true),
+                              validator: (value) {
+                                if (value != null && value.isNotEmpty) {
+                                  final latitude = double.tryParse(value);
+                                  if (latitude == null || latitude < -90 || latitude > 90) {
+                                    return "Geçerli bir enlem giriniz (-90 ile 90 arası)";
+                                  }
+                                }
+                                return null;
+                              }
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: _buildTextField('map_longitude', "Boylam (Longitude)", 
+                              keyboardType: TextInputType.numberWithOptions(decimal: true),
+                              validator: (value) {
+                                if (value != null && value.isNotEmpty) {
+                                  final longitude = double.tryParse(value);
+                                  if (longitude == null || longitude < -180 || longitude > 180) {
+                                    return "Geçerli bir boylam giriniz (-180 ile 180 arası)";
+                                  }
+                                }
+                                return null;
+                              }
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 8),
+                      _buildTextField('map_zoom_level', "Harita Zoom Seviyesi (1-20)", 
+                        keyboardType: TextInputType.number,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "Zoom seviyesi gereklidir";
+                          }
+                          final zoom = int.tryParse(value);
+                          if (zoom == null || zoom < 1 || zoom > 20) {
+                            return "Geçerli bir zoom seviyesi giriniz (1-20 arası)";
+                          }
+                          return null;
+                        }
+                      ),
+
                       _buildSectionHeader(l10n.websiteSettingsSectionAppearance, Icons.color_lens_outlined),
                       _buildColorPickerTile(l10n.websiteSettingsLabelPrimaryColor, _primaryColor, (color) => setState(() => _primaryColor = color)),
                       _buildColorPickerTile(l10n.websiteSettingsLabelSecondaryColor, _secondaryColor, (color) => setState(() => _secondaryColor = color)),
@@ -257,11 +321,9 @@ class _ManageWebsiteScreenState extends State<ManageWebsiteScreen> {
                       _buildSwitchTile(l10n.websiteSettingsToggleShowContact, _showContact, (val) => setState(() => _showContact = val)),
                       _buildSwitchTile(l10n.websiteSettingsToggleShowMap, _showMap, (val) => setState(() => _showMap = val)),
 
-                      // === YENİ WIDGET'LAR EKLENDİ ===
                       _buildSectionHeader("Online İşlemler", Icons.public),
                       _buildSwitchTile("Online Rezervasyona İzin Ver", _allowReservations, (val) => setState(() => _allowReservations = val)),
                       _buildSwitchTile("Online Siparişe İzin Ver", _allowOnlineOrdering, (val) => setState(() => _allowOnlineOrdering = val)),
-                      // ===============================
                     ],
                   ),
                 ),
@@ -288,13 +350,21 @@ class _ManageWebsiteScreenState extends State<ManageWebsiteScreen> {
     );
   }
 
-  Widget _buildTextField(String key, String label, {int maxLines = 1, IconData? icon, TextInputType? keyboardType}) {
+  Widget _buildTextField(
+    String key, 
+    String label, {
+    int maxLines = 1, 
+    IconData? icon, 
+    TextInputType? keyboardType,
+    String? Function(String?)? validator,
+  }) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: TextFormField(
         controller: _controllers[key],
         maxLines: maxLines,
         keyboardType: keyboardType,
+        validator: validator,
         decoration: InputDecoration(
           labelText: label,
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),

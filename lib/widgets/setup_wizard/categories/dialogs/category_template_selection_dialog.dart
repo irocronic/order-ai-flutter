@@ -1,5 +1,3 @@
-// lib/widgets/setup_wizard/dialogs/category_template_selection_dialog.dart
-
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../../../models/kds_screen_model.dart';
@@ -321,6 +319,39 @@ class _CategoryTemplateSelectionDialogState
                                   contentPadding: EdgeInsets.zero,
                                 ),
                               
+                              // Sabit: KDS seçimi alanı (Tümünü Seç'in hemen altında)
+                              Padding(
+                                padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
+                                child: DropdownButtonFormField<int>(
+                                  value: _selectedKdsScreenId,
+                                  isExpanded: true,
+                                  decoration: InputDecoration(
+                                    labelText: l10n.kdsScreenLabelRequired,
+                                    border: const OutlineInputBorder(),
+                                    prefixIcon: const Icon(Icons.kitchen_outlined, size: 18),
+                                    contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                                    isDense: true,
+                                  ),
+                                  hint: Text(l10n.kdsScreenNotSelected, style: const TextStyle(fontSize: 13)),
+                                  style: const TextStyle(fontSize: 13, color: Colors.black),
+                                  items: _kdsScreens.map((kds) {
+                                    return DropdownMenuItem<int>(
+                                      value: kds.id,
+                                      child: Text(kds.name, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 13)),
+                                    );
+                                  }).toList(),
+                                  onChanged: (value) {
+                                    setState(() => _selectedKdsScreenId = value);
+                                  },
+                                  validator: (value) {
+                                    if (_selectedTemplates.isNotEmpty && value == null) {
+                                      return l10n.kdsScreenValidator;
+                                    }
+                                    return null;
+                                  },
+                                ),
+                              ),
+                              
                               if (hasVisibleItems) const Divider(height: 12),
                               
                               // Template listesi - Sabit yükseklik container
@@ -403,37 +434,6 @@ class _CategoryTemplateSelectionDialogState
                               ),
                               
                               const SizedBox(height: 12),
-                              
-                              // KDS Seçimi
-                              if (_selectedTemplates.isNotEmpty)
-                                DropdownButtonFormField<int>(
-                                  value: _selectedKdsScreenId,
-                                  isExpanded: true,
-                                  decoration: InputDecoration(
-                                    labelText: l10n.kdsScreenLabelRequired,
-                                    border: const OutlineInputBorder(),
-                                    prefixIcon: const Icon(Icons.kitchen_outlined, size: 18),
-                                    contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                                    isDense: true,
-                                  ),
-                                  hint: Text(l10n.kdsScreenNotSelected, style: const TextStyle(fontSize: 13)),
-                                  style: const TextStyle(fontSize: 13, color: Colors.black),
-                                  items: _kdsScreens.map((kds) {
-                                    return DropdownMenuItem<int>(
-                                      value: kds.id,
-                                      child: Text(kds.name, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 13)),
-                                    );
-                                  }).toList(),
-                                  onChanged: (value) {
-                                    setState(() => _selectedKdsScreenId = value);
-                                  },
-                                  validator: (value) {
-                                    if (_selectedTemplates.isNotEmpty && value == null) {
-                                      return l10n.kdsScreenValidator;
-                                    }
-                                    return null;
-                                  },
-                                ),
                             ],
                           ),
                         ),

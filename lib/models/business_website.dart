@@ -1,7 +1,5 @@
 // lib/models/business_website.dart
 
-import 'package:flutter/foundation.dart';
-
 class BusinessWebsite {
   final String? aboutTitle;
   final String? aboutDescription;
@@ -21,7 +19,11 @@ class BusinessWebsite {
   final bool showContact;
   final bool showMap;
   final bool isActive;
-  // === YENİ ALANLAR EKLENDİ ===
+  
+  // Harita için yeni alanlar
+  final double? mapLatitude;
+  final double? mapLongitude;
+  final int mapZoomLevel;
   final bool allowReservations;
   final bool allowOnlineOrdering;
 
@@ -44,7 +46,9 @@ class BusinessWebsite {
     required this.showContact,
     required this.showMap,
     required this.isActive,
-    // === YENİ PARAMETRELER EKLENDİ ===
+    this.mapLatitude,
+    this.mapLongitude,
+    this.mapZoomLevel = 15,
     required this.allowReservations,
     required this.allowOnlineOrdering,
   });
@@ -69,17 +73,18 @@ class BusinessWebsite {
       showContact: json['show_contact'] as bool? ?? true,
       showMap: json['show_map'] as bool? ?? true,
       isActive: json['is_active'] as bool? ?? true,
-      // === YENİ ALANLARIN OKUNMASI ===
+      mapLatitude: json['map_latitude'] != null ? double.parse(json['map_latitude'].toString()) : null,
+      mapLongitude: json['map_longitude'] != null ? double.parse(json['map_longitude'].toString()) : null,
+      mapZoomLevel: json['map_zoom_level'] as int? ?? 15,
       allowReservations: json['allow_reservations'] as bool? ?? false,
       allowOnlineOrdering: json['allow_online_ordering'] as bool? ?? false,
     );
   }
 
-  /// Sadece güncellenebilir alanları içeren bir JSON haritası oluşturur.
   Map<String, dynamic> toJsonForUpdate({
     required String aboutTitle,
     required String aboutDescription,
-    String? aboutImage, // Resim değişmediyse null olabilir
+    String? aboutImage,
     required String contactPhone,
     required String contactEmail,
     required String contactAddress,
@@ -94,7 +99,9 @@ class BusinessWebsite {
     required bool showMenu,
     required bool showContact,
     required bool showMap,
-    // === YENİ PARAMETRELER EKLENDİ ===
+    double? mapLatitude,
+    double? mapLongitude,
+    int? mapZoomLevel,
     required bool allowReservations,
     required bool allowOnlineOrdering,
   }) {
@@ -115,14 +122,23 @@ class BusinessWebsite {
       'show_menu': showMenu,
       'show_contact': showContact,
       'show_map': showMap,
-      // === YENİ ALANLARIN YAZILMASI ===
       'allow_reservations': allowReservations,
       'allow_online_ordering': allowOnlineOrdering,
     };
-    // Sadece yeni bir resim URL'si varsa payload'a ekle
+
     if (aboutImage != null && aboutImage.isNotEmpty) {
       data['about_image'] = aboutImage;
     }
+    if (mapLatitude != null) {
+      data['map_latitude'] = mapLatitude;
+    }
+    if (mapLongitude != null) {
+      data['map_longitude'] = mapLongitude;
+    }
+    if (mapZoomLevel != null) {
+      data['map_zoom_level'] = mapZoomLevel;
+    }
+
     return data;
   }
 }

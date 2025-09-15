@@ -1,4 +1,4 @@
-// lib/screens/manage_website_screen.dart DOSYASINA EKLEYİN
+// lib/screens/manage_website_screen.dart
 
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
@@ -40,10 +40,13 @@ class _ManageWebsiteScreenState extends State<ManageWebsiteScreen> {
   bool _showMenu = true;
   bool _showContact = true;
   bool _showMap = true;
+  bool _allowReservations = false;
+  bool _allowOnlineOrdering = false;
 
-  // Color States
+  // === HATA DÜZELTME: EKSİK DEĞİŞKENLER EKLENDİ ===
   Color _primaryColor = const Color(0xFF3B82F6);
   Color _secondaryColor = const Color(0xFF10B981);
+  // ===============================================
 
   @override
   void initState() {
@@ -95,10 +98,12 @@ class _ManageWebsiteScreenState extends State<ManageWebsiteScreen> {
     _showMenu = data.showMenu;
     _showContact = data.showContact;
     _showMap = data.showMap;
+    _allowReservations = data.allowReservations;
+    _allowOnlineOrdering = data.allowOnlineOrdering;
     _primaryColor = _colorFromHex(data.primaryColor);
     _secondaryColor = _colorFromHex(data.secondaryColor);
   }
-  
+
   Future<void> _saveSettings() async {
     if (!_formKey.currentState!.validate()) return;
     final l10n = AppLocalizations.of(context)!;
@@ -122,6 +127,8 @@ class _ManageWebsiteScreenState extends State<ManageWebsiteScreen> {
         showMenu: _showMenu,
         showContact: _showContact,
         showMap: _showMap,
+        allowReservations: _allowReservations,
+        allowOnlineOrdering: _allowOnlineOrdering,
         isActive: _websiteData?.isActive ?? true,
       );
 
@@ -144,6 +151,8 @@ class _ManageWebsiteScreenState extends State<ManageWebsiteScreen> {
             showMenu: updatedData.showMenu,
             showContact: updatedData.showContact,
             showMap: updatedData.showMap,
+            allowReservations: updatedData.allowReservations,
+            allowOnlineOrdering: updatedData.allowOnlineOrdering,
           ));
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -173,7 +182,7 @@ class _ManageWebsiteScreenState extends State<ManageWebsiteScreen> {
     }
     return Color(int.parse(hexColor, radix: 16));
   }
-  
+
   void _showColorPicker(BuildContext context, Color initialColor, ValueChanged<Color> onColorChanged) {
     showDialog(
       context: context,
@@ -247,6 +256,12 @@ class _ManageWebsiteScreenState extends State<ManageWebsiteScreen> {
                       _buildSwitchTile(l10n.websiteSettingsToggleShowMenu, _showMenu, (val) => setState(() => _showMenu = val)),
                       _buildSwitchTile(l10n.websiteSettingsToggleShowContact, _showContact, (val) => setState(() => _showContact = val)),
                       _buildSwitchTile(l10n.websiteSettingsToggleShowMap, _showMap, (val) => setState(() => _showMap = val)),
+
+                      // === YENİ WIDGET'LAR EKLENDİ ===
+                      _buildSectionHeader("Online İşlemler", Icons.public),
+                      _buildSwitchTile("Online Rezervasyona İzin Ver", _allowReservations, (val) => setState(() => _allowReservations = val)),
+                      _buildSwitchTile("Online Siparişe İzin Ver", _allowOnlineOrdering, (val) => setState(() => _allowOnlineOrdering = val)),
+                      // ===============================
                     ],
                   ),
                 ),

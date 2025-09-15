@@ -21,6 +21,9 @@ class BusinessWebsite {
   final bool showContact;
   final bool showMap;
   final bool isActive;
+  // === YENİ ALANLAR EKLENDİ ===
+  final bool allowReservations;
+  final bool allowOnlineOrdering;
 
   BusinessWebsite({
     this.aboutTitle,
@@ -41,6 +44,9 @@ class BusinessWebsite {
     required this.showContact,
     required this.showMap,
     required this.isActive,
+    // === YENİ PARAMETRELER EKLENDİ ===
+    required this.allowReservations,
+    required this.allowOnlineOrdering,
   });
 
   factory BusinessWebsite.fromJson(Map<String, dynamic> json) {
@@ -63,6 +69,9 @@ class BusinessWebsite {
       showContact: json['show_contact'] as bool? ?? true,
       showMap: json['show_map'] as bool? ?? true,
       isActive: json['is_active'] as bool? ?? true,
+      // === YENİ ALANLARIN OKUNMASI ===
+      allowReservations: json['allow_reservations'] as bool? ?? false,
+      allowOnlineOrdering: json['allow_online_ordering'] as bool? ?? false,
     );
   }
 
@@ -85,6 +94,9 @@ class BusinessWebsite {
     required bool showMenu,
     required bool showContact,
     required bool showMap,
+    // === YENİ PARAMETRELER EKLENDİ ===
+    required bool allowReservations,
+    required bool allowOnlineOrdering,
   }) {
     final Map<String, dynamic> data = {
       'about_title': aboutTitle,
@@ -103,6 +115,9 @@ class BusinessWebsite {
       'show_menu': showMenu,
       'show_contact': showContact,
       'show_map': showMap,
+      // === YENİ ALANLARIN YAZILMASI ===
+      'allow_reservations': allowReservations,
+      'allow_online_ordering': allowOnlineOrdering,
     };
     // Sadece yeni bir resim URL'si varsa payload'a ekle
     if (aboutImage != null && aboutImage.isNotEmpty) {

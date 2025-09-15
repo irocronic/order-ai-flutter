@@ -31,6 +31,7 @@ import '../../utils/notifiers.dart';
 import '../../widgets/waiting_customers_modal.dart';
 import 'home_grid_view.dart';
 import 'subscription_status_card.dart';
+import '../../screens/reservations_screen.dart'; // Yeni ekranı import et
 
 class BusinessOwnerHomeContent extends StatefulWidget {
   final String token;
@@ -382,6 +383,18 @@ class _BusinessOwnerHomeContentState extends State<BusinessOwnerHomeContent> {
                               shouldRefreshWaitingCountNotifier.value = true;
                             }));
                   }),
+          // Yeni Rezervasyonlar kartı burada eklendi:
+          HomeMenuItem(
+            icon: Icons.book_online,
+            title: l10n.homeMenuReservations, // Düzeltilmiş satır
+            baseColor: Colors.purple,
+            permissionKey: '',
+            onTapBuilder: (ctx) => () => Navigator.push(
+              ctx,
+              MaterialPageRoute(
+                  builder: (_) => const ReservationsScreen()),
+            ),
+          ),
         ],
       ),
       HomeMenuSection(

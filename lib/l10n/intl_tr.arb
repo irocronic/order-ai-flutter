@@ -3841,5 +3841,12 @@
     "@websiteSettingsToggleShowMap": {},
     "buttonSaveChanges": "Değişiklikleri Kaydet",
     "@buttonSaveChanges": {},
-    "homeMenuShiftAssignment": "Vardiya Atama"
+    "homeMenuShiftAssignment": "Vardiya Atama",
+    "homeMenuReservations": "Rezervasyonlar",
+    "reservationsTitle": "Rezervasyon Yönetimi",
+    "reservationsTabPending": "Bekleyen",
+    "reservationsTabConfirmed": "Onaylı",
+    "reservationsTabPast": "Geçmiş",
+    "reservationsNoReservations": "Gösterilecek rezervasyon bulunamadı.",
+    "reservationsNoReservationsInThisCategory": "Bu kategoride rezervasyon yok."
 }

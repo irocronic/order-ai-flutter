@@ -21,7 +21,7 @@ class IngredientManagementScreen extends StatefulWidget {
 
 class _IngredientManagementScreenState extends State<IngredientManagementScreen> {
   late Future<List<Ingredient>> _ingredientsFuture;
-  
+
   final Set<int> _selectedIngredientIds = {};
   bool get _isSelectionMode => _selectedIngredientIds.isNotEmpty;
 
@@ -49,10 +49,10 @@ class _IngredientManagementScreenState extends State<IngredientManagementScreen>
       }
     });
   }
-  
+
   Future<void> _showSupplierSelectionAndSendEmail() async {
     final l10n = AppLocalizations.of(context)!;
-    
+
     if (_selectedIngredientIds.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(l10n.ingredientErrorNoItemsSelected),
@@ -72,9 +72,9 @@ class _IngredientManagementScreenState extends State<IngredientManagementScreen>
         ));
         return;
       }
-      
+
       Supplier? selectedSupplier;
-      
+
       final bool? shouldSend = await showDialog<bool>(
         context: context,
         builder: (dialogContext) {
@@ -126,7 +126,7 @@ class _IngredientManagementScreenState extends State<IngredientManagementScreen>
           });
         }
       }
-      
+
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -247,7 +247,7 @@ class _IngredientManagementScreenState extends State<IngredientManagementScreen>
     final formKey = GlobalKey<FormState>();
     final nameController = TextEditingController();
     final quantityController = TextEditingController();
-    
+
     UnitOfMeasure? selectedUnit;
     List<UnitOfMeasure>? availableUnits;
     String? unitFetchError;
@@ -300,64 +300,66 @@ class _IngredientManagementScreenState extends State<IngredientManagementScreen>
                 return AlertDialog(
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                   title: Text(l10n.ingredientAddTitle, style: const TextStyle(fontWeight: FontWeight.bold)),
-                  content: Form(
-                    key: formKey,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        TextFormField(
-                          controller: nameController,
-                          decoration: InputDecoration(
-                            labelText: l10n.ingredientNameLabel,
-                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-                            filled: true,
-                            fillColor: Colors.grey.shade50,
-                            prefixIcon: const Icon(Icons.inventory_2),
-                          ),
-                          validator: (value) => (value == null || value.trim().isEmpty) ? l10n.validatorRequiredField : null,
-                        ),
-                        const SizedBox(height: 16),
-                        TextFormField(
-                          controller: quantityController,
-                          decoration: InputDecoration(
-                            labelText: l10n.ingredientInitialStockLabel,
-                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-                            filled: true,
-                            fillColor: Colors.grey.shade50,
-                            prefixIcon: const Icon(Icons.scale),
-                          ),
-                          keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                          validator: (value) {
-                            if (value == null || value.trim().isEmpty) return l10n.validatorRequiredField;
-                            if (double.tryParse(value.replaceAll(',', '.')) == null) return l10n.validatorInvalidNumber;
-                            return null;
-                          },
-                        ),
-                        const SizedBox(height: 16),
-                        if (availableUnits != null)
-                          DropdownButtonFormField<UnitOfMeasure>(
-                            value: selectedUnit,
+                  content: SingleChildScrollView(
+                    child: Form(
+                      key: formKey,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          TextFormField(
+                            controller: nameController,
                             decoration: InputDecoration(
-                              labelText: l10n.ingredientUnitLabel,
+                              labelText: l10n.ingredientNameLabel,
                               border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
                               filled: true,
                               fillColor: Colors.grey.shade50,
-                              prefixIcon: const Icon(Icons.straighten),
+                              prefixIcon: const Icon(Icons.inventory_2),
                             ),
-                            items: availableUnits!.map((unit) {
-                              return DropdownMenuItem<UnitOfMeasure>(
-                                value: unit,
-                                child: Text(unit.name),
-                              );
-                            }).toList(),
-                            onChanged: (value) {
-                              setDialogState(() {
-                                selectedUnit = value;
-                              });
-                            },
-                            validator: (value) => value == null ? l10n.ingredientErrorSelectUnit : null,
+                            validator: (value) => (value == null || value.trim().isEmpty) ? l10n.validatorRequiredField : null,
                           ),
-                      ],
+                          const SizedBox(height: 16),
+                          TextFormField(
+                            controller: quantityController,
+                            decoration: InputDecoration(
+                              labelText: l10n.ingredientInitialStockLabel,
+                              border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                              filled: true,
+                              fillColor: Colors.grey.shade50,
+                              prefixIcon: const Icon(Icons.scale),
+                            ),
+                            keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                            validator: (value) {
+                              if (value == null || value.trim().isEmpty) return l10n.validatorRequiredField;
+                              if (double.tryParse(value.replaceAll(',', '.')) == null) return l10n.validatorInvalidNumber;
+                              return null;
+                            },
+                          ),
+                          const SizedBox(height: 16),
+                          if (availableUnits != null)
+                            DropdownButtonFormField<UnitOfMeasure>(
+                              value: selectedUnit,
+                              decoration: InputDecoration(
+                                labelText: l10n.ingredientUnitLabel,
+                                border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                                filled: true,
+                                fillColor: Colors.grey.shade50,
+                                prefixIcon: const Icon(Icons.straighten),
+                              ),
+                              items: availableUnits!.map((unit) {
+                                return DropdownMenuItem<UnitOfMeasure>(
+                                  value: unit,
+                                  child: Text(unit.name),
+                                );
+                              }).toList(),
+                              onChanged: (value) {
+                                setDialogState(() {
+                                  selectedUnit = value;
+                                });
+                              },
+                              validator: (value) => value == null ? l10n.ingredientErrorSelectUnit : null,
+                            ),
+                        ],
+                      ),
                     ),
                   ),
                   actions: [

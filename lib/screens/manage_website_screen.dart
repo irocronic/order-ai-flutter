@@ -34,7 +34,6 @@ class _ManageWebsiteScreenState extends State<ManageWebsiteScreen> {
     'facebook_url': TextEditingController(),
     'instagram_url': TextEditingController(),
     'twitter_url': TextEditingController(),
-    // === YENİ: Harita koordinatları için controller'lar ===
     'map_latitude': TextEditingController(),
     'map_longitude': TextEditingController(),
     'map_zoom_level': TextEditingController(),
@@ -97,7 +96,6 @@ class _ManageWebsiteScreenState extends State<ManageWebsiteScreen> {
     _controllers['facebook_url']?.text = data.facebookUrl ?? '';
     _controllers['instagram_url']?.text = data.instagramUrl ?? '';
     _controllers['twitter_url']?.text = data.twitterUrl ?? '';
-    // === YENİ: Harita koordinatları değerlerini doldur ===
     _controllers['map_latitude']?.text = data.mapLatitude?.toString() ?? '';
     _controllers['map_longitude']?.text = data.mapLongitude?.toString() ?? '';
     _controllers['map_zoom_level']?.text = data.mapZoomLevel.toString();
@@ -137,7 +135,6 @@ class _ManageWebsiteScreenState extends State<ManageWebsiteScreen> {
         allowReservations: _allowReservations,
         allowOnlineOrdering: _allowOnlineOrdering,
         isActive: _websiteData?.isActive ?? true,
-        // === YENİ: Harita koordinatlarını ekle ===
         mapLatitude: _controllers['map_latitude']!.text.isNotEmpty ? double.parse(_controllers['map_latitude']!.text) : null,
         mapLongitude: _controllers['map_longitude']!.text.isNotEmpty ? double.parse(_controllers['map_longitude']!.text) : null,
         mapZoomLevel: int.parse(_controllers['map_zoom_level']!.text),
@@ -225,113 +222,146 @@ class _ManageWebsiteScreenState extends State<ManageWebsiteScreen> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return Scaffold(
+      // DEĞİŞİKLİK: AppBar tasarımı güncellendi.
       appBar: AppBar(
-        title: Text(l10n.homeMenuWebsiteSettings, style: const TextStyle(color: Colors.white)),
+        title: Text(l10n.homeMenuWebsiteSettings, style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        centerTitle: true,
         flexibleSpace: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: [Colors.purple.shade700, Colors.deepPurple.shade900],
+              colors: [Colors.deepPurple.shade700, Colors.purple.shade500],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
           ),
         ),
       ),
-      body: _isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : _errorMessage.isNotEmpty
-              ? Center(child: Text(_errorMessage, style: const TextStyle(color: Colors.red)))
-              : Form(
-                  key: _formKey,
-                  child: ListView(
-                    padding: const EdgeInsets.all(16.0),
-                    children: [
-                      _buildSectionHeader(l10n.websiteSettingsSectionAbout, Icons.info_outline),
-                      _buildTextField('about_title', l10n.websiteSettingsLabelAboutTitle),
-                      _buildTextField('about_description', l10n.websiteSettingsLabelAboutDesc, maxLines: 4),
-                      _buildTextField('about_image', l10n.websiteSettingsLabelAboutImage, icon: Icons.image),
+      // DEĞİŞİKLİK: Body'e gradyan arka planı eklendi.
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              Colors.deepPurple.shade700.withOpacity(0.9),
+              Colors.purple.shade500.withOpacity(0.8),
+            ],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+        ),
+        child: _isLoading
+            ? const Center(child: CircularProgressIndicator(color: Colors.white))
+            : _errorMessage.isNotEmpty
+                ? Center(child: Text(_errorMessage, style: const TextStyle(color: Colors.white, fontSize: 16)))
+                : Form(
+                    key: _formKey,
+                    // DEĞİŞİKLİK: Okunabilirlik için içeriği bir Card içine aldık.
+                    child: SingleChildScrollView(
+                      // DEĞİŞİKLİK: Butonun içeriği engellememesi için padding eklendi.
+                      padding: const EdgeInsets.fromLTRB(12, 12, 12, 100),
+                      child: Card(
+                        color: Colors.white.withOpacity(0.95),
+                        elevation: 8,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Column(
+                            children: [
+                              _buildSectionHeader(l10n.websiteSettingsSectionAbout, Icons.info_outline),
+                              _buildTextField('about_title', l10n.websiteSettingsLabelAboutTitle),
+                              _buildTextField('about_description', l10n.websiteSettingsLabelAboutDesc, maxLines: 4),
+                              _buildTextField('about_image', l10n.websiteSettingsLabelAboutImage, icon: Icons.image),
 
-                      _buildSectionHeader(l10n.websiteSettingsSectionContact, Icons.contact_page_outlined),
-                      _buildTextField('contact_phone', l10n.websiteSettingsLabelPhone, icon: Icons.phone, keyboardType: TextInputType.phone),
-                      _buildTextField('contact_email', l10n.websiteSettingsLabelEmail, icon: Icons.email, keyboardType: TextInputType.emailAddress),
-                      _buildTextField('contact_address', l10n.websiteSettingsLabelAddress, icon: Icons.location_on_outlined, maxLines: 2),
-                      _buildTextField('contact_working_hours', l10n.websiteSettingsLabelWorkingHours, icon: Icons.access_time),
+                              _buildSectionHeader(l10n.websiteSettingsSectionContact, Icons.contact_page_outlined),
+                              _buildTextField('contact_phone', l10n.websiteSettingsLabelPhone, icon: Icons.phone, keyboardType: TextInputType.phone),
+                              _buildTextField('contact_email', l10n.websiteSettingsLabelEmail, icon: Icons.email, keyboardType: TextInputType.emailAddress),
+                              _buildTextField('contact_address', l10n.websiteSettingsLabelAddress, icon: Icons.location_on_outlined, maxLines: 2),
+                              _buildTextField('contact_working_hours', l10n.websiteSettingsLabelWorkingHours, icon: Icons.access_time),
 
-                      // === YENİ: Harita Ayarları Bölümü ===
-                      _buildSectionHeader("Harita Ayarları", Icons.map_outlined),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: _buildTextField('map_latitude', "Enlem (Latitude)", 
-                              keyboardType: TextInputType.numberWithOptions(decimal: true),
-                              validator: (value) {
-                                if (value != null && value.isNotEmpty) {
-                                  final latitude = double.tryParse(value);
-                                  if (latitude == null || latitude < -90 || latitude > 90) {
-                                    return "Geçerli bir enlem giriniz (-90 ile 90 arası)";
+                              _buildSectionHeader("Harita Ayarları", Icons.map_outlined),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: _buildTextField('map_latitude', "Enlem (Latitude)", 
+                                      keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
+                                      validator: (value) {
+                                        if (value != null && value.isNotEmpty) {
+                                          final latitude = double.tryParse(value);
+                                          if (latitude == null || latitude < -90 || latitude > 90) {
+                                            return "Geçerli bir enlem girin (-90 ile 90)";
+                                          }
+                                        }
+                                        return null;
+                                      }
+                                    ),
+                                  ),
+                                  const SizedBox(width: 8),
+                                  Expanded(
+                                    child: _buildTextField('map_longitude', "Boylam (Longitude)", 
+                                      keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
+                                      validator: (value) {
+                                        if (value != null && value.isNotEmpty) {
+                                          final longitude = double.tryParse(value);
+                                          if (longitude == null || longitude < -180 || longitude > 180) {
+                                            return "Geçerli bir boylam girin (-180 ile 180)";
+                                          }
+                                        }
+                                        return null;
+                                      }
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 8),
+                              _buildTextField('map_zoom_level', "Harita Zoom Seviyesi (1-20)", 
+                                keyboardType: TextInputType.number,
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return "Zoom seviyesi gereklidir";
                                   }
-                                }
-                                return null;
-                              }
-                            ),
-                          ),
-                          const SizedBox(width: 8),
-                          Expanded(
-                            child: _buildTextField('map_longitude', "Boylam (Longitude)", 
-                              keyboardType: TextInputType.numberWithOptions(decimal: true),
-                              validator: (value) {
-                                if (value != null && value.isNotEmpty) {
-                                  final longitude = double.tryParse(value);
-                                  if (longitude == null || longitude < -180 || longitude > 180) {
-                                    return "Geçerli bir boylam giriniz (-180 ile 180 arası)";
+                                  final zoom = int.tryParse(value);
+                                  if (zoom == null || zoom < 1 || zoom > 20) {
+                                    return "Geçerli bir zoom seviyesi girin (1-20)";
                                   }
+                                  return null;
                                 }
-                                return null;
-                              }
-                            ),
+                              ),
+
+                              _buildSectionHeader(l10n.websiteSettingsSectionAppearance, Icons.color_lens_outlined),
+                              _buildColorPickerTile(l10n.websiteSettingsLabelPrimaryColor, _primaryColor, (color) => setState(() => _primaryColor = color)),
+                              _buildColorPickerTile(l10n.websiteSettingsLabelSecondaryColor, _secondaryColor, (color) => setState(() => _secondaryColor = color)),
+                              
+                              _buildSectionHeader(l10n.websiteSettingsSectionSocial, Icons.share_outlined),
+                              _buildTextField('facebook_url', 'Facebook URL', icon: Icons.facebook),
+                              _buildTextField('instagram_url', 'Instagram URL', icon: Icons.camera_alt_outlined),
+                              _buildTextField('twitter_url', 'Twitter/X URL', icon: Icons.read_more),
+                              
+                              _buildSectionHeader(l10n.websiteSettingsSectionVisibility, Icons.visibility_outlined),
+                              _buildSwitchTile(l10n.websiteSettingsToggleShowMenu, _showMenu, (val) => setState(() => _showMenu = val)),
+                              _buildSwitchTile(l10n.websiteSettingsToggleShowContact, _showContact, (val) => setState(() => _showContact = val)),
+                              _buildSwitchTile(l10n.websiteSettingsToggleShowMap, _showMap, (val) => setState(() => _showMap = val)),
+
+                              _buildSectionHeader("Online İşlemler", Icons.public),
+                              _buildSwitchTile("Online Rezervasyona İzin Ver", _allowReservations, (val) => setState(() => _allowReservations = val)),
+                              _buildSwitchTile("Online Siparişe İzin Ver", _allowOnlineOrdering, (val) => setState(() => _allowOnlineOrdering = val)),
+                            ],
                           ),
-                        ],
+                        ),
                       ),
-                      const SizedBox(height: 8),
-                      _buildTextField('map_zoom_level', "Harita Zoom Seviyesi (1-20)", 
-                        keyboardType: TextInputType.number,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return "Zoom seviyesi gereklidir";
-                          }
-                          final zoom = int.tryParse(value);
-                          if (zoom == null || zoom < 1 || zoom > 20) {
-                            return "Geçerli bir zoom seviyesi giriniz (1-20 arası)";
-                          }
-                          return null;
-                        }
-                      ),
-
-                      _buildSectionHeader(l10n.websiteSettingsSectionAppearance, Icons.color_lens_outlined),
-                      _buildColorPickerTile(l10n.websiteSettingsLabelPrimaryColor, _primaryColor, (color) => setState(() => _primaryColor = color)),
-                      _buildColorPickerTile(l10n.websiteSettingsLabelSecondaryColor, _secondaryColor, (color) => setState(() => _secondaryColor = color)),
-                      
-                      _buildSectionHeader(l10n.websiteSettingsSectionSocial, Icons.share_outlined),
-                      _buildTextField('facebook_url', 'Facebook URL', icon: Icons.facebook),
-                      _buildTextField('instagram_url', 'Instagram URL', icon: Icons.camera_alt_outlined),
-                      _buildTextField('twitter_url', 'Twitter/X URL', icon: Icons.read_more),
-                      
-                      _buildSectionHeader(l10n.websiteSettingsSectionVisibility, Icons.visibility_outlined),
-                      _buildSwitchTile(l10n.websiteSettingsToggleShowMenu, _showMenu, (val) => setState(() => _showMenu = val)),
-                      _buildSwitchTile(l10n.websiteSettingsToggleShowContact, _showContact, (val) => setState(() => _showContact = val)),
-                      _buildSwitchTile(l10n.websiteSettingsToggleShowMap, _showMap, (val) => setState(() => _showMap = val)),
-
-                      _buildSectionHeader("Online İşlemler", Icons.public),
-                      _buildSwitchTile("Online Rezervasyona İzin Ver", _allowReservations, (val) => setState(() => _allowReservations = val)),
-                      _buildSwitchTile("Online Siparişe İzin Ver", _allowOnlineOrdering, (val) => setState(() => _allowOnlineOrdering = val)),
-                    ],
+                    ),
                   ),
-                ),
+      ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: _isLoading ? null : _saveSettings,
         label: Text(l10n.buttonSaveChanges),
-        icon: _isLoading ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2)) : const Icon(Icons.save),
-        backgroundColor: Colors.deepPurple,
+        icon: _isLoading 
+            ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white)) 
+            : const Icon(Icons.save),
+        // DEĞİŞİKLİK: Renkler temayla uyumlu hale getirildi.
+        backgroundColor: Colors.deepPurple.shade700,
         foregroundColor: Colors.white,
       ),
     );
@@ -339,12 +369,12 @@ class _ManageWebsiteScreenState extends State<ManageWebsiteScreen> {
 
   Widget _buildSectionHeader(String title, IconData icon) {
     return Padding(
-      padding: const EdgeInsets.only(top: 24.0, bottom: 8.0),
+      padding: const EdgeInsets.only(top: 20.0, bottom: 12.0),
       child: Row(
         children: [
-          Icon(icon, color: Colors.deepPurple),
+          Icon(icon, color: Colors.deepPurple.shade700),
           const SizedBox(width: 8),
-          Text(title, style: Theme.of(context).textTheme.titleLarge?.copyWith(color: Colors.deepPurple)),
+          Text(title, style: Theme.of(context).textTheme.titleLarge?.copyWith(color: Colors.deepPurple.shade900, fontWeight: FontWeight.bold)),
         ],
       ),
     );
@@ -367,8 +397,18 @@ class _ManageWebsiteScreenState extends State<ManageWebsiteScreen> {
         validator: validator,
         decoration: InputDecoration(
           labelText: label,
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-          prefixIcon: icon != null ? Icon(icon) : null,
+          labelStyle: TextStyle(color: Colors.grey.shade700),
+          prefixIcon: icon != null ? Icon(icon, color: Colors.grey.shade600) : null,
+          filled: true,
+          fillColor: Colors.black.withOpacity(0.04),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: BorderSide.none,
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: BorderSide(color: Colors.deepPurple.shade700, width: 2),
+          ),
         ),
       ),
     );
@@ -376,6 +416,7 @@ class _ManageWebsiteScreenState extends State<ManageWebsiteScreen> {
 
   Widget _buildColorPickerTile(String title, Color color, ValueChanged<Color> onColorChanged) {
     return ListTile(
+      contentPadding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
       title: Text(title),
       trailing: GestureDetector(
         onTap: () => _showColorPicker(context, color, onColorChanged),
@@ -384,8 +425,15 @@ class _ManageWebsiteScreenState extends State<ManageWebsiteScreen> {
           height: 40,
           decoration: BoxDecoration(
             color: color,
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: Colors.grey),
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: Colors.grey.shade400),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.1),
+                blurRadius: 4,
+                offset: const Offset(0, 2),
+              ),
+            ],
           ),
         ),
       ),
@@ -398,7 +446,8 @@ class _ManageWebsiteScreenState extends State<ManageWebsiteScreen> {
       title: Text(title),
       value: value,
       onChanged: onChanged,
-      activeColor: Colors.deepPurple,
+      activeColor: Colors.deepPurple.shade700,
+      contentPadding: const EdgeInsets.symmetric(horizontal: 8),
     );
   }
 }

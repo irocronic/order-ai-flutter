@@ -51,7 +51,7 @@ dependencies:
   network_info_plus: ^5.0.3
   network_discovery: ^1.0.0
   printing: ^5.11.1
-  pdf: ^3.10.8
+  pdf: ^3.11.3
   excel: ^4.0.3
   open_file_plus: ^3.4.1
   flutter_blue_plus: ^1.31.20
@@ -78,7 +78,6 @@ flutter:
     - assets/sounds/
     - assets/sounds/notifications/
     - assets/sounds/notifications/tr/
-    - assets/sounds/notifications/en/
     - assets/sounds/setup/
     - assets/sounds/setup/tr/
     - assets/sounds/setup/en/

@@ -1,4 +1,4 @@
-// lib/services/reservation_service.dart (YENİ DOSYA)
+// lib/services/reservation_service.dart
 
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -38,6 +38,15 @@ class ReservationService {
     final response = await http.post(url, headers: {"Authorization": "Bearer $token"});
     if (response.statusCode != 200) {
       throw Exception('Rezervasyon iptal edilemedi: ${response.statusCode}');
+    }
+  }
+
+  /// (YENİ EKLENDİ) Bir rezervasyonu "oturdu" olarak işaretler.
+  static Future<void> markSeated(String token, int reservationId) async {
+    final url = ApiService.getUrl('/reservations/$reservationId/mark-seated/');
+    final response = await http.post(url, headers: {"Authorization": "Bearer $token"});
+    if (response.statusCode != 200) {
+      throw Exception('Rezervasyon "oturdu" olarak işaretlenemedi: ${response.statusCode}');
     }
   }
 }

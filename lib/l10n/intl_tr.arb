@@ -3848,5 +3848,95 @@
     "reservationsTabConfirmed": "Onaylı",
     "reservationsTabPast": "Geçmiş",
     "reservationsNoReservations": "Gösterilecek rezervasyon bulunamadı.",
-    "reservationsNoReservationsInThisCategory": "Bu kategoride rezervasyon yok."
+    "reservationsNoReservationsInThisCategory": "Bu kategoride rezervasyon yok.",
+    "manageTablesInfoCreatingQrPdf": "QR kodları içeren PDF dosyası oluşturuluyor...",
+    "@manageTablesInfoCreatingQrPdf": {
+        "description": "Kullanıcıya tüm masaların QR kodlarını içeren bir PDF dosyasının oluşturulduğunu bildiren mesaj."
+    },
+
+    "manageTablesSuccessQrPdfSaved": "PDF dosyası başarıyla '{filePath}' konumuna kaydedildi.",
+    "@manageTablesSuccessQrPdfSaved": {
+        "description": "PDF dosyasının başarıyla kaydedildiğini ve dosya yolunu bildiren mesaj.",
+        "placeholders": {
+            "filePath": {
+                "type": "String",
+                "example": "/storage/emulated/0/Download/dosya.pdf"
+            }
+        }
+    },
+
+    "dialogButtonOpen": "AÇ",
+    "@dialogButtonOpen": {
+        "description": "Bir dosyayı veya uygulamayı açmak için kullanılan buton metni."
+    },
+
+    "manageTablesErrorCreatingQrPdf": "QR kodları PDF'e aktarılırken bir hata oluştu: {error}",
+    "@manageTablesErrorCreatingQrPdf": {
+        "description": "PDF oluşturma sırasında bir hata olduğunu bildiren mesaj.",
+        "placeholders": {
+            "error": {
+                "type": "String",
+                "example": "Dosya yazılamadı."
+            }
+        }
+    },
+
+    "manageTablesTooltipExportQr": "Tüm Masaların QR Kodlarını İndir",
+    "@manageTablesTooltipExportQr": {
+        "description": "Tüm masa QR kodlarını PDF olarak indirme butonunun üzerine gelindiğinde çıkan ipucu metni."
+    },
+    "manageTablesButtonDownloadQr": "QR Kodunu İndir",
+    "manageTablesSuccessQrDownloaded": "QR kod başarıyla indirildi.",
+    "manageTablesErrorQrDownload": "QR kod indirilemedi: {error}",
+    "reservationsTabOthers": "Diğer",
+    "@reservationsTabOthers": {
+        "description": "Rezervasyon ekranındaki 'Diğer' durumları gösteren sekme başlığı (iptal, oturdu vb.)"
+    },
+    "reservationsErrorLoading": "Rezervasyonlar yüklenirken bir hata oluştu: {error}",
+    "@reservationsErrorLoading": {
+        "description": "Rezervasyon listesi yüklenemediğinde gösterilen hata mesajı",
+        "placeholders": {
+            "error": {
+                "type": "String",
+                "example": "Sunucuya bağlanılamadı"
+            }
+        }
+    },
+    "reservationsNoReservationsFound": "Gösterilecek rezervasyon bulunamadı.",
+    "@reservationsNoReservationsFound": {
+        "description": "Hiçbir rezervasyon bulunamadığında gösterilen mesaj"
+    },
+    "reservationsNoReservationsInThisCategory": "Bu kategoride rezervasyon yok.",
+    "@reservationsNoReservationsInThisCategory": {
+        "description": "Belirli bir sekmede (örn: onaylanmış) hiç rezervasyon olmadığında gösterilen mesaj"
+    },
+    "reservationsPartySizeTooltip": "{count} Kişi",
+    "@reservationsPartySizeTooltip": {
+        "description": "Rezervasyon kartındaki kişi sayısını gösteren baloncuk metni",
+        "placeholders": {
+            "count": {
+                "type": "Object"
+            }
+        }
+    },
+    "tableLabel": "Masa",
+    "@tableLabel": {
+        "description": "Genel 'Masa' kelimesi"
+    },
+    "reservationsConfirmTooltip": "Onayla",
+    "@reservationsConfirmTooltip": {
+        "description": "Rezervasyonu onaylama butonunun üzerine gelince çıkan ipucu metni"
+    },
+    "reservationsCancelTooltip": "İptal Et",
+    "@reservationsCancelTooltip": {
+        "description": "Rezervasyonu iptal etme butonunun üzerine gelince çıkan ipucu metni"
+    },
+    "reservationsMarkSeatedTooltip": "Müşteri geldi, oturdu olarak işaretle",
+    "@reservationsMarkSeatedTooltip": {
+        "description": "Müşteriyi oturdu olarak işaretleme butonunun üzerine gelince çıkan ipucu metni"
+    },
+    "reservationsMarkSeatedButton": "Oturdu",
+    "@reservationsMarkSeatedButton": {
+        "description": "Müşteriyi oturdu olarak işaretleme butonu metni"
+    }
 }

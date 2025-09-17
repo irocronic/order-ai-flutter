@@ -31,7 +31,8 @@ import '../../utils/notifiers.dart';
 import '../../widgets/waiting_customers_modal.dart';
 import 'home_grid_view.dart';
 import 'subscription_status_card.dart';
-import '../../screens/reservations_screen.dart'; // Yeni ekranı import et
+import '../../screens/reservations_screen.dart';
+import '../../screens/business_card_designer_screen.dart';
 
 class BusinessOwnerHomeContent extends StatefulWidget {
   final String token;
@@ -516,6 +517,30 @@ class _BusinessOwnerHomeContentState extends State<BusinessOwnerHomeContent> {
                       builder: (_) => BusinessSettingsScreen(
                           token: widget.token,
                           businessId: widget.businessId)))),
+
+
+
+
+
+
+          // ================= YENİ EKLENECEK KISIM BAŞLANGICI =================
+          HomeMenuItem(
+              icon: Icons.contact_mail_outlined,
+              title: l10n.homeMenuBusinessCard, // .arb dosyanıza eklediğiniz anahtar
+              baseColor: Colors.teal.shade600,
+              requiresBusinessOwner: true,
+              onTapBuilder: (ctx) => () => Navigator.push(
+                  ctx, MaterialPageRoute(builder: (_) => const BusinessCardDesignerScreen()))),
+          // ================= YENİ EKLENECEK KISIM SONU =====================
+
+
+
+
+
+
+
+
+
           HomeMenuItem(
               icon: Icons.web_outlined,
               title: l10n.homeMenuManageWebsite,

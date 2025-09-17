@@ -52,6 +52,8 @@ dependencies:
   network_discovery: ^1.0.0
   printing: ^5.11.1
   pdf: ^3.11.3
+  google_fonts: ^6.2.1
+  font_awesome_flutter: ^10.7.0
   excel: ^4.0.3
   open_file_plus: ^3.4.1
   flutter_blue_plus: ^1.31.20

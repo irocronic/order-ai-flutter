@@ -3938,5 +3938,9 @@
     "reservationsMarkSeatedButton": "Oturdu",
     "@reservationsMarkSeatedButton": {
         "description": "Müşteriyi oturdu olarak işaretleme butonu metni"
+    },
+    "homeMenuBusinessCard": "Kartvizit Tasarımı",
+    "@homeMenuBusinessCard": {
+        "description": "Ana menüdeki kartvizit tasarım ekranına yönlendiren butonun başlığı."
     }
 }

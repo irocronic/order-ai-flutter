@@ -30,6 +30,8 @@ import 'dart:async';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'screens/login_screen.dart';
 import 'services/api_service.dart';
+import 'providers/business_card_provider.dart';
+import 'screens/business_card_designer_screen.dart';
 
 // Global Keys - Thundering Herd çözümü için RouteObserver eklendi
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -160,8 +162,11 @@ Future<void> main() async {
   );
 
   runApp(
-    ChangeNotifierProvider(
-      create: (_) => LanguageProvider()..loadLocale(),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => LanguageProvider()..loadLocale()),
+        ChangeNotifierProvider(create: (context) => BusinessCardProvider()),
+      ],
       child: const MyApp(),
     ),
   );

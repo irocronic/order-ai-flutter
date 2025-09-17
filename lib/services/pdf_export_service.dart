@@ -1,12 +1,14 @@
 // lib/services/pdf_export_service.dart
 
 import 'package:flutter/material.dart' as material;
+import 'package:google_fonts/google_fonts.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 import '../models/business_card_model.dart';
 import '../models/card_icon_enum.dart';
-import 'package:google_fonts/google_fonts.dart';
+// YENİ EKLENDİ
+import '../models/shape_style.dart';
 
 class PdfExportService {
   static Future<void> generateAndShareCard(
@@ -24,7 +26,6 @@ class PdfExportService {
           final scaleX = (85 * PdfPageFormat.mm) / cardModel.dimensions.width;
           final scaleY = (55 * PdfPageFormat.mm) / cardModel.dimensions.height;
 
-          // DÜZELTME: Değişkenin tipi 'pw.Decoration' yerine 'pw.BoxDecoration' olmalı.
           pw.BoxDecoration decoration;
           if (cardModel.gradientEndColor != null) {
             decoration = pw.BoxDecoration(
@@ -57,7 +58,7 @@ class PdfExportService {
                 return pw.Positioned(
                   left: pdfX,
                   bottom: pdfY,
-                  child: pw.Opacity( // Opaklık desteği
+                  child: pw.Opacity(
                     opacity: element.opacity,
                     child: pw.SizedBox(
                       width: scaledWidth,
@@ -95,15 +96,17 @@ class PdfExportService {
           if (isItalic) return await PdfGoogleFonts.latoItalic();
           return await PdfGoogleFonts.latoRegular();
         case 'Montserrat':
-          if (isBold && isItalic) return await PdfGoogleFonts.montserratBoldItalic();
+          if (isBold && isItalic)
+            return await PdfGoogleFonts.montserratBoldItalic();
           if (isBold) return await PdfGoogleFonts.montserratBold();
           if (isItalic) return await PdfGoogleFonts.montserratItalic();
           return await PdfGoogleFonts.montserratRegular();
         case 'Oswald':
-           if (isBold) return await PdfGoogleFonts.oswaldBold();
-           return await PdfGoogleFonts.oswaldRegular();
+          if (isBold) return await PdfGoogleFonts.oswaldBold();
+          return await PdfGoogleFonts.oswaldRegular();
         case 'Merriweather':
-          if (isBold && isItalic) return await PdfGoogleFonts.merriweatherBoldItalic();
+          if (isBold && isItalic)
+            return await PdfGoogleFonts.merriweatherBoldItalic();
           if (isBold) return await PdfGoogleFonts.merriweatherBold();
           if (isItalic) return await PdfGoogleFonts.merriweatherItalic();
           return await PdfGoogleFonts.merriweatherRegular();
@@ -140,14 +143,18 @@ class PdfExportService {
     return fontMap;
   }
 
-  static pw.Widget _buildPdfElement(CardElement element,
-      Map<String, pw.Font> fontMap, pw.Font iconFont, double scaleX, double scaleY) {
+  static pw.Widget _buildPdfElement(
+      CardElement element,
+      Map<String, pw.Font> fontMap,
+      pw.Font iconFont,
+      double scaleX,
+      double scaleY) {
     pw.Font getFont(material.TextStyle style) {
       final family = style.fontFamily ?? 'Roboto';
       final key = "${family}_${style.fontWeight}_${style.fontStyle}";
       return fontMap[key]!;
     }
-    
+
     switch (element.type) {
       case CardElementType.text:
         return pw.Text(
@@ -166,13 +173,27 @@ class PdfExportService {
         try {
           final icon = CardIcon.values.byName(element.content);
           switch (icon) {
-            case CardIcon.phone: iconData = material.Icons.phone; break;
-            case CardIcon.email: iconData = material.Icons.email; break;
-            case CardIcon.web: iconData = material.Icons.language; break;
-            case CardIcon.location: iconData = material.Icons.location_on; break;
-            case CardIcon.linkedin: iconData = material.Icons.contact_mail; break;
-            case CardIcon.twitter: iconData = material.Icons.flutter_dash; break;
-            case CardIcon.github: iconData = material.Icons.code; break;
+            case CardIcon.phone:
+              iconData = material.Icons.phone;
+              break;
+            case CardIcon.email:
+              iconData = material.Icons.email;
+              break;
+            case CardIcon.web:
+              iconData = material.Icons.language;
+              break;
+            case CardIcon.location:
+              iconData = material.Icons.location_on;
+              break;
+            case CardIcon.linkedin:
+              iconData = material.Icons.contact_mail;
+              break;
+            case CardIcon.twitter:
+              iconData = material.Icons.flutter_dash;
+              break;
+            case CardIcon.github:
+              iconData = material.Icons.code;
+              break;
           }
         } catch (e) {
           iconData = material.Icons.circle;
@@ -191,13 +212,54 @@ class PdfExportService {
         }
         return pw.Center(child: pw.Text("Görsel Alanı"));
       case CardElementType.qrCode:
-         return pw.BarcodeWidget(
-            barcode: pw.Barcode.qrCode(),
-            data: element.content,
-            color: PdfColor.fromInt(element.style.color?.value ?? material.Colors.black.value),
-         );
+        return pw.BarcodeWidget(
+          barcode: pw.Barcode.qrCode(),
+          data: element.content,
+          color: PdfColor.fromInt(
+              element.style.color?.value ?? material.Colors.black.value),
+        );
       case CardElementType.group:
         return pw.SizedBox(); // Gruplar PDF'te görünmez
+        
+      // YENİ EKLENDİ: Şekil elemanını PDF'e çizmek için yeni case
+      case CardElementType.shape:
+        if (element.shapeStyle != null) {
+          final style = element.shapeStyle!;
+          switch (style.shapeType) {
+            case ShapeType.rectangle:
+              return pw.Container(
+                decoration: pw.BoxDecoration(
+                  color: PdfColor.fromInt(style.fillColor.value),
+                  border: pw.Border.all(
+                    color: PdfColor.fromInt(style.borderColor.value),
+                    width: style.borderWidth * scaleY,
+                  ),
+                ),
+              );
+            case ShapeType.ellipse:
+              // PDF kütüphanesi elips için doğrudan bir decoration sunmuyor.
+              // ClipOval ile benzer bir görünüm elde edebiliriz.
+              return pw.ClipOval(
+                child: pw.Container(
+                  decoration: pw.BoxDecoration(
+                    color: PdfColor.fromInt(style.fillColor.value),
+                    border: pw.Border.all(
+                      color: PdfColor.fromInt(style.borderColor.value),
+                      width: style.borderWidth * scaleY,
+                    ),
+                  ),
+                ),
+              );
+            case ShapeType.line:
+              return pw.Container(
+                // Yüksekliği kenarlık kalınlığı kadar olan bir kutu çizerek
+                // çizgi elde ediyoruz.
+                height: style.borderWidth * scaleY,
+                color: PdfColor.fromInt(style.borderColor.value),
+              );
+          }
+        }
+        return pw.SizedBox(); // shapeStyle null ise boş alan döner.
     }
   }
 }

@@ -6,7 +6,11 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import '../../models/business_card_model.dart';
+// YENİ EKLENDİ
+import '../../models/shape_style.dart';
 import '../../providers/business_card_provider.dart';
+// YENİ EKLENDİ
+import 'template_gallery_dialog.dart';
 
 class _QrCodeDialog extends StatefulWidget {
   const _QrCodeDialog();
@@ -67,7 +71,6 @@ class _QrCodeDialogState extends State<_QrCodeDialog> {
 
 class ControlsPanelWidget extends StatefulWidget {
   const ControlsPanelWidget({Key? key}) : super(key: key);
-
   @override
   State<ControlsPanelWidget> createState() => _ControlsPanelWidgetState();
 }
@@ -80,7 +83,6 @@ class _ControlsPanelWidgetState extends State<ControlsPanelWidget>
   void _handleTabChange() {
     final selectedElements = _provider.selectedElements;
     if (!mounted) return;
-
     if (selectedElements.isEmpty && _tabController.index != 0) {
       _tabController.animateTo(0);
     } else if (selectedElements.isNotEmpty && _tabController.index != 1) {
@@ -110,11 +112,18 @@ class _ControlsPanelWidgetState extends State<ControlsPanelWidget>
     );
   }
 
+  // YENİ EKLENDİ: Şablon galerisini açan metot
+  void _showTemplateGallery(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (_) => const TemplateGalleryDialog(),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final provider = context.watch<BusinessCardProvider>();
     final selectedElements = provider.selectedElements;
-
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -200,6 +209,7 @@ class _ControlsPanelWidgetState extends State<ControlsPanelWidget>
         const SizedBox(height: 16),
         _buildGradientControls(provider),
         const SizedBox(height: 12),
+        // GÜNCELLEME BAŞLANGICI: Eleman ekleme butonları güncellendi
         Row(
           children: [
             Expanded(
@@ -214,8 +224,7 @@ class _ControlsPanelWidgetState extends State<ControlsPanelWidget>
               child: ElevatedButton.icon(
                 onPressed: () async {
                   final picker = ImagePicker();
-                  final file =
-                      await picker.pickImage(source: ImageSource.gallery);
+                  final file = await picker.pickImage(source: ImageSource.gallery);
                   if (file != null) {
                     final bytes = await file.readAsBytes();
                     provider.addImageElement(bytes);
@@ -228,10 +237,83 @@ class _ControlsPanelWidgetState extends State<ControlsPanelWidget>
           ],
         ),
         const SizedBox(height: 12),
-        ElevatedButton.icon(
-          onPressed: () => _showQrCodeDialog(context),
-          icon: const Icon(Icons.qr_code),
-          label: const Text("QR Kodu Ekle"),
+        Row(
+          children: [
+            Expanded(
+              child: ElevatedButton.icon(
+                onPressed: () => _showQrCodeDialog(context),
+                icon: const Icon(Icons.qr_code),
+                label: const Text("QR Kod"),
+              ),
+            ),
+            const SizedBox(width: 12),
+            // YENİ EKLENDİ: Şekil ekleme menüsü
+            Expanded(
+              child: PopupMenuButton<ShapeType>(
+                onSelected: provider.addShapeElement,
+                itemBuilder: (context) => [
+                  const PopupMenuItem(
+                    value: ShapeType.rectangle,
+                    child: Text("Dikdörtgen"),
+                  ),
+                  const PopupMenuItem(
+                    value: ShapeType.ellipse,
+                    child: Text("Elips"),
+                  ),
+                  const PopupMenuItem(
+                    value: ShapeType.line,
+                    child: Text("Çizgi"),
+                  ),
+                ],
+                child: Container(
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).primaryColor,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: const Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.format_shapes, color: Colors.white),
+                      SizedBox(width: 8),
+                      Text("Şekil", style: TextStyle(color: Colors.white)),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+        // GÜNCELLEME SONU
+        const Divider(height: 32),
+        // YENİ EKLENDİ: Şablon butonları
+        Text("Şablonlar", style: Theme.of(context).textTheme.titleLarge),
+        const SizedBox(height: 8),
+        Row(
+          children: [
+            Expanded(
+              child: ElevatedButton.icon(
+                onPressed: () => _showTemplateGallery(context),
+                icon: const Icon(Icons.collections),
+                label: const Text("Şablon Galerisi"),
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: ElevatedButton.icon(
+                onPressed: () {
+                  // TODO: Şablon adı sormak için bir dialog gösterilebilir.
+                  provider.saveCardAsTemplate("Yeni Şablon");
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text("Tasarım şablon olarak kaydedildi!"))
+                  );
+                },
+                icon: const Icon(Icons.save_as),
+                label: const Text("Farklı Kaydet"),
+                style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
+              ),
+            ),
+          ],
         ),
         const Divider(height: 32),
         Text("Katmanlar", style: Theme.of(context).textTheme.titleLarge),
@@ -319,7 +401,10 @@ class _ControlsPanelWidgetState extends State<ControlsPanelWidget>
                     ? Icons.image
                     : element.type == CardElementType.qrCode
                         ? Icons.qr_code
-                        : Icons.star),
+                        // YENİ EKLENDİ
+                        : element.type == CardElementType.shape
+                            ? Icons.format_shapes
+                            : Icons.star),
             title: Text(
               element.content.isEmpty ? element.type.name : element.content,
               maxLines: 1,
@@ -371,13 +456,14 @@ class _ControlsPanelWidgetState extends State<ControlsPanelWidget>
             key: ValueKey(element.id),
             initialValue: element.content,
             decoration: const InputDecoration(
-                labelText: "Metin İçeriği", border: OutlineInputBorder()),
+               labelText: "Metin İçeriği", border: OutlineInputBorder()),
             onChanged: (text) =>
                 updateProperty(text, (e, v) => e.copyWith(content: v)),
           ),
           const SizedBox(height: 16),
         ],
-        if (element.type != CardElementType.qrCode)
+        // GÜNCELLEME BAŞLANGICI: Renk seçici mantığı güncellendi
+        if (element.type != CardElementType.qrCode && element.type != CardElementType.shape)
           ListTile(
             contentPadding: EdgeInsets.zero,
             leading: const Icon(Icons.color_lens_outlined),
@@ -390,6 +476,14 @@ class _ControlsPanelWidgetState extends State<ControlsPanelWidget>
                   (e, v) => e.copyWith(style: e.style.copyWith(color: v)));
             }),
           ),
+        // GÜNCELLEME SONU
+        
+        // YENİ EKLENDİ: Şekil elemanı için özel kontroller
+        if (element.type == CardElementType.shape && element.shapeStyle != null) ...[
+          _buildShapeStyleControls(provider, element),
+          const Divider(),
+        ],
+        
         const Text("Opaklık", style: TextStyle(color: Colors.black54)),
         Slider(
           value: element.opacity,
@@ -406,10 +500,122 @@ class _ControlsPanelWidgetState extends State<ControlsPanelWidget>
         if (element.type == CardElementType.text) ...[
           _buildTextStyleControls(provider, element),
           const Divider(),
+          // YENİ EKLENDİ: Gelişmiş metin stili kontrolleri
+          _buildAdvancedTextStyleControls(provider, element),
+          const Divider(),
           _buildFontFamilySelector(provider, element),
           const Divider(),
         ],
         _buildLayerOrderControls(provider),
+      ],
+    );
+  }
+  
+  // YENİ EKLENDİ: Şekil stillerini (dolgu, kenarlık) düzenleyen widget
+  Widget _buildShapeStyleControls(BusinessCardProvider provider, CardElement element) {
+    final style = element.shapeStyle!;
+
+    void updateShapeStyle(ShapeStyle newStyle) {
+      provider.updateSelectedElementsProperties(
+          (e) => e.copyWith(shapeStyle: newStyle));
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text("Şekil Stili", style: Theme.of(context).textTheme.titleSmall),
+        if (style.shapeType != ShapeType.line)
+          ListTile(
+            contentPadding: EdgeInsets.zero,
+            title: const Text("Dolgu Rengi"),
+            trailing: CircleAvatar(backgroundColor: style.fillColor, radius: 15),
+            onTap: () => _showColorPicker(context, style.fillColor, (color) {
+              updateShapeStyle(style.copyWith(fillColor: color));
+            }),
+          ),
+        ListTile(
+          contentPadding: EdgeInsets.zero,
+          title: const Text("Kenarlık Rengi"),
+          trailing: CircleAvatar(backgroundColor: style.borderColor, radius: 15),
+          onTap: () => _showColorPicker(context, style.borderColor, (color) {
+            updateShapeStyle(style.copyWith(borderColor: color));
+          }),
+        ),
+        Row(children: [
+          const Text("Kenarlık Kalınlığı: "),
+          Expanded(
+            child: Slider(
+              value: style.borderWidth,
+              min: 0,
+              max: 20,
+              onChanged: (val) {
+                updateShapeStyle(style.copyWith(borderWidth: val));
+              },
+            ),
+          ),
+          Text(style.borderWidth.toStringAsFixed(1)),
+        ]),
+      ],
+    );
+  }
+
+  // YENİ EKLENDİ: Harf aralığı, satır yüksekliği ve gölge kontrolleri
+  Widget _buildAdvancedTextStyleControls(BusinessCardProvider provider, CardElement element) {
+    final style = element.style;
+    final hasShadow = style.shadows != null && style.shadows!.isNotEmpty;
+
+    void updateStyle(TextStyle newStyle) {
+      provider.updateSelectedElementsProperties((e) => e.copyWith(style: newStyle));
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text("Gelişmiş Metin Stili", style: Theme.of(context).textTheme.titleSmall),
+        SwitchListTile(
+          contentPadding: EdgeInsets.zero,
+          title: const Text("Gölge Ekle"),
+          value: hasShadow,
+          onChanged: (addShadow) {
+            final newShadows = addShadow
+                ? [
+                    const Shadow(
+                      blurRadius: 4.0,
+                      color: Colors.black54,
+                      offset: Offset(2.0, 2.0),
+                    ),
+                  ]
+                // HATA DÜZELTMESİ: null yerine boş bir liste gönderiyoruz.
+                : <Shadow>[];
+            updateStyle(style.copyWith(shadows: newShadows));
+          },
+        ),
+        const Text("Harf Aralığı", style: TextStyle(color: Colors.black54)),
+        Slider(
+          value: style.letterSpacing ?? 0.0,
+          min: -2.0,
+          max: 10.0,
+          divisions: 120,
+          label: (style.letterSpacing ?? 0.0).toStringAsFixed(1),
+          onChanged: (val) {
+            updateStyle(style.copyWith(letterSpacing: val));
+          },
+        ),
+        const Text("Satır Yüksekliği", style: TextStyle(color: Colors.black54)),
+        Slider(
+          value: style.height ?? 1.0,
+          min: 0.5,
+          max: 3.0,
+          divisions: 25,
+          label: (style.height ?? 1.0).toStringAsFixed(1),
+          onChanged: (val) {
+            updateStyle(style.copyWith(height: val));
+          },
+        ),
+        const Text(
+          "Not: Gölgeler PDF çıktısında görünmeyebilir.",
+          style: TextStyle(fontSize: 12, color: Colors.grey),
+        ),
       ],
     );
   }

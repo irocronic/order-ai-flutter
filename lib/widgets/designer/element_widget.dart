@@ -2,9 +2,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 import '../../models/business_card_model.dart';
 import '../../models/card_icon_enum.dart';
-import 'package:qr_flutter/qr_flutter.dart';
+// YENİ EKLENDİ
+import 'shape_painter.dart';
 
 class ElementWidget extends StatelessWidget {
   final CardElement element;
@@ -42,18 +44,33 @@ class ElementWidget extends StatelessWidget {
         try {
           final icon = CardIcon.values.byName(element.content);
           switch (icon) {
-            case CardIcon.phone: iconData = Icons.phone; break;
-            case CardIcon.email: iconData = Icons.email; break;
-            case CardIcon.web: iconData = Icons.language; break;
-            case CardIcon.location: iconData = Icons.location_on; break;
-            case CardIcon.linkedin: iconData = Icons.contact_mail; break;
-            case CardIcon.twitter: iconData = Icons.flutter_dash; break;
-            case CardIcon.github: iconData = Icons.code; break;
+            case CardIcon.phone:
+              iconData = Icons.phone;
+              break;
+            case CardIcon.email:
+              iconData = Icons.email;
+              break;
+            case CardIcon.web:
+              iconData = Icons.language;
+              break;
+            case CardIcon.location:
+              iconData = Icons.location_on;
+              break;
+            case CardIcon.linkedin:
+              iconData = Icons.contact_mail;
+              break;
+            case CardIcon.twitter:
+              iconData = Icons.flutter_dash;
+              break;
+            case CardIcon.github:
+              iconData = Icons.code;
+              break;
           }
         } catch (e) {
           iconData = Icons.circle;
         }
-        child = Icon(iconData, size: element.size.height, color: element.style.color);
+        child = Icon(iconData,
+            size: element.size.height, color: element.style.color);
         break;
       case CardElementType.image:
         if (element.imageData != null) {
@@ -78,13 +95,24 @@ class ElementWidget extends StatelessWidget {
         );
         break;
       case CardElementType.group:
-        // DÜZELTME: BorderStyle.dashed standart bir enum üyesi değil.
-        // Hata vermemesi için düz bir çerçeve ile değiştirildi.
         child = Container(
           decoration: BoxDecoration(
             border: Border.all(color: Colors.grey.withOpacity(0.5)),
           ),
         );
+        break;
+        
+      // YENİ EKLENDİ: Şekil elemanını çizmek için yeni case
+      case CardElementType.shape:
+        if (element.shapeStyle != null) {
+          child = CustomPaint(
+            painter: ShapePainter(element.shapeStyle!),
+            size: element.size,
+          );
+        } else {
+          // Fallback, normalde olmamalı
+          child = Container(color: Colors.red.withOpacity(0.5));
+        }
         break;
     }
 

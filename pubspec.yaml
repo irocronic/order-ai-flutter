@@ -83,3 +83,5 @@ flutter:
     - assets/sounds/setup/
     - assets/sounds/setup/tr/
     - assets/sounds/setup/en/
+    - assets/templates/
+    - assets/previews/

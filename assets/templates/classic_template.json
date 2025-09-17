@@ -1,0 +1,152 @@
+{
+    "gradientStartColor": 4294967295,
+    "gradientEndColor": null,
+    "gradientType": null,
+    "elements": [
+        {
+            "id": "a1b2c3d4-logo-h",
+            "type": "text",
+            "content": "H",
+            "position": {"dx": 75, "dy": 15},
+            "size": {"width": 200, "height": 75},
+            "style": { "color": 4278190080, "fontSize": 70, "fontStyle": "FontStyle.italic", "fontFamily": "Merriweather"},
+            "textAlign": "center", "rotation": 0.0, "opacity": 1.0
+        },
+        {
+            "id": "e5f6g7h8-name",
+            "type": "text",
+            "content": "HELİN KINAY",
+            "position": {"dx": 75, "dy": 80},
+            "size": {"width": 200, "height": 22},
+            "style": { "color": 4278190080, "fontSize": 18, "fontFamily": "Lato", "letterSpacing": 4.0},
+            "textAlign": "center", "rotation": 0.0, "opacity": 1.0
+        },
+        {
+            "id": "i9j0k1l2-title",
+            "type": "text",
+            "content": "İç Mimar",
+            "position": {"dx": 75, "dy": 102},
+            "size": {"width": 200, "height": 18},
+            "style": { "color": 4278190080, "fontSize": 14, "fontFamily": "Lato", "letterSpacing": 2.0},
+            "textAlign": "center", "rotation": 0.0, "opacity": 1.0
+        },
+        {
+            "id": "icon-phone",
+            "type": "icon",
+            "content": "phone",
+            "position": {"dx": 15, "dy": 130},
+            "size": {"width": 12, "height": 12},
+            "style": {"color": 4278190080},
+            "rotation": 0.0, "opacity": 1.0
+        },
+        {
+            "id": "text-phone",
+            "type": "text",
+            "content": "0 212 123 24 25",
+            "position": {"dx": 35, "dy": 129},
+            "size": {"width": 150, "height": 14},
+            "style": {"color": 4278190080, "fontSize": 11, "fontFamily": "Lato"},
+            "textAlign": "left", "rotation": 0.0, "opacity": 1.0
+        },
+        {
+            "id": "icon-web",
+            "type": "icon",
+            "content": "web",
+            "position": {"dx": 15, "dy": 145},
+            "size": {"width": 12, "height": 12},
+            "style": {"color": 4278190080},
+            "rotation": 0.0, "opacity": 1.0
+        },
+        {
+            "id": "text-web",
+            "type": "text",
+            "content": "www.harikasite.web.tr",
+            "position": {"dx": 35, "dy": 144},
+            "size": {"width": 150, "height": 14},
+            "style": {"color": 4278190080, "fontSize": 11, "fontFamily": "Lato"},
+            "textAlign": "left", "rotation": 0.0, "opacity": 1.0
+        },
+        {
+            "id": "icon-email",
+            "type": "icon",
+            "content": "email",
+            "position": {"dx": 15, "dy": 160},
+            "size": {"width": 12, "height": 12},
+            "style": {"color": 4278190080},
+            "rotation": 0.0, "opacity": 1.0
+        },
+        {
+            "id": "text-email",
+            "type": "text",
+            "content": "merhaba@harikasite.web.tr",
+            "position": {"dx": 35, "dy": 159},
+            "size": {"width": 150, "height": 14},
+            "style": {"color": 4278190080, "fontSize": 11, "fontFamily": "Lato"},
+            "textAlign": "left", "rotation": 0.0, "opacity": 1.0
+        },
+        {
+            "id": "icon-location",
+            "type": "icon",
+            "content": "location",
+            "position": {"dx": 15, "dy": 175},
+            "size": {"width": 12, "height": 12},
+            "style": {"color": 4278190080},
+            "rotation": 0.0, "opacity": 1.0
+        },
+        {
+            "id": "text-location",
+            "type": "text",
+            "content": "Karesi/Balıkesir",
+            "position": {"dx": 35, "dy": 174},
+            "size": {"width": 150, "height": 14},
+            "style": {"color": 4278190080, "fontSize": 11, "fontFamily": "Lato"},
+            "textAlign": "left", "rotation": 0.0, "opacity": 1.0
+        },
+        {
+            "id": "shape-1",
+            "type": "shape",
+            "content": "rectangle",
+            "position": {"dx": 280, "dy": 110},
+            "size": {"width": 10, "height": 80},
+            "shapeStyle": {"shapeType": "rectangle", "fillColor": 4292927700, "borderColor": 0, "borderWidth": 0.0},
+            "rotation": 0.0, "opacity": 0.8
+        },
+        {
+            "id": "shape-2",
+            "type": "shape",
+            "content": "rectangle",
+            "position": {"dx": 295, "dy": 125},
+            "size": {"width": 10, "height": 65},
+            "shapeStyle": {"shapeType": "rectangle", "fillColor": 4292927700, "borderColor": 0, "borderWidth": 0.0},
+            "rotation": 0.0, "opacity": 0.6
+        },
+        {
+            "id": "shape-3",
+            "type": "shape",
+            "content": "rectangle",
+            "position": {"dx": 310, "dy": 100},
+            "size": {"width": 10, "height": 90},
+            "shapeStyle": {"shapeType": "rectangle", "fillColor": 4292927700, "borderColor": 0, "borderWidth": 0.0},
+            "rotation": 0.0, "opacity": 1.0
+        },
+        {
+            "id": "shape-4",
+            "type": "shape",
+            "content": "rectangle",
+            "position": {"dx": 325, "dy": 135},
+            "size": {"width": 10, "height": 55},
+            "shapeStyle": {"shapeType": "rectangle", "fillColor": 4292927700, "borderColor": 0, "borderWidth": 0.0},
+            "rotation": 0.0, "opacity": 0.5
+        },
+        {
+            "id": "shape-5",
+            "type": "shape",
+            "content": "rectangle",
+            "position": {"dx": 340, "dy": 120},
+            "size": {"width": 10, "height": 70},
+            "shapeStyle": {"shapeType": "rectangle", "fillColor": 4292927700, "borderColor": 0, "borderWidth": 0.0},
+            "rotation": 0.0, "opacity": 0.7
+        }
+    ],
+    "dimensions": {"width": 350, "height": 200}
+}

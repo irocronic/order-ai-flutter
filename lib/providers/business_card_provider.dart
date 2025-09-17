@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:collection/collection.dart';
 import 'package:uuid/uuid.dart';
 import '../models/business_card_model.dart';
+import '../models/shape_style.dart';
 import 'commands.dart';
 
 // Hizalama çizgilerini temsil eden sınıf.
@@ -221,7 +222,7 @@ class BusinessCardProvider extends ChangeNotifier {
 
   void addTextElement() {
     final newElement = CardElement(
-      id: UniqueKey().toString(),
+      id: const Uuid().v4(), // Tutarlılık için Uuid kullanıldı.
       type: CardElementType.text,
       content: 'Yeni Metin',
       position: const Offset(20, 100),
@@ -234,9 +235,30 @@ class BusinessCardProvider extends ChangeNotifier {
     selectElement(newElement.id);
   }
 
+  // YENİ EKLENDİ: Şekil elemanı ekleme metodu
+  void addShapeElement(ShapeType shapeType) {
+    final newElement = CardElement(
+      id: const Uuid().v4(),
+      type: CardElementType.shape,
+      content: shapeType.name, // İçerik olarak tipini tutabiliriz.
+      position: const Offset(75, 75),
+      size: shapeType == ShapeType.line ? const Size(100, 4) : const Size(100, 100),
+      style: const TextStyle(), // Şekiller için genel stil kullanılmıyor.
+      shapeStyle: ShapeStyle(
+        shapeType: shapeType,
+        fillColor: shapeType == ShapeType.line ? Colors.transparent : Colors.blue.withOpacity(0.7),
+        borderColor: Colors.black,
+        borderWidth: 4,
+      ),
+    );
+    final command = AddElementCommand(this, newElement);
+    execute(command);
+    selectElement(newElement.id);
+  }
+
   void addImageElement(Uint8List imageData) {
     final newElement = CardElement(
-      id: UniqueKey().toString(),
+      id: const Uuid().v4(), // Tutarlılık için Uuid kullanıldı.
       type: CardElementType.image,
       content: '',
       imageData: imageData,
@@ -251,7 +273,7 @@ class BusinessCardProvider extends ChangeNotifier {
 
   void addQrCodeElement(String data) {
     final newElement = CardElement(
-      id: UniqueKey().toString(),
+      id: const Uuid().v4(), // Tutarlılık için Uuid kullanıldı.
       type: CardElementType.qrCode,
       content: data,
       position: const Offset(50, 50),
@@ -304,15 +326,31 @@ class BusinessCardProvider extends ChangeNotifier {
     await prefs.setString('saved_business_card', jsonString);
   }
 
+  // YENİ EKLENDİ: Kullanıcının kendi şablonlarını kaydetmesi için.
+  Future<void> saveCardAsTemplate(String templateName) async {
+    final prefs = await SharedPreferences.getInstance();
+    final String jsonString = jsonEncode(_cardModel.toJson());
+    // Şablonları ayrı bir anahtar altında listeliyoruz.
+    final List<String> templates = prefs.getStringList('user_templates') ?? [];
+    // Basit bir format: "isim|json_verisi"
+    templates.add("$templateName|$jsonString");
+    await prefs.setStringList('user_templates', templates);
+  }
+
   Future<void> loadCard() async {
     final prefs = await SharedPreferences.getInstance();
     final String? jsonString = prefs.getString('saved_business_card');
     if (jsonString != null) {
-      _cardModel = BusinessCardModel.fromJson(jsonDecode(jsonString));
-      _undoStack.clear();
-      _redoStack.clear();
-      _selectedElementIds = [];
-      notifyListeners();
+      loadCardFromJson(jsonString);
     }
+  }
+
+  // YENİ EKLENDİ: JSON string'den kart yükleyen merkezi bir metot.
+  void loadCardFromJson(String jsonString) {
+    _cardModel = BusinessCardModel.fromJson(jsonDecode(jsonString));
+    _undoStack.clear();
+    _redoStack.clear();
+    _selectedElementIds = [];
+    notifyListeners();
   }
 }

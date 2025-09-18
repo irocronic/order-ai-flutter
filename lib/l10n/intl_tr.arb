@@ -3942,5 +3942,58 @@
     "homeMenuBusinessCard": "Kartvizit Tasarımı",
     "@homeMenuBusinessCard": {
         "description": "Ana menüdeki kartvizit tasarım ekranına yönlendiren butonun başlığı."
+    },
+    "tableLayoutScreenTitle": "Masa Düzeni Planlayıcısı",
+    "@tableLayoutScreenTitle": {
+        "description": "Title for the table layout editor screen"
+    },
+    "tableLayoutSuccessSave": "Masa düzeni başarıyla kaydedildi.",
+    "@tableLayoutSuccessSave": {
+        "description": "Success message when table layout is saved"
+    },
+    "tableLayoutErrorSave": "Masa düzeni kaydedilemedi.",
+    "@tableLayoutErrorSave": {
+        "description": "Error message when table layout fails to save"
+    },
+    "manageTablesTooltipLayoutPlanner": "Masa Düzenini Planla",
+    "@manageTablesTooltipLayoutPlanner": {
+        "description": "Tooltip for the layout planner button on the manage tables screen"
+    },
+    "tableLayoutPaletteAddElements": "Eleman Ekle",
+    "tableLayoutPaletteAddText": "Metin Ekle",
+    "tableLayoutPaletteDefaultText": "Yeni Metin",
+    "tableLayoutPaletteAddRectangle": "Dikdörtgen Ekle",
+    "tableLayoutPaletteAddEllipse": "Elips Ekle",
+    "tableLayoutPaletteAddLine": "Çizgi Ekle",
+    "tableLayoutPaletteUnplacedTables": "Yerleştirilmemiş Masalar ({count})",
+    "@tableLayoutPaletteUnplacedTables": {
+        "description": "Number of unplaced tables",
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "tableLayoutPaletteAllTablesPlaced": "Tüm masalar yerleştirildi.",
+    "tableLayoutPaletteTableLabel": "Masa {tableNumber}",
+    "@tableLayoutPaletteTableLabel": {
+        "description": "Label for a table with its number",
+        "placeholders": {
+            "tableNumber": {
+                "type": "String"
+            }
+        }
+    },
+    "tableLayoutSuccessSave": "Masa düzeni başarıyla kaydedildi.",
+    "@tableLayoutSuccessSave": {
+        "description": "Success message when table layout is saved"
+    },
+    "tableLayoutErrorSave": "Masa düzeni kaydedilemedi.",
+    "@tableLayoutErrorSave": {
+        "description": "Error message when table layout fails to save"
+    },
+    "manageTablesTooltipLayoutPlanner": "Masa Düzenini Planla",
+    "@manageTablesTooltipLayoutPlanner": {
+        "description": "Tooltip for the layout planner button on the manage tables screen"
     }
 }

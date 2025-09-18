@@ -1,4 +1,5 @@
 // lib/widgets/designer/transformable_element_widget.dart
+// (Güncellenmiş: rotation handle için global/local koordinat düzeltmesi)
 
 import 'dart:math';
 import 'package:flutter/material.dart';
@@ -27,11 +28,12 @@ class _TransformableElementWidgetState extends State<TransformableElementWidget>
   late BusinessCardModel _initialModel;
   late DragStartDetails _dragStartDetails;
   late double _initialRotation;
+  Offset? _centerGlobal;
 
   @override
   Widget build(BuildContext context) {
     // LOG: Bu widget'ın hangi veriyle oluşturulduğunu görelim.
-    print('--- Building TransformableElement ID: ${widget.element.id} at ${widget.element.position} with size ${widget.element.size}');
+    // print('--- Building TransformableElement ID: ${widget.element.id} at ${widget.element.position} with size ${widget.element.size}');
 
     final provider = context.read<BusinessCardProvider>();
 
@@ -87,12 +89,22 @@ class _TransformableElementWidgetState extends State<TransformableElementWidget>
                 _initialModel = provider.cardModel;
                 _dragStartDetails = details;
                 _initialRotation = widget.element.rotation;
+
+                // Burada element merkezinin global koordinatını hesaplıyoruz.
+                final renderBox = context.findRenderObject() as RenderBox?;
+                if (renderBox != null) {
+                  // TransformableElementWidget Positioned olduğu için,
+                  // renderBox'ın lokal (0,0) noktası elementin sol üst köşesiyle eşleşir.
+                  _centerGlobal = renderBox.localToGlobal(widget.element.size.center(Offset.zero));
+                } else {
+                  _centerGlobal = null;
+                }
               },
               onPanUpdate: (details) {
-                final center = widget.element.position +
-                    widget.element.size.center(Offset.zero);
-                final startVector = _dragStartDetails.globalPosition - center;
-                final currentVector = details.globalPosition - center;
+                if (_centerGlobal == null) return;
+
+                final startVector = _dragStartDetails.globalPosition - _centerGlobal!;
+                final currentVector = details.globalPosition - _centerGlobal!;
                 final angleDelta =
                     currentVector.direction - startVector.direction;
                 final newElements = provider.cardModel.elements.map((e) {
@@ -128,12 +140,12 @@ class _TransformableElementWidgetState extends State<TransformableElementWidget>
       top: widget.element.position.dy,
       child: Listener(
         onPointerDown: (_) {
-          print('>>> LISTENER onPointerDown -- Element ID: ${widget.element.id}');
+          // print('>>> LISTENER onPointerDown -- Element ID: ${widget.element.id}');
         },
         child: GestureDetector(
           behavior: HitTestBehavior.opaque,
           onTap: () {
-            print('>>> GESTUREDETECTOR onTap -- Element ID: ${widget.element.id} -- Selecting element...');
+            // print('>>> GESTUREDETECTOR onTap -- Element ID: ${widget.element.id} -- Selecting element...');
             provider.selectElement(
               widget.element.id,
               addToSelection: provider.isShiftPressed,

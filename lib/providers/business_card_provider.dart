@@ -1,4 +1,5 @@
 // lib/providers/business_card_provider.dart
+// (Güncellenmiş: const Uuid() hataları ve clipboard derin kopya düzeltmeleri)
 
 import 'dart:convert';
 import 'dart:typed_data';
@@ -37,7 +38,7 @@ class BusinessCardProvider extends ChangeNotifier {
   bool get isShiftPressed => _isShiftPressed;
   List<AlignmentGuide> get activeGuides => _activeGuides;
   
-  // YENİ EKLENEN GETTER
+  // YENİ EKLENDEN GETTER
   bool get isCanvasPanningEnabled => _isCanvasPanningEnabled;
 
   bool get canUndo => _undoStack.isNotEmpty;
@@ -181,7 +182,8 @@ class BusinessCardProvider extends ChangeNotifier {
   }
 
   void copySelectedElements() {
-    _clipboard = selectedElements;
+    // Derin kopya alıyoruz, böylece model değiştiğinde clipboard bozulmaz.
+    _clipboard = selectedElements.map((e) => CardElement.fromJson(e.toJson())).toList();
   }
 
   void pasteElements() {
@@ -189,7 +191,7 @@ class BusinessCardProvider extends ChangeNotifier {
 
     final oldModel = cardModel;
     final newElements = List<CardElement>.from(oldModel.elements);
-    const uuid = Uuid();
+    final uuid = Uuid();
 
     List<String> newSelectedIds = [];
     for (var element in _clipboard) {
@@ -222,7 +224,7 @@ class BusinessCardProvider extends ChangeNotifier {
 
   void addTextElement() {
     final newElement = CardElement(
-      id: const Uuid().v4(), // Tutarlılık için Uuid kullanıldı.
+      id: Uuid().v4(), // Uuid artık const değil.
       type: CardElementType.text,
       content: 'Yeni Metin',
       position: const Offset(20, 100),
@@ -238,7 +240,7 @@ class BusinessCardProvider extends ChangeNotifier {
   // YENİ EKLENDİ: Şekil elemanı ekleme metodu
   void addShapeElement(ShapeType shapeType) {
     final newElement = CardElement(
-      id: const Uuid().v4(),
+      id: Uuid().v4(),
       type: CardElementType.shape,
       content: shapeType.name, // İçerik olarak tipini tutabiliriz.
       position: const Offset(75, 75),
@@ -258,7 +260,7 @@ class BusinessCardProvider extends ChangeNotifier {
 
   void addImageElement(Uint8List imageData) {
     final newElement = CardElement(
-      id: const Uuid().v4(), // Tutarlılık için Uuid kullanıldı.
+      id: Uuid().v4(),
       type: CardElementType.image,
       content: '',
       imageData: imageData,
@@ -273,7 +275,7 @@ class BusinessCardProvider extends ChangeNotifier {
 
   void addQrCodeElement(String data) {
     final newElement = CardElement(
-      id: const Uuid().v4(), // Tutarlılık için Uuid kullanıldı.
+      id: Uuid().v4(),
       type: CardElementType.qrCode,
       content: data,
       position: const Offset(50, 50),
@@ -330,11 +332,11 @@ class BusinessCardProvider extends ChangeNotifier {
   Future<void> saveCardAsTemplate(String templateName) async {
     final prefs = await SharedPreferences.getInstance();
     final String jsonString = jsonEncode(_cardModel.toJson());
-    // Şablonları ayrı bir anahtar altında listeliyoruz.
-    final List<String> templates = prefs.getStringList('user_templates') ?? [];
-    // Basit bir format: "isim|json_verisi"
-    templates.add("$templateName|$jsonString");
-    await prefs.setStringList('user_templates', templates);
+    // Öneri: Daha sağlam bir format kullanmak için map olarak kaydediyoruz.
+    final List<String> existing = prefs.getStringList('user_templates') ?? [];
+    final newEntry = jsonEncode({'name': templateName, 'json': jsonString});
+    existing.add(newEntry);
+    await prefs.setStringList('user_templates', existing);
   }
 
   Future<void> loadCard() async {

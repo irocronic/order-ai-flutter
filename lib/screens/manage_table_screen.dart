@@ -1,5 +1,3 @@
-// lib/screens/manage_table_screen.dart
-
 import '../services/notification_center.dart';
 import '../services/refresh_manager.dart';
 import 'dart:convert';
@@ -21,8 +19,9 @@ import 'dart:io' as io;
 import 'package:printing/printing.dart';
 // Web desteği için ekle:
 import 'package:flutter/foundation.dart' show kIsWeb;
-// HATA DÜZELTMESİ: 'dart:html' import'u mobil derlemede hataya neden olduğu için kaldırıldı.
-// import 'dart:html' as html;
+// YENİ EKLENDİ: Masa düzeni ekranını import ediyoruz.
+import 'table_layout_screen.dart';
+
 
 class ManageTableScreen extends StatefulWidget {
   final String token;
@@ -107,6 +106,12 @@ class _ManageTableScreenState extends State<ManageTableScreen> {
           isLoading = false;
         });
       }
+    } finally {
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
+      }
     }
   }
 
@@ -172,7 +177,7 @@ class _ManageTableScreenState extends State<ManageTableScreen> {
             SnackBar(
                 content: Text("Web'de indirme özelliği şu an desteklenmiyor."),
                 backgroundColor: Colors.orange),
-          );
+           );
         } else {
           // Mobil için olan kod değiştirilmedi.
           var status = await Permission.storage.status;
@@ -193,7 +198,7 @@ class _ManageTableScreenState extends State<ManageTableScreen> {
           if (result.type != ResultType.done) throw Exception("Dosya açılamadı: ${result.message}");
 
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('${l10n.manageTablesSuccessQrDownloaded}: $filePath'), backgroundColor: Colors.green),
+           SnackBar(content: Text('${l10n.manageTablesSuccessQrDownloaded}: $filePath'), backgroundColor: Colors.green),
           );
         }
       }
@@ -313,7 +318,7 @@ class _ManageTableScreenState extends State<ManageTableScreen> {
                             if (table == null) {
                               response = await http.post(
                                 ApiService.getUrl('/tables/'),
-                                 headers: {
+                                headers: {
                                   "Content-Type": "application/json",
                                   "Authorization": "Bearer ${widget.token}",
                                  },
@@ -321,7 +326,7 @@ class _ManageTableScreenState extends State<ManageTableScreen> {
                                   'business': widget.businessId,
                                   'table_number': tableNumber,
                                 }),
-                              );
+                               );
                             } else {
                               response = await http.put(
                                 ApiService.getUrl('/tables/${table['id']}/'),
@@ -333,14 +338,14 @@ class _ManageTableScreenState extends State<ManageTableScreen> {
                                   'business': widget.businessId,
                                    'table_number': tableNumber,
                                 }),
-                              );
+                           );
                             }
 
                             if (!mounted) return;
                             if (response.statusCode == 201 || response.statusCode == 200) {
                               setStateDialog(() {
                                 dialogMessage = table == null
-                                    ? dialogL10n.manageTablesInfoCreated
+                                     ? dialogL10n.manageTablesInfoCreated
                                     : dialogL10n.manageTablesInfoUpdated;
                               });
                               await fetchTables();
@@ -365,13 +370,13 @@ class _ManageTableScreenState extends State<ManageTableScreen> {
                                 setStateDialog(() => dialogMessage = errorMsg);
                               }
                             }
-                          } catch (e) {
+                           } catch (e) {
                             if (mounted) setStateDialog(() => dialogMessage = dialogL10n.errorGeneral(e.toString()));
                           } finally {
                             if (mounted) setStateDialog(() => isDialogSubmitting = false);
                           }
                         }
-                      },
+                       },
                 child: isDialogSubmitting
                     ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2))
                     : Text(table == null ? dialogL10n.manageTablesButtonCreate : l10n.updateButton),
@@ -396,7 +401,7 @@ class _ManageTableScreenState extends State<ManageTableScreen> {
           content: Text(dialogL10n.manageTablesDialogDeleteContent),
           actions: [
             TextButton(
-              onPressed: () => Navigator.pop(dialogContext, false),
+               onPressed: () => Navigator.pop(dialogContext, false),
               child: Text(dialogL10n.dialogButtonCancel),
             ),
             ElevatedButton(
@@ -489,7 +494,7 @@ class _ManageTableScreenState extends State<ManageTableScreen> {
                         dialogL10n.manageTablesErrorCreatingQr,
                         textAlign: TextAlign.center,
                       ),
-                    );
+                   );
                   },
                 ),
                 const SizedBox(height: 10),
@@ -557,12 +562,23 @@ class _ManageTableScreenState extends State<ManageTableScreen> {
           ),
         ),
         actions: [
+          // YENİ EKLENDİ: Masa Düzeni Planlayıcısı için kısayol butonu
+          IconButton(
+            icon: const Icon(Icons.view_quilt_outlined, color: Colors.white),
+            tooltip: "Masa Düzenini Planla", // Bunu .arb dosyanıza ekleyebilirsiniz: manageTablesTooltipLayoutPlanner
+            onPressed: isLoading ? null : () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const TableLayoutScreen()),
+              );
+            },
+          ),
           if (!_isExporting)
             IconButton(
               icon: const Icon(Icons.picture_as_pdf_outlined, color: Colors.white),
               tooltip: l10n.manageTablesTooltipExportQr,
               onPressed: isLoading || tables.isEmpty ? null : _exportAllQrCodes,
-            ),
+           ),
           if (_isExporting)
             const Padding(
               padding: EdgeInsets.all(16.0),
@@ -638,7 +654,7 @@ class _ManageTableScreenState extends State<ManageTableScreen> {
                                           style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                                         ),
                                         Column(
-                                           crossAxisAlignment: CrossAxisAlignment.start,
+                                          crossAxisAlignment: CrossAxisAlignment.start,
                                           mainAxisSize: MainAxisSize.min,
                                            children: [
                                             Text(
@@ -665,7 +681,7 @@ class _ManageTableScreenState extends State<ManageTableScreen> {
                                             ),
                                           ],
                                         ),
-                                         Row(
+                                        Row(
                                           mainAxisAlignment: MainAxisAlignment.end,
                                           children: [
                                             if (tableUuid.isNotEmpty)

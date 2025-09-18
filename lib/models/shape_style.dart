@@ -1,4 +1,4 @@
-// YENİ DOSYA: lib/models/shape_style.dart
+// lib/models/shape_style.dart
 
 import 'package:flutter/material.dart';
 
@@ -40,12 +40,39 @@ class ShapeStyle {
         'borderWidth': borderWidth,
       };
 
+  // Yardımcı: JSON'dan gelen renk değeri hem int hem de hex string olabileceği için
+  // esnek parse yapan fonksiyon.
+  static Color parseColor(dynamic jsonColor) {
+    try {
+      if (jsonColor == null) return Colors.blue;
+      if (jsonColor is int) return Color(jsonColor);
+      if (jsonColor is String) {
+        // Örn: "#RRGGBB" veya "RRGGBB" veya "#AARRGGBB"
+        String s = jsonColor.trim();
+        if (s.startsWith('#')) s = s.substring(1);
+        // Eğer alpha yoksa FF ekle
+        if (s.length == 6) s = 'FF' + s;
+        return Color(int.parse(s, radix: 16));
+      }
+    } catch (_) {
+      // fallback
+    }
+    return Colors.blue;
+  }
+
   factory ShapeStyle.fromJson(Map<String, dynamic> json) {
     return ShapeStyle(
-      shapeType: ShapeType.values.byName(json['shapeType'] ?? 'rectangle'),
-      fillColor: Color(json['fillColor'] ?? Colors.blue.value),
-      borderColor: Color(json['borderColor'] ?? Colors.black.value),
-      borderWidth: json['borderWidth'] ?? 2.0,
+      shapeType: json.containsKey('shapeType')
+          ? ShapeType.values.firstWhere(
+              (e) => e.name == (json['shapeType'] as String? ?? 'rectangle'),
+              orElse: () => ShapeType.rectangle,
+            )
+          : ShapeType.rectangle,
+      fillColor: parseColor(json['fillColor'] ?? json['fill_color']),
+      borderColor: parseColor(json['borderColor'] ?? json['border_color']),
+      borderWidth: (json['borderWidth'] ?? json['border_width'] ?? 2.0) is num
+          ? (json['borderWidth'] ?? json['border_width'] ?? 2.0).toDouble()
+          : 2.0,
     );
   }
 

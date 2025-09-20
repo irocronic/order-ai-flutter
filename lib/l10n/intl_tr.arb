@@ -3995,5 +3995,11 @@
     "manageTablesTooltipLayoutPlanner": "Masa Düzenini Planla",
     "@manageTablesTooltipLayoutPlanner": {
         "description": "Tooltip for the layout planner button on the manage tables screen"
-    }
+    },
+    "tableLayoutScreenTitle": "Masa Düzeni Planlayıcısı",
+    "buttonSaveChanges": "Değişiklikleri Kaydet",
+    "tableLayoutSuccessSave": "Masa düzeni başarıyla kaydedildi.",
+    "tableLayoutErrorSave": "Masa düzeni kaydedilirken hata oluştu.",
+    "tableLayoutToggleGrid": "Izgarayı ve Hizalamayı Aç/Kapat",
+    "unplacedTablesTitle": "Yerleştirilmemiş Masalar"
 }

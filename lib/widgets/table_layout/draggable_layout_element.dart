@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../models/layout_element.dart';
 import '../../providers/table_layout_provider.dart';
-import 'element_renderer.dart'; // Bu da elemanları çizecek widget
-import 'element_editor.dart'; // Düzenleyici modal'ı açmak için
+import 'element_renderer.dart';
+import 'element_editor.dart';
 
 class DraggableLayoutElement extends StatelessWidget {
   final LayoutElement element;
@@ -19,48 +19,58 @@ class DraggableLayoutElement extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<TableLayoutProvider>(context, listen: false);
-    final isSelected = provider.selectedItem == element;
+    final provider = context.read<TableLayoutProvider>();
+    final isSelected = provider.selectedItem is LayoutElement && (provider.selectedItem as LayoutElement).id == element.id;
 
-    return Draggable<LayoutElement>(
-      data: element,
-      feedback: Material(
-        color: Colors.transparent,
-        child: ElementRenderer(element: element, isSelected: false),
-      ),
-      childWhenDragging: Container(),
-      onDragStarted: () {
-        provider.selectItem(element);
-      },
-      onDragEnd: (details) {
-        // DragTarget canvas tarafından yönetiliyor.
-      },
-      child: GestureDetector(
-        onTap: () {
+    return Positioned(
+      left: element.position.dx,
+      top: element.position.dy,
+      child: Draggable<LayoutElement>(
+        data: element,
+        feedback: Material(
+          color: Colors.transparent,
+          child: ElementRenderer(element: element, isSelected: true),
+        ),
+        childWhenDragging: Opacity(
+          opacity: 0.3,
+          child: ElementRenderer(element: element, isSelected: isSelected),
+        ),
+        onDragStarted: () {
           provider.selectItem(element);
         },
-        onDoubleTap: () async {
-          // Burada mevcut provider'ı doğrudan ElementEditor'a geçiriyoruz.
-          await showDialog(
-            context: context,
-            useRootNavigator: false,
-            builder: (dialogContext) => ElementEditor(
-              element: element,
-              provider: provider, // <-- provider'ı geçiriyoruz
-            ),
-          );
+        // GÜNCELLENDİ: Sürükleme bittiğinde artık sadece global ekran
+        // pozisyonunu provider'a gönderiyoruz. Provider, bu pozisyonu
+        // canvas'ın lokal koordinatına kendisi çevirecek.
+        onDragEnd: (details) {
+          provider.updateItemPositionAfterDrag(element, details.offset);
         },
-        onLongPress: () async {
-          await showDialog(
-            context: context,
-            useRootNavigator: false,
-            builder: (dialogContext) => ElementEditor(
-              element: element,
-              provider: provider,
-            ),
-          );
-        },
-        child: ElementRenderer(element: element, isSelected: isSelected),
+        child: GestureDetector(
+          onTap: () {
+            provider.selectItem(element);
+          },
+          // GÜNCELLENDİ: ElementEditor'ı yeni haliyle çağırıyoruz.
+          // Provider'ı doğrudan vermek yerine 'onSave' callback'i tanımlıyoruz.
+          onDoubleTap: () async {
+            await showDialog(
+              context: context,
+              useRootNavigator: false,
+              builder: (dialogContext) => ElementEditor(
+                element: element,
+                onSave: (updatedElement) {
+                  // ElementEditor'dan dönen güncel element bilgisini
+                  // provider'daki metot ile state'e işliyoruz.
+                  provider.updateElementProperties(
+                    element,
+                    size: updatedElement.size,
+                    rotation: updatedElement.rotation,
+                    styleUpdates: updatedElement.styleProperties,
+                  );
+                },
+              ),
+            );
+          },
+          child: ElementRenderer(element: element, isSelected: isSelected),
+        ),
       ),
     );
   }

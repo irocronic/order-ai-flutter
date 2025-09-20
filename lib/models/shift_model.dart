@@ -1,3 +1,5 @@
+// lib/models/shift_model.dart
+
 import 'package:flutter/material.dart';
 
 class Shift {

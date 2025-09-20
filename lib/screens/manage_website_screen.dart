@@ -3,9 +3,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart'; // YENİ EKLENDİ
 import '../services/user_session.dart';
 import '../services/website_service.dart';
 import '../models/business_website.dart';
+import 'map_picker_screen.dart'; // YENİ EKLENDİ
 
 class ManageWebsiteScreen extends StatefulWidget {
   const ManageWebsiteScreen({Key? key}) : super(key: key);
@@ -99,7 +101,7 @@ class _ManageWebsiteScreenState extends State<ManageWebsiteScreen> {
     _controllers['map_latitude']?.text = data.mapLatitude?.toString() ?? '';
     _controllers['map_longitude']?.text = data.mapLongitude?.toString() ?? '';
     _controllers['map_zoom_level']?.text = data.mapZoomLevel.toString();
-    
+
     _showMenu = data.showMenu;
     _showContact = data.showContact;
     _showMap = data.showMap;
@@ -135,13 +137,18 @@ class _ManageWebsiteScreenState extends State<ManageWebsiteScreen> {
         allowReservations: _allowReservations,
         allowOnlineOrdering: _allowOnlineOrdering,
         isActive: _websiteData?.isActive ?? true,
-        mapLatitude: _controllers['map_latitude']!.text.isNotEmpty ? double.parse(_controllers['map_latitude']!.text) : null,
-        mapLongitude: _controllers['map_longitude']!.text.isNotEmpty ? double.parse(_controllers['map_longitude']!.text) : null,
+        mapLatitude: _controllers['map_latitude']!.text.isNotEmpty
+            ? double.parse(_controllers['map_latitude']!.text)
+            : null,
+        mapLongitude: _controllers['map_longitude']!.text.isNotEmpty
+            ? double.parse(_controllers['map_longitude']!.text)
+            : null,
         mapZoomLevel: int.parse(_controllers['map_zoom_level']!.text),
       );
 
       await WebsiteService.updateWebsiteDetails(
-          UserSession.token, updatedData.toJsonForUpdate(
+          UserSession.token,
+          updatedData.toJsonForUpdate(
             aboutTitle: updatedData.aboutTitle ?? '',
             aboutDescription: updatedData.aboutDescription ?? '',
             aboutImage: updatedData.aboutImage,
@@ -176,13 +183,40 @@ class _ManageWebsiteScreenState extends State<ManageWebsiteScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-              content: Text(
-                  l10n.websiteSettingsErrorSave(e.toString().replaceFirst("Exception: ", ""))),
+              content: Text(l10n
+                  .websiteSettingsErrorSave(e.toString().replaceFirst("Exception: ", ""))),
               backgroundColor: Colors.red),
         );
       }
     } finally {
       if (mounted) setState(() => _isLoading = false);
+    }
+  }
+
+  // YENİ EKLENEN METOT
+  Future<void> _openMapPicker() async {
+    // Mevcut değerleri al, eğer geçersizse varsayılan bir konum kullan
+    final currentLat = double.tryParse(_controllers['map_latitude']!.text);
+    final currentLng = double.tryParse(_controllers['map_longitude']!.text);
+
+    LatLng initialLatLng = const LatLng(39.9334, 32.8597); // Varsayılan Ankara
+    if (currentLat != null && currentLng != null) {
+      initialLatLng = LatLng(currentLat, currentLng);
+    }
+
+    // MapPickerScreen'i aç ve bir sonuç bekle (seçilen LatLng)
+    final selectedLocation = await Navigator.of(context).push<LatLng>(
+      MaterialPageRoute(
+        builder: (ctx) => MapPickerScreen(initialLocation: initialLatLng),
+      ),
+    );
+
+    // Eğer kullanıcı bir konum seçip onayladıysa...
+    if (selectedLocation != null) {
+      setState(() {
+        _controllers['map_latitude']?.text = selectedLocation.latitude.toString();
+        _controllers['map_longitude']?.text = selectedLocation.longitude.toString();
+      });
     }
   }
 
@@ -194,7 +228,8 @@ class _ManageWebsiteScreenState extends State<ManageWebsiteScreen> {
     return Color(int.parse(hexColor, radix: 16));
   }
 
-  void _showColorPicker(BuildContext context, Color initialColor, ValueChanged<Color> onColorChanged) {
+  void _showColorPicker(
+      BuildContext context, Color initialColor, ValueChanged<Color> onColorChanged) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -222,9 +257,10 @@ class _ManageWebsiteScreenState extends State<ManageWebsiteScreen> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return Scaffold(
-      // DEĞİŞİKLİK: AppBar tasarımı güncellendi.
       appBar: AppBar(
-        title: Text(l10n.homeMenuWebsiteSettings, style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
+        title: Text(l10n.homeMenuWebsiteSettings,
+            style: const TextStyle(
+                fontWeight: FontWeight.bold, color: Colors.white)),
         backgroundColor: Colors.transparent,
         elevation: 0,
         centerTitle: true,
@@ -238,7 +274,6 @@ class _ManageWebsiteScreenState extends State<ManageWebsiteScreen> {
           ),
         ),
       ),
-      // DEĞİŞİKLİK: Body'e gradyan arka planı eklendi.
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
@@ -253,12 +288,12 @@ class _ManageWebsiteScreenState extends State<ManageWebsiteScreen> {
         child: _isLoading
             ? const Center(child: CircularProgressIndicator(color: Colors.white))
             : _errorMessage.isNotEmpty
-                ? Center(child: Text(_errorMessage, style: const TextStyle(color: Colors.white, fontSize: 16)))
+                ? Center(
+                    child: Text(_errorMessage,
+                        style: const TextStyle(color: Colors.white, fontSize: 16)))
                 : Form(
                     key: _formKey,
-                    // DEĞİŞİKLİK: Okunabilirlik için içeriği bir Card içine aldık.
                     child: SingleChildScrollView(
-                      // DEĞİŞİKLİK: Butonun içeriği engellememesi için padding eklendi.
                       padding: const EdgeInsets.fromLTRB(12, 12, 12, 100),
                       child: Card(
                         color: Colors.white.withOpacity(0.95),
@@ -270,22 +305,40 @@ class _ManageWebsiteScreenState extends State<ManageWebsiteScreen> {
                           padding: const EdgeInsets.all(16.0),
                           child: Column(
                             children: [
-                              _buildSectionHeader(l10n.websiteSettingsSectionAbout, Icons.info_outline),
-                              _buildTextField('about_title', l10n.websiteSettingsLabelAboutTitle),
-                              _buildTextField('about_description', l10n.websiteSettingsLabelAboutDesc, maxLines: 4),
-                              _buildTextField('about_image', l10n.websiteSettingsLabelAboutImage, icon: Icons.image),
+                              _buildSectionHeader(
+                                  l10n.websiteSettingsSectionAbout, Icons.info_outline),
+                              _buildTextField(
+                                  'about_title', l10n.websiteSettingsLabelAboutTitle),
+                              _buildTextField(
+                                  'about_description', l10n.websiteSettingsLabelAboutDesc,
+                                  maxLines: 4),
+                              _buildTextField(
+                                  'about_image', l10n.websiteSettingsLabelAboutImage,
+                                  icon: Icons.image),
 
-                              _buildSectionHeader(l10n.websiteSettingsSectionContact, Icons.contact_page_outlined),
-                              _buildTextField('contact_phone', l10n.websiteSettingsLabelPhone, icon: Icons.phone, keyboardType: TextInputType.phone),
-                              _buildTextField('contact_email', l10n.websiteSettingsLabelEmail, icon: Icons.email, keyboardType: TextInputType.emailAddress),
-                              _buildTextField('contact_address', l10n.websiteSettingsLabelAddress, icon: Icons.location_on_outlined, maxLines: 2),
-                              _buildTextField('contact_working_hours', l10n.websiteSettingsLabelWorkingHours, icon: Icons.access_time),
-
+                              _buildSectionHeader(l10n.websiteSettingsSectionContact,
+                                  Icons.contact_page_outlined),
+                              _buildTextField(
+                                  'contact_phone', l10n.websiteSettingsLabelPhone,
+                                  icon: Icons.phone,
+                                  keyboardType: TextInputType.phone),
+                              _buildTextField(
+                                  'contact_email', l10n.websiteSettingsLabelEmail,
+                                  icon: Icons.email,
+                                  keyboardType: TextInputType.emailAddress),
+                              _buildTextField(
+                                  'contact_address', l10n.websiteSettingsLabelAddress,
+                                  icon: Icons.location_on_outlined, maxLines: 2),
+                              _buildTextField('contact_working_hours',
+                                  l10n.websiteSettingsLabelWorkingHours,
+                                  icon: Icons.access_time),
+                              
+                              // HARİTA BÖLÜMÜ GÜNCELLENDİ
                               _buildSectionHeader("Harita Ayarları", Icons.map_outlined),
                               Row(
                                 children: [
                                   Expanded(
-                                    child: _buildTextField('map_latitude', "Enlem (Latitude)", 
+                                    child: _buildTextField('map_latitude', "Enlem (Latitude)",
                                       keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
                                       validator: (value) {
                                         if (value != null && value.isNotEmpty) {
@@ -316,6 +369,18 @@ class _ManageWebsiteScreenState extends State<ManageWebsiteScreen> {
                                 ],
                               ),
                               const SizedBox(height: 8),
+                              Center(
+                                child: ElevatedButton.icon(
+                                  onPressed: _openMapPicker,
+                                  icon: const Icon(Icons.map),
+                                  label: const Text("Haritadan Konum Seç"),
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.deepPurple.shade100,
+                                    foregroundColor: Colors.deepPurple.shade900,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 16),
                               _buildTextField('map_zoom_level', "Harita Zoom Seviyesi (1-20)", 
                                 keyboardType: TextInputType.number,
                                 validator: (value) {
@@ -330,23 +395,42 @@ class _ManageWebsiteScreenState extends State<ManageWebsiteScreen> {
                                 }
                               ),
 
-                              _buildSectionHeader(l10n.websiteSettingsSectionAppearance, Icons.color_lens_outlined),
-                              _buildColorPickerTile(l10n.websiteSettingsLabelPrimaryColor, _primaryColor, (color) => setState(() => _primaryColor = color)),
-                              _buildColorPickerTile(l10n.websiteSettingsLabelSecondaryColor, _secondaryColor, (color) => setState(() => _secondaryColor = color)),
-                              
-                              _buildSectionHeader(l10n.websiteSettingsSectionSocial, Icons.share_outlined),
-                              _buildTextField('facebook_url', 'Facebook URL', icon: Icons.facebook),
-                              _buildTextField('instagram_url', 'Instagram URL', icon: Icons.camera_alt_outlined),
-                              _buildTextField('twitter_url', 'Twitter/X URL', icon: Icons.read_more),
-                              
-                              _buildSectionHeader(l10n.websiteSettingsSectionVisibility, Icons.visibility_outlined),
-                              _buildSwitchTile(l10n.websiteSettingsToggleShowMenu, _showMenu, (val) => setState(() => _showMenu = val)),
-                              _buildSwitchTile(l10n.websiteSettingsToggleShowContact, _showContact, (val) => setState(() => _showContact = val)),
-                              _buildSwitchTile(l10n.websiteSettingsToggleShowMap, _showMap, (val) => setState(() => _showMap = val)),
+                              _buildSectionHeader(l10n.websiteSettingsSectionAppearance,
+                                  Icons.color_lens_outlined),
+                              _buildColorPickerTile(
+                                  l10n.websiteSettingsLabelPrimaryColor,
+                                  _primaryColor,
+                                  (color) => setState(() => _primaryColor = color)),
+                              _buildColorPickerTile(
+                                  l10n.websiteSettingsLabelSecondaryColor,
+                                  _secondaryColor,
+                                  (color) => setState(() => _secondaryColor = color)),
+
+                              _buildSectionHeader(
+                                  l10n.websiteSettingsSectionSocial, Icons.share_outlined),
+                              _buildTextField('facebook_url', 'Facebook URL',
+                                  icon: Icons.facebook),
+                              _buildTextField('instagram_url', 'Instagram URL',
+                                  icon: Icons.camera_alt_outlined),
+                              _buildTextField('twitter_url', 'Twitter/X URL',
+                                  icon: Icons.read_more),
+
+                              _buildSectionHeader(l10n.websiteSettingsSectionVisibility,
+                                  Icons.visibility_outlined),
+                              _buildSwitchTile(l10n.websiteSettingsToggleShowMenu,
+                                  _showMenu, (val) => setState(() => _showMenu = val)),
+                              _buildSwitchTile(l10n.websiteSettingsToggleShowContact,
+                                  _showContact, (val) => setState(() => _showContact = val)),
+                              _buildSwitchTile(l10n.websiteSettingsToggleShowMap,
+                                  _showMap, (val) => setState(() => _showMap = val)),
 
                               _buildSectionHeader("Online İşlemler", Icons.public),
-                              _buildSwitchTile("Online Rezervasyona İzin Ver", _allowReservations, (val) => setState(() => _allowReservations = val)),
-                              _buildSwitchTile("Online Siparişe İzin Ver", _allowOnlineOrdering, (val) => setState(() => _allowOnlineOrdering = val)),
+                              _buildSwitchTile("Online Rezervasyona İzin Ver",
+                                  _allowReservations,
+                                  (val) => setState(() => _allowReservations = val)),
+                              _buildSwitchTile("Online Siparişe İzin Ver",
+                                  _allowOnlineOrdering,
+                                  (val) => setState(() => _allowOnlineOrdering = val)),
                             ],
                           ),
                         ),
@@ -357,10 +441,12 @@ class _ManageWebsiteScreenState extends State<ManageWebsiteScreen> {
       floatingActionButton: FloatingActionButton.extended(
         onPressed: _isLoading ? null : _saveSettings,
         label: Text(l10n.buttonSaveChanges),
-        icon: _isLoading 
-            ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white)) 
+        icon: _isLoading
+            ? const SizedBox(
+                width: 20,
+                height: 20,
+                child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
             : const Icon(Icons.save),
-        // DEĞİŞİKLİK: Renkler temayla uyumlu hale getirildi.
         backgroundColor: Colors.deepPurple.shade700,
         foregroundColor: Colors.white,
       ),
@@ -374,17 +460,19 @@ class _ManageWebsiteScreenState extends State<ManageWebsiteScreen> {
         children: [
           Icon(icon, color: Colors.deepPurple.shade700),
           const SizedBox(width: 8),
-          Text(title, style: Theme.of(context).textTheme.titleLarge?.copyWith(color: Colors.deepPurple.shade900, fontWeight: FontWeight.bold)),
+          Text(title,
+              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                  color: Colors.deepPurple.shade900, fontWeight: FontWeight.bold)),
         ],
       ),
     );
   }
 
   Widget _buildTextField(
-    String key, 
+    String key,
     String label, {
-    int maxLines = 1, 
-    IconData? icon, 
+    int maxLines = 1,
+    IconData? icon,
     TextInputType? keyboardType,
     String? Function(String?)? validator,
   }) {
@@ -414,7 +502,8 @@ class _ManageWebsiteScreenState extends State<ManageWebsiteScreen> {
     );
   }
 
-  Widget _buildColorPickerTile(String title, Color color, ValueChanged<Color> onColorChanged) {
+  Widget _buildColorPickerTile(
+      String title, Color color, ValueChanged<Color> onColorChanged) {
     return ListTile(
       contentPadding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
       title: Text(title),
@@ -440,7 +529,7 @@ class _ManageWebsiteScreenState extends State<ManageWebsiteScreen> {
       onTap: () => _showColorPicker(context, color, onColorChanged),
     );
   }
-  
+
   Widget _buildSwitchTile(String title, bool value, ValueChanged<bool> onChanged) {
     return SwitchListTile(
       title: Text(title),

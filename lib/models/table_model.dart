@@ -1,6 +1,11 @@
 // lib/models/table_model.dart
 
-class TableModel {
+// YENİ IMPORT: Tip güvenliği sağlamak için oluşturulan arayüzü import ediyoruz.
+import 'i_layout_item.dart';
+
+// GÜNCELLENDİ: Sınıf tanımı, ILayoutItem arayüzünü uygulayacak şekilde değiştirildi.
+class TableModel implements ILayoutItem {
+  @override // ILayoutItem arayüzünden gelen 'id' alanını karşıladığını belirtir.
   final int id;
   int tableNumber;
   final String uuid;

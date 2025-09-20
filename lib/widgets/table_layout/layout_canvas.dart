@@ -2,84 +2,117 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../providers/table_layout_provider.dart';
+import 'draggable_layout_element.dart';
+import 'draggable_table.dart';
+import 'grid_painter.dart';
 import '../../models/table_model.dart';
 import '../../models/layout_element.dart';
-import '../../providers/table_layout_provider.dart';
-import 'draggable_table.dart';
-import 'draggable_layout_element.dart';
 
+// GÜNCELLENDİ: StatefulWidget'a çevrildi, çünkü provider'a GlobalKey'i
+// bir kez set etmemiz gerekiyor.
 class LayoutCanvas extends StatefulWidget {
   const LayoutCanvas({Key? key}) : super(key: key);
 
   @override
-  _LayoutCanvasState createState() => _LayoutCanvasState();
+  State<LayoutCanvas> createState() => _LayoutCanvasState();
 }
 
 class _LayoutCanvasState extends State<LayoutCanvas> {
-  final TransformationController _transformationController = TransformationController();
+  // YENİ: Canvas'ın Stack'ini referans almak için GlobalKey.
+  final GlobalKey _canvasKey = GlobalKey();
+
+  @override
+  void initState() {
+    super.initState();
+    // build metodu çağrıldıktan sonra provider'a key'i set et.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        context.read<TableLayoutProvider>().setCanvasKey(_canvasKey);
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<TableLayoutProvider>(context);
+    final provider = context.watch<TableLayoutProvider>();
     final layout = provider.layout;
 
     if (layout == null) {
-      return const Center(child: Text("Yerleşim planı yüklenemedi."));
+      return const Center(child: Text('Yerleşim planı yüklenemedi.'));
     }
 
+    const double canvasPadding = 50.0;
+
     return Container(
-      margin: const EdgeInsets.all(8),
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.grey.shade300),
-        color: Colors.white,
-      ),
+      color: Colors.blueGrey.shade100,
       child: InteractiveViewer(
-        transformationController: _transformationController,
-        minScale: 0.1,
-        maxScale: 4.0,
+        maxScale: 2.0,
+        minScale: 0.5,
+        boundaryMargin: const EdgeInsets.all(canvasPadding),
         constrained: false,
         child: DragTarget<Object>(
           onAcceptWithDetails: (details) {
             final RenderBox renderBox = context.findRenderObject() as RenderBox;
-            final Offset localOffset = renderBox.globalToLocal(details.offset);
-            final Matrix4 matrix = _transformationController.value.clone()..invert();
-            final Offset transformedOffset = MatrixUtils.transformPoint(matrix, localOffset);
+            final localOffset = renderBox.globalToLocal(details.offset);
 
-            // HATA DÜZELTMESİ (Sürükle-Bırak): Hem TableModel hem de LayoutElement için pozisyon güncelleme mantığı eklendi.
             if (details.data is TableModel) {
-              provider.placeTableOnCanvas(details.data as TableModel, transformedOffset);
+              final table = details.data as TableModel;
+              provider.placeTableOnCanvas(table, localOffset);
             } else if (details.data is LayoutElement) {
-              provider.updateDroppedElementPosition(details.data as LayoutElement, transformedOffset);
+              final element = details.data as LayoutElement;
+              provider.updateDroppedElementPosition(element, localOffset);
             }
           },
           builder: (context, candidateData, rejectedData) {
             return SizedBox(
-              width: layout.width,
-              height: layout.height,
+              width: layout.width + (canvasPadding * 2),
+              height: layout.height + (canvasPadding * 2),
               child: Stack(
                 children: [
-                  ...provider.placedTables.map((table) {
-                    return Positioned(
-                      left: table.posX ?? 0,
-                      top: table.posY ?? 0,
-                      child: DraggableTable(
-                        table: table,
+                  Positioned(
+                    left: canvasPadding,
+                    top: canvasPadding,
+                    child: Container(
+                      width: layout.width,
+                      height: layout.height,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        border: Border.all(color: Colors.grey.shade400),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.1),
+                            blurRadius: 10,
+                            offset: const Offset(0, 5),
+                          )
+                        ],
                       ),
-                    );
-                  }).toList(),
-                  ...provider.elements.map((element) {
-                    return Positioned(
-                      left: element.position.dx,
-                      top: element.position.dy,
-                      child: DraggableLayoutElement(
-                        element: element,
-                        constraints: BoxConstraints(
-                          maxWidth: layout.width,
-                          maxHeight: layout.height,
-                        ),
+                      // YENİ: Stack'e anahtar atandı.
+                      child: Stack(
+                        key: _canvasKey,
+                        clipBehavior: Clip.none,
+                        children: [
+                          if (provider.isGridVisible)
+                            Positioned.fill(
+                              child: CustomPaint(
+                                painter: GridPainter(
+                                  gridSpacing: provider.gridSpacing,
+                                  gridColor: Colors.grey.shade300,
+                                ),
+                              ),
+                            ),
+                          Positioned.fill(
+                            child: GestureDetector(
+                              onTap: () => provider.deselectAll(),
+                              child: Container(color: Colors.transparent),
+                            ),
+                          ),
+                          ...provider.placedTables.map((table) => DraggableTable(table: table)),
+                          ...provider.elements.map((element) => DraggableLayoutElement(element: element, constraints: BoxConstraints.expand(width: layout.width, height: layout.height))),
+                        ],
                       ),
-                    );
-                  }).toList(),
+                    ),
+                  ),
                 ],
               ),
             );

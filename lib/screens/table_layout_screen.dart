@@ -6,6 +6,7 @@ import '../providers/table_layout_provider.dart';
 import '../widgets/table_layout/layout_canvas.dart';
 import '../widgets/table_layout/table_palette.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import '../models/table_model.dart';
 
 class TableLayoutScreen extends StatelessWidget {
   const TableLayoutScreen({Key? key}) : super(key: key);
@@ -22,6 +23,17 @@ class TableLayoutScreen extends StatelessWidget {
               title: Text(l10n.tableLayoutScreenTitle, style: const TextStyle(color: Colors.white)),
               backgroundColor: Colors.blue.shade900,
               actions: [
+                // YENİ EKLENEN BÖLÜM: Izgara aç/kapa butonu
+                IconButton(
+                  icon: Icon(
+                    provider.isGridVisible ? Icons.grid_on_outlined : Icons.grid_off_outlined,
+                    color: provider.isGridVisible ? Colors.white : Colors.white54,
+                  ),
+                  tooltip: l10n.tableLayoutToggleGrid, // .arb dosyanıza ekleyin: "Izgarayı ve Hizalamayı Aç/Kapat"
+                  onPressed: () {
+                    context.read<TableLayoutProvider>().toggleGridSnapping();
+                  },
+                ),
                 if (provider.isLoading)
                   const Padding(
                     padding: EdgeInsets.all(16.0),
@@ -39,20 +51,37 @@ class TableLayoutScreen extends StatelessWidget {
                       await provider.saveLayout();
                       if (context.mounted) {
                         ScaffoldMessenger.of(context).showSnackBar(
-                           SnackBar(content: Text(provider.errorMessage.isEmpty ? l10n.tableLayoutSuccessSave : l10n.tableLayoutErrorSave), backgroundColor: provider.errorMessage.isEmpty ? Colors.green : Colors.red),
+                            SnackBar(content: Text(provider.errorMessage.isEmpty ? l10n.tableLayoutSuccessSave : l10n.tableLayoutErrorSave), backgroundColor: provider.errorMessage.isEmpty ? Colors.green : Colors.red),
                         );
                       }
                     },
                   ),
               ],
             ),
+            floatingActionButton: provider.selectedItem != null
+                ? FloatingActionButton.extended(
+                    onPressed: () {
+                      context.read<TableLayoutProvider>().deleteSelectedItem();
+                    },
+                    backgroundColor: Colors.redAccent,
+                    icon: const Icon(Icons.delete_forever_outlined),
+                    label: Text(
+                      provider.selectedItem is TableModel
+                          ? "Masayı Kaldır"
+                          : "Öğeyi Sil",
+                    ),
+                  )
+                : null,
             body: provider.isLoading
                 ? const Center(child: CircularProgressIndicator())
                 : provider.errorMessage.isNotEmpty
                     ? Center(child: Text(provider.errorMessage))
                     : Row(
                         children: const [
-                          TablePalette(),
+                          SizedBox(
+                            width: 200,
+                            child: TablePalette(),
+                          ),
                           Expanded(
                             child: LayoutCanvas(),
                           ),

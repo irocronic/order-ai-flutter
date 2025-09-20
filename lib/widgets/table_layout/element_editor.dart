@@ -1,18 +1,19 @@
 // lib/widgets/table_layout/element_editor.dart
-//
-// Basit, pratik bir düzenleyici. İleride renk picker, font ailesi,
-// hizalama vb. özellikler eklenebilir.
 
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import '../../models/layout_element.dart';
-import '../../providers/table_layout_provider.dart';
-import '../../models/shape_style.dart';
 
+// GÜNCELLENDİ: Provider importları ve bağımlılığı kaldırıldı.
 class ElementEditor extends StatefulWidget {
   final LayoutElement element;
-  final TableLayoutProvider? provider; // Opsiyonel: doğrudan provider verilebilir
-  const ElementEditor({Key? key, required this.element, this.provider}) : super(key: key);
+  // YENİ: Değişiklikler kaydedildiğinde çağrılacak callback.
+  final Function(LayoutElement) onSave;
+
+  const ElementEditor({
+    Key? key,
+    required this.element,
+    required this.onSave,
+  }) : super(key: key);
 
   @override
   State<ElementEditor> createState() => _ElementEditorState();
@@ -55,30 +56,24 @@ class _ElementEditorState extends State<ElementEditor> {
     super.dispose();
   }
 
-  TableLayoutProvider _resolveProvider(BuildContext ctx) {
-    // Eğer widget.provider verilmişse onu kullan; değilse context üzerinden al.
-    if (widget.provider != null) return widget.provider!;
-    return Provider.of<TableLayoutProvider>(ctx, listen: false);
-  }
+  // GÜNCELLENDİ: Provider'a doğrudan erişim yerine callback kullanılıyor.
+  void _applyChanges() {
+    // Stilleri içeren map'i güncelle.
+    final newStyleProperties = Map<String, dynamic>.from(widget.element.styleProperties);
+    newStyleProperties['content'] = _textController.text;
+    newStyleProperties['fontSize'] = _fontSize;
+    newStyleProperties['isBold'] = _isBold;
+    newStyleProperties['color'] = _color.value;
 
-  void _applyChanges({bool saveToServer = false}) {
-    final provider = _resolveProvider(context);
-    provider.updateElementProperties(
-      widget.element,
+    // `copyWith` ile güncellenmiş yeni bir element nesnesi oluştur.
+    final updatedElement = widget.element.copyWith(
       size: Size(_width, _height),
       rotation: _rotation,
-      styleUpdates: {
-        'content': _textController.text,
-        'fontSize': _fontSize,
-        'isBold': _isBold,
-        'color': _color.value,
-      },
+      styleProperties: newStyleProperties,
     );
 
-    if (saveToServer) {
-      // İsteğe bağlı: anında kaydetmek istersen provider.saveLayout() çağır.
-      // provider.saveLayout();
-    }
+    // Değişikliği parent widget'a bildir.
+    widget.onSave(updatedElement);
 
     Navigator.of(context).pop();
   }
@@ -201,7 +196,7 @@ class _ElementEditorState extends State<ElementEditor> {
       ),
       actions: [
         TextButton(onPressed: () => Navigator.of(context).pop(), child: const Text('İptal')),
-        ElevatedButton(onPressed: () => _applyChanges(saveToServer: false), child: const Text('Kaydet')),
+        ElevatedButton(onPressed: _applyChanges, child: const Text('Kaydet')),
       ],
     );
   }

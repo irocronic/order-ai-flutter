@@ -19,7 +19,6 @@ class ElementRenderer extends StatelessWidget {
   Widget build(BuildContext context) {
     Widget child;
 
-    // Elemanın tipine göre uygun widget'ı oluştur
     switch (element.type) {
       case LayoutElementType.text:
         child = Text(
@@ -39,14 +38,13 @@ class ElementRenderer extends StatelessWidget {
         break;
     }
 
-    // Seçim çerçevesi
     return Container(
       width: element.size.width,
       height: element.size.height,
       decoration: isSelected
           ? BoxDecoration(
-              border: Border.all(color: Colors.blueAccent, width: 2),
-            )
+        border: Border.all(color: Colors.blueAccent, width: 2),
+      )
           : null,
       child: Transform.rotate(
         angle: element.rotation * (math.pi / 180),
@@ -56,7 +54,6 @@ class ElementRenderer extends StatelessWidget {
   }
 }
 
-// Şekilleri çizmek için kullanılan yardımcı sınıf
 class ShapePainter extends CustomPainter {
   final ShapeStyle style;
   ShapePainter({required this.style});
@@ -88,16 +85,18 @@ class ShapePainter extends CustomPainter {
         }
         break;
       case ShapeType.line:
-        // Çizgi için borderPaint'i fill gibi kullanırız
         final linePaint = Paint()
           ..color = style.borderColor
-          ..strokeWidth = size.height // Kalınlığı size'ın yüksekliğinden alır
+          ..strokeWidth = size.height
           ..strokeCap = StrokeCap.round;
         canvas.drawLine(Offset(0, size.height / 2), Offset(size.width, size.height / 2), linePaint);
         break;
     }
   }
 
+  // GÜNCELLENDİ: Performans iyileştirmesi. Sadece stil nesnesi değiştiğinde
+  // yeniden çizim yap. Bu, ShapeStyle sınıfındaki '==' ve 'hashCode'
+  // override'ları sayesinde doğru çalışır.
   @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
+  bool shouldRepaint(covariant ShapePainter oldDelegate) => oldDelegate.style != style;
 }

@@ -2,14 +2,15 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../models/table_model.dart';
 import '../../providers/table_layout_provider.dart';
+import 'table_widget.dart';
+// YENİ IMPORT
+import '../../models/i_layout_item.dart';
 
 class DraggableTable extends StatelessWidget {
   final TableModel table;
 
-  // HATA DÜZELTMESİ: 'constraints' parametresi kaldırıldı.
   const DraggableTable({
     Key? key,
     required this.table,
@@ -17,52 +18,39 @@ class DraggableTable extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<TableLayoutProvider>(context, listen: false);
+    final provider = context.read<TableLayoutProvider>();
+    // GÜNCELLENDİ: Tip kontrolü `ILayoutItem` üzerinden yapılıyor.
     final isSelected = provider.selectedItem is TableModel && (provider.selectedItem as TableModel).id == table.id;
 
-    final tableWidget = Material(
-      color: Colors.transparent,
-      child: GestureDetector(
-        onTap: () {
+    return Positioned(
+      left: table.posX,
+      top: table.posY,
+      child: Draggable<TableModel>(
+        data: table,
+        feedback: Material(
+          color: Colors.transparent,
+          child: TableWidget(table: table, isSelected: true),
+        ),
+        childWhenDragging: Opacity(
+          opacity: 0.3,
+          child: TableWidget(table: table, isSelected: isSelected),
+        ),
+        onDragStarted: () {
           provider.selectItem(table);
         },
-        child: Container(
-          width: 80,
-          height: 80,
-          decoration: BoxDecoration(
-            color: isSelected ? Colors.blue.shade200 : Colors.blue.shade50,
-            border: Border.all(
-              color: isSelected ? Colors.blue.shade700 : Colors.blue.shade200,
-              width: 2,
-            ),
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Center(
-            child: Text(
-              // l10n hatasını gidermek için AppLocalizations.of(context) kullanıldı
-              AppLocalizations.of(context)!.tableLayoutPaletteTableLabel(table.tableNumber.toString()),
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: isSelected ? Colors.blue.shade900 : Colors.blue.shade700,
-              ),
-            ),
-          ),
+        // GÜNCELLENDİ: Sürükleme bittiğinde artık sadece global ekran
+        // pozisyonunu provider'a gönderiyoruz. Provider, bu pozisyonu
+        // canvas'ın lokal koordinatına kendisi çevirecek.
+        onDragEnd: (details) {
+          provider.updateItemPositionAfterDrag(table, details.offset);
+        },
+        child: GestureDetector(
+          onTap: () {
+            provider.selectItem(table);
+          },
+          child: TableWidget(table: table, isSelected: isSelected),
         ),
       ),
-    );
-
-    return Draggable<TableModel>(
-      data: table,
-      feedback: tableWidget,
-      childWhenDragging: Container(),
-      onDragUpdate: (details) {
-        // Bu, sürükleme sırasında anlık pozisyon güncellemesi sağlar.
-        // Ancak performansı etkileyebilir. Genellikle onDragEnd kullanılır.
-      },
-      onDragEnd: (details) {
-        // DragTarget bu işlevi üstlendiği için burada ek bir logik gerekmiyor.
-      },
-      child: tableWidget,
     );
   }
 }

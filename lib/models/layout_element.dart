@@ -1,18 +1,20 @@
 // lib/models/layout_element.dart
 
 import 'package:flutter/material.dart';
-import 'shape_style.dart'; // Mevcut shape_style.dart dosyanı import edecek
+import 'shape_style.dart';
+// YENİ IMPORT
+import 'i_layout_item.dart';
 
 enum LayoutElementType { text, shape }
 
-class LayoutElement {
+// GÜNCELLENDİ: ILayoutItem arayüzünü uygular.
+class LayoutElement implements ILayoutItem {
+  @override
   int? id;
   final LayoutElementType type;
   Offset position;
   Size size;
   double rotation;
-  // Hem metin ('content', 'fontSize' vb.) hem de şekil ('fillColor' vb.)
-  // stil özelliklerini bu tek map içinde saklayacağız.
   Map<String, dynamic> styleProperties;
 
   LayoutElement({
@@ -23,6 +25,26 @@ class LayoutElement {
     this.rotation = 0.0,
     required this.styleProperties,
   });
+
+  // YENİ METOT: ElementEditor'da yapılan değişiklikleri uygulamak için
+  // mevcut nesneyi kopyalayıp güncelleyen pratik bir metot.
+  LayoutElement copyWith({
+    int? id,
+    LayoutElementType? type,
+    Offset? position,
+    Size? size,
+    double? rotation,
+    Map<String, dynamic>? styleProperties,
+  }) {
+    return LayoutElement(
+      id: id ?? this.id,
+      type: type ?? this.type,
+      position: position ?? this.position,
+      size: size ?? this.size,
+      rotation: rotation ?? this.rotation,
+      styleProperties: styleProperties ?? this.styleProperties,
+    );
+  }
 
   factory LayoutElement.fromJson(Map<String, dynamic> json) {
     double parseDouble(dynamic v, [double fallback = 0.0]) {
@@ -43,20 +65,18 @@ class LayoutElement {
     return LayoutElement(
       id: json['id'],
       type: LayoutElementType.values.firstWhere(
-        (e) => e.name == (json['element_type'] as String? ?? json['elementType'] ?? 'text'),
-        orElse: () => LayoutElementType.text, // Varsayılan
+            (e) => e.name == (json['element_type'] as String? ?? json['elementType'] ?? 'text'),
+        orElse: () => LayoutElementType.text,
       ),
       position: Offset(posX, posY),
       size: Size(width, height),
       rotation: rotation,
-      // Django'dan gelen JSONField'ı doğrudan alıyoruz.
       styleProperties: Map<String, dynamic>.from(json['style_properties'] ?? json['styleProperties'] ?? {}),
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      // id'nin null olup olmadığını kontrol et, yeni eklenenlerde null olabilir.
       if (id != null) 'id': id,
       'element_type': type.name,
       'pos_x': position.dx,
@@ -67,19 +87,10 @@ class LayoutElement {
       'style_properties': styleProperties,
     };
   }
-
-  // Stil özelliklerine kolay erişim için yardımcı getter'lar.
-  // Bu getter'lar, styleProperties map'inin içinden doğru veriyi okur.
-
-  // Metin Elemanları için
+  
   String get content => styleProperties['content'] ?? styleProperties['text'] ?? '';
   double get fontSize => (styleProperties['fontSize'] as num?)?.toDouble() ?? 14.0;
   Color get color => ShapeStyle.parseColor(styleProperties['color'] ?? styleProperties['fillColor'] ?? styleProperties['fill_color'] ?? Colors.black.value);
   bool get isBold => styleProperties['isBold'] ?? styleProperties['bold'] ?? false;
-
-  // Şekil Elemanları için
-  // Bu getter, styleProperties map'ini ShapeStyle.fromJson'a gönderir.
-  // ShapeStyle.fromJson metodu, sadece kendi ihtiyacı olan alanları (fillColor, shapeType vb.)
-  // bu map içerisinden alarak bir ShapeStyle nesnesi oluşturur.
   ShapeStyle get shapeStyle => ShapeStyle.fromJson(Map<String, dynamic>.from(styleProperties));
 }

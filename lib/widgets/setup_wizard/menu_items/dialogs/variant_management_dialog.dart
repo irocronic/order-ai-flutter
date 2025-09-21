@@ -222,48 +222,50 @@ class _VariantManagementDialogState extends State<VariantManagementDialog> {
               ),
             ],
           ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                'Manuel varyant ekleme formunda doldurulmuş alanlar var.',
-                style: TextStyle(fontSize: 16),
-              ),
-              const SizedBox(height: 12),
-              Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: Colors.orange.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(8),
-                  border: Border.all(color: Colors.orange.withOpacity(0.3)),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Manuel varyant ekleme formunda doldurulmuş alanlar var.',
+                  style: TextStyle(fontSize: 16),
                 ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    if (widget.variantConfig.variantNameController.text.trim().isNotEmpty)
-                      Text(
-                        '• Varyant Adı: "${widget.variantConfig.variantNameController.text.trim()}"',
-                        style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
-                      ),
-                    if (widget.variantConfig.variantPriceController.text.trim().isNotEmpty)
-                      Text(
-                        '• Fiyat: "₺${widget.variantConfig.variantPriceController.text.trim()}"',
-                        style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
-                      ),
-                  ],
+                const SizedBox(height: 12),
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: Colors.orange.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(color: Colors.orange.withOpacity(0.3)),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      if (widget.variantConfig.variantNameController.text.trim().isNotEmpty)
+                        Text(
+                          '• Varyant Adı: "${widget.variantConfig.variantNameController.text.trim()}"',
+                          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+                        ),
+                      if (widget.variantConfig.variantPriceController.text.trim().isNotEmpty)
+                        Text(
+                          '• Fiyat: "₺${widget.variantConfig.variantPriceController.text.trim()}"',
+                          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+                        ),
+                    ],
+                  ),
                 ),
-              ),
-              const SizedBox(height: 12),
-              const Text(
-                'Bu varyantı eklemeden çıkmak istiyor musunuz?',
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.black87,
+                const SizedBox(height: 12),
+                const Text(
+                  'Bu varyantı eklemeden çıkmak istiyor musunuz?',
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.black87,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
           actions: [
             TextButton(

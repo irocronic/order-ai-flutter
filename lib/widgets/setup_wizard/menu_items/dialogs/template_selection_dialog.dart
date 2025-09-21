@@ -1,4 +1,3 @@
-// lib/widgets/setup_wizard/menu_items/dialogs/template_selection_dialog.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:collection/collection.dart';
@@ -17,14 +16,14 @@ class TemplateSelectionDialog extends StatefulWidget {
   final String token;
   final List<dynamic> availableCategories;
   final int currentMenuItemCount;
-  final int businessId; // ✅ YENİ EKLENEN
+  final int businessId;
 
   const TemplateSelectionDialog({
     Key? key,
     required this.token,
     required this.availableCategories,
     required this.currentMenuItemCount,
-    required this.businessId, // ✅ YENİ EKLENEN
+    required this.businessId,
   }) : super(key: key);
 
   @override
@@ -33,27 +32,26 @@ class TemplateSelectionDialog extends StatefulWidget {
 
 class _TemplateSelectionDialogState extends State<TemplateSelectionDialog> {
   late final TemplateSelectionService _service;
-  
+
   // State variables
   List<int> selectedTemplateIds = [];
   List<dynamic> allTemplates = [];
   List<dynamic> filteredTemplates = [];
   final TextEditingController _searchController = TextEditingController();
-  
-  // ✅ YENİ: Scroll controller ekle
+
   final ScrollController _scrollController = ScrollController();
-  
+
   // Reçete özelliği için state'ler
   Map<int, bool> templateRecipeStatus = {}; // templateId -> isFromRecipe
   Map<int, TextEditingController> templatePriceControllers = {}; // templateId -> price controller
-  
+
   // Varyant yönetimi için state'ler
   Map<int, VariantTemplateConfig> templateVariantConfigs = {}; // templateId -> variant config
-  
-  // YENİ: Hızlı varyant ekleme için state'ler
+
+  // Hızlı varyant ekleme için state'ler
   List<dynamic> _variantTemplates = [];
   bool _isLoadingVariantTemplates = false;
-  
+
   String? _selectedCategoryName;
   int? _targetCategoryId;
   bool _isLoadingTemplates = false;
@@ -71,14 +69,11 @@ class _TemplateSelectionDialogState extends State<TemplateSelectionDialog> {
   void dispose() {
     _searchController.removeListener(_filterTemplates);
     _searchController.dispose();
-    _scrollController.dispose(); // ✅ YENİ: Scroll controller dispose
-    
-    // Price controller'ları dispose et
+    _scrollController.dispose();
+
     for (var controller in templatePriceControllers.values) {
       controller.dispose();
     }
-    
-    // Variant config'leri dispose et
     for (var config in templateVariantConfigs.values) {
       config.dispose();
     }
@@ -102,35 +97,33 @@ class _TemplateSelectionDialogState extends State<TemplateSelectionDialog> {
   Future<void> _loadTemplatesForCategory(String categoryName) async {
     if (!mounted) return;
     setState(() => _isLoadingTemplates = true);
-    
+
     try {
       final templates = await _service.fetchTemplatesForCategory(categoryName);
-      
+
       if (mounted) {
         setState(() {
           allTemplates = templates;
           filteredTemplates = templates;
           selectedTemplateIds.clear();
           _searchController.clear();
-          
-          // Her template için varsayılan değerleri ayarla
+
           templateRecipeStatus.clear();
           for (var controller in templatePriceControllers.values) {
             controller.dispose();
           }
           templatePriceControllers.clear();
-          
-          // Varyant config'lerini temizle
+
           for (var config in templateVariantConfigs.values) {
             config.dispose();
           }
           templateVariantConfigs.clear();
-          
+
           for (var template in templates) {
             final templateId = template['id'] as int;
             final templateName = template['name'] as String? ?? 'İsimsiz Ürün';
-            
-            templateRecipeStatus[templateId] = true; // Varsayılan olarak reçeteli
+
+            templateRecipeStatus[templateId] = true;
             templatePriceControllers[templateId] = TextEditingController();
             templateVariantConfigs[templateId] = VariantTemplateConfig(
               templateId: templateId,
@@ -138,8 +131,7 @@ class _TemplateSelectionDialogState extends State<TemplateSelectionDialog> {
             );
           }
         });
-        
-        // YENİ: Varyant şablonlarını da yükle
+
         _loadVariantTemplatesForCategory(categoryName);
       }
     } catch (e) {
@@ -156,26 +148,24 @@ class _TemplateSelectionDialogState extends State<TemplateSelectionDialog> {
     }
   }
 
-  // YENİ: Varyant şablonlarını yükle
   Future<void> _loadVariantTemplatesForCategory(String categoryName) async {
     if (!mounted) return;
     setState(() => _isLoadingVariantTemplates = true);
-    
+
     try {
       final variantTemplates = await _service.fetchVariantTemplatesForCategory(categoryName);
-      
+
       if (mounted) {
         setState(() {
           _variantTemplates = variantTemplates;
         });
       }
     } catch (e) {
-      // Kategoriye özel varyant şablonu yoksa genel şablonları dene
       try {
         final defaultTemplates = await _service.fetchDefaultVariantTemplates();
         if (mounted) {
           setState(() {
-            _variantTemplates = defaultTemplates.take(8).toList(); // İlk 8 tanesi
+            _variantTemplates = defaultTemplates.take(8).toList();
           });
         }
       } catch (e2) {
@@ -192,18 +182,18 @@ class _TemplateSelectionDialogState extends State<TemplateSelectionDialog> {
 
   void _toggleTemplateSelection(int templateId) {
     final currentLimits = UserSession.limitsNotifier.value;
-    
+
     setState(() {
       if (selectedTemplateIds.contains(templateId)) {
         selectedTemplateIds.remove(templateId);
       } else {
         int totalAfterSelection = widget.currentMenuItemCount + selectedTemplateIds.length + 1;
-        
+
         if (totalAfterSelection > currentLimits.maxMenuItems) {
           _showLimitReachedDialog();
           return;
         }
-        
+
         selectedTemplateIds.add(templateId);
       }
     });
@@ -212,8 +202,7 @@ class _TemplateSelectionDialogState extends State<TemplateSelectionDialog> {
   void _toggleRecipeStatus(int templateId) {
     setState(() {
       templateRecipeStatus[templateId] = !(templateRecipeStatus[templateId] ?? true);
-      
-      // Reçeteli ürüne geçerken fiyat alanını temizle
+
       if (templateRecipeStatus[templateId] == true) {
         templatePriceControllers[templateId]?.clear();
       }
@@ -222,22 +211,22 @@ class _TemplateSelectionDialogState extends State<TemplateSelectionDialog> {
 
   void _toggleSelectAll() {
     final currentLimits = UserSession.limitsNotifier.value;
-    
+
     setState(() {
       final allCurrentVisible = filteredTemplates.map((t) => t['id'] as int).toSet();
       final hasAllSelected = allCurrentVisible.every((id) => selectedTemplateIds.contains(id));
-      
+
       if (hasAllSelected) {
         selectedTemplateIds.removeWhere((id) => allCurrentVisible.contains(id));
       } else {
         final newSelections = allCurrentVisible.where((id) => !selectedTemplateIds.contains(id)).toList();
         int totalAfterAllSelection = widget.currentMenuItemCount + selectedTemplateIds.length + newSelections.length;
-        
+
         if (totalAfterAllSelection > currentLimits.maxMenuItems) {
           _showLimitReachedDialog();
           return;
         }
-        
+
         selectedTemplateIds.addAll(newSelections);
       }
     });
@@ -285,49 +274,37 @@ class _TemplateSelectionDialogState extends State<TemplateSelectionDialog> {
     return true;
   }
 
-  // ✅ GÜNCELLENME: Validation metodunu güncelle
-  bool _validateVariants() {
-    print('🔍 Starting variant validation...');
-    
+  bool _validateVariantImages() {
     for (int templateId in selectedTemplateIds) {
       final variantConfig = templateVariantConfigs[templateId];
-      print('  - Checking template $templateId:');
-      print('    - variantConfig exists: ${variantConfig != null}');
-      
       if (variantConfig != null && variantConfig.hasVariantImageEnabled) {
-        print('    - hasVariantImageEnabled: ${variantConfig.hasVariantImageEnabled}');
-        print('    - variants count: ${variantConfig.variants.length}');
-        print('    - hasVariantImage: ${variantConfig.hasVariantImage}');
-        print('    - XFile: ${variantConfig.variantImageXFile?.path}');
-        print('    - WebBytes: ${variantConfig.variantWebImageBytes?.length}');
-        
-        // ✅ GÜNCELLENME: Artık gerçek validation yap
         if (variantConfig.variants.isNotEmpty) {
-          // Varyantlar varsa, en az birinin fotoğrafının upload edilmiş olması gerekiyor
           bool hasValidVariant = variantConfig.variants.any((variant) => variant.image.isNotEmpty);
-          
-          if (hasValidVariant) {
-            print('    ✅ Variant has uploaded image URL');
-          } else {
-            print('    ❌ Variant image enabled but no uploaded image found!');
-            return false; // ✅ Artık gerçek validation yap
+          if (!hasValidVariant) {
+            return false;
           }
         }
-      } else {
-        print('    ✅ No image validation needed for template $templateId');
       }
     }
-    
-    print('✅ All variants validated successfully');
     return true;
   }
+  
+  // GÜNCELLEME: Seçilen her ürünün en az bir varyantı olup olmadığını kontrol eden metot.
+  bool _validateAllSelectedItemsHaveVariants() {
+    if (selectedTemplateIds.isEmpty) {
+      return true; 
+    }
+    return selectedTemplateIds.every((id) {
+      final config = templateVariantConfigs[id];
+      return config != null && config.variants.isNotEmpty;
+    });
+  }
 
-  // ✅ GÜNCELLENME: VariantManagementDialog çağrısını güncelle
   Future<void> _openVariantManagementDialog(int templateId) async {
     final variantConfig = templateVariantConfigs[templateId];
     if (variantConfig == null) return;
 
-    final result = await showDialog<bool>(
+    await showDialog<bool>(
       context: context,
       barrierDismissible: false,
       builder: (context) => VariantManagementDialog(
@@ -335,30 +312,24 @@ class _TemplateSelectionDialogState extends State<TemplateSelectionDialog> {
         variantConfig: variantConfig,
         variantTemplates: _variantTemplates,
         isLoadingVariantTemplates: _isLoadingVariantTemplates,
-        businessId: widget.businessId, // ✅ YENİ EKLENEN
+        businessId: widget.businessId,
         onVariantTemplateSelected: (variantTemplate) {
           _addQuickVariant(templateId, variantTemplate);
         },
       ),
     );
 
-    // DÜZELTİLDİ: Modal'dan döndükten sonra her zaman state'i güncelle
     if (mounted) {
-      setState(() {
-        // Varyant config güncellendiği için state'i yenile
-        // Bu, _isButtonEnabled getter'ının doğru çalışmasını sağlar
-      });
+      setState(() {});
     }
   }
 
-  // Hızlı varyant ekleme - Form alanlarını da dolduruyor
   void _addQuickVariant(int templateId, Map<String, dynamic> variantTemplate) {
     final variantConfig = templateVariantConfigs[templateId];
     if (variantConfig == null) return;
 
     final variantName = variantTemplate['name'] as String;
-    
-    // Aynı isimde varyant varsa ekleme
+
     if (variantConfig.variants.any((v) => v.name.toLowerCase() == variantName.toLowerCase())) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -370,7 +341,6 @@ class _TemplateSelectionDialogState extends State<TemplateSelectionDialog> {
       return;
     }
 
-    // Fiyat hesaplama - String'i Number'a güvenli çevirme
     double multiplier = 1.0;
     try {
       final multiplierValue = variantTemplate['price_multiplier'];
@@ -386,11 +356,9 @@ class _TemplateSelectionDialogState extends State<TemplateSelectionDialog> {
       multiplier = 1.0;
     }
 
-    // Hesaplanan fiyat
-    final basePrice = 25.0; // Varsayılan base price
+    final basePrice = 25.0;
     final calculatedPrice = basePrice * multiplier;
 
-    // is_extra alanını güvenli çevirme
     bool isExtra = false;
     try {
       final isExtraValue = variantTemplate['is_extra'];
@@ -409,7 +377,6 @@ class _TemplateSelectionDialogState extends State<TemplateSelectionDialog> {
     }
 
     setState(() {
-      // Manuel varyant alanlarını doldur
       variantConfig.variantNameController.text = variantName;
       variantConfig.variantPriceController.text = calculatedPrice.toStringAsFixed(2);
       variantConfig.isVariantExtra = isExtra;
@@ -424,35 +391,26 @@ class _TemplateSelectionDialogState extends State<TemplateSelectionDialog> {
     );
   }
 
-  // ✅ GÜNCELLENME: Özel ürün ekleme callback'i - scroll eklendi
   void _onCustomProductAdded(Map<String, dynamic> customProductData) {
     final int customTemplateId = customProductData['templateId'];
     final String productName = customProductData['productName'];
     final bool isFromRecipe = customProductData['isFromRecipe'];
     final double? price = customProductData['price'];
     final List<dynamic> variants = customProductData['variants'] ?? [];
-    
+
     setState(() {
-      // Özel ürünü seçili listeye ekle
       selectedTemplateIds.add(customTemplateId);
-      
-      // Template recipe status ayarla
       templateRecipeStatus[customTemplateId] = isFromRecipe;
-      
-      // Fiyat controller oluştur
       final priceController = TextEditingController();
       if (!isFromRecipe && price != null) {
         priceController.text = price.toStringAsFixed(2);
       }
       templatePriceControllers[customTemplateId] = priceController;
-      
-      // Varyant config oluştur
       final variantConfig = VariantTemplateConfig(
         templateId: customTemplateId,
         templateName: productName,
       );
-      
-      // Varyantları ekle
+
       for (var variantData in variants) {
         final variant = MenuItemVariant(
           id: -DateTime.now().millisecondsSinceEpoch,
@@ -464,27 +422,21 @@ class _TemplateSelectionDialogState extends State<TemplateSelectionDialog> {
         );
         variantConfig.addVariant(variant);
       }
-      
+
       templateVariantConfigs[customTemplateId] = variantConfig;
-      
-      // ✅ YENİ: Özel ürünü template listesine en başa ekle (yeni olduğu belli olsun)
       allTemplates.insert(0, {
         'id': customTemplateId,
         'name': productName,
         'isCustomProduct': true,
       });
-      
-      // ✅ YENİ: Filtered templates'i de güncelle
-      _filterTemplates(); // Mevcut arama kriterlerine göre yeniden filtrele
+
+      _filterTemplates();
     });
-    
-    print('🆕 Custom product added to template list: $productName (ID: $customTemplateId)');
-    
-    // ✅ YENİ: Yeni eklenen ürüne scroll et
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _scrollToNewlyAddedItem(customTemplateId);
     });
-    
+
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text('Özel ürün "$productName" eklendi ve seçildi'),
@@ -499,35 +451,24 @@ class _TemplateSelectionDialogState extends State<TemplateSelectionDialog> {
     );
   }
 
-  // ✅ YENİ: Yeni eklenen ürüne scroll etme metodu
   void _scrollToNewlyAddedItem(int templateId) {
     try {
-      // Ürünün listede hangi indexte olduğunu bul
       final itemIndex = filteredTemplates.indexWhere((template) => template['id'] == templateId);
-      
+
       if (itemIndex != -1 && _scrollController.hasClients) {
-        // Her template item yaklaşık 80px yüksekliğinde + padding
         const double itemHeight = 80.0;
-        const double headerHeight = 200.0; // Header ve diğer sabit elementler
-        
+        const double headerHeight = 200.0;
+
         final double targetOffset = headerHeight + (itemIndex * itemHeight);
         final double maxScrollExtent = _scrollController.position.maxScrollExtent;
-        
-        // Hedef offset'i sınırla
         final double safeOffset = targetOffset > maxScrollExtent ? maxScrollExtent : targetOffset;
-        
-        print('🎯 Scrolling to item $templateId at index $itemIndex');
-        print('   - Target offset: $targetOffset, Safe offset: $safeOffset');
-        print('   - Max scroll extent: $maxScrollExtent');
-        
-        // Smooth scroll animation
+
         _scrollController.animateTo(
           safeOffset,
           duration: const Duration(milliseconds: 800),
           curve: Curves.easeInOut,
         );
-        
-        // 1 saniye sonra yine bir kez daha scroll et (emin olmak için)
+
         Future.delayed(const Duration(milliseconds: 1200), () {
           if (_scrollController.hasClients && mounted) {
             _scrollController.animateTo(
@@ -537,50 +478,40 @@ class _TemplateSelectionDialogState extends State<TemplateSelectionDialog> {
             );
           }
         });
-      } else {
-        print('❌ Could not scroll to item $templateId: itemIndex=$itemIndex, hasClients=${_scrollController.hasClients}');
       }
     } catch (e) {
       print('❌ Error scrolling to newly added item: $e');
     }
   }
 
-  // ✅ YENİ: Seçili ürünün görünür olup olmadığını kontrol et
   void _ensureSelectedItemVisible(int templateId) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _scrollToNewlyAddedItem(templateId);
     });
   }
 
-  // ✅ GÜNCELLENME: _prepareResultData metodunu güncelle
   Map<String, dynamic> _prepareResultData() {
     final List<int> templateIds = selectedTemplateIds.toList();
     final List<Map<String, dynamic>> templatesWithOptions = [];
-    
+
     for (int templateId in selectedTemplateIds) {
       final isFromRecipe = templateRecipeStatus[templateId] ?? true;
       final priceText = templatePriceControllers[templateId]?.text.trim() ?? '';
       final variantConfig = templateVariantConfigs[templateId];
-      
-      // ✅ YENİ: Varyant listesini doğru şekilde hazırla - artık gerçek URL'ler var
       final variantList = variantConfig?.variants.map((v) {
-        print('🔗 Varyant "${v.name}" için fotoğraf URL: ${v.image}');
-        
         return {
           'name': v.name,
           'price': v.price,
           'isExtra': v.isExtra,
-          'image': v.image, // ✅ Artık gerçek Firebase URL
+          'image': v.image,
         };
       }).toList() ?? [];
-      
-      // ✅ YENİ: Özel ürün kontrolü
+
       final template = allTemplates.firstWhere(
         (t) => t['id'] == templateId,
         orElse: () => {'id': templateId, 'name': 'Unknown', 'isCustomProduct': false},
       );
-      
-      // Fotoğraf verilerini de ekle (artık gerek yok ama geriye uyumluluk için)
+
       templatesWithOptions.add({
         'templateId': templateId,
         'isFromRecipe': isFromRecipe,
@@ -588,27 +519,12 @@ class _TemplateSelectionDialogState extends State<TemplateSelectionDialog> {
         'variants': variantList,
         'hasVariantImage': variantConfig?.hasVariantImage ?? false,
         'variantImageEnabled': variantConfig?.hasVariantImageEnabled ?? false,
-        'variantImageData': null, // ✅ Artık gerek yok çünkü URL'ler hazır
-        'isCustomProduct': template['isCustomProduct'] ?? false, // ✅ YENİ: Özel ürün işareti
-        'productName': template['isCustomProduct'] == true ? template['name'] : null, // ✅ YENİ: Özel ürün adı
+        'variantImageData': null,
+        'isCustomProduct': template['isCustomProduct'] ?? false,
+        'productName': template['isCustomProduct'] == true ? template['name'] : null,
       });
     }
-    
-    print('🔍 Hazırlanan veri (güncellenmiş):');
-    for (var template in templatesWithOptions) {
-      print('Template ${template['templateId']}:');
-      print('  - Variants: ${template['variants']?.length ?? 0}');
-      print('  - Is Custom: ${template['isCustomProduct']}');
-      if (template['isCustomProduct'] == true) {
-        print('  - Product Name: ${template['productName']}');
-      }
-      for (var variant in (template['variants'] as List? ?? [])) {
-        print('    * ${variant['name']}: imageUrl=${variant['image']}');
-      }
-      print('  - Has image: ${template['hasVariantImage']}');
-      print('  - Image enabled: ${template['variantImageEnabled']}');
-    }
-    
+
     return {
       'selectedTemplateIds': templateIds,
       'targetCategoryId': _targetCategoryId,
@@ -617,23 +533,19 @@ class _TemplateSelectionDialogState extends State<TemplateSelectionDialog> {
     };
   }
 
+  // GÜNCELLEME: Butonun aktif olma koşulu güncellendi.
   bool get _isButtonEnabled {
     final hasSelection = selectedTemplateIds.isNotEmpty;
+    if (!hasSelection) return false;
+
     final hasCategory = _targetCategoryId != null;
     final pricesValid = _validatePrices();
-    final variantsValid = _validateVariants();
+    final imageVariantsValid = _validateVariantImages();
     
-    // Debug için log ekle
-    print('🔍 Button enabled check:');
-    print('  - hasSelection: $hasSelection (${selectedTemplateIds.length} items)');
-    print('  - hasCategory: $hasCategory ($_targetCategoryId)');
-    print('  - pricesValid: $pricesValid');
-    print('  - variantsValid: $variantsValid');
-    
-    final isEnabled = hasSelection && hasCategory && pricesValid && variantsValid;
-    print('  - FINAL RESULT: $isEnabled');
-    
-    return isEnabled;
+    // YENİ KONTROL: Seçilen her ürünün en az bir varyantı olmalı.
+    final allSelectedHaveVariants = _validateAllSelectedItemsHaveVariants();
+
+    return hasCategory && pricesValid && imageVariantsValid && allSelectedHaveVariants;
   }
 
   void _onCategoryChanged(String? categoryName) {
@@ -659,6 +571,9 @@ class _TemplateSelectionDialogState extends State<TemplateSelectionDialog> {
     final availableHeight = screenHeight - keyboardHeight - 100.0;
     final dialogHeight = availableHeight > 400.0 ? availableHeight : 400.0;
     
+    // YENİ: Varyant zorunluluğu için hata mesajı kontrolü
+    final bool everySelectedHasVariant = _validateAllSelectedItemsHaveVariants();
+
     return Dialog(
       insetPadding: EdgeInsets.symmetric(
         horizontal: screenWidth > 600 ? screenWidth * 0.1 : 16.0,
@@ -669,12 +584,10 @@ class _TemplateSelectionDialogState extends State<TemplateSelectionDialog> {
         height: dialogHeight,
         child: Column(
           children: [
-            // Header
             TemplateSelectionHeader(
               onClose: () => Navigator.of(context).pop(),
             ),
             
-            // ✅ GÜNCELLENME: Content'e scroll controller geçir ve onEnsureItemVisible kaldırıldı
             Expanded(
               child: TemplateSelectionContent(
                 currentMenuItemCount: widget.currentMenuItemCount,
@@ -691,7 +604,7 @@ class _TemplateSelectionDialogState extends State<TemplateSelectionDialog> {
                 targetCategoryId: _targetCategoryId,
                 businessId: widget.businessId,
                 token: widget.token,
-                scrollController: _scrollController, // ✅ YENİ: Scroll controller ekle
+                scrollController: _scrollController,
                 onCategoryChanged: _onCategoryChanged,
                 onToggleSelectAll: _toggleSelectAll,
                 onToggleTemplateSelection: _toggleTemplateSelection,
@@ -699,32 +612,56 @@ class _TemplateSelectionDialogState extends State<TemplateSelectionDialog> {
                 onOpenVariantManagement: _openVariantManagementDialog,
                 onShowLimitReached: _showLimitReachedDialog,
                 onCustomProductAdded: _onCustomProductAdded,
-                // ✅ KALDIRILDI: onEnsureItemVisible callback'i
               ),
             ),
             
-            // Footer
-            TemplateSelectionFooter(
-              isButtonEnabled: _isButtonEnabled,
-              selectedTemplateIds: selectedTemplateIds,
-              templateVariantConfigs: templateVariantConfigs,
-              onCancel: () => Navigator.of(context).pop(),
-              onConfirm: () {
-                // Önce validation kontrolü yap
-                if (!_validateVariants()) {
-                  // Validation hatası varsa snackbar göster
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Varyant fotoğrafları eksik. Lütfen kontrol edin.'),
-                      backgroundColor: Colors.red,
+            // GÜNCELLEME: TemplateSelectionFooter widget'ı kaldırıldı ve yerine
+            // doğrudan buton ve hata mesajı mantığı eklendi.
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      TextButton(
+                        onPressed: () => Navigator.of(context).pop(),
+                        child: Text(l10n.dialogButtonCancel),
+                      ),
+                      const SizedBox(width: 8),
+                      ElevatedButton(
+                        onPressed: _isButtonEnabled ? () {
+                          if (!_validateVariantImages()) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('Varyant fotoğrafları eksik. Lütfen kontrol edin.'),
+                                backgroundColor: Colors.red,
+                              ),
+                            );
+                            return;
+                          }
+                          final result = _prepareResultData();
+                          Navigator.of(context).pop(result);
+                        } : null,
+                        child: Text(l10n.templateAddSelectedButton),
+                      ),
+                    ],
+                  ),
+                  // YENİ: Koşullu hata mesajı
+                  if (!_isButtonEnabled && selectedTemplateIds.isNotEmpty && !everySelectedHasVariant)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 8.0),
+                      child: Text(
+                        l10n.templateVariantRequiredError,
+                        style: TextStyle(
+                            color: Theme.of(context).colorScheme.error,
+                            fontSize: 12),
+                        textAlign: TextAlign.right,
+                      ),
                     ),
-                  );
-                  return;
-                }
-                
-                final result = _prepareResultData();
-                Navigator.of(context).pop(result);
-              },
+                ],
+              ),
             ),
           ],
         ),

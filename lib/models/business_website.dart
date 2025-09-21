@@ -26,6 +26,7 @@ class BusinessWebsite {
   final int mapZoomLevel;
   final bool allowReservations;
   final bool allowOnlineOrdering;
+  final String themeMode; // <-- YENİ ALAN
 
   BusinessWebsite({
     this.aboutTitle,
@@ -51,6 +52,7 @@ class BusinessWebsite {
     this.mapZoomLevel = 15,
     required this.allowReservations,
     required this.allowOnlineOrdering,
+    this.themeMode = 'system', // <-- YENİ ALAN
   });
 
   factory BusinessWebsite.fromJson(Map<String, dynamic> json) {
@@ -78,6 +80,7 @@ class BusinessWebsite {
       mapZoomLevel: json['map_zoom_level'] as int? ?? 15,
       allowReservations: json['allow_reservations'] as bool? ?? false,
       allowOnlineOrdering: json['allow_online_ordering'] as bool? ?? false,
+      themeMode: json['theme_mode'] as String? ?? 'system', // <-- YENİ ALAN
     );
   }
 
@@ -104,6 +107,7 @@ class BusinessWebsite {
     int? mapZoomLevel,
     required bool allowReservations,
     required bool allowOnlineOrdering,
+    required String themeMode, // <-- YENİ PARAMETRE
   }) {
     final Map<String, dynamic> data = {
       'about_title': aboutTitle,
@@ -124,6 +128,7 @@ class BusinessWebsite {
       'show_map': showMap,
       'allow_reservations': allowReservations,
       'allow_online_ordering': allowOnlineOrdering,
+      'theme_mode': themeMode, // <-- YENİ ALAN
     };
 
     if (aboutImage != null && aboutImage.isNotEmpty) {

@@ -1,3 +1,5 @@
+// lib/widgets/universal_quantity_input.dart
+
 import 'package:flutter/material.dart';
 import '../models/ingredient.dart';
 import '../utils/unit_converter.dart';

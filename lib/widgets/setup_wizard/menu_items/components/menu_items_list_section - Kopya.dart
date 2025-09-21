@@ -808,21 +808,29 @@ class _MenuItemsListSectionState extends State<MenuItemsListSection> {
                     const SizedBox(height: 8),
                     Row(
                       children: [
+                        // 🎨 Düzenle butonu - Daha koyu sarı/turuncu arka plan
                         Expanded(
                           child: SizedBox(
                             height: 32,
-                            child: IconButton(
+                            child: ElevatedButton.icon(
                               icon: Icon(
                                 Icons.tune,
                                 color: Colors.white,
-                                size: 16,
+                                size: 14,
                               ),
-                              tooltip: 'Düzenle', // Hover/Long press metni
+                              label: Text(
+                                'Düzenle',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 11,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
                               onPressed: () => _openVariantsDialog(menuItem as Map<String, dynamic>),
-                              style: IconButton.styleFrom(
-                                backgroundColor: Colors.orange.shade600,
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.orange.shade600, // 🎨 Daha koyu turuncu
                                 foregroundColor: Colors.white,
-                                elevation: 2,
+                                elevation: 2, // 🎨 Hafif gölge
                                 shadowColor: Colors.orange.withOpacity(0.3),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(8),
@@ -831,7 +839,7 @@ class _MenuItemsListSectionState extends State<MenuItemsListSection> {
                                     width: 1,
                                   ),
                                 ),
-                                padding: EdgeInsets.zero,
+                                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
                               ),
                             ),
                           ),
@@ -843,18 +851,25 @@ class _MenuItemsListSectionState extends State<MenuItemsListSection> {
                         Expanded(
                           child: SizedBox(
                             height: 32,
-                            child: IconButton(
+                            child: ElevatedButton.icon(
                               icon: Icon(
                                 Icons.delete_outline,
                                 color: Colors.white,
-                                size: 16,
+                                size: 14,
                               ),
-                              tooltip: 'Sil', // Hover/Long press metni
+                              label: Text(
+                                'Sil',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 11,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
                               onPressed: () => _deleteMenuItem(context, menuItemId, menuItemName),
-                              style: IconButton.styleFrom(
-                                backgroundColor: Colors.red.shade600,
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.red.shade600, // 🎨 Daha koyu kırmızı
                                 foregroundColor: Colors.white,
-                                elevation: 2,
+                                elevation: 2, // 🎨 Hafif gölge
                                 shadowColor: Colors.red.withOpacity(0.3),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(8),
@@ -863,7 +878,7 @@ class _MenuItemsListSectionState extends State<MenuItemsListSection> {
                                     width: 1,
                                   ),
                                 ),
-                                padding: EdgeInsets.zero,
+                                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
                               ),
                             ),
                           ),

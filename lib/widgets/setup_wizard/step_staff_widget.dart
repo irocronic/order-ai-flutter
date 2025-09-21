@@ -445,11 +445,6 @@ class StepStaffWidgetState extends State<StepStaffWidget> {
         });
       },
     );
-    usernameController.dispose();
-    passwordController.dispose();
-    firstNameController.dispose();
-    lastNameController.dispose();
-    emailController.dispose(); // Controller'ı dispose et
   }
 
   // 🎵 YENİ EKLENEN: Ses kontrol butonu

@@ -3811,7 +3811,7 @@
     "@websiteSettingsLabelAboutTitle": {},
     "websiteSettingsLabelAboutDesc": "Hakkımızda Açıklaması",
     "@websiteSettingsLabelAboutDesc": {},
-    "websiteSettingsLabelAboutImage": "Hakkımızda Görseli (URL)",
+    "websiteSettingsLabelAboutImage": "Hakkımızda Görseli",
     "@websiteSettingsLabelAboutImage": {},
     "websiteSettingsSectionContact": "İletişim Bilgileri",
     "@websiteSettingsSectionContact": {},
@@ -4001,5 +4001,7 @@
     "tableLayoutSuccessSave": "Masa düzeni başarıyla kaydedildi.",
     "tableLayoutErrorSave": "Masa düzeni kaydedilirken hata oluştu.",
     "tableLayoutToggleGrid": "Izgarayı ve Hizalamayı Aç/Kapat",
-    "unplacedTablesTitle": "Yerleştirilmemiş Masalar"
+    "unplacedTablesTitle": "Yerleştirilmemiş Masalar",
+    "templateAddSelectedButton": "Seçilenleri Ekle",
+    "templateVariantRequiredError": "Her seçili ürüne en az bir varyant eklemelisiniz."
 }

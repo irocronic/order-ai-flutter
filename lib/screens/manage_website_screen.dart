@@ -1,13 +1,19 @@
 // lib/screens/manage_website_screen.dart
 
+import 'dart:io';
+import 'dart:typed_data';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart'; // YENİ EKLENDİ
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart' as p;
+import '../services/firebase_storage_service.dart';
 import '../services/user_session.dart';
 import '../services/website_service.dart';
 import '../models/business_website.dart';
-import 'map_picker_screen.dart'; // YENİ EKLENDİ
+import 'map_picker_screen.dart';
 
 class ManageWebsiteScreen extends StatefulWidget {
   const ManageWebsiteScreen({Key? key}) : super(key: key);
@@ -21,6 +27,9 @@ class _ManageWebsiteScreenState extends State<ManageWebsiteScreen> {
   bool _isLoading = true;
   String _errorMessage = '';
   BusinessWebsite? _websiteData;
+
+  final ImagePicker _picker = ImagePicker();
+  bool _isUploadingAboutImage = false;
 
   // Form Controllers
   final Map<String, TextEditingController> _controllers = {
@@ -47,6 +56,10 @@ class _ManageWebsiteScreenState extends State<ManageWebsiteScreen> {
   bool _showMap = true;
   bool _allowReservations = false;
   bool _allowOnlineOrdering = false;
+
+  // === YENİ KOD BAŞLANGICI ===
+  String _themeMode = 'system'; // Varsayılan tema değeri
+  // === YENİ KOD SONU ===
 
   Color _primaryColor = const Color(0xFF3B82F6);
   Color _secondaryColor = const Color(0xFF10B981);
@@ -107,8 +120,72 @@ class _ManageWebsiteScreenState extends State<ManageWebsiteScreen> {
     _showMap = data.showMap;
     _allowReservations = data.allowReservations;
     _allowOnlineOrdering = data.allowOnlineOrdering;
+    
+    // === YENİ KOD BAŞLANGICI ===
+    _themeMode = data.themeMode; // API'den gelen tema bilgisini ata
+    // === YENİ KOD SONU ===
+    
     _primaryColor = _colorFromHex(data.primaryColor);
     _secondaryColor = _colorFromHex(data.secondaryColor);
+  }
+
+  Future<void> _pickAndUploadAboutImage() async {
+    if (_isUploadingAboutImage || !mounted) return;
+    final l10n = AppLocalizations.of(context)!;
+
+    final XFile? image =
+        await _picker.pickImage(source: ImageSource.gallery, imageQuality: 80);
+    if (image == null || !mounted) return;
+
+    setState(() => _isUploadingAboutImage = true);
+
+    try {
+      Uint8List? imageBytes;
+      if (kIsWeb) {
+        imageBytes = await image.readAsBytes();
+      }
+
+      String fileName = p.basename(image.path);
+      String firebaseFileName =
+          "website_assets/business_${UserSession.businessId}/about_${DateTime.now().millisecondsSinceEpoch}_$fileName";
+
+      final String? downloadUrl = await FirebaseStorageService.uploadImage(
+        imageFile: kIsWeb ? null : File(image.path),
+        imageBytes: imageBytes,
+        fileName: firebaseFileName,
+        folderPath: 'website_assets',
+      );
+
+      if (downloadUrl == null) {
+        throw Exception(l10n.photoUploadErrorFirebase);
+      }
+
+      if (mounted) {
+        setState(() {
+          _controllers['about_image']?.text = downloadUrl;
+        });
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(l10n.accountSettingsSuccessPhotoUpdate),
+            backgroundColor: Colors.green,
+          ),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(l10n.accountSettingsErrorUploadingPhotoGeneric(
+                e.toString().replaceFirst("Exception: ", ""))),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() => _isUploadingAboutImage = false);
+      }
+    }
   }
 
   Future<void> _saveSettings() async {
@@ -130,7 +207,8 @@ class _ManageWebsiteScreenState extends State<ManageWebsiteScreen> {
         instagramUrl: _controllers['instagram_url']!.text,
         twitterUrl: _controllers['twitter_url']!.text,
         primaryColor: '#${_primaryColor.value.toRadixString(16).substring(2)}',
-        secondaryColor: '#${_secondaryColor.value.toRadixString(16).substring(2)}',
+        secondaryColor:
+            '#${_secondaryColor.value.toRadixString(16).substring(2)}',
         showMenu: _showMenu,
         showContact: _showContact,
         showMap: _showMap,
@@ -144,6 +222,7 @@ class _ManageWebsiteScreenState extends State<ManageWebsiteScreen> {
             ? double.parse(_controllers['map_longitude']!.text)
             : null,
         mapZoomLevel: int.parse(_controllers['map_zoom_level']!.text),
+        themeMode: _themeMode, // Seçilen temayı modele ekle
       );
 
       await WebsiteService.updateWebsiteDetails(
@@ -171,6 +250,7 @@ class _ManageWebsiteScreenState extends State<ManageWebsiteScreen> {
             mapLatitude: updatedData.mapLatitude,
             mapLongitude: updatedData.mapLongitude,
             mapZoomLevel: updatedData.mapZoomLevel,
+            themeMode: updatedData.themeMode, // Seçilen temayı API'ye gönder
           ));
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -183,8 +263,8 @@ class _ManageWebsiteScreenState extends State<ManageWebsiteScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-              content: Text(l10n
-                  .websiteSettingsErrorSave(e.toString().replaceFirst("Exception: ", ""))),
+              content: Text(l10n.websiteSettingsErrorSave(
+                  e.toString().replaceFirst("Exception: ", ""))),
               backgroundColor: Colors.red),
         );
       }
@@ -193,29 +273,27 @@ class _ManageWebsiteScreenState extends State<ManageWebsiteScreen> {
     }
   }
 
-  // YENİ EKLENEN METOT
   Future<void> _openMapPicker() async {
-    // Mevcut değerleri al, eğer geçersizse varsayılan bir konum kullan
     final currentLat = double.tryParse(_controllers['map_latitude']!.text);
     final currentLng = double.tryParse(_controllers['map_longitude']!.text);
 
-    LatLng initialLatLng = const LatLng(39.9334, 32.8597); // Varsayılan Ankara
+    LatLng initialLatLng = const LatLng(39.9334, 32.8597);
     if (currentLat != null && currentLng != null) {
       initialLatLng = LatLng(currentLat, currentLng);
     }
 
-    // MapPickerScreen'i aç ve bir sonuç bekle (seçilen LatLng)
     final selectedLocation = await Navigator.of(context).push<LatLng>(
       MaterialPageRoute(
         builder: (ctx) => MapPickerScreen(initialLocation: initialLatLng),
       ),
     );
 
-    // Eğer kullanıcı bir konum seçip onayladıysa...
     if (selectedLocation != null) {
       setState(() {
-        _controllers['map_latitude']?.text = selectedLocation.latitude.toString();
-        _controllers['map_longitude']?.text = selectedLocation.longitude.toString();
+        _controllers['map_latitude']?.text =
+            selectedLocation.latitude.toString();
+        _controllers['map_longitude']?.text =
+            selectedLocation.longitude.toString();
       });
     }
   }
@@ -223,13 +301,13 @@ class _ManageWebsiteScreenState extends State<ManageWebsiteScreen> {
   Color _colorFromHex(String hexColor) {
     hexColor = hexColor.toUpperCase().replaceAll("#", "");
     if (hexColor.length == 6) {
-      hexColor = "FF" + hexColor;
+      hexColor = "FF$hexColor";
     }
     return Color(int.parse(hexColor, radix: 16));
   }
 
-  void _showColorPicker(
-      BuildContext context, Color initialColor, ValueChanged<Color> onColorChanged) {
+  void _showColorPicker(BuildContext context, Color initialColor,
+      ValueChanged<Color> onColorChanged) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -290,7 +368,8 @@ class _ManageWebsiteScreenState extends State<ManageWebsiteScreen> {
             : _errorMessage.isNotEmpty
                 ? Center(
                     child: Text(_errorMessage,
-                        style: const TextStyle(color: Colors.white, fontSize: 16)))
+                        style:
+                            const TextStyle(color: Colors.white, fontSize: 16)))
                 : Form(
                     key: _formKey,
                     child: SingleChildScrollView(
@@ -304,19 +383,26 @@ class _ManageWebsiteScreenState extends State<ManageWebsiteScreen> {
                         child: Padding(
                           padding: const EdgeInsets.all(16.0),
                           child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               _buildSectionHeader(
-                                  l10n.websiteSettingsSectionAbout, Icons.info_outline),
-                              _buildTextField(
-                                  'about_title', l10n.websiteSettingsLabelAboutTitle),
-                              _buildTextField(
-                                  'about_description', l10n.websiteSettingsLabelAboutDesc,
+                                  l10n.websiteSettingsSectionAbout,
+                                  Icons.info_outline),
+                              _buildTextField('about_title',
+                                  l10n.websiteSettingsLabelAboutTitle),
+                              _buildTextField('about_description',
+                                  l10n.websiteSettingsLabelAboutDesc,
                                   maxLines: 4),
-                              _buildTextField(
-                                  'about_image', l10n.websiteSettingsLabelAboutImage,
-                                  icon: Icons.image),
-
-                              _buildSectionHeader(l10n.websiteSettingsSectionContact,
+                              const SizedBox(height: 8),
+                              _buildImagePicker(
+                                label: l10n.websiteSettingsLabelAboutImage,
+                                controller: _controllers['about_image']!,
+                                onUpload: _pickAndUploadAboutImage,
+                                isUploading: _isUploadingAboutImage,
+                              ),
+                              const SizedBox(height: 16),
+                              _buildSectionHeader(
+                                  l10n.websiteSettingsSectionContact,
                                   Icons.contact_page_outlined),
                               _buildTextField(
                                   'contact_phone', l10n.websiteSettingsLabelPhone,
@@ -326,45 +412,54 @@ class _ManageWebsiteScreenState extends State<ManageWebsiteScreen> {
                                   'contact_email', l10n.websiteSettingsLabelEmail,
                                   icon: Icons.email,
                                   keyboardType: TextInputType.emailAddress),
-                              _buildTextField(
-                                  'contact_address', l10n.websiteSettingsLabelAddress,
-                                  icon: Icons.location_on_outlined, maxLines: 2),
+                              _buildTextField('contact_address',
+                                  l10n.websiteSettingsLabelAddress,
+                                  icon: Icons.location_on_outlined,
+                                  maxLines: 2),
                               _buildTextField('contact_working_hours',
                                   l10n.websiteSettingsLabelWorkingHours,
                                   icon: Icons.access_time),
-                              
-                              // HARİTA BÖLÜMÜ GÜNCELLENDİ
-                              _buildSectionHeader("Harita Ayarları", Icons.map_outlined),
+                              _buildSectionHeader(
+                                  "Harita Ayarları", Icons.map_outlined),
                               Row(
                                 children: [
                                   Expanded(
-                                    child: _buildTextField('map_latitude', "Enlem (Latitude)",
-                                      keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
-                                      validator: (value) {
-                                        if (value != null && value.isNotEmpty) {
-                                          final latitude = double.tryParse(value);
-                                          if (latitude == null || latitude < -90 || latitude > 90) {
-                                            return "Geçerli bir enlem girin (-90 ile 90)";
-                                          }
+                                    child: _buildTextField(
+                                        'map_latitude', "Enlem (Latitude)",
+                                        keyboardType: const TextInputType
+                                            .numberWithOptions(
+                                                decimal: true, signed: true),
+                                        validator: (value) {
+                                      if (value != null && value.isNotEmpty) {
+                                        final latitude = double.tryParse(value);
+                                        if (latitude == null ||
+                                            latitude < -90 ||
+                                            latitude > 90) {
+                                          return "Geçerli bir enlem girin (-90 ile 90)";
                                         }
-                                        return null;
                                       }
-                                    ),
+                                      return null;
+                                    }),
                                   ),
                                   const SizedBox(width: 8),
                                   Expanded(
-                                    child: _buildTextField('map_longitude', "Boylam (Longitude)", 
-                                      keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: true),
-                                      validator: (value) {
-                                        if (value != null && value.isNotEmpty) {
-                                          final longitude = double.tryParse(value);
-                                          if (longitude == null || longitude < -180 || longitude > 180) {
-                                            return "Geçerli bir boylam girin (-180 ile 180)";
-                                          }
+                                    child: _buildTextField('map_longitude',
+                                        "Boylam (Longitude)",
+                                        keyboardType: const TextInputType
+                                            .numberWithOptions(
+                                                decimal: true, signed: true),
+                                        validator: (value) {
+                                      if (value != null && value.isNotEmpty) {
+                                        final longitude =
+                                            double.tryParse(value);
+                                        if (longitude == null ||
+                                            longitude < -180 ||
+                                            longitude > 180) {
+                                          return "Geçerli bir boylam girin (-180 ile 180)";
                                         }
-                                        return null;
                                       }
-                                    ),
+                                      return null;
+                                    }),
                                   ),
                                 ],
                               ),
@@ -375,62 +470,79 @@ class _ManageWebsiteScreenState extends State<ManageWebsiteScreen> {
                                   icon: const Icon(Icons.map),
                                   label: const Text("Haritadan Konum Seç"),
                                   style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.deepPurple.shade100,
-                                    foregroundColor: Colors.deepPurple.shade900,
+                                    backgroundColor:
+                                        Colors.deepPurple.shade100,
+                                    foregroundColor:
+                                        Colors.deepPurple.shade900,
                                   ),
                                 ),
                               ),
                               const SizedBox(height: 16),
-                              _buildTextField('map_zoom_level', "Harita Zoom Seviyesi (1-20)", 
-                                keyboardType: TextInputType.number,
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return "Zoom seviyesi gereklidir";
-                                  }
-                                  final zoom = int.tryParse(value);
-                                  if (zoom == null || zoom < 1 || zoom > 20) {
-                                    return "Geçerli bir zoom seviyesi girin (1-20)";
-                                  }
-                                  return null;
+                              _buildTextField(
+                                  'map_zoom_level', "Harita Zoom Seviyesi (1-20)",
+                                  keyboardType: TextInputType.number,
+                                  validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return "Zoom seviyesi gereklidir";
                                 }
-                              ),
-
-                              _buildSectionHeader(l10n.websiteSettingsSectionAppearance,
+                                final zoom = int.tryParse(value);
+                                if (zoom == null || zoom < 1 || zoom > 20) {
+                                  return "Geçerli bir zoom seviyesi girin (1-20)";
+                                }
+                                return null;
+                              }),
+                              _buildSectionHeader(
+                                  l10n.websiteSettingsSectionAppearance,
                                   Icons.color_lens_outlined),
+                              
+                              // === YENİ WIDGET ÇAĞRISI ===
+                              _buildThemeSelector(),
+                              // =========================
+
                               _buildColorPickerTile(
                                   l10n.websiteSettingsLabelPrimaryColor,
                                   _primaryColor,
-                                  (color) => setState(() => _primaryColor = color)),
+                                  (color) =>
+                                      setState(() => _primaryColor = color)),
                               _buildColorPickerTile(
                                   l10n.websiteSettingsLabelSecondaryColor,
                                   _secondaryColor,
-                                  (color) => setState(() => _secondaryColor = color)),
-
-                              _buildSectionHeader(
-                                  l10n.websiteSettingsSectionSocial, Icons.share_outlined),
+                                  (color) =>
+                                      setState(() => _secondaryColor = color)),
+                              _buildSectionHeader(l10n.websiteSettingsSectionSocial,
+                                  Icons.share_outlined),
                               _buildTextField('facebook_url', 'Facebook URL',
                                   icon: Icons.facebook),
-                              _buildTextField('instagram_url', 'Instagram URL',
+                              _buildTextField(
+                                  'instagram_url', 'Instagram URL',
                                   icon: Icons.camera_alt_outlined),
                               _buildTextField('twitter_url', 'Twitter/X URL',
                                   icon: Icons.read_more),
-
-                              _buildSectionHeader(l10n.websiteSettingsSectionVisibility,
+                              _buildSectionHeader(
+                                  l10n.websiteSettingsSectionVisibility,
                                   Icons.visibility_outlined),
-                              _buildSwitchTile(l10n.websiteSettingsToggleShowMenu,
-                                  _showMenu, (val) => setState(() => _showMenu = val)),
-                              _buildSwitchTile(l10n.websiteSettingsToggleShowContact,
-                                  _showContact, (val) => setState(() => _showContact = val)),
+                              _buildSwitchTile(
+                                  l10n.websiteSettingsToggleShowMenu,
+                                  _showMenu,
+                                  (val) => setState(() => _showMenu = val)),
+                              _buildSwitchTile(
+                                  l10n.websiteSettingsToggleShowContact,
+                                  _showContact,
+                                  (val) => setState(() => _showContact = val)),
                               _buildSwitchTile(l10n.websiteSettingsToggleShowMap,
                                   _showMap, (val) => setState(() => _showMap = val)),
-
-                              _buildSectionHeader("Online İşlemler", Icons.public),
-                              _buildSwitchTile("Online Rezervasyona İzin Ver",
+                              _buildSectionHeader(
+                                  "Online İşlemler", Icons.public),
+                              _buildSwitchTile(
+                                  "Online Rezervasyona İzin Ver",
                                   _allowReservations,
-                                  (val) => setState(() => _allowReservations = val)),
-                              _buildSwitchTile("Online Siparişe İzin Ver",
+                                  (val) =>
+                                      setState(() => _allowReservations = val)),
+                              _buildSwitchTile(
+                                  "Online Siparişe İzin Ver",
                                   _allowOnlineOrdering,
-                                  (val) => setState(() => _allowOnlineOrdering = val)),
+                                  (val) => setState(
+                                      () => _allowOnlineOrdering = val)),
                             ],
                           ),
                         ),
@@ -445,13 +557,59 @@ class _ManageWebsiteScreenState extends State<ManageWebsiteScreen> {
             ? const SizedBox(
                 width: 20,
                 height: 20,
-                child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
+                child:
+                    CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
             : const Icon(Icons.save),
         backgroundColor: Colors.deepPurple.shade700,
         foregroundColor: Colors.white,
       ),
     );
   }
+
+  // === YENİ METOT BAŞLANGICI ===
+  Widget _buildThemeSelector() {
+    final Map<String, String> themeOptions = {
+      'system': "Sistem Varsayılanı",
+      'light': "Aydınlık Mod",
+      'dark': "Karanlık Mod",
+    };
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: DropdownButtonFormField<String>(
+        value: _themeMode,
+        decoration: InputDecoration(
+          labelText: "Web Sitesi Teması",
+          labelStyle: TextStyle(color: Colors.grey.shade700),
+          prefixIcon: Icon(Icons.brightness_6_outlined, color: Colors.grey.shade600),
+          filled: true,
+          fillColor: Colors.black.withOpacity(0.04),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: BorderSide.none,
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: BorderSide(color: Colors.deepPurple.shade700, width: 2),
+          ),
+        ),
+        items: themeOptions.entries.map((entry) {
+          return DropdownMenuItem<String>(
+            value: entry.key,
+            child: Text(entry.value),
+          );
+        }).toList(),
+        onChanged: (String? newValue) {
+          if (newValue != null) {
+            setState(() {
+              _themeMode = newValue;
+            });
+          }
+        },
+      ),
+    );
+  }
+  // === YENİ METOT SONU ===
 
   Widget _buildSectionHeader(String title, IconData icon) {
     return Padding(
@@ -462,7 +620,8 @@ class _ManageWebsiteScreenState extends State<ManageWebsiteScreen> {
           const SizedBox(width: 8),
           Text(title,
               style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  color: Colors.deepPurple.shade900, fontWeight: FontWeight.bold)),
+                  color: Colors.deepPurple.shade900,
+                  fontWeight: FontWeight.bold)),
         ],
       ),
     );
@@ -486,7 +645,8 @@ class _ManageWebsiteScreenState extends State<ManageWebsiteScreen> {
         decoration: InputDecoration(
           labelText: label,
           labelStyle: TextStyle(color: Colors.grey.shade700),
-          prefixIcon: icon != null ? Icon(icon, color: Colors.grey.shade600) : null,
+          prefixIcon:
+              icon != null ? Icon(icon, color: Colors.grey.shade600) : null,
           filled: true,
           fillColor: Colors.black.withOpacity(0.04),
           border: OutlineInputBorder(
@@ -499,6 +659,86 @@ class _ManageWebsiteScreenState extends State<ManageWebsiteScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildImagePicker({
+    required String label,
+    required TextEditingController controller,
+    required Future<void> Function() onUpload,
+    required bool isUploading,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: TextStyle(
+              color: Colors.grey.shade700,
+              fontSize: 16,
+              fontWeight: FontWeight.w500),
+        ),
+        const SizedBox(height: 8),
+        GestureDetector(
+          onTap: isUploading ? null : onUpload,
+          child: Container(
+            height: 150,
+            width: double.infinity,
+            decoration: BoxDecoration(
+              color: Colors.black.withOpacity(0.04),
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: Colors.grey.shade300),
+            ),
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                ValueListenableBuilder<TextEditingValue>(
+                  valueListenable: controller,
+                  builder: (context, value, child) {
+                    if (value.text.isEmpty) {
+                      return Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.add_a_photo_outlined,
+                              color: Colors.grey.shade600, size: 40),
+                          const SizedBox(height: 8),
+                          Text(
+                            "Görsel Yükle",
+                            style: TextStyle(color: Colors.grey.shade700),
+                          )
+                        ],
+                      );
+                    }
+                    return ClipRRect(
+                      borderRadius: BorderRadius.circular(11),
+                      child: FadeInImage.memoryNetwork(
+                        placeholder: kTransparentImage,
+                        image: value.text,
+                        fit: BoxFit.cover,
+                        width: double.infinity,
+                        height: 150,
+                        imageErrorBuilder: (context, error, stackTrace) =>
+                            const Icon(Icons.broken_image,
+                                color: Colors.red, size: 40),
+                      ),
+                    );
+                  },
+                ),
+                if (isUploading)
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.black.withOpacity(0.5),
+                      borderRadius: BorderRadius.circular(11),
+                    ),
+                    child: const Center(
+                      child: CircularProgressIndicator(color: Colors.white),
+                    ),
+                  ),
+              ],
+            ),
+          ),
+        )
+      ],
     );
   }
 
@@ -530,7 +770,8 @@ class _ManageWebsiteScreenState extends State<ManageWebsiteScreen> {
     );
   }
 
-  Widget _buildSwitchTile(String title, bool value, ValueChanged<bool> onChanged) {
+  Widget _buildSwitchTile(
+      String title, bool value, ValueChanged<bool> onChanged) {
     return SwitchListTile(
       title: Text(title),
       value: value,
@@ -540,3 +781,12 @@ class _ManageWebsiteScreenState extends State<ManageWebsiteScreen> {
     );
   }
 }
+
+final Uint8List kTransparentImage = Uint8List.fromList([
+  0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A, 0x00, 0x00, 0x00, 0x0D, 0x49,
+  0x48, 0x44, 0x52, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x01, 0x08, 0x06,
+  0x00, 0x00, 0x00, 0x1F, 0x15, 0xC4, 0x89, 0x00, 0x00, 0x00, 0x0A, 0x49, 0x44,
+  0x41, 0x54, 0x78, 0x9C, 0x63, 0x00, 0x01, 0x00, 0x00, 0x05, 0x00, 0x01, 0x0D,
+  0x0A, 0x2D, 0xB4, 0x00, 0x00, 0x00, 0x00, 0x49, 0x45, 0x4E, 0x44, 0xAE, 0x42,
+  0x60, 0x82,
+]);

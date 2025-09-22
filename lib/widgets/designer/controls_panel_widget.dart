@@ -2,12 +2,14 @@
 
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart'; // YENİ IMPORT
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import '../../models/business_card_model.dart';
 import '../../models/shape_style.dart';
 import '../../providers/business_card_provider.dart';
+import 'icon_gallery_dialog.dart'; // YENİ IMPORT
 import 'template_gallery_dialog.dart';
 
 class _QrCodeDialog extends StatefulWidget {
@@ -309,6 +311,32 @@ class _ControlsPanelWidgetState extends State<ControlsPanelWidget>
             ),
           ],
         ),
+        const SizedBox(height: 12),
+        ElevatedButton.icon(
+          onPressed: provider.addSvgElement,
+          icon: const Icon(Icons.star_outline),
+          label: const Text("SVG Objesi Ekle"),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.purple.shade400,
+            foregroundColor: Colors.white,
+          ),
+        ),
+        const SizedBox(height: 12),
+        // YENİ EKLENDİ
+        ElevatedButton.icon(
+          onPressed: () {
+            showDialog(
+              context: context,
+              builder: (context) => const IconGalleryDialog(),
+            );
+          },
+          icon: const Icon(FontAwesomeIcons.icons),
+          label: const Text("Hazır İkon Ekle"),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.teal,
+            foregroundColor: Colors.white,
+          ),
+        ),
       ],
     );
   }
@@ -382,8 +410,6 @@ class _ControlsPanelWidgetState extends State<ControlsPanelWidget>
               provider.updateBackgroundColor(
                   currentStartColor, endColor, GradientType.linear);
             } else {
-              // GÜNCELLEME: Gradyanı temizlemek için dördüncü parametreyi (clearGradient)
-              // `true` olarak gönderiyoruz.
               provider.updateBackgroundColor(currentStartColor, null, null, true);
             }
           },
@@ -502,11 +528,25 @@ class _ControlsPanelWidgetState extends State<ControlsPanelWidget>
           const SizedBox(height: 16),
         ],
         if (element.type != CardElementType.qrCode &&
-            element.type != CardElementType.shape)
+            element.type != CardElementType.shape &&
+            element.type != CardElementType.fontAwesomeIcon) // İkon rengini buradan yöneteceğiz
           ListTile(
             contentPadding: EdgeInsets.zero,
             leading: const Icon(Icons.color_lens_outlined),
             title: const Text("Eleman Rengi"),
+            trailing:
+                CircleAvatar(backgroundColor: element.style.color, radius: 15),
+            onTap: () => _showColorPicker(context, element.style.color!,
+                (color) {
+              updateProperty(
+                  color, (e, v) => e.copyWith(style: e.style.copyWith(color: v)));
+            }),
+          ),
+        if (element.type == CardElementType.fontAwesomeIcon)
+          ListTile(
+            contentPadding: EdgeInsets.zero,
+            leading: const Icon(Icons.color_lens_outlined),
+            title: const Text("İkon Rengi"),
             trailing:
                 CircleAvatar(backgroundColor: element.style.color, radius: 15),
             onTap: () => _showColorPicker(context, element.style.color!,

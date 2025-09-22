@@ -3,9 +3,11 @@
 import 'dart:convert';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart'; // YENİ IMPORT
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:collection/collection.dart';
 import 'package:uuid/uuid.dart';
+import 'package:file_picker/file_picker.dart';
 import '../models/business_card_model.dart';
 import '../models/shape_style.dart';
 import 'commands.dart';
@@ -287,6 +289,46 @@ class BusinessCardProvider extends ChangeNotifier {
     selectElement(newElement.id);
   }
 
+  Future<void> addSvgElement() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['svg'],
+    );
+
+    if (result != null && result.files.single.bytes != null) {
+      final fileBytes = result.files.single.bytes!;
+      final svgContent = utf8.decode(fileBytes);
+
+      final newElement = CardElement(
+        id: Uuid().v4(),
+        type: CardElementType.svg,
+        content: svgContent,
+        imageData: null,
+        position: const Offset(50, 50),
+        size: const Size(100, 100),
+        style: const TextStyle(),
+      );
+      final command = AddElementCommand(this, newElement);
+      execute(command);
+      selectElement(newElement.id);
+    }
+  }
+  
+  // YENİ EKLENDİ: FontAwesome ikonu ekleme metodu
+  void addFontAwesomeIconElement(IconData iconData) {
+    final newElement = CardElement(
+      id: Uuid().v4(),
+      type: CardElementType.fontAwesomeIcon,
+      content: iconData.codePoint.toString(), // İkonun kodunu sakla
+      position: const Offset(50, 50),
+      size: const Size(40, 40),
+      style: const TextStyle(color: Colors.black), // Varsayılan renk
+    );
+    final command = AddElementCommand(this, newElement);
+    execute(command);
+    selectElement(newElement.id);
+  }
+
   void deleteSelectedElements() {
     if (_selectedElementIds.isNotEmpty) {
       final command = DeleteElementsCommand(this, selectedElements);
@@ -295,7 +337,6 @@ class BusinessCardProvider extends ChangeNotifier {
     }
   }
 
-  // #region GÜNCELLEME BAŞLANGICI
   void updateBackgroundColor(Color startColor,
       [Color? endColor, GradientType? type, bool clearGradient = false]) {
     final command = UpdateBackgroundColorCommand(
@@ -306,11 +347,9 @@ class BusinessCardProvider extends ChangeNotifier {
         startColor,
         endColor,
         type,
-        // YENİ: Bayrak komuta iletiliyor.
         clearGradient);
     execute(command);
   }
-  // #endregion GÜNCELLEME SONU
 
   void updateSelectedElementsProperties(
       CardElement Function(CardElement) updater) {

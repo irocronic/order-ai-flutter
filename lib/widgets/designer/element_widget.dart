@@ -1,11 +1,12 @@
 // lib/widgets/designer/element_widget.dart
 
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart'; // YENİ IMPORT
 import 'package:google_fonts/google_fonts.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import '../../models/business_card_model.dart';
 import '../../models/card_icon_enum.dart';
-// YENİ EKLENDİ
 import 'shape_painter.dart';
 
 class ElementWidget extends StatelessWidget {
@@ -101,8 +102,7 @@ class ElementWidget extends StatelessWidget {
           ),
         );
         break;
-        
-      // YENİ EKLENDİ: Şekil elemanını çizmek için yeni case
+
       case CardElementType.shape:
         if (element.shapeStyle != null) {
           child = CustomPaint(
@@ -110,9 +110,36 @@ class ElementWidget extends StatelessWidget {
             size: element.size,
           );
         } else {
-          // Fallback, normalde olmamalı
           child = Container(color: Colors.red.withOpacity(0.5));
         }
+        break;
+        
+      case CardElementType.svg:
+        if (element.content.isNotEmpty) {
+          child = SvgPicture.string(
+            element.content,
+            fit: BoxFit.contain,
+          );
+        } else {
+          child = Container(
+            color: Colors.grey.shade200,
+            child: Icon(Icons.star_outline,
+                size: element.size.height / 2, color: Colors.grey),
+          );
+        }
+        break;
+
+      // YENİ EKLENDİ
+      case CardElementType.fontAwesomeIcon:
+        final codePoint = int.tryParse(element.content) ?? FontAwesomeIcons.question.codePoint;
+        // FontAwesome'un farklı stilleri (solid, regular, brands) için 'fontFamily' adını doğru belirtmek gerekebilir.
+        // Şimdilik varsayılan (solid) için çalışacaktır.
+        final iconData = IconData(codePoint, fontFamily: 'FontAwesomeSolid', fontPackage: 'font_awesome_flutter');
+        child = FaIcon(
+          iconData,
+          size: element.size.width,
+          color: element.style.color,
+        );
         break;
     }
 

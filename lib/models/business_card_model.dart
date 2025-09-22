@@ -8,7 +8,7 @@ import 'package:collection/collection.dart';
 import 'card_icon_enum.dart';
 import 'shape_style.dart';
 
-enum CardElementType { text, image, icon, qrCode, group, shape }
+enum CardElementType { text, image, icon, qrCode, group, shape, svg, fontAwesomeIcon }
 
 enum GradientType { linear, radial }
 

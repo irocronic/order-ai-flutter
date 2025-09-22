@@ -59,6 +59,8 @@ dependencies:
   flutter_blue_plus: ^1.31.20
   webview_flutter: ^4.7.0
   google_maps_flutter: ^2.12.0
+  flutter_svg: ^2.0.7
+  file_picker: ^6.1.1
 
   # YENİ EKLENDİ: Özel ses dosyalarını çalmak için.
   audioplayers: ^6.5.0
@@ -85,6 +87,7 @@ flutter:
     - assets/sounds/setup/en/
     - assets/templates/
     - assets/previews/
+    - assets/fonts/
 
 # --- flutter_native_splash İÇİN EKLENEN BÖLÜM ---
 # Bu bölümü kendi projenize göre düzenlemeyi unutmayın.

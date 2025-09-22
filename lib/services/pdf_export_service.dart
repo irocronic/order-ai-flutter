@@ -1,13 +1,15 @@
 // lib/services/pdf_export_service.dart
 
+// lib/services/pdf_export_service.dart
+
 import 'package:flutter/material.dart' as material;
+import 'package:flutter/services.dart'; // GÜNCELLEME: Font yüklemek için eklendi.
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 import '../models/business_card_model.dart';
 import '../models/card_icon_enum.dart';
-// YENİ EKLENDİ
 import '../models/shape_style.dart';
 
 class PdfExportService {
@@ -17,6 +19,13 @@ class PdfExportService {
 
     final fontMap = await _loadFonts(cardModel);
     final iconFont = await PdfGoogleFonts.materialIcons();
+
+    // GÜNCELLEME: FontAwesome fontunu asset'lerden yüklüyoruz.
+    // Bu kodun çalışması için TTF dosyasını projenize ekleyip pubspec.yaml'da
+    // asset olarak tanımladığınızdan emin olun.
+    final fontAwesomeTtf =
+        await rootBundle.load("assets/fonts/fa-solid-900.ttf");
+    final fontAwesome = pw.TtfFont(fontAwesomeTtf);
 
     pdf.addPage(
       pw.Page(
@@ -66,7 +75,13 @@ class PdfExportService {
                       child: pw.Transform.rotate(
                         angle: -element.rotation,
                         child: _buildPdfElement(
-                            element, fontMap, iconFont, scaleX, scaleY),
+                          element,
+                          fontMap,
+                          iconFont,
+                          fontAwesome, // GÜNCELLEME: Yüklenen fontu metoda gönder.
+                          scaleX,
+                          scaleY,
+                        ),
                       ),
                     ),
                   ),
@@ -144,11 +159,13 @@ class PdfExportService {
   }
 
   static pw.Widget _buildPdfElement(
-      CardElement element,
-      Map<String, pw.Font> fontMap,
-      pw.Font iconFont,
-      double scaleX,
-      double scaleY) {
+    CardElement element,
+    Map<String, pw.Font> fontMap,
+    pw.Font iconFont,
+    pw.Font fontAwesome, // GÜNCELLEME: Yeni parametre eklendi.
+    double scaleX,
+    double scaleY,
+  ) {
     pw.Font getFont(material.TextStyle style) {
       final family = style.fontFamily ?? 'Roboto';
       final key = "${family}_${style.fontWeight}_${style.fontStyle}";
@@ -220,8 +237,7 @@ class PdfExportService {
         );
       case CardElementType.group:
         return pw.SizedBox(); // Gruplar PDF'te görünmez
-        
-      // YENİ EKLENDİ: Şekil elemanını PDF'e çizmek için yeni case
+
       case CardElementType.shape:
         if (element.shapeStyle != null) {
           final style = element.shapeStyle!;
@@ -237,8 +253,6 @@ class PdfExportService {
                 ),
               );
             case ShapeType.ellipse:
-              // PDF kütüphanesi elips için doğrudan bir decoration sunmuyor.
-              // ClipOval ile benzer bir görünüm elde edebiliriz.
               return pw.ClipOval(
                 child: pw.Container(
                   decoration: pw.BoxDecoration(
@@ -252,14 +266,27 @@ class PdfExportService {
               );
             case ShapeType.line:
               return pw.Container(
-                // Yüksekliği kenarlık kalınlığı kadar olan bir kutu çizerek
-                // çizgi elde ediyoruz.
                 height: style.borderWidth * scaleY,
                 color: PdfColor.fromInt(style.borderColor.value),
               );
           }
         }
-        return pw.SizedBox(); // shapeStyle null ise boş alan döner.
+        return pw.SizedBox();
+        
+      case CardElementType.svg:
+        return pw.SvgImage(svg: element.content);
+
+      // GÜNCELLEME: Eksik olan case durumu eklendi.
+      case CardElementType.fontAwesomeIcon:
+        final codePoint = int.tryParse(element.content) ?? 0;
+        return pw.Text(
+          String.fromCharCode(codePoint),
+          style: pw.TextStyle(
+            font: fontAwesome,
+            fontSize: element.size.width * scaleX,
+            color: PdfColor.fromInt(element.style.color!.value),
+          ),
+        );
     }
   }
 }

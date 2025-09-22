@@ -2,7 +2,8 @@
 
 import 'package:flutter/material.dart';
 
-// YENİ EKLENDİ: Şekil türlerini ayırt etmek için enum.
+// HATA BURADAYDI: Bu enum tanımı dosyanızda eksik.
+// Lütfen bu satırları dosyanın en üstüne eklediğinizden emin olun.
 enum ShapeType { rectangle, ellipse, line }
 
 @immutable
@@ -40,23 +41,17 @@ class ShapeStyle {
         'borderWidth': borderWidth,
       };
 
-  // Yardımcı: JSON'dan gelen renk değeri hem int hem de hex string olabileceği için
-  // esnek parse yapan fonksiyon.
   static Color parseColor(dynamic jsonColor) {
     try {
       if (jsonColor == null) return Colors.blue;
       if (jsonColor is int) return Color(jsonColor);
       if (jsonColor is String) {
-        // Örn: "#RRGGBB" veya "RRGGBB" veya "#AARRGGBB"
         String s = jsonColor.trim();
         if (s.startsWith('#')) s = s.substring(1);
-        // Eğer alpha yoksa FF ekle
         if (s.length == 6) s = 'FF' + s;
         return Color(int.parse(s, radix: 16));
       }
-    } catch (_) {
-      // fallback
-    }
+    } catch (_) {}
     return Colors.blue;
   }
 

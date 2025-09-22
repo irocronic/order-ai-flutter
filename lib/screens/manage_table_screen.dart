@@ -1,3 +1,5 @@
+// lib/screens/manage_table_screen.dart
+
 import '../services/notification_center.dart';
 import '../services/refresh_manager.dart';
 import 'dart:convert';
@@ -628,7 +630,7 @@ class _ManageTableScreenState extends State<ManageTableScreen> {
                                 maxCrossAxisExtent: 350.0,
                                 mainAxisSpacing: 16.0,
                                 crossAxisSpacing: 16.0,
-                                childAspectRatio: 1.5,
+                                childAspectRatio: 1.4,
                               ),
                               itemCount: tables.length,
                               itemBuilder: (context, index) {

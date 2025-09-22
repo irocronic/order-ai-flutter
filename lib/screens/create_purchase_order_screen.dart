@@ -221,6 +221,9 @@ class _CreatePurchaseOrderScreenState extends State<CreatePurchaseOrderScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(l10n.purchaseOrderCreateTitle, style: const TextStyle(color: Colors.white)),
+        iconTheme: const IconThemeData(
+          color: Colors.white,
+        ),
         flexibleSpace: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(

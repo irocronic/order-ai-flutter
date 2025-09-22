@@ -1,4 +1,4 @@
-// YENİ DOSYA: lib/widgets/designer/template_gallery_dialog.dart
+// lib/widgets/designer/template_gallery_dialog.dart
 
 import 'dart:convert';
 import 'package:flutter/material.dart';
@@ -18,14 +18,19 @@ class _TemplateGalleryDialogState extends State<TemplateGalleryDialog> {
   // Örnek şablon listesi. Bunu dışarıdan da alabilirsiniz.
   final List<Template> _templates = [
     Template(
-      name: "Modern Tasarım",
+      name: "Business Card V1",
       assetPath: 'assets/templates/modern_template.json',
-      previewImagePath: 'assets/previews/modern.png', // Bu görselleri projenize eklemelisiniz.
+      previewImagePath: 'assets/previews/modern.png', 
     ),
     Template(
-      name: "Klasik Tasarım",
+      name: "Business Card V2",
       assetPath: 'assets/templates/classic_template.json',
-      previewImagePath: 'assets/previews/classic.png', // Bu görselleri projenize eklemelisiniz.
+      previewImagePath: 'assets/previews/classic.png', 
+    ),
+    Template(
+      name: "Logo V1",
+      assetPath: 'assets/templates/logo.json', // Adım 1'de kopyaladığın dosyanın yolu
+      previewImagePath: 'assets/previews/logo.png', // Önizleme resmi (isteğe bağlı ama önerilir)
     ),
   ];
 

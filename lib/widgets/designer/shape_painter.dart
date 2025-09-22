@@ -1,4 +1,4 @@
-// YENİ DOSYA: lib/widgets/designer/shape_painter.dart
+// lib/widgets/designer/shape_painter.dart
 
 import 'package:flutter/material.dart';
 import '../../models/shape_style.dart';

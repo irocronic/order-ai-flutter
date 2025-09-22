@@ -1,0 +1,76 @@
+{
+    "gradientStartColor": 4294967295,
+    "gradientEndColor": null,
+    "gradientType": null,
+    "elements": [
+        {
+            "id": "h-left-bar",
+            "type": "shape",
+            "content": "rectangle",
+            "position": {"dx": 80.0, "dy": 100.0},
+            "size": {"width": 20.0, "height": 100.0},
+            "style": {},
+            "shapeStyle": {"shapeType": "rectangle", "fillColor": 4283059274, "borderColor": 4283059274, "borderWidth": 0.0},
+            "rotation": 0.0, "opacity": 1.0
+        },
+        {
+            "id": "h-cross-bar",
+            "type": "shape",
+            "content": "rectangle",
+            "position": {"dx": 100.0, "dy": 140.0},
+            "size": {"width": 40.0, "height": 20.0},
+            "style": {},
+            "shapeStyle": {"shapeType": "rectangle", "fillColor": 4283059274, "borderColor": 4283059274, "borderWidth": 0.0},
+            "rotation": 0.0, "opacity": 1.0
+        },
+        {
+            "id": "h-right-bar",
+            "type": "shape",
+            "content": "rectangle",
+            "position": {"dx": 140.0, "dy": 100.0},
+            "size": {"width": 20.0, "height": 100.0},
+            "style": {},
+            "shapeStyle": {"shapeType": "rectangle", "fillColor": 4283059274, "borderColor": 4283059274, "borderWidth": 0.0},
+            "rotation": 0.0, "opacity": 1.0
+        },
+        {
+            "id": "k-upper-arm",
+            "type": "shape",
+            "content": "rectangle",
+            "position": {"dx": 155.0, "dy": 115.0},
+            "size": {"width": 55.0, "height": 20.0},
+            "style": {},
+            "shapeStyle": {"shapeType": "rectangle", "fillColor": 4293414719, "borderColor": 4293414719, "borderWidth": 0.0},
+            "rotation": -0.785398, "opacity": 1.0
+        },
+        {
+            "id": "k-lower-arm",
+            "type": "shape",
+            "content": "rectangle",
+            "position": {"dx": 155.0, "dy": 165.0},
+            "size": {"width": 55.0, "height": 20.0},
+            "style": {},
+            "shapeStyle": {"shapeType": "rectangle", "fillColor": 4293414719, "borderColor": 4293414719, "borderWidth": 0.0},
+            "rotation": 0.785398, "opacity": 1.0
+        },
+        {
+            "id": "brand-name",
+            "type": "text",
+            "content": "HELİN KINAY",
+            "position": {"dx": 50.0, "dy": 220.0},
+            "size": {"width": 200.0, "height": 25.0},
+            "style": { "color": 4283059274, "fontSize": 20.0, "fontFamily": "Montserrat", "letterSpacing": 3.0, "fontWeight": "FontWeight.bold"},
+            "textAlign": "center", "rotation": 0.0, "opacity": 1.0
+        },
+        {
+            "id": "brand-title",
+            "type": "text",
+            "content": "İÇ MİMAR",
+            "position": {"dx": 50.0, "dy": 245.0},
+            "size": {"width": 200.0, "height": 20.0},
+            "style": { "color": 4293414719, "fontSize": 12.0, "fontFamily": "Lato", "letterSpacing": 2.0},
+            "textAlign": "center", "rotation": 0.0, "opacity": 1.0
+        }
+    ],
+    "dimensions": {"width": 300.0, "height": 300.0}
+}

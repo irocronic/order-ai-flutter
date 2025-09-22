@@ -6,10 +6,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import '../../models/business_card_model.dart';
-// YENİ EKLENDİ
 import '../../models/shape_style.dart';
 import '../../providers/business_card_provider.dart';
-// YENİ EKLENDİ
 import 'template_gallery_dialog.dart';
 
 class _QrCodeDialog extends StatefulWidget {
@@ -68,7 +66,6 @@ class _QrCodeDialogState extends State<_QrCodeDialog> {
   }
 }
 
-
 class ControlsPanelWidget extends StatefulWidget {
   const ControlsPanelWidget({Key? key}) : super(key: key);
   @override
@@ -83,17 +80,22 @@ class _ControlsPanelWidgetState extends State<ControlsPanelWidget>
   void _handleTabChange() {
     final selectedElements = _provider.selectedElements;
     if (!mounted) return;
-    if (selectedElements.isEmpty && _tabController.index != 0) {
+
+    const int elementSettingsTabIndex = 4;
+
+    if (selectedElements.isEmpty &&
+        _tabController.index == elementSettingsTabIndex) {
       _tabController.animateTo(0);
-    } else if (selectedElements.isNotEmpty && _tabController.index != 1) {
-      _tabController.animateTo(1);
+    } else if (selectedElements.isNotEmpty &&
+        _tabController.index != elementSettingsTabIndex) {
+      _tabController.animateTo(elementSettingsTabIndex);
     }
   }
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 2, vsync: this);
+    _tabController = TabController(length: 5, vsync: this);
     _provider = context.read<BusinessCardProvider>();
     _provider.addListener(_handleTabChange);
   }
@@ -104,7 +106,7 @@ class _ControlsPanelWidgetState extends State<ControlsPanelWidget>
     _provider.removeListener(_handleTabChange);
     super.dispose();
   }
-  
+
   void _showQrCodeDialog(BuildContext context) {
     showDialog(
       context: context,
@@ -112,7 +114,6 @@ class _ControlsPanelWidgetState extends State<ControlsPanelWidget>
     );
   }
 
-  // YENİ EKLENDİ: Şablon galerisini açan metot
   void _showTemplateGallery(BuildContext context) {
     showDialog(
       context: context,
@@ -142,22 +143,21 @@ class _ControlsPanelWidgetState extends State<ControlsPanelWidget>
             Container(
               decoration: BoxDecoration(
                 color: Colors.blue.shade50,
-                borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+                borderRadius:
+                    const BorderRadius.vertical(top: Radius.circular(12)),
               ),
               child: TabBar(
                 controller: _tabController,
                 labelColor: Colors.blue.shade800,
                 unselectedLabelColor: Colors.black54,
                 indicatorColor: Colors.blue.shade800,
+                isScrollable: true,
                 tabs: const [
-                  Tab(
-                    icon: Icon(Icons.dashboard_customize),
-                    text: "Genel Ayarlar",
-                  ),
-                  Tab(
-                    icon: Icon(Icons.edit),
-                    text: "Eleman Ayarları",
-                  ),
+                  Tab(icon: Icon(Icons.palette_outlined), text: "Genel"),
+                  Tab(icon: Icon(Icons.add_box_outlined), text: "Öğe Ekle"),
+                  Tab(icon: Icon(Icons.collections_outlined), text: "Şablon"),
+                  Tab(icon: Icon(Icons.layers_outlined), text: "Katman"),
+                  Tab(icon: Icon(Icons.edit_outlined), text: "Eleman"),
                 ],
               ),
             ),
@@ -168,8 +168,24 @@ class _ControlsPanelWidgetState extends State<ControlsPanelWidget>
                   SingleChildScrollView(
                     child: Padding(
                       padding: const EdgeInsets.all(16),
-                      child: _buildGeneralControls(context, provider),
+                      child: _buildBackgroundControls(context, provider),
                     ),
+                  ),
+                  SingleChildScrollView(
+                    child: Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: _buildAddElementControls(context, provider),
+                    ),
+                  ),
+                  SingleChildScrollView(
+                    child: Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: _buildTemplateControls(context, provider),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: _buildLayersControls(context, provider),
                   ),
                   selectedElements.isEmpty
                       ? const Center(
@@ -200,16 +216,25 @@ class _ControlsPanelWidgetState extends State<ControlsPanelWidget>
     );
   }
 
-  Widget _buildGeneralControls(
+  Widget _buildBackgroundControls(
+      BuildContext context, BusinessCardProvider provider) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text("Arkaplan Ayarları", style: Theme.of(context).textTheme.titleLarge),
+        const SizedBox(height: 16),
+        _buildGradientControls(provider),
+      ],
+    );
+  }
+
+  Widget _buildAddElementControls(
       BuildContext context, BusinessCardProvider provider) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Text("Genel Ayarlar", style: Theme.of(context).textTheme.titleLarge),
+        Text("Yeni Öğe Ekle", style: Theme.of(context).textTheme.titleLarge),
         const SizedBox(height: 16),
-        _buildGradientControls(provider),
-        const SizedBox(height: 12),
-        // GÜNCELLEME BAŞLANGICI: Eleman ekleme butonları güncellendi
         Row(
           children: [
             Expanded(
@@ -224,7 +249,8 @@ class _ControlsPanelWidgetState extends State<ControlsPanelWidget>
               child: ElevatedButton.icon(
                 onPressed: () async {
                   final picker = ImagePicker();
-                  final file = await picker.pickImage(source: ImageSource.gallery);
+                  final file =
+                      await picker.pickImage(source: ImageSource.gallery);
                   if (file != null) {
                     final bytes = await file.readAsBytes();
                     provider.addImageElement(bytes);
@@ -247,7 +273,6 @@ class _ControlsPanelWidgetState extends State<ControlsPanelWidget>
               ),
             ),
             const SizedBox(width: 12),
-            // YENİ EKLENDİ: Şekil ekleme menüsü
             Expanded(
               child: PopupMenuButton<ShapeType>(
                 onSelected: provider.addShapeElement,
@@ -284,11 +309,17 @@ class _ControlsPanelWidgetState extends State<ControlsPanelWidget>
             ),
           ],
         ),
-        // GÜNCELLEME SONU
-        const Divider(height: 32),
-        // YENİ EKLENDİ: Şablon butonları
+      ],
+    );
+  }
+
+  Widget _buildTemplateControls(
+      BuildContext context, BusinessCardProvider provider) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
         Text("Şablonlar", style: Theme.of(context).textTheme.titleLarge),
-        const SizedBox(height: 8),
+        const SizedBox(height: 16),
         Row(
           children: [
             Expanded(
@@ -302,11 +333,9 @@ class _ControlsPanelWidgetState extends State<ControlsPanelWidget>
             Expanded(
               child: ElevatedButton.icon(
                 onPressed: () {
-                  // TODO: Şablon adı sormak için bir dialog gösterilebilir.
                   provider.saveCardAsTemplate("Yeni Şablon");
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text("Tasarım şablon olarak kaydedildi!"))
-                  );
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      content: Text("Tasarım şablon olarak kaydedildi!")));
                 },
                 icon: const Icon(Icons.save_as),
                 label: const Text("Farklı Kaydet"),
@@ -315,10 +344,20 @@ class _ControlsPanelWidgetState extends State<ControlsPanelWidget>
             ),
           ],
         ),
-        const Divider(height: 32),
+      ],
+    );
+  }
+
+  Widget _buildLayersControls(
+      BuildContext context, BusinessCardProvider provider) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
         Text("Katmanlar", style: Theme.of(context).textTheme.titleLarge),
         const SizedBox(height: 8),
-        _buildLayersPanel(context, provider),
+        Expanded(
+          child: _buildLayersPanel(context, provider),
+        ),
       ],
     );
   }
@@ -330,19 +369,22 @@ class _ControlsPanelWidgetState extends State<ControlsPanelWidget>
       children: [
         SwitchListTile(
           title: const Text("Gradyan Kullan"),
-          value: model.gradientEndColor != null,
+          value: model.gradientEndColor != null && model.gradientType != null,
           onChanged: (useGradient) {
-            final startColor = model.gradientStartColor;
+            final currentStartColor = model.gradientStartColor;
+
             if (useGradient) {
-              final endColor = startColor == Colors.white
+              final endColor = currentStartColor == Colors.white
                   ? Colors.blue.shade200
-                  : HSLColor.fromColor(startColor)
+                  : HSLColor.fromColor(currentStartColor)
                       .withLightness(0.8)
                       .toColor();
               provider.updateBackgroundColor(
-                  startColor, endColor, GradientType.linear);
+                  currentStartColor, endColor, GradientType.linear);
             } else {
-              provider.updateBackgroundColor(startColor, null, null);
+              // GÜNCELLEME: Gradyanı temizlemek için dördüncü parametreyi (clearGradient)
+              // `true` olarak gönderiyoruz.
+              provider.updateBackgroundColor(currentStartColor, null, null, true);
             }
           },
         ),
@@ -364,8 +406,8 @@ class _ControlsPanelWidgetState extends State<ControlsPanelWidget>
           ListTile(
             contentPadding: const EdgeInsets.symmetric(horizontal: 16),
             title: const Text("Bitiş Rengi"),
-            trailing:
-                CircleAvatar(backgroundColor: model.gradientEndColor, radius: 15),
+            trailing: CircleAvatar(
+                backgroundColor: model.gradientEndColor, radius: 15),
             onTap: () => _showColorPicker(
               context,
               model.gradientEndColor!,
@@ -381,13 +423,11 @@ class _ControlsPanelWidgetState extends State<ControlsPanelWidget>
       BuildContext context, BusinessCardProvider provider) {
     final elements = provider.cardModel.elements.reversed.toList();
     return Container(
-      height: 200,
       decoration: BoxDecoration(
         border: Border.all(color: Colors.grey.shade300),
         borderRadius: BorderRadius.circular(8),
       ),
       child: ReorderableListView.builder(
-        primary: false, // <-- DÜZELTME BURADA
         itemCount: elements.length,
         itemBuilder: (context, index) {
           final element = elements[index];
@@ -401,7 +441,6 @@ class _ControlsPanelWidgetState extends State<ControlsPanelWidget>
                     ? Icons.image
                     : element.type == CardElementType.qrCode
                         ? Icons.qr_code
-                        // YENİ EKLENDİ
                         : element.type == CardElementType.shape
                             ? Icons.format_shapes
                             : Icons.star),
@@ -456,34 +495,31 @@ class _ControlsPanelWidgetState extends State<ControlsPanelWidget>
             key: ValueKey(element.id),
             initialValue: element.content,
             decoration: const InputDecoration(
-               labelText: "Metin İçeriği", border: OutlineInputBorder()),
+                labelText: "Metin İçeriği", border: OutlineInputBorder()),
             onChanged: (text) =>
                 updateProperty(text, (e, v) => e.copyWith(content: v)),
           ),
           const SizedBox(height: 16),
         ],
-        // GÜNCELLEME BAŞLANGICI: Renk seçici mantığı güncellendi
-        if (element.type != CardElementType.qrCode && element.type != CardElementType.shape)
+        if (element.type != CardElementType.qrCode &&
+            element.type != CardElementType.shape)
           ListTile(
             contentPadding: EdgeInsets.zero,
             leading: const Icon(Icons.color_lens_outlined),
             title: const Text("Eleman Rengi"),
-            trailing: CircleAvatar(
-                backgroundColor: element.style.color, radius: 15),
-            onTap: () => _showColorPicker(
-                context, element.style.color!, (color) {
-              updateProperty(color,
-                  (e, v) => e.copyWith(style: e.style.copyWith(color: v)));
+            trailing:
+                CircleAvatar(backgroundColor: element.style.color, radius: 15),
+            onTap: () => _showColorPicker(context, element.style.color!,
+                (color) {
+              updateProperty(
+                  color, (e, v) => e.copyWith(style: e.style.copyWith(color: v)));
             }),
           ),
-        // GÜNCELLEME SONU
-        
-        // YENİ EKLENDİ: Şekil elemanı için özel kontroller
-        if (element.type == CardElementType.shape && element.shapeStyle != null) ...[
+        if (element.type == CardElementType.shape &&
+            element.shapeStyle != null) ...[
           _buildShapeStyleControls(provider, element),
           const Divider(),
         ],
-        
         const Text("Opaklık", style: TextStyle(color: Colors.black54)),
         Slider(
           value: element.opacity,
@@ -500,7 +536,6 @@ class _ControlsPanelWidgetState extends State<ControlsPanelWidget>
         if (element.type == CardElementType.text) ...[
           _buildTextStyleControls(provider, element),
           const Divider(),
-          // YENİ EKLENDİ: Gelişmiş metin stili kontrolleri
           _buildAdvancedTextStyleControls(provider, element),
           const Divider(),
           _buildFontFamilySelector(provider, element),
@@ -510,9 +545,9 @@ class _ControlsPanelWidgetState extends State<ControlsPanelWidget>
       ],
     );
   }
-  
-  // YENİ EKLENDİ: Şekil stillerini (dolgu, kenarlık) düzenleyen widget
-  Widget _buildShapeStyleControls(BusinessCardProvider provider, CardElement element) {
+
+  Widget _buildShapeStyleControls(
+      BusinessCardProvider provider, CardElement element) {
     final style = element.shapeStyle!;
 
     void updateShapeStyle(ShapeStyle newStyle) {
@@ -528,7 +563,8 @@ class _ControlsPanelWidgetState extends State<ControlsPanelWidget>
           ListTile(
             contentPadding: EdgeInsets.zero,
             title: const Text("Dolgu Rengi"),
-            trailing: CircleAvatar(backgroundColor: style.fillColor, radius: 15),
+            trailing:
+                CircleAvatar(backgroundColor: style.fillColor, radius: 15),
             onTap: () => _showColorPicker(context, style.fillColor, (color) {
               updateShapeStyle(style.copyWith(fillColor: color));
             }),
@@ -536,7 +572,8 @@ class _ControlsPanelWidgetState extends State<ControlsPanelWidget>
         ListTile(
           contentPadding: EdgeInsets.zero,
           title: const Text("Kenarlık Rengi"),
-          trailing: CircleAvatar(backgroundColor: style.borderColor, radius: 15),
+          trailing:
+              CircleAvatar(backgroundColor: style.borderColor, radius: 15),
           onTap: () => _showColorPicker(context, style.borderColor, (color) {
             updateShapeStyle(style.copyWith(borderColor: color));
           }),
@@ -559,19 +596,21 @@ class _ControlsPanelWidgetState extends State<ControlsPanelWidget>
     );
   }
 
-  // YENİ EKLENDİ: Harf aralığı, satır yüksekliği ve gölge kontrolleri
-  Widget _buildAdvancedTextStyleControls(BusinessCardProvider provider, CardElement element) {
+  Widget _buildAdvancedTextStyleControls(
+      BusinessCardProvider provider, CardElement element) {
     final style = element.style;
     final hasShadow = style.shadows != null && style.shadows!.isNotEmpty;
 
     void updateStyle(TextStyle newStyle) {
-      provider.updateSelectedElementsProperties((e) => e.copyWith(style: newStyle));
+      provider
+          .updateSelectedElementsProperties((e) => e.copyWith(style: newStyle));
     }
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text("Gelişmiş Metin Stili", style: Theme.of(context).textTheme.titleSmall),
+        Text("Gelişmiş Metin Stili",
+            style: Theme.of(context).textTheme.titleSmall),
         SwitchListTile(
           contentPadding: EdgeInsets.zero,
           title: const Text("Gölge Ekle"),
@@ -585,7 +624,6 @@ class _ControlsPanelWidgetState extends State<ControlsPanelWidget>
                       offset: Offset(2.0, 2.0),
                     ),
                   ]
-                // HATA DÜZELTMESİ: null yerine boş bir liste gönderiyoruz.
                 : <Shadow>[];
             updateStyle(style.copyWith(shadows: newShadows));
           },
@@ -663,8 +701,8 @@ class _ControlsPanelWidgetState extends State<ControlsPanelWidget>
             min: -180,
             max: 180,
             onChanged: (val) {
-              provider.updateSelectedElementsProperties((e) =>
-                  e.copyWith(rotation: val * math.pi / 180));
+              provider.updateSelectedElementsProperties(
+                  (e) => e.copyWith(rotation: val * math.pi / 180));
             },
           )),
           Text("${(element.rotation * 180 / math.pi).round()}°"),
@@ -685,8 +723,8 @@ class _ControlsPanelWidgetState extends State<ControlsPanelWidget>
           tooltip: "Kalın",
           icon: const Icon(Icons.format_bold),
           color: isBold ? Colors.blue : Colors.black54,
-          onPressed: () => provider.updateSelectedElementsProperties((e) =>
-              e.copyWith(
+          onPressed: () => provider.updateSelectedElementsProperties((e) => e
+              .copyWith(
                   style: e.style.copyWith(
                       fontWeight:
                           isBold ? FontWeight.normal : FontWeight.bold))),
@@ -695,8 +733,8 @@ class _ControlsPanelWidgetState extends State<ControlsPanelWidget>
           tooltip: "İtalik",
           icon: const Icon(Icons.format_italic),
           color: isItalic ? Colors.blue : Colors.black54,
-          onPressed: () => provider.updateSelectedElementsProperties((e) =>
-              e.copyWith(
+          onPressed: () => provider.updateSelectedElementsProperties((e) => e
+              .copyWith(
                   style: e.style.copyWith(
                       fontStyle:
                           isItalic ? FontStyle.normal : FontStyle.italic))),
@@ -705,9 +743,8 @@ class _ControlsPanelWidgetState extends State<ControlsPanelWidget>
         IconButton(
           tooltip: "Sola Hizala",
           icon: const Icon(Icons.format_align_left),
-          color: element.textAlign == TextAlign.left
-              ? Colors.blue
-              : Colors.black54,
+          color:
+              element.textAlign == TextAlign.left ? Colors.blue : Colors.black54,
           onPressed: () => provider.updateSelectedElementsProperties(
               (e) => e.copyWith(textAlign: TextAlign.left)),
         ),

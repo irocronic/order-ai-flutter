@@ -1,5 +1,4 @@
 // lib/providers/business_card_provider.dart
-// (Güncellenmiş: const Uuid() hataları ve clipboard derin kopya düzeltmeleri)
 
 import 'dart:convert';
 import 'dart:typed_data';
@@ -37,7 +36,7 @@ class BusinessCardProvider extends ChangeNotifier {
   List<String> get selectedElementIds => _selectedElementIds;
   bool get isShiftPressed => _isShiftPressed;
   List<AlignmentGuide> get activeGuides => _activeGuides;
-  
+
   // YENİ EKLENDEN GETTER
   bool get isCanvasPanningEnabled => _isCanvasPanningEnabled;
 
@@ -182,8 +181,8 @@ class BusinessCardProvider extends ChangeNotifier {
   }
 
   void copySelectedElements() {
-    // Derin kopya alıyoruz, böylece model değiştiğinde clipboard bozulmaz.
-    _clipboard = selectedElements.map((e) => CardElement.fromJson(e.toJson())).toList();
+    _clipboard =
+        selectedElements.map((e) => CardElement.fromJson(e.toJson())).toList();
   }
 
   void pasteElements() {
@@ -204,9 +203,7 @@ class BusinessCardProvider extends ChangeNotifier {
     }
 
     final newModel = oldModel.copyWith(elements: newElements);
-
     _selectedElementIds = newSelectedIds;
-
     updateModel(oldModel, newModel);
   }
 
@@ -224,7 +221,7 @@ class BusinessCardProvider extends ChangeNotifier {
 
   void addTextElement() {
     final newElement = CardElement(
-      id: Uuid().v4(), // Uuid artık const değil.
+      id: Uuid().v4(),
       type: CardElementType.text,
       content: 'Yeni Metin',
       position: const Offset(20, 100),
@@ -237,18 +234,21 @@ class BusinessCardProvider extends ChangeNotifier {
     selectElement(newElement.id);
   }
 
-  // YENİ EKLENDİ: Şekil elemanı ekleme metodu
   void addShapeElement(ShapeType shapeType) {
     final newElement = CardElement(
       id: Uuid().v4(),
       type: CardElementType.shape,
-      content: shapeType.name, // İçerik olarak tipini tutabiliriz.
+      content: shapeType.name,
       position: const Offset(75, 75),
-      size: shapeType == ShapeType.line ? const Size(100, 4) : const Size(100, 100),
-      style: const TextStyle(), // Şekiller için genel stil kullanılmıyor.
+      size: shapeType == ShapeType.line
+          ? const Size(100, 4)
+          : const Size(100, 100),
+      style: const TextStyle(),
       shapeStyle: ShapeStyle(
         shapeType: shapeType,
-        fillColor: shapeType == ShapeType.line ? Colors.transparent : Colors.blue.withOpacity(0.7),
+        fillColor: shapeType == ShapeType.line
+            ? Colors.transparent
+            : Colors.blue.withOpacity(0.7),
         borderColor: Colors.black,
         borderWidth: 4,
       ),
@@ -295,8 +295,9 @@ class BusinessCardProvider extends ChangeNotifier {
     }
   }
 
+  // #region GÜNCELLEME BAŞLANGICI
   void updateBackgroundColor(Color startColor,
-      [Color? endColor, GradientType? type]) {
+      [Color? endColor, GradientType? type, bool clearGradient = false]) {
     final command = UpdateBackgroundColorCommand(
         this,
         cardModel.gradientStartColor,
@@ -304,9 +305,12 @@ class BusinessCardProvider extends ChangeNotifier {
         cardModel.gradientType,
         startColor,
         endColor,
-        type);
+        type,
+        // YENİ: Bayrak komuta iletiliyor.
+        clearGradient);
     execute(command);
   }
+  // #endregion GÜNCELLEME SONU
 
   void updateSelectedElementsProperties(
       CardElement Function(CardElement) updater) {
@@ -328,11 +332,9 @@ class BusinessCardProvider extends ChangeNotifier {
     await prefs.setString('saved_business_card', jsonString);
   }
 
-  // YENİ EKLENDİ: Kullanıcının kendi şablonlarını kaydetmesi için.
   Future<void> saveCardAsTemplate(String templateName) async {
     final prefs = await SharedPreferences.getInstance();
     final String jsonString = jsonEncode(_cardModel.toJson());
-    // Öneri: Daha sağlam bir format kullanmak için map olarak kaydediyoruz.
     final List<String> existing = prefs.getStringList('user_templates') ?? [];
     final newEntry = jsonEncode({'name': templateName, 'json': jsonString});
     existing.add(newEntry);
@@ -347,7 +349,6 @@ class BusinessCardProvider extends ChangeNotifier {
     }
   }
 
-  // YENİ EKLENDİ: JSON string'den kart yükleyen merkezi bir metot.
   void loadCardFromJson(String jsonString) {
     _cardModel = BusinessCardModel.fromJson(jsonDecode(jsonString));
     _undoStack.clear();

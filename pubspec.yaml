@@ -59,7 +59,7 @@ dependencies:
   flutter_blue_plus: ^1.31.20
   webview_flutter: ^4.7.0
   google_maps_flutter: ^2.12.0
-  
+
   # YENİ EKLENDİ: Özel ses dosyalarını çalmak için.
   audioplayers: ^6.5.0
 
@@ -77,7 +77,6 @@ flutter:
   # YENİ EKLENDİ: Ses dosyalarının bulunduğu klasörü tanıtmak için.
   assets:
     - .env
-    - .env
     - assets/sounds/
     - assets/sounds/notifications/
     - assets/sounds/notifications/tr/
@@ -86,3 +85,24 @@ flutter:
     - assets/sounds/setup/en/
     - assets/templates/
     - assets/previews/
+
+# --- flutter_native_splash İÇİN EKLENEN BÖLÜM ---
+# Bu bölümü kendi projenize göre düzenlemeyi unutmayın.
+flutter_native_splash:
+  # Açılış ekranının arka plan rengi.
+  color: "#000000" 
+
+  # Açılış ekranında gösterilecek resmin yolu.
+  # Projenizde "assets" klasörü içinde "splash.png" adında bir resim olmalı.
+  # Kendi logonuzu kullanmak için bu yolu ve assets klasörünü düzenleyin.
+  image: assets/splash.png
+
+  # Android 12 ve sonrası için özel ayarlar.
+  android_12:
+    color: "#000000"
+    image: assets/splash.png
+
+  # Hangi platformlarda splash screen oluşturulacağını belirtir.
+  android: true
+  ios: true
+  web: true

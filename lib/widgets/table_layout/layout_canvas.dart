@@ -9,8 +9,7 @@ import 'grid_painter.dart';
 import '../../models/table_model.dart';
 import '../../models/layout_element.dart';
 
-// GÜNCELLENDİ: StatefulWidget'a çevrildi, çünkü provider'a GlobalKey'i
-// bir kez set etmemiz gerekiyor.
+/// Yerleşim planı çizim alanı (canvas)
 class LayoutCanvas extends StatefulWidget {
   const LayoutCanvas({Key? key}) : super(key: key);
 
@@ -19,13 +18,13 @@ class LayoutCanvas extends StatefulWidget {
 }
 
 class _LayoutCanvasState extends State<LayoutCanvas> {
-  // YENİ: Canvas'ın Stack'ini referans almak için GlobalKey.
+  /// Canvas Stack’ini referans almak için GlobalKey
   final GlobalKey _canvasKey = GlobalKey();
 
   @override
   void initState() {
     super.initState();
-    // build metodu çağrıldıktan sonra provider'a key'i set et.
+    // build sonrası provider’a key’i set et
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) {
         context.read<TableLayoutProvider>().setCanvasKey(_canvasKey);
@@ -39,7 +38,9 @@ class _LayoutCanvasState extends State<LayoutCanvas> {
     final layout = provider.layout;
 
     if (layout == null) {
-      return const Center(child: Text('Yerleşim planı yüklenemedi.'));
+      return const Center(
+        child: Text('Yerleşim planı yüklenemedi.'),
+      );
     }
 
     const double canvasPadding = 50.0;
@@ -53,15 +54,22 @@ class _LayoutCanvasState extends State<LayoutCanvas> {
         constrained: false,
         child: DragTarget<Object>(
           onAcceptWithDetails: (details) {
-            final RenderBox renderBox = context.findRenderObject() as RenderBox;
+            final renderBox =
+                _canvasKey.currentContext?.findRenderObject() as RenderBox?;
+            if (renderBox == null) return;
+
             final localOffset = renderBox.globalToLocal(details.offset);
 
             if (details.data is TableModel) {
-              final table = details.data as TableModel;
-              provider.placeTableOnCanvas(table, localOffset);
+              provider.placeTableOnCanvas(
+                details.data as TableModel,
+                localOffset,
+              );
             } else if (details.data is LayoutElement) {
-              final element = details.data as LayoutElement;
-              provider.updateDroppedElementPosition(element, localOffset);
+              provider.updateDroppedElementPosition(
+                details.data as LayoutElement,
+                localOffset,
+              );
             }
           },
           builder: (context, candidateData, rejectedData) {
@@ -84,10 +92,9 @@ class _LayoutCanvasState extends State<LayoutCanvas> {
                             color: Colors.black.withOpacity(0.1),
                             blurRadius: 10,
                             offset: const Offset(0, 5),
-                          )
+                          ),
                         ],
                       ),
-                      // YENİ: Stack'e anahtar atandı.
                       child: Stack(
                         key: _canvasKey,
                         clipBehavior: Clip.none,
@@ -103,12 +110,24 @@ class _LayoutCanvasState extends State<LayoutCanvas> {
                             ),
                           Positioned.fill(
                             child: GestureDetector(
-                              onTap: () => provider.deselectAll(),
+                              onTap: provider.deselectAll,
                               child: Container(color: Colors.transparent),
                             ),
                           ),
-                          ...provider.placedTables.map((table) => DraggableTable(table: table)),
-                          ...provider.elements.map((element) => DraggableLayoutElement(element: element, constraints: BoxConstraints.expand(width: layout.width, height: layout.height))),
+                          // Yerleştirilmiş masalar
+                          ...provider.placedTables.map(
+                            (table) => DraggableTable(table: table),
+                          ),
+                          // Diğer öğeler (metin, şekil vb.)
+                          ...provider.elements.map(
+                            (element) => DraggableLayoutElement(
+                              element: element,
+                              constraints: BoxConstraints.expand(
+                                width: layout.width,
+                                height: layout.height,
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                     ),

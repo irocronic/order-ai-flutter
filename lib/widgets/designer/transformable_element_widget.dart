@@ -1,5 +1,4 @@
 // lib/widgets/designer/transformable_element_widget.dart
-// (Güncellenmiş: rotation handle için global/local koordinat düzeltmesi)
 
 import 'dart:math';
 import 'package:flutter/material.dart';

@@ -1,6 +1,5 @@
 // lib/providers/commands.dart
 
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import '../models/business_card_model.dart';
 import 'business_card_provider.dart';
@@ -38,7 +37,8 @@ class AddElementCommand extends Command {
 
   @override
   void execute() {
-    final elements = List<CardElement>.from(provider.cardModel.elements)..add(_element);
+    final elements = List<CardElement>.from(provider.cardModel.elements)
+      ..add(_element);
     final newModel = provider.cardModel.copyWith(elements: elements);
     provider.setCardModelForCommand(newModel);
   }
@@ -76,7 +76,8 @@ class DeleteElementsCommand extends Command {
   }
 }
 
-// GÜNCELLEME: Bu komut artık gradyanı destekliyor.
+// #region GÜNCELLEME BAŞLANGICI
+// Bu komut artık `clearGradient` bayrağını destekliyor.
 class UpdateBackgroundColorCommand extends Command {
   final Color _oldStartColor;
   final Color? _oldEndColor;
@@ -84,19 +85,26 @@ class UpdateBackgroundColorCommand extends Command {
   final Color _newStartColor;
   final Color? _newEndColor;
   final GradientType? _newGradientType;
+  final bool _clearGradient;
 
   UpdateBackgroundColorCommand(
-      BusinessCardProvider provider,
-      this._oldStartColor, this._oldEndColor, this._oldGradientType,
-      this._newStartColor, this._newEndColor, this._newGradientType
+    BusinessCardProvider provider,
+    this._oldStartColor,
+    this._oldEndColor,
+    this._oldGradientType,
+    this._newStartColor,
+    this._newEndColor,
+    this._newGradientType,
+    this._clearGradient,
   ) : super(provider);
 
   @override
   void execute() {
     final newModel = provider.cardModel.copyWith(
-        gradientStartColor: _newStartColor,
-        gradientEndColor: _newEndColor,
-        gradientType: _newGradientType
+      gradientStartColor: _newStartColor,
+      gradientEndColor: _newEndColor,
+      gradientType: _newGradientType,
+      clearGradient: _clearGradient,
     );
     provider.setCardModelForCommand(newModel);
   }
@@ -104,10 +112,13 @@ class UpdateBackgroundColorCommand extends Command {
   @override
   void undo() {
     final newModel = provider.cardModel.copyWith(
-        gradientStartColor: _oldStartColor,
-        gradientEndColor: _oldEndColor,
-        gradientType: _oldGradientType
+      gradientStartColor: _oldStartColor,
+      gradientEndColor: _oldEndColor,
+      gradientType: _oldGradientType,
+      // Geri alma işleminde gradyanı temizlemiyoruz, eski haline döndürüyoruz.
+      clearGradient: false,
     );
     provider.setCardModelForCommand(newModel);
   }
 }
+// #endregion GÜNCELLEME SONU

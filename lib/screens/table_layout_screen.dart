@@ -1,4 +1,4 @@
-// lib/screens/table_layout_screen.dart (GÜNCELLENMİŞ VE DUYARLI VERSİYON)
+// lib/screens/table_layout_screen.dart
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -28,15 +28,22 @@ class _TableLayoutScreenState extends State<TableLayoutScreen> {
         builder: (context, provider, child) {
           return Scaffold(
             appBar: AppBar(
-              title: Text(l10n.tableLayoutScreenTitle, style: const TextStyle(color: Colors.white)),
+              title: Text(
+                l10n.tableLayoutScreenTitle,
+                style: const TextStyle(color: Colors.white),
+              ),
               backgroundColor: Colors.blue.shade900,
               actions: [
                 IconButton(
                   icon: Icon(
-                    _isPanelVisible ? Icons.view_quilt_outlined : Icons.view_day_outlined,
+                    _isPanelVisible
+                        ? Icons.view_quilt_outlined
+                        : Icons.view_day_outlined,
                     color: Colors.white,
                   ),
-                  tooltip: _isPanelVisible ? "Eleman Panelini Gizle" : "Eleman Panelini Göster",
+                  tooltip: _isPanelVisible
+                      ? "Eleman Panelini Gizle"
+                      : "Eleman Panelini Göster",
                   onPressed: () {
                     setState(() {
                       _isPanelVisible = !_isPanelVisible;
@@ -45,8 +52,12 @@ class _TableLayoutScreenState extends State<TableLayoutScreen> {
                 ),
                 IconButton(
                   icon: Icon(
-                    provider.isGridVisible ? Icons.grid_on_outlined : Icons.grid_off_outlined,
-                    color: provider.isGridVisible ? Colors.white : Colors.white54,
+                    provider.isGridVisible
+                        ? Icons.grid_on_outlined
+                        : Icons.grid_off_outlined,
+                    color: provider.isGridVisible
+                        ? Colors.white
+                        : Colors.white54,
                   ),
                   tooltip: l10n.tableLayoutToggleGrid,
                   onPressed: () {
@@ -59,7 +70,10 @@ class _TableLayoutScreenState extends State<TableLayoutScreen> {
                     child: SizedBox(
                       width: 20,
                       height: 20,
-                      child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
+                      child: CircularProgressIndicator(
+                        color: Colors.white,
+                        strokeWidth: 2,
+                      ),
                     ),
                   )
                 else
@@ -71,8 +85,14 @@ class _TableLayoutScreenState extends State<TableLayoutScreen> {
                       if (context.mounted) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
-                            content: Text(provider.errorMessage.isEmpty ? l10n.tableLayoutSuccessSave : l10n.tableLayoutErrorSave),
-                            backgroundColor: provider.errorMessage.isEmpty ? Colors.green : Colors.red,
+                            content: Text(
+                              provider.errorMessage.isEmpty
+                                  ? l10n.tableLayoutSuccessSave
+                                  : l10n.tableLayoutErrorSave,
+                            ),
+                            backgroundColor: provider.errorMessage.isEmpty
+                                ? Colors.green
+                                : Colors.red,
                           ),
                         );
                       }
@@ -83,7 +103,9 @@ class _TableLayoutScreenState extends State<TableLayoutScreen> {
             floatingActionButton: provider.selectedItem != null
                 ? FloatingActionButton.extended(
                     onPressed: () {
-                      context.read<TableLayoutProvider>().deleteSelectedItem();
+                      context
+                          .read<TableLayoutProvider>()
+                          .deleteSelectedItem();
                     },
                     backgroundColor: Colors.redAccent,
                     icon: const Icon(Icons.delete_forever_outlined),
@@ -110,8 +132,6 @@ class _TableLayoutScreenState extends State<TableLayoutScreen> {
                                   width: _isPanelVisible ? 250 : 0,
                                   child: const ClipRect(
                                     child: TablePalette(
-                                      // GÜNCELLEME: Parametreyi burada gönderiyoruz.
-                                      // Kenar paneli dikey bir alandır.
                                       palleteLayoutAxis: Axis.vertical,
                                     ),
                                   ),
@@ -128,11 +148,11 @@ class _TableLayoutScreenState extends State<TableLayoutScreen> {
                                 AnimatedContainer(
                                   duration: const Duration(milliseconds: 300),
                                   curve: Curves.easeInOut,
-                                  height: _isPanelVisible ? constraints.maxHeight * 0.35 : 0,
+                                  height: _isPanelVisible
+                                      ? constraints.maxHeight * 0.35
+                                      : 0,
                                   child: const ClipRect(
                                     child: TablePalette(
-                                      // GÜNCELLEME: Parametreyi burada gönderiyoruz.
-                                      // Üst panel yatay bir alandır.
                                       palleteLayoutAxis: Axis.horizontal,
                                     ),
                                   ),

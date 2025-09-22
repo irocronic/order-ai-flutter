@@ -21,99 +21,151 @@ class TablePalette extends StatelessWidget {
     final provider = context.watch<TableLayoutProvider>();
     final l10n = AppLocalizations.of(context)!;
 
+    // Bu artık gerekli değil ama kalmasında bir sakınca yok.
+    // final screenHeight = MediaQuery.of(context).size.height;
+
     return Container(
       padding: const EdgeInsets.all(12),
       color: Colors.grey[100],
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Dekoratif Eleman Ekleme Bölümü
-          Text(
-            l10n.tableLayoutPaletteAddElements,
-            style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 8),
-          Wrap(
-            spacing: 8.0,
-            runSpacing: 4.0,
-            children: [
-              IconButton(
-                icon: const Icon(Icons.text_fields),
-                tooltip: l10n.tableLayoutPaletteAddText,
-                onPressed: () {
-                  provider.addElement(LayoutElementType.text, l10n.tableLayoutPaletteDefaultText, null);
-                },
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Dekoratif Elemanlar
+            Text(
+              l10n.tableLayoutPaletteAddElements,
+              style: Theme.of(context)
+                  .textTheme
+                  .titleMedium
+                  ?.copyWith(fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 8),
+            Wrap(
+              spacing: 8.0,
+              runSpacing: 4.0,
+              children: [
+                IconButton(
+                  icon: const Icon(Icons.text_fields),
+                  tooltip: l10n.tableLayoutPaletteAddText,
+                  onPressed: () {
+                    provider.addElement(
+                      LayoutElementType.text,
+                      l10n.tableLayoutPaletteDefaultText,
+                      null,
+                    );
+                  },
+                ),
+                IconButton(
+                  icon: const Icon(Icons.check_box_outline_blank),
+                  tooltip: l10n.tableLayoutPaletteAddRectangle,
+                  onPressed: () {
+                    provider.addElement(
+                      LayoutElementType.shape,
+                      'rectangle',
+                      ShapeType.rectangle,
+                    );
+                  },
+                ),
+                IconButton(
+                  icon: const Icon(Icons.circle_outlined),
+                  tooltip: l10n.tableLayoutPaletteAddEllipse,
+                  onPressed: () {
+                    provider.addElement(
+                      LayoutElementType.shape,
+                      'ellipse',
+                      ShapeType.ellipse,
+                    );
+                  },
+                ),
+                IconButton(
+                  icon: const Icon(Icons.linear_scale),
+                  tooltip: l10n.tableLayoutPaletteAddLine,
+                  onPressed: () {
+                    provider.addElement(
+                      LayoutElementType.shape,
+                      'line',
+                      ShapeType.line,
+                    );
+                  },
+                ),
+              ],
+            ),
+            const Divider(height: 24),
+            // Yerleştirilmemiş Masalar
+            Text(
+              l10n.tableLayoutPaletteUnplacedTables(
+                provider.unplacedTables.length,
               ),
-              IconButton(
-                icon: const Icon(Icons.check_box_outline_blank),
-                tooltip: l10n.tableLayoutPaletteAddRectangle,
-                onPressed: () {
-                  provider.addElement(LayoutElementType.shape, 'rectangle', ShapeType.rectangle);
-                },
-              ),
-              IconButton(
-                icon: const Icon(Icons.circle_outlined),
-                tooltip: l10n.tableLayoutPaletteAddEllipse,
-                onPressed: () {
-                  provider.addElement(LayoutElementType.shape, 'ellipse', ShapeType.ellipse);
-                },
-              ),
-              IconButton(
-                icon: const Icon(Icons.linear_scale),
-                tooltip: l10n.tableLayoutPaletteAddLine,
-                onPressed: () {
-                  provider.addElement(LayoutElementType.shape, 'line', ShapeType.line);
-                },
-              ),
-            ],
-          ),
-          const Divider(height: 24),
-          // Yerleştirilmemiş Masalar Bölümü
-          Text(
-            l10n.tableLayoutPaletteUnplacedTables(provider.unplacedTables.length),
-            style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 8),
-          Expanded(
-            child: provider.unplacedTables.isEmpty
-                ? Center(child: Text(l10n.tableLayoutPaletteAllTablesPlaced, textAlign: TextAlign.center))
+              style: Theme.of(context)
+                  .textTheme
+                  .titleMedium
+                  ?.copyWith(fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 8),
+            provider.unplacedTables.isEmpty
+                ? Center(
+                    child: Text(
+                      l10n.tableLayoutPaletteAllTablesPlaced,
+                      textAlign: TextAlign.center,
+                    ),
+                  )
+                // DEĞİŞİKLİK 1: Sabit yükseklikli SizedBox kaldırıldı.
+                // Artık doğrudan buildTableList çağrılıyor.
                 : buildTableList(context, provider),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
-  
-  Widget buildTableList(BuildContext context, TableLayoutProvider provider) {
-    // Geniş ekranda panelimiz dikey bir sütun gibi davranır. İçine Grid koyarız.
+
+  Widget buildTableList(
+      BuildContext context, TableLayoutProvider provider) {
+    // Geniş ekranda dikey grid
     if (palleteLayoutAxis == Axis.vertical) {
       return GridView.builder(
+        // DEĞİŞİKLİK 2: Bu iki satır eklendi.
+        shrinkWrap: true, // GridView'ın içeriği kadar yer kaplamasını sağlar.
+        physics: const NeverScrollableScrollPhysics(), // Kaydırmayı dıştaki SingleChildScrollView'a bırakır.
+
         padding: const EdgeInsets.only(top: 4.0),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 3,
           crossAxisSpacing: 8,
           mainAxisSpacing: 8,
-          childAspectRatio: 1.0,
+          childAspectRatio:
+              MediaQuery.of(context).size.width > 1000 ? 1.2 : 1.0,
         ),
         itemCount: provider.unplacedTables.length,
         itemBuilder: (context, index) {
           final table = provider.unplacedTables[index];
-          return _buildDraggableTableIcon(context, table, 65.0, 14.0);
+          return _buildDraggableTableIcon(
+            context,
+            table,
+            50.0,
+            12.0,
+          );
         },
       );
     }
-    // Dar ekranda panelimiz yatay bir satır gibi davranır. İçine yatay liste koyarız.
+    // Dar ekranda yatay liste
     else {
       return SizedBox(
-        height: 65,
+        height: 50,
         child: ListView.builder(
           scrollDirection: Axis.horizontal,
           itemCount: provider.unplacedTables.length,
           itemBuilder: (context, index) {
             final table = provider.unplacedTables[index];
-            return Padding(
-              padding: const EdgeInsets.only(right: 10.0),
-              child: _buildDraggableTableIcon(context, table, 55.0, 12.0),
+            return Center(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                child: _buildDraggableTableIcon(
+                  context,
+                  table,
+                  40.0,
+                  10.0,
+                ),
+              ),
             );
           },
         ),
@@ -121,13 +173,20 @@ class TablePalette extends StatelessWidget {
     }
   }
 
-  Widget _buildDraggableTableIcon(BuildContext context, TableModel table, double iconSize, double fontSize) {
+  Widget _buildDraggableTableIcon(
+    BuildContext context,
+    TableModel table,
+    double iconSize,
+    double fontSize,
+  ) {
     final l10n = AppLocalizations.of(context)!;
 
     final tableWidget = Container(
       constraints: BoxConstraints(
-        maxWidth: iconSize,
-        maxHeight: iconSize * 1.5,
+        minWidth: iconSize,
+        minHeight: iconSize,
+        maxWidth: iconSize * 1.2,
+        maxHeight: iconSize * 1.2,
       ),
       padding: const EdgeInsets.all(4.0),
       decoration: BoxDecoration(
@@ -139,7 +198,7 @@ class TablePalette extends StatelessWidget {
             color: Colors.black.withOpacity(0.1),
             blurRadius: 3,
             offset: const Offset(1, 1),
-          )
+          ),
         ],
       ),
       child: Center(
@@ -155,9 +214,6 @@ class TablePalette extends StatelessWidget {
       ),
     );
 
-    // GÜNCELLEME: Draggable -> LongPressDraggable olarak değiştirildi.
-    // Bu değişiklik, sürükleme işlemini sadece öğeye uzun basıldığında başlatır.
-    // Böylece normal swipe hareketi listenin kaydırılmasını sağlar.
     return LongPressDraggable<Object>(
       data: table,
       feedback: Material(

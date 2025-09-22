@@ -1,18 +1,34 @@
 // lib/screens/manage_website_screen.dart
 
-import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
+import 'package:open_file_plus/open_file_plus.dart';
 import 'package:path/path.dart' as p;
+import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:qr_flutter/qr_flutter.dart';
+
+// HATA ÇÖZÜMÜ:
+// 1. Mobil platformlar için dosya işlemleri yapmak üzere 'dart:io' kütüphanesini 'io' takma adıyla import ediyoruz.
+import 'dart:io' as io;
+// 2. Koşullu import kullanarak:
+//    - Eğer platform web ise (dart.library.html true ise), gerçek 'dart:html' kütüphanesini 'html' takma adıyla import ediyoruz.
+//    - Eğer platform web değilse, mobil derleyicinin hata vermemesi için oluşturduğumuz sahte (stub) sınıfları içeren dosyayı import ediyoruz.
+import 'package:makarna_app/helpers/html_stub.dart' if (dart.library.html) 'dart:html' as html;
+
+
+import '../models/business_website.dart';
+import '../services/api_service.dart';
 import '../services/firebase_storage_service.dart';
 import '../services/user_session.dart';
 import '../services/website_service.dart';
-import '../models/business_website.dart';
 import 'map_picker_screen.dart';
 
 class ManageWebsiteScreen extends StatefulWidget {
@@ -31,7 +47,6 @@ class _ManageWebsiteScreenState extends State<ManageWebsiteScreen> {
   final ImagePicker _picker = ImagePicker();
   bool _isUploadingAboutImage = false;
 
-  // Form Controllers
   final Map<String, TextEditingController> _controllers = {
     'about_title': TextEditingController(),
     'about_description': TextEditingController(),
@@ -50,16 +65,12 @@ class _ManageWebsiteScreenState extends State<ManageWebsiteScreen> {
     'map_zoom_level': TextEditingController(),
   };
 
-  // Switch States
   bool _showMenu = true;
   bool _showContact = true;
   bool _showMap = true;
   bool _allowReservations = false;
   bool _allowOnlineOrdering = false;
-
-  // === YENİ KOD BAŞLANGICI ===
-  String _themeMode = 'system'; // Varsayılan tema değeri
-  // === YENİ KOD SONU ===
+  String _themeMode = 'system';
 
   Color _primaryColor = const Color(0xFF3B82F6);
   Color _secondaryColor = const Color(0xFF10B981);
@@ -120,11 +131,7 @@ class _ManageWebsiteScreenState extends State<ManageWebsiteScreen> {
     _showMap = data.showMap;
     _allowReservations = data.allowReservations;
     _allowOnlineOrdering = data.allowOnlineOrdering;
-    
-    // === YENİ KOD BAŞLANGICI ===
-    _themeMode = data.themeMode; // API'den gelen tema bilgisini ata
-    // === YENİ KOD SONU ===
-    
+    _themeMode = data.themeMode;
     _primaryColor = _colorFromHex(data.primaryColor);
     _secondaryColor = _colorFromHex(data.secondaryColor);
   }
@@ -150,7 +157,7 @@ class _ManageWebsiteScreenState extends State<ManageWebsiteScreen> {
           "website_assets/business_${UserSession.businessId}/about_${DateTime.now().millisecondsSinceEpoch}_$fileName";
 
       final String? downloadUrl = await FirebaseStorageService.uploadImage(
-        imageFile: kIsWeb ? null : File(image.path),
+        imageFile: kIsWeb ? null : io.File(image.path),
         imageBytes: imageBytes,
         fileName: firebaseFileName,
         folderPath: 'website_assets',
@@ -190,6 +197,7 @@ class _ManageWebsiteScreenState extends State<ManageWebsiteScreen> {
 
   Future<void> _saveSettings() async {
     if (!_formKey.currentState!.validate()) return;
+    _formKey.currentState!.save();
     final l10n = AppLocalizations.of(context)!;
     setState(() => _isLoading = true);
     try {
@@ -222,7 +230,7 @@ class _ManageWebsiteScreenState extends State<ManageWebsiteScreen> {
             ? double.parse(_controllers['map_longitude']!.text)
             : null,
         mapZoomLevel: int.parse(_controllers['map_zoom_level']!.text),
-        themeMode: _themeMode, // Seçilen temayı modele ekle
+        themeMode: _themeMode,
       );
 
       await WebsiteService.updateWebsiteDetails(
@@ -250,7 +258,7 @@ class _ManageWebsiteScreenState extends State<ManageWebsiteScreen> {
             mapLatitude: updatedData.mapLatitude,
             mapLongitude: updatedData.mapLongitude,
             mapZoomLevel: updatedData.mapZoomLevel,
-            themeMode: updatedData.themeMode, // Seçilen temayı API'ye gönder
+            themeMode: updatedData.themeMode,
           ));
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -291,9 +299,9 @@ class _ManageWebsiteScreenState extends State<ManageWebsiteScreen> {
     if (selectedLocation != null) {
       setState(() {
         _controllers['map_latitude']?.text =
-            selectedLocation.latitude.toString();
+            selectedLocation.latitude.toStringAsFixed(8);
         _controllers['map_longitude']?.text =
-            selectedLocation.longitude.toString();
+            selectedLocation.longitude.toStringAsFixed(8);
       });
     }
   }
@@ -331,6 +339,161 @@ class _ManageWebsiteScreenState extends State<ManageWebsiteScreen> {
     );
   }
 
+  String _slugify(String text) {
+    if (text.isEmpty) return '';
+    const Map<String, String> replacements = {
+      'ı': 'i', 'ğ': 'g', 'ü': 'u', 'ş': 's', 'ö': 'o', 'ç': 'c',
+      'İ': 'i', 'Ğ': 'g', 'Ü': 'u', 'Ş': 's', 'Ö': 'o', 'Ç': 'c'
+    };
+    
+    String slug = text.toLowerCase();
+    replacements.forEach((key, value) {
+      slug = slug.replaceAll(key, value);
+    });
+
+    return slug
+        .replaceAll(RegExp(r'\s+'), '-')
+        .replaceAll(RegExp(r'[^\w\-]+'), '')
+        .replaceAll(RegExp(r'\-\-+'), '-')
+        .replaceAll(RegExp(r'^-+'), '')
+        .replaceAll(RegExp(r'-+$'), '');
+  }
+
+  Future<void> _downloadQrImage(String data, String name) async {
+    final l10n = AppLocalizations.of(context)!;
+    try {
+      final qrValidationResult = QrValidator.validate(
+        data: data,
+        version: QrVersions.auto,
+      );
+      if (qrValidationResult.status == QrValidationStatus.valid) {
+        final qrCode = qrValidationResult.qrCode;
+        final painter = QrPainter.withQr(
+          qr: qrCode!,
+          color: const Color(0xFF000000),
+          emptyColor: const Color(0xFFFFFFFF),
+          gapless: false,
+        );
+        final picData = await painter.toImageData(800);
+        if (picData == null) throw Exception("QR kodu oluşturulamadı.");
+        final bytes = picData.buffer.asUint8List();
+        final fileName =
+            '${name}_qr_${DateFormat('yyyyMMdd_HHmmss').format(DateTime.now())}.png';
+
+        if (kIsWeb) {
+          final blob = html.Blob([bytes]);
+          final url = html.Url.createObjectUrlFromBlob(blob);
+          final anchor = html.AnchorElement(href: url)
+            ..setAttribute("download", fileName)
+            ..click();
+          html.Url.revokeObjectUrl(url);
+        } else {
+          var status = await Permission.storage.status;
+          if (!status.isGranted) {
+            status = await Permission.storage.request();
+            if (!status.isGranted) {
+              throw Exception("Depolama izni verilmedi.");
+            }
+          }
+          final io.Directory? dir = await getDownloadsDirectory();
+          if (dir == null) throw Exception("İndirilenler klasörü bulunamadı.");
+          final filePath = '${dir.path}/$fileName';
+          final file = io.File(filePath);
+          await file.writeAsBytes(bytes);
+
+          final result = await OpenFile.open(filePath);
+          if (result.type != ResultType.done) {
+            throw Exception("Dosya açılamadı: ${result.message}");
+          }
+        }
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+                content: Text(l10n.manageTablesSuccessQrDownloaded),
+                backgroundColor: Colors.green),
+          );
+        }
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+              content: Text(l10n.manageTablesErrorQrDownload(e.toString())),
+              backgroundColor: Colors.red),
+        );
+      }
+    }
+  }
+
+  Future<void> _showQrDialog(BuildContext context, String websiteLink) async {
+    final l10n = AppLocalizations.of(context)!;
+
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext dialogContext) {
+        final dialogL10n = AppLocalizations.of(dialogContext)!;
+        return AlertDialog(
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          title: Text("Web Sitesi QR Kodu",
+              textAlign: TextAlign.center,
+              style: const TextStyle(fontWeight: FontWeight.bold)),
+          content: SizedBox(
+            width: 250,
+            height: 350,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                QrImageView(
+                  data: websiteLink,
+                  version: QrVersions.auto,
+                  size: 200.0,
+                  gapless: false,
+                  errorStateBuilder: (cxt, err) {
+                    return Center(
+                      child: Text(
+                        dialogL10n.manageTablesErrorCreatingQr,
+                        textAlign: TextAlign.center,
+                      ),
+                    );
+                  },
+                ),
+                const SizedBox(height: 10),
+                SelectableText(
+                  websiteLink,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(fontSize: 12, color: Colors.blue),
+                ),
+                const SizedBox(height: 20),
+                ElevatedButton.icon(
+                  icon: const Icon(Icons.download),
+                  label: Text(dialogL10n.manageTablesButtonDownloadQr),
+                  onPressed: () => _downloadQrImage(websiteLink, "website"),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.deepPurpleAccent,
+                    foregroundColor: Colors.white,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          actionsAlignment: MainAxisAlignment.center,
+          actions: <Widget>[
+            TextButton(
+              child: Text(dialogL10n.dialogButtonClose,
+                  style: const TextStyle(
+                      color: Colors.blueAccent, fontWeight: FontWeight.bold)),
+              onPressed: () {
+                Navigator.of(dialogContext).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
@@ -339,6 +502,10 @@ class _ManageWebsiteScreenState extends State<ManageWebsiteScreen> {
         title: Text(l10n.homeMenuWebsiteSettings,
             style: const TextStyle(
                 fontWeight: FontWeight.bold, color: Colors.white)),
+
+        iconTheme: const IconThemeData(
+          color: Colors.white,
+        ),
         backgroundColor: Colors.transparent,
         elevation: 0,
         centerTitle: true,
@@ -351,6 +518,31 @@ class _ManageWebsiteScreenState extends State<ManageWebsiteScreen> {
             ),
           ),
         ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.qr_code_2_outlined, color: Colors.white),
+            tooltip: "Web Sitesi QR Kodu",
+            onPressed: _isLoading
+                ? null
+                : () {
+                    final businessName = UserSession.username;
+                    if (businessName != null && businessName.isNotEmpty) {
+                      final businessSlug = _slugify(businessName);
+                      final uri = Uri.parse(ApiService.baseUrl.replaceAll('/api', ''));
+                      final websiteLink =
+                          '${uri.scheme}://${uri.host}${uri.hasPort ? ':${uri.port}' : ''}/website/$businessSlug/';
+                      _showQrDialog(context, websiteLink);
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                            content: Text(
+                                "İşletme adı bulunamadı, QR kod oluşturulamıyor."),
+                            backgroundColor: Colors.orange),
+                      );
+                    }
+                  },
+          ),
+        ],
       ),
       body: Container(
         decoration: BoxDecoration(
@@ -494,11 +686,7 @@ class _ManageWebsiteScreenState extends State<ManageWebsiteScreen> {
                               _buildSectionHeader(
                                   l10n.websiteSettingsSectionAppearance,
                                   Icons.color_lens_outlined),
-                              
-                              // === YENİ WIDGET ÇAĞRISI ===
                               _buildThemeSelector(),
-                              // =========================
-
                               _buildColorPickerTile(
                                   l10n.websiteSettingsLabelPrimaryColor,
                                   _primaryColor,
@@ -566,7 +754,6 @@ class _ManageWebsiteScreenState extends State<ManageWebsiteScreen> {
     );
   }
 
-  // === YENİ METOT BAŞLANGICI ===
   Widget _buildThemeSelector() {
     final Map<String, String> themeOptions = {
       'system': "Sistem Varsayılanı",
@@ -581,7 +768,8 @@ class _ManageWebsiteScreenState extends State<ManageWebsiteScreen> {
         decoration: InputDecoration(
           labelText: "Web Sitesi Teması",
           labelStyle: TextStyle(color: Colors.grey.shade700),
-          prefixIcon: Icon(Icons.brightness_6_outlined, color: Colors.grey.shade600),
+          prefixIcon:
+              Icon(Icons.brightness_6_outlined, color: Colors.grey.shade600),
           filled: true,
           fillColor: Colors.black.withOpacity(0.04),
           border: OutlineInputBorder(
@@ -606,10 +794,16 @@ class _ManageWebsiteScreenState extends State<ManageWebsiteScreen> {
             });
           }
         },
+        onSaved: (String? newValue) {
+          if (newValue != null) {
+            setState(() {
+              _themeMode = newValue;
+            });
+          }
+        },
       ),
     );
   }
-  // === YENİ METOT SONU ===
 
   Widget _buildSectionHeader(String title, IconData icon) {
     return Padding(
@@ -737,7 +931,7 @@ class _ManageWebsiteScreenState extends State<ManageWebsiteScreen> {
               ],
             ),
           ),
-        )
+        ),
       ],
     );
   }

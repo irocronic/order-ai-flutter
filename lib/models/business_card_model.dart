@@ -93,12 +93,14 @@ class CardElement {
         'fontFamily': style.fontFamily,
         'letterSpacing': style.letterSpacing,
         'height': style.height,
-        'shadows': shadows?.map((s) => {
-          'color': s.color.value,
-          'offsetX': s.offset.dx,
-          'offsetY': s.offset.dy,
-          'blurRadius': s.blurRadius,
-        }).toList(),
+        'shadows': shadows
+            ?.map((s) => {
+                  'color': s.color.value,
+                  'offsetX': s.offset.dx,
+                  'offsetY': s.offset.dy,
+                  'blurRadius': s.blurRadius,
+                })
+            .toList(),
       },
       'shapeStyle': shapeStyle?.toJson(),
       'textAlign': textAlign.name,
@@ -109,18 +111,15 @@ class CardElement {
     };
   }
 
-  // GÜNCELLEME BAŞLANGICI: JSON'dan CardElement oluşturma metodu daha güvenli hale getirildi.
   factory CardElement.fromJson(Map<String, dynamic> json) {
     FontWeight? fontWeight;
     FontStyle? fontStyle;
     List<Shadow>? shadows;
     TextStyle textStyle;
 
-    // 'style' anahtarının var olup olmadığını ve null olup olmadığını kontrol ediyoruz.
     final styleMap = json['style'] as Map<String, dynamic>?;
 
     if (styleMap != null) {
-      // styleMap null değilse, içindeki değerleri güvenle okuyabiliriz.
       if (styleMap['fontWeight'] == FontWeight.bold.toString()) {
         fontWeight = FontWeight.bold;
       }
@@ -130,15 +129,18 @@ class CardElement {
       }
 
       if (styleMap['shadows'] != null) {
-        shadows = (styleMap['shadows'] as List).map((s) => Shadow(
-          color: Color(s['color']),
-          offset: Offset(s['offsetX'], s['offsetY']),
-          blurRadius: s['blurRadius'],
-        )).toList();
+        shadows = (styleMap['shadows'] as List)
+            .map((s) => Shadow(
+                  color: Color(s['color']),
+                  offset: Offset(s['offsetX'], s['offsetY']),
+                  blurRadius: s['blurRadius'],
+                ))
+            .toList();
       }
-      
+
       textStyle = TextStyle(
-        color: styleMap['color'] != null ? Color(styleMap['color']) : Colors.black,
+        color:
+            styleMap['color'] != null ? Color(styleMap['color']) : Colors.black,
         fontSize: styleMap['fontSize'],
         fontWeight: fontWeight,
         fontStyle: fontStyle,
@@ -148,30 +150,31 @@ class CardElement {
         shadows: shadows,
       );
     } else {
-      // Eğer JSON içinde 'style' objesi yoksa (örneğin şekil elemanları için),
-      // varsayılan boş bir TextStyle oluşturuyoruz.
       textStyle = const TextStyle();
     }
-    
+
     return CardElement(
       id: json['id'],
       type: CardElementType.values.byName(json['type']),
       content: json['content'],
-      imageData: json['imageData'] != null ? base64Decode(json['imageData']) : null,
+      imageData:
+          json['imageData'] != null ? base64Decode(json['imageData']) : null,
       position: Offset(json['position']['dx'], json['position']['dy']),
       size: Size(json['size']['width'], json['size']['height']),
-      style: textStyle, // Güvenli bir şekilde oluşturulan TextStyle'ı atıyoruz.
-      shapeStyle: json['shapeStyle'] != null ? ShapeStyle.fromJson(json['shapeStyle']) : null,
+      style: textStyle,
+      shapeStyle: json['shapeStyle'] != null
+          ? ShapeStyle.fromJson(json['shapeStyle'])
+          : null,
       textAlign: TextAlign.values.byName(json['textAlign'] ?? 'left'),
       rotation: json['rotation'] ?? 0.0,
       opacity: json['opacity'] ?? 1.0,
       groupId: json['groupId'],
       children: json['children'] != null
-          ? List<CardElement>.from(json['children'].map((x) => CardElement.fromJson(x)))
+          ? List<CardElement>.from(
+              json['children'].map((x) => CardElement.fromJson(x)))
           : null,
     );
   }
-  // GÜNCELLEME SONU
 
   @override
   bool operator ==(Object other) {
@@ -194,7 +197,8 @@ class CardElement {
   }
 
   @override
-  int get hashCode => Object.hash(id, type, content, position, size, style, shapeStyle, textAlign, rotation, opacity, groupId, children);
+  int get hashCode => Object.hash(id, type, content, position, size, style,
+      shapeStyle, textAlign, rotation, opacity, groupId, children);
 }
 
 @immutable
@@ -212,21 +216,29 @@ class BusinessCardModel {
     required this.elements,
     this.dimensions = const Size(350, 200),
   });
+
+  // #region GÜNCELLEME
   BusinessCardModel copyWith({
     Color? gradientStartColor,
     Color? gradientEndColor,
     GradientType? gradientType,
     List<CardElement>? elements,
     Size? dimensions,
+    // YENİ EKLENDİ: Gradyanı temizlemek için bir bayrak
+    bool clearGradient = false,
   }) {
     return BusinessCardModel(
       gradientStartColor: gradientStartColor ?? this.gradientStartColor,
-      gradientEndColor: gradientEndColor ?? this.gradientEndColor,
-      gradientType: gradientType ?? this.gradientType,
+      // GÜNCELLENDİ: Bayrak true ise null ata, değilse eski mantığı kullan.
+      gradientEndColor:
+          clearGradient ? null : (gradientEndColor ?? this.gradientEndColor),
+      gradientType:
+          clearGradient ? null : (gradientType ?? this.gradientType),
       elements: elements ?? this.elements,
       dimensions: dimensions ?? this.dimensions,
     );
   }
+  // #endregion GÜNCELLEME
 
   factory BusinessCardModel.defaultCard() {
     return BusinessCardModel(
@@ -238,7 +250,7 @@ class BusinessCardModel {
           content: 'Ad Soyad',
           position: const Offset(20, 30),
           size: const Size(200, 40),
-           style: const TextStyle(
+          style: const TextStyle(
               fontSize: 22,
               fontWeight: FontWeight.bold,
               color: Colors.black,
@@ -255,12 +267,17 @@ class BusinessCardModel {
         'elements': elements.map((e) => e.toJson()).toList(),
         'dimensions': {'width': dimensions.width, 'height': dimensions.height},
       };
-      
+
   factory BusinessCardModel.fromJson(Map<String, dynamic> json) {
     return BusinessCardModel(
-      gradientStartColor: Color(json['gradientStartColor'] ?? Colors.white.value),
-      gradientEndColor: json['gradientEndColor'] != null ? Color(json['gradientEndColor']) : null,
-      gradientType: json['gradientType'] != null ? GradientType.values.byName(json['gradientType']) : null,
+      gradientStartColor:
+          Color(json['gradientStartColor'] ?? Colors.white.value),
+      gradientEndColor: json['gradientEndColor'] != null
+          ? Color(json['gradientEndColor'])
+          : null,
+      gradientType: json['gradientType'] != null
+          ? GradientType.values.byName(json['gradientType'])
+          : null,
       elements: List<CardElement>.from(
           json['elements'].map((x) => CardElement.fromJson(x))),
       dimensions:
@@ -282,5 +299,6 @@ class BusinessCardModel {
   }
 
   @override
-  int get hashCode => Object.hash(gradientStartColor, gradientEndColor, gradientType, dimensions, elements);
+  int get hashCode => Object.hash(
+      gradientStartColor, gradientEndColor, gradientType, dimensions, elements);
 }

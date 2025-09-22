@@ -7,26 +7,26 @@
             "id": "name-main",
             "type": "text",
             "content": "FULL NAME",
-            "position": {"dx": 20, "dy": 30},
-            "size": {"width": 220, "height": 35},
-            "style": { "color": 4280954420, "fontSize": 28, "fontWeight": "FontWeight.bold", "fontFamily": "Oswald"},
+            "position": {"dx": 20.0, "dy": 30.0},
+            "size": {"width": 220.0, "height": 35.0},
+            "style": { "color": 4280954420, "fontSize": 28.0, "fontWeight": "FontWeight.bold", "fontFamily": "Oswald"},
             "textAlign": "left", "rotation": 0.0, "opacity": 1.0
         },
         {
             "id": "title-sub",
             "type": "text",
             "content": "CEO & Founder",
-            "position": {"dx": 22, "dy": 65},
-            "size": {"width": 200, "height": 20},
-            "style": { "color": 4280954420, "fontSize": 16, "fontFamily": "Lato"},
+            "position": {"dx": 22.0, "dy": 65.0},
+            "size": {"width": 200.0, "height": 20.0},
+            "style": { "color": 4280954420, "fontSize": 16.0, "fontFamily": "Lato"},
             "textAlign": "left", "rotation": 0.0, "opacity": 1.0
         },
         {
             "id": "icon-phone-modern",
             "type": "icon",
             "content": "phone",
-            "position": {"dx": 22, "dy": 110},
-            "size": {"width": 14, "height": 14},
+            "position": {"dx": 22.0, "dy": 110.0},
+            "size": {"width": 14.0, "height": 14.0},
             "style": {"color": 4280954420},
             "rotation": 0.0, "opacity": 1.0
         },
@@ -34,17 +34,17 @@
             "id": "text-phone-modern",
             "type": "text",
             "content": "415-999-9999",
-            "position": {"dx": 47, "dy": 109},
-            "size": {"width": 150, "height": 16},
-            "style": {"color": 4280954420, "fontSize": 13, "fontFamily": "Lato"},
+            "position": {"dx": 47.0, "dy": 109.0},
+            "size": {"width": 150.0, "height": 16.0},
+            "style": {"color": 4280954420, "fontSize": 13.0, "fontFamily": "Lato"},
             "textAlign": "left", "rotation": 0.0, "opacity": 1.0
         },
         {
             "id": "icon-email-modern",
             "type": "icon",
             "content": "email",
-            "position": {"dx": 22, "dy": 130},
-            "size": {"width": 14, "height": 14},
+            "position": {"dx": 22.0, "dy": 130.0},
+            "size": {"width": 14.0, "height": 14.0},
             "style": {"color": 4280954420},
             "rotation": 0.0, "opacity": 1.0
         },
@@ -52,17 +52,17 @@
             "id": "text-email-modern",
             "type": "text",
             "content": "john@email.com",
-            "position": {"dx": 47, "dy": 129},
-            "size": {"width": 150, "height": 16},
-            "style": {"color": 4280954420, "fontSize": 13, "fontFamily": "Lato"},
+            "position": {"dx": 47.0, "dy": 129.0},
+            "size": {"width": 150.0, "height": 16.0},
+            "style": {"color": 4280954420, "fontSize": 13.0, "fontFamily": "Lato"},
             "textAlign": "left", "rotation": 0.0, "opacity": 1.0
         },
         {
             "id": "icon-web-modern",
             "type": "icon",
             "content": "web",
-            "position": {"dx": 22, "dy": 150},
-            "size": {"width": 14, "height": 14},
+            "position": {"dx": 22.0, "dy": 150.0},
+            "size": {"width": 14.0, "height": 14.0},
             "style": {"color": 4280954420},
             "rotation": 0.0, "opacity": 1.0
         },
@@ -70,17 +70,17 @@
             "id": "text-web-modern",
             "type": "text",
             "content": "website.com",
-            "position": {"dx": 47, "dy": 149},
-            "size": {"width": 150, "height": 16},
-            "style": {"color": 4280954420, "fontSize": 13, "fontFamily": "Lato"},
+            "position": {"dx": 47.0, "dy": 149.0},
+            "size": {"width": 150.0, "height": 16.0},
+            "style": {"color": 4280954420, "fontSize": 13.0, "fontFamily": "Lato"},
             "textAlign": "left", "rotation": 0.0, "opacity": 1.0
         },
         {
             "id": "logo-circle",
             "type": "shape",
             "content": "ellipse",
-            "position": {"dx": 250, "dy": 70},
-            "size": {"width": 80, "height": 80},
+            "position": {"dx": 250.0, "dy": 70.0},
+            "size": {"width": 80.0, "height": 80.0},
             "shapeStyle": {"shapeType": "ellipse", "fillColor": 0, "borderColor": 4280954420, "borderWidth": 1.5},
             "rotation": 0.0, "opacity": 1.0
         },
@@ -88,11 +88,11 @@
             "id": "logo-letter",
             "type": "text",
             "content": "L",
-            "position": {"dx": 250, "dy": 80},
-            "size": {"width": 80, "height": 60},
-            "style": { "color": 4280954420, "fontSize": 40, "fontWeight": "FontWeight.bold", "fontFamily": "Oswald"},
+            "position": {"dx": 250.0, "dy": 80.0},
+            "size": {"width": 80.0, "height": 60.0},
+            "style": { "color": 4280954420, "fontSize": 40.0, "fontWeight": "FontWeight.bold", "fontFamily": "Oswald"},
             "textAlign": "center", "rotation": 0.0, "opacity": 1.0
         }
     ],
-    "dimensions": {"width": 350, "height": 200}
+    "dimensions": {"width": 350.0, "height": 200.0}
 }

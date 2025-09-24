@@ -254,12 +254,6 @@ class _AccountSettingsScreenState extends State<AccountSettingsScreen> {
     final Map<String, String> supportedLanguages = {
       'tr': 'Türkçe',
       'en': 'English',
-      'de': 'Deutsch',
-      'es': 'Español',
-      'ar': 'العربية',
-      'it': 'Italiano',
-      'zh': '中文',
-      'ru': 'Русский',
     };
 
     // HATA DÜZELTME: View.of(context).locale yerine Localizations.localeOf(context) kullanılıyor.

@@ -1,6 +1,7 @@
 // lib/widgets/setup_wizard/menu_items/components/template_list_widget.dart
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart'; // EKLENDİ
 
 import '../../../../services/user_session.dart';
 import '../models/variant_template_config.dart';
@@ -16,15 +17,15 @@ class TemplateListWidget extends StatelessWidget {
   final Map<int, TextEditingController> templatePriceControllers;
   final Map<int, VariantTemplateConfig> templateVariantConfigs;
   final int currentMenuItemCount;
-  final int? targetCategoryId; // ✅ YENİ EKLENEN
-  final int businessId; // ✅ YENİ EKLENEN
-  final String token; // ✅ YENİ EKLENEN
+  final int? targetCategoryId;
+  final int businessId;
+  final String token;
   final VoidCallback onToggleSelectAll;
   final Function(int) onToggleTemplateSelection;
   final Function(int) onToggleRecipeStatus;
   final Function(int) onOpenVariantManagement;
   final VoidCallback onShowLimitReached;
-  final Function(Map<String, dynamic>) onCustomProductAdded; // ✅ YENİ EKLENEN
+  final Function(Map<String, dynamic>) onCustomProductAdded;
 
   const TemplateListWidget({
     Key? key,
@@ -37,23 +38,23 @@ class TemplateListWidget extends StatelessWidget {
     required this.templatePriceControllers,
     required this.templateVariantConfigs,
     required this.currentMenuItemCount,
-    required this.targetCategoryId, // ✅ YENİ EKLENEN
-    required this.businessId, // ✅ YENİ EKLENEN
-    required this.token, // ✅ YENİ EKLENEN
+    required this.targetCategoryId,
+    required this.businessId,
+    required this.token,
     required this.onToggleSelectAll,
     required this.onToggleTemplateSelection,
     required this.onToggleRecipeStatus,
     required this.onOpenVariantManagement,
     required this.onShowLimitReached,
-    required this.onCustomProductAdded, // ✅ YENİ EKLENEN
+    required this.onCustomProductAdded,
   }) : super(key: key);
 
-  // ✅ YENİ EKLENEN: Özel ürün ekleme dialog'u açma
   Future<void> _openCustomProductDialog(BuildContext context) async {
+    final l10n = AppLocalizations.of(context)!; // EKLENDİ
     if (targetCategoryId == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Önce bir kategori seçin'),
+        SnackBar(
+          content: Text(l10n.selectCategoryFirst), // GÜNCELLENDİ
           backgroundColor: Colors.red,
         ),
       );
@@ -78,6 +79,7 @@ class TemplateListWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!; // EKLENDİ
     if (selectedCategoryName == null) {
       return Center(
         child: Column(
@@ -86,7 +88,7 @@ class TemplateListWidget extends StatelessWidget {
             Icon(Icons.category_outlined, size: 32, color: Colors.grey.shade500),
             const SizedBox(height: 8),
             Text(
-              'Önce bir kategori seçin',
+              l10n.selectCategoryFirst, // GÜNCELLENDİ
               style: TextStyle(
                 fontSize: 12,
                 color: Colors.grey.shade600,
@@ -104,7 +106,7 @@ class TemplateListWidget extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SizedBox(
+            const SizedBox(
               width: 24,
               height: 24,
               child: CircularProgressIndicator(
@@ -114,7 +116,7 @@ class TemplateListWidget extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             Text(
-              'Şablonlar yükleniyor...',
+              l10n.loadingTemplates, // GÜNCELLENDİ
               style: TextStyle(
                 fontSize: 12,
                 color: Colors.grey.shade600,
@@ -133,7 +135,7 @@ class TemplateListWidget extends StatelessWidget {
             Icon(Icons.inventory_2_outlined, size: 32, color: Colors.grey.shade500),
             const SizedBox(height: 8),
             Text(
-              'Bu kategori için şablon bulunamadı',
+              l10n.noTemplatesFoundForCategory, // GÜNCELLENDİ
               style: TextStyle(
                 fontSize: 12,
                 color: Colors.grey.shade600,
@@ -141,11 +143,10 @@ class TemplateListWidget extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 16),
-            // ✅ YENİ: Şablon yoksa da özel ürün ekleyebilsin
             ElevatedButton.icon(
               onPressed: () => _openCustomProductDialog(context),
               icon: const Icon(Icons.add_circle_outline, size: 18),
-              label: const Text('Özel Ürün Ekle'),
+              label: Text(l10n.addCustomProduct), // GÜNCELLENDİ
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.green,
                 foregroundColor: Colors.white,
@@ -165,7 +166,7 @@ class TemplateListWidget extends StatelessWidget {
             Icon(Icons.search_off, size: 24, color: Colors.grey.shade500),
             const SizedBox(height: 6),
             Text(
-              'Arama kriterlerinize uygun\nürün bulunamadı.',
+              l10n.noProductsFoundForSearchCriteria, // GÜNCELLENDİ
               style: TextStyle(
                 fontSize: 11,
                 color: Colors.grey.shade600,
@@ -173,11 +174,10 @@ class TemplateListWidget extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 16),
-            // ✅ YENİ: Arama sonucu yoksa da özel ürün ekleyebilsin
             ElevatedButton.icon(
               onPressed: () => _openCustomProductDialog(context),
               icon: const Icon(Icons.add_circle_outline, size: 18),
-              label: const Text('Özel Ürün Ekle'),
+              label: Text(l10n.addCustomProduct), // GÜNCELLENDİ
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.green,
                 foregroundColor: Colors.white,
@@ -190,12 +190,11 @@ class TemplateListWidget extends StatelessWidget {
     }
 
     final bool hasVisibleItems = filteredTemplates.isNotEmpty;
-    final bool allVisibleSelected = hasVisibleItems && 
+    final bool allVisibleSelected = hasVisibleItems &&
         filteredTemplates.every((template) => selectedTemplateIds.contains(template['id']));
 
     return Column(
       children: [
-        // Tümünü seç butonu
         if (hasVisibleItems)
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
@@ -221,7 +220,7 @@ class TemplateListWidget extends StatelessWidget {
                 const SizedBox(width: 6),
                 Expanded(
                   child: Text(
-                    allVisibleSelected ? 'Tümünü Bırak' : 'Tümünü Seç',
+                    allVisibleSelected ? l10n.deselectAll : l10n.selectAll, // GÜNCELLENDİ
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 12,
@@ -251,7 +250,6 @@ class TemplateListWidget extends StatelessWidget {
             ),
           ),
 
-        // ✅ YENİ EKLENEN: Özel Ürün Ekle butonu
         if (hasVisibleItems)
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
@@ -266,9 +264,9 @@ class TemplateListWidget extends StatelessWidget {
               child: ElevatedButton.icon(
                 onPressed: () => _openCustomProductDialog(context),
                 icon: const Icon(Icons.add_circle_outline, size: 16),
-                label: const Text(
-                  'Yeni Ürün Ekle',
-                  style: TextStyle(
+                label: Text(
+                  l10n.addNewProduct, // GÜNCELLENDİ
+                  style: const TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.bold,
                   ),
@@ -286,7 +284,6 @@ class TemplateListWidget extends StatelessWidget {
             ),
           ),
         
-        // Template listesi
         Expanded(
           child: ListView.builder(
             padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
@@ -314,10 +311,9 @@ class TemplateListWidget extends StatelessWidget {
                 ),
                 child: Column(
                   children: [
-                    // Ana ürün satırı
                     CheckboxListTile(
                       title: Text(
-                        template['name'] ?? 'İsimsiz Ürün',
+                        template['name'] ?? l10n.unnamedProduct, // GÜNCELLENDİ
                         style: TextStyle(
                           fontWeight: FontWeight.w500,
                           fontSize: 12,
@@ -329,15 +325,15 @@ class TemplateListWidget extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                       ),
                       subtitle: wouldExceedLimit 
-                        ? const Text(
-                            'Limit aşılacak',
-                            style: TextStyle(
-                              color: Colors.red,
-                              fontSize: 9,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          )
-                        : null,
+                          ? Text(
+                              l10n.limitWillBeExceeded, // GÜNCELLENDİ
+                              style: const TextStyle(
+                                color: Colors.red,
+                                fontSize: 9,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            )
+                          : null,
                       value: isSelected,
                       onChanged: wouldExceedLimit ? null : (bool? value) {
                         if (value != null) {
@@ -373,7 +369,7 @@ class TemplateListWidget extends StatelessWidget {
                                   ),
                                 ),
                                 child: Text(
-                                  isFromRecipe ? 'Reçeteli' : 'Manuel',
+                                  isFromRecipe ? l10n.productTypeRecipe : l10n.productTypeManual, // GÜNCELLENDİ
                                   style: TextStyle(
                                     fontSize: 9,
                                     fontWeight: FontWeight.bold,
@@ -389,21 +385,20 @@ class TemplateListWidget extends StatelessWidget {
                       ) : null,
                     ),
                     
-                    // Fiyat alanı (sadece manuel ürünler için)
                     if (isSelected && !isFromRecipe && priceController != null)
                       Padding(
                         padding: const EdgeInsets.fromLTRB(32, 0, 12, 8),
                         child: TextFormField(
                           controller: priceController,
                           decoration: InputDecoration(
-                            labelText: 'Fiyat (₺)',
-                            hintText: 'Örn: 25.50',
+                            labelText: '${l10n.priceLabel} (${l10n.currencySymbol.trim()})', // GÜNCELLENDİ
+                            hintText: l10n.menuItemPriceHint, // GÜNCELLENDİ
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(6),
                             ),
                             contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
                             isDense: true,
-                            prefixText: '₺ ',
+                            prefixText: l10n.currencySymbol, // GÜNCELLENDİ
                           ),
                           style: const TextStyle(fontSize: 12),
                           keyboardType: const TextInputType.numberWithOptions(decimal: true),
@@ -416,7 +411,6 @@ class TemplateListWidget extends StatelessWidget {
                         ),
                       ),
                     
-                    // Varyant durumu göstergesi ve yönetim butonu
                     if (isSelected && variantConfig != null)
                       Container(
                         margin: const EdgeInsets.fromLTRB(32, 8, 12, 8),
@@ -435,7 +429,7 @@ class TemplateListWidget extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    'Varyantlar',
+                                    l10n.variants, // GÜNCELLENDİ
                                     style: TextStyle(
                                       fontSize: 12,
                                       fontWeight: FontWeight.bold,
@@ -445,7 +439,7 @@ class TemplateListWidget extends StatelessWidget {
                                   if (variantConfig.variants.isNotEmpty) ...[
                                     const SizedBox(height: 4),
                                     Text(
-                                      '${variantConfig.variants.length} varyant eklendi',
+                                      l10n.variantsAddedCount(variantConfig.variants.length), // GÜNCELLENDİ
                                       style: TextStyle(
                                         fontSize: 10,
                                         color: Colors.green.shade600,
@@ -462,7 +456,7 @@ class TemplateListWidget extends StatelessWidget {
                                 size: 14,
                               ),
                               label: Text(
-                                variantConfig.variants.isEmpty ? 'Ekle' : 'Düzenle',
+                                variantConfig.variants.isEmpty ? l10n.add : l10n.edit, // GÜNCELLENDİ
                                 style: const TextStyle(fontSize: 11),
                               ),
                               style: ElevatedButton.styleFrom(

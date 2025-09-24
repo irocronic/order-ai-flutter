@@ -1,5 +1,6 @@
 // lib/widgets/setup_wizard/menu_items/components/template_search_field.dart
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class TemplateSearchField extends StatelessWidget {
   final TextEditingController searchController;
@@ -11,11 +12,13 @@ class TemplateSearchField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return TextField(
       controller: searchController,
       decoration: InputDecoration(
-        labelText: 'Ürün Ara',
-        hintText: 'Ürün adı ile ara...',
+        labelText: l10n.searchProductLabel,
+        hintText: l10n.searchProductHint,
         prefixIcon: Icon(Icons.search, size: 18, color: Colors.grey.shade600),
         border: const OutlineInputBorder(),
         contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),

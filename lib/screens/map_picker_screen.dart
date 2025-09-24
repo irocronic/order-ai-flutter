@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:uuid/uuid.dart';
+import '../services/api_service.dart';
+import '../services/user_session.dart';
 
 class MapPickerScreen extends StatefulWidget {
   final LatLng initialLocation;
@@ -23,11 +25,10 @@ class _MapPickerScreenState extends State<MapPickerScreen> {
   LatLng? _pickedLocation;
   final Set<Marker> _markers = {};
 
-  // --- YENİ EKLENEN DEĞİŞKENLER ---
   final TextEditingController _searchController = TextEditingController();
   String _sessionToken = const Uuid().v4();
   List<dynamic> _placePredictions = [];
-  final String _apiKey = "AIzaSyBAgXbA85EJfjSCc5BdQtEdH3wXJ1trb80"; // API anahtarınız
+  bool _isSearching = false;
 
   @override
   void initState() {
@@ -63,52 +64,130 @@ class _MapPickerScreenState extends State<MapPickerScreen> {
     setState(() {
       _pickedLocation = position;
       _addMarker(position);
-      _placePredictions = []; // Tahmin listesini temizle
+      _placePredictions = [];
     });
   }
 
-  // --- YENİ EKLENEN METOTLAR ---
-
-  // Google Places Autocomplete API'sini kullanarak yer araması yapar.
   Future<void> _searchPlaces(String input) async {
     if (input.isEmpty) {
       setState(() {
         _placePredictions = [];
+        _isSearching = false;
       });
       return;
     }
 
-    final String baseUrl =
-        'https://maps.googleapis.com/maps/api/place/autocomplete/json';
-    String url =
-        '$baseUrl?input=$input&key=$_apiKey&sessiontoken=$_sessionToken&language=tr&components=country:tr';
+    setState(() {
+      _isSearching = true;
+    });
 
     try {
-      final response = await http.get(Uri.parse(url));
+      final url = ApiService.getUrl('/google-places/autocomplete/').replace(
+        queryParameters: {
+          'input': input,
+          'sessiontoken': _sessionToken,
+          'language': 'tr',
+          'components': 'country:tr',
+        },
+      );
+
+      final response = await http.get(
+        url,
+        headers: {
+          "Authorization": "Bearer ${UserSession.token}",
+          "Content-Type": "application/json",
+        },
+      );
+
       if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        
+        // Google API error status kontrolü
+        if (data.containsKey('status') && data['status'] == 'REQUEST_DENIED') {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Google Maps API anahtarı hatası. Lütfen yöneticinize başvurun.'),
+              backgroundColor: Colors.red,
+            ),
+          );
+          setState(() {
+            _placePredictions = [];
+            _isSearching = false;
+          });
+          return;
+        }
+        
+        if (data.containsKey('predictions')) {
+          final predictions = data['predictions'] ?? [];
+          setState(() {
+            _placePredictions = predictions;
+            _isSearching = false;
+          });
+        } else {
+          setState(() {
+            _placePredictions = [];
+            _isSearching = false;
+          });
+        }
+      } else if (response.statusCode == 403) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('API anahtarı hatası. Lütfen yöneticinize başvurun.'),
+            backgroundColor: Colors.red,
+          ),
+        );
         setState(() {
-          _placePredictions = json.decode(response.body)['predictions'];
+          _placePredictions = [];
+          _isSearching = false;
         });
       } else {
-        // Hata durumunda kullanıcıya bilgi verilebilir.
-        print('Places API Error: ${response.body}');
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Arama yapılırken hata oluştu: ${response.statusCode}'),
+            backgroundColor: Colors.orange,
+          ),
+        );
+        setState(() {
+          _placePredictions = [];
+          _isSearching = false;
+        });
       }
     } catch (e) {
-      print('Arama sırasında bir hata oluştu: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Bağlantı hatası. İnternet bağlantınızı kontrol edin.'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      setState(() {
+        _placePredictions = [];
+        _isSearching = false;
+      });
     }
   }
 
-  // Seçilen yerin detaylarını (enlem/boylam) alır.
   Future<void> _getPlaceDetails(String placeId) async {
-    final String baseUrl =
-        'https://maps.googleapis.com/maps/api/place/details/json';
-    String url =
-        '$baseUrl?place_id=$placeId&key=$_apiKey&sessiontoken=$_sessionToken&fields=geometry';
-
     try {
-      final response = await http.get(Uri.parse(url));
+      final url = ApiService.getUrl('/google-places/details/').replace(
+        queryParameters: {
+          'place_id': placeId,
+          'sessiontoken': _sessionToken,
+          'fields': 'geometry',
+        },
+      );
+
+      final response = await http.get(
+        url,
+        headers: {
+          "Authorization": "Bearer ${UserSession.token}",
+          "Content-Type": "application/json",
+        },
+      );
+      
       if (response.statusCode == 200) {
-        final details = json.decode(response.body)['result'];
+        final data = json.decode(response.body);
+        final details = data['result'];
+        
         if (details != null && details['geometry'] != null) {
           final location = details['geometry']['location'];
           final lat = location['lat'];
@@ -118,21 +197,28 @@ class _MapPickerScreenState extends State<MapPickerScreen> {
           setState(() {
             _pickedLocation = newPosition;
             _addMarker(newPosition);
-            _placePredictions = []; // Listeyi temizle
-            _searchController.clear(); // Arama çubuğunu temizle
+            _placePredictions = [];
+            _searchController.clear();
           });
 
-          // Haritayı yeni konuma hareket ettir
           _mapController.animateCamera(CameraUpdate.newLatLngZoom(newPosition, 17.0));
-
-          // Yeni bir arama oturumu için token'ı yenile
           _sessionToken = const Uuid().v4();
         }
       } else {
-        print('Place Details API Error: ${response.body}');
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Konum detayları alınırken hata oluştu.'),
+            backgroundColor: Colors.orange,
+          ),
+        );
       }
     } catch (e) {
-      print('Yer detayı alınırken bir hata oluştu: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Bağlantı hatası oluştu.'),
+          backgroundColor: Colors.red,
+        ),
+      );
     }
   }
 
@@ -152,7 +238,6 @@ class _MapPickerScreenState extends State<MapPickerScreen> {
           ),
         ],
       ),
-      // YAPI DEĞİŞİKLİĞİ: Arama çubuğu ve sonuçlarını haritanın üzerine koymak için Stack kullanıldı.
       body: Stack(
         children: [
           GoogleMap(
@@ -192,7 +277,16 @@ class _MapPickerScreenState extends State<MapPickerScreen> {
                 },
                 decoration: InputDecoration(
                   hintText: 'Restoran veya adres arayın...',
-                  prefixIcon: const Icon(Icons.search),
+                  prefixIcon: _isSearching 
+                      ? const SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: Padding(
+                            padding: EdgeInsets.all(12.0),
+                            child: CircularProgressIndicator(strokeWidth: 2),
+                          ),
+                        )
+                      : const Icon(Icons.search),
                   border: InputBorder.none,
                   contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
                   suffixIcon: _searchController.text.isNotEmpty
@@ -210,6 +304,7 @@ class _MapPickerScreenState extends State<MapPickerScreen> {
               ),
             ),
           ),
+          
           // ARAMA SONUÇLARI LİSTESİ
           if (_placePredictions.isNotEmpty)
             Positioned(
@@ -217,11 +312,11 @@ class _MapPickerScreenState extends State<MapPickerScreen> {
               right: 15,
               left: 15,
               child: Container(
-                constraints: BoxConstraints(maxHeight: 250),
+                constraints: const BoxConstraints(maxHeight: 250),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(10),
-                   boxShadow: [
+                  boxShadow: [
                     BoxShadow(
                       color: Colors.black.withOpacity(0.1),
                       blurRadius: 8,
@@ -233,10 +328,15 @@ class _MapPickerScreenState extends State<MapPickerScreen> {
                   shrinkWrap: true,
                   itemCount: _placePredictions.length,
                   itemBuilder: (context, index) {
+                    final prediction = _placePredictions[index];
+                    final description = prediction['description'] ?? 'Bilinmeyen Yer';
+                    final placeId = prediction['place_id'] ?? '';
+                    
                     return ListTile(
-                      title: Text(_placePredictions[index]['description']),
+                      title: Text(description),
+                      leading: const Icon(Icons.location_on, color: Colors.grey),
                       onTap: () {
-                        _getPlaceDetails(_placePredictions[index]['place_id']);
+                        _getPlaceDetails(placeId);
                       },
                     );
                   },

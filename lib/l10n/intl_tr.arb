@@ -2513,14 +2513,6 @@
   "currencyTL": "₺",
   "currencySymbol": "₺",
   "dialogDeleteCategoryContent": "Bu kategoriyi ve altındaki tüm ürünleri silmek istediğinize emin misiniz? Bu işlem geri alınamaz.",
-  "errorGeneral": "Bir hata oluştu: {details}",
-  "@errorGeneral": {
-    "placeholders": {
-      "details": {
-        "type": "String"
-      }
-    }
-  },
   "editOrderErrorFetchingBusinessName": "İşletme adı alınırken hata: {error}",
   "@editOrderErrorFetchingBusinessName": {
     "placeholders": {
@@ -2803,13 +2795,13 @@
   "setupWizardSaveAndContinueButton": "Kaydet ve Devam Et",
   "setupWizardErrorSavingSettings": "Ayarlar kaydedilirken hata oluştu: {errorDetails}",
   "@setupWizardErrorSavingSettings": {
-      "description": "Error message when saving localization settings fails.",
-      "placeholders": {
-          "errorDetails": {
-              "type": "String",
-              "example": "Network error"
-          }
+    "description": "Ayarlar kaydedilirken hata oluştuğunda gösterilen mesaj.",
+    "placeholders": {
+      "errorDetails": {
+        "type": "String",
+        "example": "Ağ hatası"
       }
+    }
   },
   "subscriptionScreenTitle": "Abonelik Yönetimi",
   "@subscriptionScreenTitle": {
@@ -2967,7 +2959,6 @@
   "manageKdsErrorLimitExceeded": "KDS Ekranı oluşturma limitinize ({maxKds}) ulaştınız. Yeni bir ekran ekleyebilmek için lütfen paketinizi yükseltin.",
   "manageTablesErrorLimitExceeded": "Masa oluşturma limitinize ({maxTables}) ulaştınız. Yeni bir masa ekleyebilmek için lütfen paketinizi yükseltin.",
   "createVariantErrorLimitExceeded": "Varyant/seçenek oluşturma limitinize ({maxVariants}) ulaştınız. Yeni bir varyant ekleyebilmek için lütfen paketinizi yükseltin.",
-  "manageStaffErrorLimitExceeded": "Personel oluşturma limitinize ({maxStaff}) ulaştınız. Yeni bir personel ekleyebilmek için lütfen paketinizi yükseltin.",
   "menuItemKdvRateLabel": "KDV Oranı",
   "kdvRateValidatorRequired": "Lütfen bir KDV oranı girin.",
   "kdvRateValidatorInvalid": "Lütfen 0 ile 100 arasında geçerli bir oran girin.",
@@ -4003,5 +3994,587 @@
     "tableLayoutToggleGrid": "Izgarayı ve Hizalamayı Aç/Kapat",
     "unplacedTablesTitle": "Yerleştirilmemiş Masalar",
     "templateAddSelectedButton": "Seçilenleri Ekle",
-    "templateVariantRequiredError": "Her seçili ürüne en az bir varyant eklemelisiniz."
+    "templateVariantRequiredError": "Her seçili ürüne en az bir varyant eklemelisiniz.",
+    "homeMenuPaymentSettings": "Ödeme Ayarları",
+    "@homeMenuPaymentSettings": {
+    "description": "Ana ekrandaki ödeme ayarları menü kartının başlığı"
+  },
+  "paymentTypeQrCode": "QR Kod ile Öde",
+  "qrPaymentScreenTitle": "QR Kod ile Ödeme",
+  "qrPaymentInstruction": "QR kodu bankanızın mobil uygulaması ile okutun",
+  "qrPaymentErrorInitiate": "QR ödeme başlatılırken hata: {error}",
+  "qrPaymentErrorTimeout": "QR ödeme süresi doldu",
+  "qrPaymentErrorFailedOrExpired": "QR ödeme başarısız veya süresi doldu",
+  "paymentSuccessMessage": "Ödeme başarıyla tamamlandı!",
+  "dialogButtonBack": "Geri",
+  "orderTotalLabel": "Toplam Tutar:",
+  "qrPaymentSecondsLeft": "saniye kaldı",
+  "voiceGuideActive": "Sesli Rehber Aktif",
+  "tooltipUnmute": "Sesi Aç",
+  "tooltipMute": "Sesi Kapat",
+  "tooltipReplayGuide": "Rehberi Tekrar Çal",
+  "languageNameTr": "Türkçe",
+  "languageNameEn": "English",
+  "languageNameDe": "Deutsch",
+  "languageNameEs": "Español",
+  "languageNameAr": "العربية",
+  "languageNameIt": "Italiano",
+  "languageNameZh": "中文",
+  "languageNameRu": "Русский",
+  "currencyNameTRY": "Türk Lirası (₺)",
+  "currencyNameUSD": "ABD Doları ($)",
+  "currencyNameEUR": "Euro (€)",
+  "currencyNameGBP": "İngiliz Sterlini (£)",
+  "timeZoneNameIstanbul": "(GMT+3) Istanbul",
+  "timeZoneNameLondon": "(GMT+0) London",
+  "timeZoneNameBerlin": "(GMT+1) Berlin",
+  "timeZoneNameNewYork": "(GMT-5) New York",
+  "timeZoneNameDubai": "(GMT+4) Dubai",
+  "timeZoneNameTokyo": "(GMT+9) Tokyo",
+  "welcomeMessageTr": "Hoş geldiniz",
+  "welcomeMessageEn": "Welcome",
+  "welcomeMessageDe": "Willkommen",
+  "welcomeMessageEs": "Bienvenido",
+  "welcomeMessageAr": "أهلاً وسهلاً",
+  "welcomeMessageIt": "Benvenuto",
+  "welcomeMessageZh": "欢迎",
+  "welcomeMessageRu": "добро пожаловать",
+  "welcomeMessageFr": "Bienvenue",
+  "setupCategoriesQuickStartTitle": "Hızlı Başlangıç",
+  "setupCategoriesQuickStartDescription": "Hazır şablonlardan kategori oluşturarak hızlıca başlayın!",
+  "setupCategoriesAddFromTemplateButton": "Şablondan Ekle",
+  "setupCategoriesSuccessFromTemplate": "Kategoriler şablondan başarıyla oluşturuldu!",
+  "setupCategoriesErrorFromTemplate": "Şablondan kategori oluşturulurken hata: {errorDetails}",
+  "@setupCategoriesErrorFromTemplate": {
+    "placeholders": {
+      "errorDetails": {
+        "type": "String"
+      }
+    }
+  },
+  "setupCategoriesErrorLoadingTemplates": "Şablonlar yüklenirken bir hata oluştu: {errorDetails}",
+  "@setupCategoriesErrorLoadingTemplates": {
+    "placeholders": {
+      "errorDetails": {
+        "type": "String"
+      }
+    }
+  },
+  "setupCategoriesManualAddTitle": "Manuel Kategori Ekleme",
+  "categoryDefaultKdvRateLabel": "Varsayılan KDV Oranı (%)",
+  "setupCategoriesMainCategory": "Ana Kategori",
+  "setupCategoriesKdsLoading": "KDS Ekranları yükleniyor...",
+  "setupCategoriesErrorDefineKdsFirst": "Önce Ayarlar > KDS Ekranları bölümünden bir ekran tanımlamalısınız.",
+  "setupCategoriesLabelDisplayKds": "Görüntüleneceği Mutfak Ekranı",
+  "setupCategoriesHintSelectKds": "Bir mutfak ekranı seçin",
+  "setupCategoriesValidatorSelectKds": "Lütfen bir mutfak ekranı seçin.",
+  "setupCategoriesAddButton": "Kategoriyi Ekle",
+  "setupCategoriesErrorSelectKds": "Lütfen kategorinin görüntüleneceği bir mutfak ekranı seçin.",
+  "setupCategoriesSuccessAdded": "\"{categoryName}\" kategorisi başarıyla eklendi.",
+  "@setupCategoriesSuccessAdded": {
+    "placeholders": {
+      "categoryName": {
+        "type": "String"
+      }
+    }
+  },
+  "setupCategoriesErrorCreating": "Kategori oluşturulurken hata: {errorDetails}",
+    "@setupCategoriesErrorCreating": {
+    "placeholders": {
+      "errorDetails": {
+        "type": "String"
+      }
+    }
+  },
+  "errorLoadingData": "Veriler yüklenirken hata: {error}",
+  "@errorLoadingData": {
+    "description": "Error message shown when initial data fails to load.",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Network error"
+      }
+    }
+  },
+  "categoryLimitInfo": "Mevcut: {current}, Seçilen: {selected}, Limit: {limit}",
+  "@categoryLimitInfo": {
+    "description": "Informational text showing category counts and the subscription limit.",
+    "placeholders": {
+      "current": {
+        "type": "int",
+        "example": "5"
+      },
+      "selected": {
+        "type": "int",
+        "example": "3"
+      },
+      "limit": {
+        "type": "int",
+        "example": "10"
+      }
+    }
+  },
+  "searchCategoryTemplateLabel": "Kategori Şablonu Ara",
+  "@searchCategoryTemplateLabel": {
+    "description": "Label for the search input field for category templates."
+  },
+  "searchCategoryTemplateHint": "Kategori adı ile ara...",
+  "@searchCategoryTemplateHint": {
+    "description": "Hint text for the category template search field."
+  },
+  "selectAll": "Tümünü Seç",
+  "@selectAll": {
+    "description": "Button text to select all visible items."
+  },
+  "deselectAll": "Tümünü Bırak",
+  "@deselectAll": {
+    "description": "Button text to deselect all visible items."
+  },
+  "templatesDisplayed": "Görüntülenen: {count} şablon",
+  "@templatesDisplayed": {
+    "description": "Subtitle indicating how many templates are currently visible in the list.",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "15"
+      }
+    }
+  },
+  "noTemplatesFound": "Şablon bulunamadı",
+  "@noTemplatesFound": {
+    "description": "Message shown when no category templates are available at all."
+  },
+  "noTemplatesMatchSearch": "Arama kriterlerinize uygun\nkategori şablonu bulunamadı.",
+  "@noTemplatesMatchSearch": {
+    "description": "Message shown when a search yields no results."
+  },
+  "iconInfo": "İkon: {iconName}",
+  "@iconInfo": {
+    "description": "Subtitle for a template list item, indicating its icon.",
+    "placeholders": {
+      "iconName": {
+        "type": "String",
+        "example": "coffee_cup"
+      }
+    }
+  },
+  "limitWillBeExceeded": "Limit aşılacak",
+  "@limitWillBeExceeded": {
+    "description": "Warning message on a list item indicating that selecting it would exceed the user's plan limit."
+  },
+  "createTemplateButtonWithCount": "{count} Şablon Oluştur",
+  "@createTemplateButtonWithCount": {
+    "description": "Text for the main action button to create selected templates, including the count.",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "5"
+      }
+    }
+  },
+  "setupCategoriesErrorCreating": "Kategori oluşturulurken hata: {errorDetails}",
+  "@setupCategoriesErrorCreating": {
+    "description": "Error message shown when creating categories fails.",
+    "placeholders": {
+      "errorDetails": {
+        "type": "String",
+        "example": "API returned 500"
+      }
+    }
+  },
+  "quickStartTitle": "Hızlı Başlangıç",
+  "@quickStartTitle": {
+    "description": "Title for the 'Quick Start' section on the menu items page."
+  },
+  "quickStartDescription": "Popüler kategoriler için hazır ürünleri hızla ekleyin",
+  "@quickStartDescription": {
+    "description": "Description for the 'Quick Start' section, encouraging users to add items from templates."
+  },
+  "addFromTemplateButton": "Şablondan Ürün Ekle",
+  "@addFromTemplateButton": {
+    "description": "Label for the button that opens the template selection dialog for menu items."
+  },
+  "menuItemsAddedSuccess": "{count,plural, =1{1 ürün başarıyla eklendi!} other{# ürün başarıyla eklendi!}}",
+  "@menuItemsAddedSuccess": {
+    "description": "Success message shown after adding one or more menu items from templates.",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "5"
+      }
+    }
+  },
+  "menuItemsAddedError": "Hiçbir ürün eklenemedi. Lütfen tekrar deneyin.",
+  "@menuItemsAddedError": {
+    "description": "Error message shown when no menu items could be added from templates."
+  },
+  "errorCreatingCustomProduct": "Özel ürün oluşturulurken hata: {error}",
+  "@errorCreatingCustomProduct": {
+    "description": "Error message thrown when creating a custom menu item fails.",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Invalid price"
+      }
+    }
+  },
+  "menuItemService_errorBusinessInfoMissing": "İşletme bilgisi eksik. Lütfen uygulamayı yeniden başlatın.",
+  "menuItemService_errorInvalidCategory": "Geçersiz kategori. Lütfen farklı bir kategori seçin.",
+  "menuItemService_errorProductAlreadyExists": "Bu isimde bir ürün zaten mevcut. Lütfen farklı bir isim deneyin.",
+  "menuItemService_errorPriceRequiredForManualProduct": "Manuel ürün için fiyat belirtmek zorunludur.",
+  "menuItemService_errorAuthorization": "Yetki hatası. Lütfen tekrar giriş yapın.",
+  "menuItemService_errorForbidden": "Bu işlem için yetkiniz bulunmuyor.",
+  "menuItemService_errorProductLimitReached": "Ürün ekleme limitinize ulaştınız.",
+  "menuItemService_errorCreatingCustomProduct": "Özel ürün oluşturulurken hata: {error}",
+  "@menuItemService_errorCreatingCustomProduct": {
+      "description": "Özel ürün oluşturma sırasında genel bir hata mesajı.",
+      "placeholders": {
+          "error": {
+              "type": "String",
+              "example": "Network error"
+          }
+      }
+  },
+  "menuItemService_unnamedProduct": "İsimsiz Ürün",
+  "menuItemService_errorCouldNotCreateUniqueName": "Ürün ismi benzersiz hale getirilemedi. Lütfen manuel olarak farklı bir isim deneyin.",
+  "menuItemService_errorCreatingProduct": "Ürün oluşturulurken bir hata oluştu: {error}",
+  "@menuItemService_errorCreatingProduct": {
+      "description": "Genel ürün oluşturma hatası.",
+      "placeholders": {
+          "error": {
+              "type": "String",
+              "example": "API error"
+          }
+      }
+  },
+  "menuItemService_errorVariantImageUploadFailed": "Varyant görseli yüklenemedi.",
+  "menuItemService_errorFetchingTemplateData": "Şablon verileri alınırken bir hata oluştu.",
+  "menuItemService_errorNetworkFetchingTemplate": "Şablon verisi alınırken ağ hatası: {error}",
+  "@menuItemService_errorNetworkFetchingTemplate": {
+      "description": "Şablon verisi alınırken ağ hatası mesajı.",
+      "placeholders": {
+          "error": {
+              "type": "String",
+              "example": "Connection timed out"
+          }
+      }
+  },
+  "menuItemService_errorFirebaseUploadFailed": "Dosya yüklemesi başarısız oldu.",
+  "manualMenuItemAddTitle": "Manuel Ürün Ekleme",
+  "currencySymbol": "₺ ",
+  "menuItemPriceHint": "Örn: 25.50",
+  "selectCategoryFirst": "Önce bir kategori seçin",
+  "loadingTemplates": "Şablonlar yükleniyor...",
+  "noTemplatesFoundForCategory": "Bu kategori için şablon bulunamadı",
+  "addCustomProduct": "Özel Ürün Ekle",
+  "noProductsFoundForSearchCriteria": "Arama kriterlerinize uygun\nürün bulunamadı.",
+  "deselectAll": "Tümünü Bırak",
+  "selectAll": "Tümünü Seç",
+  "addNewProduct": "Yeni Ürün Ekle",
+  "unnamedProduct": "İsimsiz Ürün",
+  "limitWillBeExceeded": "Limit aşılacak",
+  "productTypeRecipe": "Reçeteli",
+  "productTypeManual": "Manuel",
+  "priceLabel": "Fiyat",
+  "variants": "Varyantlar",
+  "variantsAddedCount": "{count} varyant eklendi",
+  "@variantsAddedCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "add": "Ekle",
+  "edit": "Düzenle",
+  "menuItemVariantsDialogErrorLoadingVariants": "Varyantlar yüklenirken hata: {error}",
+  "@menuItemVariantsDialogErrorLoadingVariants": {
+      "placeholders": {
+          "error": {
+              "type": "String"
+          }
+      }
+  },
+  "menuItemVariantsDialogQuickAddVariant": "Hızlı Varyant Ekle:",
+  "menuItemVariantsDialogLoadingTemplates": "Şablonlar yükleniyor...",
+  "menuItemVariantsDialogLimitReachedContent": "Varyant ekleme limitinize ulaştınız ({limit}). Daha fazla varyant eklemek için planınızı yükseltin.",
+  "@menuItemVariantsDialogLimitReachedContent": {
+      "placeholders": {
+          "limit": {
+              "type": "int"
+          }
+      }
+  },
+  "menuItemVariantsDialogFirebaseUploadFailed": "Firebase upload başarısız",
+  "menuItemVariantsDialogErrorUploadingPhoto": "Fotoğraf yüklenirken hata: {error}",
+  "@menuItemVariantsDialogErrorUploadingPhoto": {
+      "placeholders": {
+          "error": {
+              "type": "String"
+          }
+      }
+  },
+  "menuItemVariantsDialogVariantAddedSuccess": "\"{variantName}\" varyantı başarıyla eklendi!",
+  "@menuItemVariantsDialogVariantAddedSuccess": {
+      "placeholders": {
+          "variantName": {
+              "type": "String"
+          }
+      }
+  },
+  "menuItemVariantsDialogDeleteVariantTitle": "Varyant Sil",
+  "menuItemVariantsDialogDeleteVariantContent": "\"{variantName}\" varyantını silmek istediğinizden emin misiniz?",
+  "@menuItemVariantsDialogDeleteVariantContent": {
+      "placeholders": {
+          "variantName": {
+              "type": "String"
+          }
+      }
+  },
+  "menuItemVariantsDialogVariantDeletedSuccess": "\"{variantName}\" varyantı silindi",
+  "@menuItemVariantsDialogVariantDeletedSuccess": {
+      "placeholders": {
+          "variantName": {
+              "type": "String"
+          }
+      }
+  },
+  "menuItemVariantsDialogErrorDeletingVariant": "Varyant silinirken hata: {error}",
+  "@menuItemVariantsDialogErrorDeletingVariant": {
+      "placeholders": {
+          "error": {
+              "type": "String"
+          }
+      }
+  },
+  "menuItemVariantsDialogUnnamedProduct": "İsimsiz Ürün",
+  "menuItemVariantsDialogTitle": "Varyant Yönetimi - {menuItemName}",
+  "@menuItemVariantsDialogTitle": {
+      "placeholders": {
+          "menuItemName": {
+              "type": "String"
+          }
+      }
+  },
+  "menuItemVariantsDialogCurrentVariants": "Mevcut Varyantlar ({count}):",
+  "@menuItemVariantsDialogCurrentVariants": {
+      "placeholders": {
+          "count": {
+              "type": "int"
+          }
+      }
+  },
+  "menuItemVariantsDialogExtraTag": "Ekstra",
+  "menuItemVariantsDialogDeleteVariantTooltip": "Varyantı Sil",
+  "menuItemVariantsDialogNoVariantsAdded": "Henüz varyant eklenmemiş",
+  "menuItemVariantsDialogNoVariantsDescription": "Bu ürün için boyut, ekstra seçenek gibi varyantlar ekleyebilirsiniz",
+  "menuItemVariantsDialogAddNewVariant": "Yeni Varyant Ekle:",
+  "menuItemVariantsDialogVariantNameLabel": "Varyant Adı",
+  "menuItemVariantsDialogVariantNameHint": "Büyük, Küçük, Ekstra...",
+  "menuItemVariantsDialogVariantNameRequired": "Varyant adı gerekli",
+  "menuItemVariantsDialogPriceLabel": "Fiyat",
+  "menuItemVariantsDialogPriceRequired": "Fiyat gerekli",
+  "menuItemVariantsDialogInvalidPrice": "Geçersiz fiyat",
+  "menuItemVariantsDialogExtraOptionTitle": "Ekstra seçenek",
+  "menuItemVariantsDialogExtraOptionSubtitle": "Ek ücretli özellik mi?",
+  "menuItemVariantsDialogVariantPhotoOptional": "Varyant Fotoğrafı (Opsiyonel)",
+  "menuItemVariantsDialogSelectImage": "Resim Seç",
+  "menuItemVariantsDialogAddingButton": "Ekleniyor...",
+  "menuItemVariantsDialogAddVariantButton": "Varyant Ekle",
+  "menuItemVariantsDialogCloseButton": "Kapat",
+  "templateCategoryDropdownLabel": "Kategori Seçin",
+  "templateCategoryDropdownUnknownCategory": "Bilinmeyen Kategori",
+  "templateCategoryDropdownHint": "Kategori seçiniz...",
+  "dialogDeleteMenuItemContent": "{menuItemName} ürününü silmek istediğinizden emin misiniz?",
+  "@dialogDeleteMenuItemContent": {
+    "placeholders": {
+      "menuItemName": {
+        "type": "String",
+        "example": "Cheeseburger"
+      }
+    }
+  },
+  "snackbarMenuItemDeleted": "{menuItemName} ürünü silindi",
+  "@snackbarMenuItemDeleted": {
+    "placeholders": {
+      "menuItemName": {
+        "type": "String",
+        "example": "Cheeseburger"
+      }
+    }
+  },
+  "snackbarMenuItemDeleteError": "Ürün silinirken hata: {error}",
+  "@snackbarMenuItemDeleteError": {
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Network error"
+      }
+    }
+  },
+  "snackbarUploadingPhotoFor": "{menuItemName} için fotoğraf yükleniyor...",
+  "@snackbarUploadingPhotoFor": {
+    "placeholders": {
+      "menuItemName": {
+        "type": "String",
+        "example": "Cheeseburger"
+      }
+    }
+  },
+  "snackbarPhotoUpdateSuccess": "{menuItemName} fotoğrafı başarıyla güncellendi!",
+  "@snackbarPhotoUpdateSuccess": {
+    "placeholders": {
+      "menuItemName": {
+        "type": "String",
+        "example": "Cheeseburger"
+      }
+    }
+  },
+  "snackbarPhotoUploadFailed": "Fotoğraf yüklenemedi",
+  "snackbarPhotoUploadError": "Fotoğraf yüklenirken hata oluştu: {error}",
+  "@snackbarPhotoUploadError": {
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Upload failed"
+      }
+    }
+  },
+  "firebaseUploadError": "Firebase yükleme hatası: {error}",
+  "@firebaseUploadError": {
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Permission denied"
+      }
+    }
+  },
+  "apiUpdateError": "API güncelleme hatası: {error}",
+  "@apiUpdateError": {
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Not found"
+      }
+    }
+  },
+  "dialogPhotoSourceTitle": "Fotoğraf Kaynağı",
+  "dialogPhotoSourceContent": "Fotoğrafı nereden seçmek istiyorsunuz?",
+  "photoSourceGallery": "Galeri",
+  "photoSourceCamera": "Kamera",
+  "uncategorized": "Kategori Yok",
+  "unnamedProduct": "İsimsiz Ürün",
+  "vatRate": "KDV {kdvRate}%",
+  "@vatRate": {
+    "placeholders": {
+      "kdvRate": {
+        "type": "String",
+        "example": "10"
+      }
+    }
+  },
+  "addPhoto": "Fotoğraf\nEkle",
+  "tooltipEdit": "Düzenle",
+  "tooltipDelete": "Sil",
+  "badgeNew": "YENİ",
+  "productNameRequired": "Ürün adı gerekli",
+  "genericError": "Hata: {error}",
+  "@genericError": {
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Ağ bağlantısı yok"
+      }
+    }
+  },
+  "addNewProductTitle": "Yeni Ürün Ekle",
+  "quickAddProductTitle": "Hızlı Ürün Ekleme",
+  "quickAddProductInfo": "• Ürün varsayılan olarak reçeteli oluşturulur.\n• Fiyat, manuel/reçeteli ayarları ve varyantları sonradan düzenleyebilirsiniz.\n• Eklendikten sonra ürün listesinde görünecektir.",
+  "productNameLabel": "Ürün Adı",
+  "productNameHint": "Örn: Özel Pizza, Meyve Suyu, Ev Yemeği...",
+  "dialogButtonCancel": "İptal",
+  "addingButtonLabel": "Ekleniyor...",
+  "addProductButtonLabel": "Ürünü Ekle",
+  "audioGuideActive": "Sesli Rehber Aktif",
+  "tooltipUnmute": "Sesi Aç",
+  "tooltipMute": "Sesi Kapat",
+  "tooltipReplayGuide": "Rehberi Tekrar Çal",
+  "categoryLimitIndicator": "{count} / {limit} Kategori Oluşturuldu",
+  "@categoryLimitIndicator": {
+    "description": "Kullanıcının mevcut kategori sayısını ve limitini gösterir.",
+    "placeholders": {
+      "count": {
+        "type": "String",
+        "example": "5"
+      },
+      "limit": {
+        "type": "String",
+        "example": "20"
+      }
+    }
+  },
+  "selectImageButton": "Resim Seç",
+  "addProductFromTemplateTitle": "Şablondan Ürün Ekle",
+  "itemSelectionInfo": "Mevcut: {currentCount}, Seçilen: {selectedCount}",
+  "@itemSelectionInfo": {
+    "description": "Şablon seçim ekranında mevcut ve seçili ürün sayısını gösterir.",
+    "placeholders": {
+      "currentCount": {
+        "type": "String",
+        "example": "50"
+      },
+      "selectedCount": {
+        "type": "String",
+        "example": "12"
+      }
+    }
+  },
+  "totalVariantsInfo": "Toplam Varyant: {count}",
+  "@totalVariantsInfo": {
+    "description": "Seçili ürünlerin toplam varyant sayısını gösterir.",
+    "placeholders": {
+      "count": {
+        "type": "String",
+        "example": "25"
+      }
+    }
+  },
+  "searchProductLabel": "Ürün Ara",
+  "searchProductHint": "Ürün adı ile ara...",
+  "setupCategoriesUnnamedCategory": "İsimsiz Kategori",
+  "@setupCategoriesUnnamedCategory": {
+    "description": "Kategori adı olmadığında gösterilecek varsayılan metin."
+  },
+  "setupCategoriesKdsInfoWithId": "KDS ID: {id}",
+  "@setupCategoriesKdsInfoWithId": {
+    "description": "KDS ekran adı mevcut olmadığında KDS ID'sini göstermek için etiket.",
+    "placeholders": {
+      "id": {
+        "type": "Object"
+      }
+    }
+  },
+  "setupCategoriesSubCategoryLabel": "Alt: {parentName}",
+  "@setupCategoriesSubCategoryLabel": {
+    "description": "Bir alt kategoriyi ve üst kategori adını belirten etiket.",
+    "placeholders": {
+      "parentName": {
+        "type": "String"
+      }
+    }
+  },
+  "setupCategoriesVatRateLabel": "KDV {rate}%",
+  "@setupCategoriesVatRateLabel": {
+    "description": "Bir kategori için KDV oranını gösteren etiket.",
+    "placeholders": {
+      "rate": {
+        "type": "String"
+      }
+    }
+  },
+  "buttonDelete": "Sil",
+  "@buttonDelete": {
+    "description": "Kategori kartındaki silme butonu metni."
+  },
+  "imagePickerSelectButton": "Fotoğraf Seçimi Yap"
 }

@@ -1,0 +1,4441 @@
+{
+  "@@locale": "en",
+  "loginPageTitle": "Log In",
+  "usernameLabel": "Username",
+  "passwordLabel": "Password",
+  "usernameHint": "Please enter your username.",
+  "passwordHint": "Please enter your password.",
+  "loginButtonText": "Log In",
+  "forgotPasswordButtonText": "Forgot Password?",
+  "registerPromptText": "Don't have an account? Sign Up",
+  "loginErrorInvalidCredentials": "Invalid username or password.",
+  "loginErrorAccountInactive": "Your account is inactive. Please contact the administrator.",
+  "loginErrorAccountNotApproved": "Your account has not yet been approved by the administrator.",
+  "registerPageTitle": "Business Owner Registration",
+  "emailLabel": "Email Address",
+  "usernameHintRequired": "Please enter a username",
+  "usernameHintMinLength": "Username must be at least 4 characters long.",
+  "emailHintRequired": "Please enter an email address",
+  "emailHintInvalid": "Please enter a valid email address",
+  "passwordHintRequired": "Please enter a password",
+  "passwordHintMinLength": "Password must be at least 6 characters long.",
+  "registerTypeLabel": "Registration Type",
+  "registerTypeBusinessOwner": "Business Owner",
+  "registerButtonText": "Sign Up",
+  "registerSuccessMessage": "Registration successful! 🎉 You can use the app for free during the trial period.",
+  "registerErrorUsernameExists": "This username already exists.",
+  "registerErrorEmailExists": "This email address is already registered.",
+  "registerErrorPasswordCommon": "Password is too common, please choose a stronger password.",
+  "addStaffTitle": "Add New Staff Member",
+  "editStaffTitle": "Edit Staff Member",
+  "addKitchenStaffTitle": "Add New Kitchen Staff",
+  "editKitchenStaffTitle": "Edit Kitchen Staff",
+  "positionLabel": "Position",
+  "positionSalonStaff": "Front of House Staff",
+  "positionKitchenStaff": "Kitchen Staff",
+  "firstNameLabel": "First Name*",
+  "lastNameLabel": "Last Name*",
+  "firstNameRequired": "Staff first name is required",
+  "lastNameRequired": "Staff last name is required",
+  "passwordNewLabel": "New Password (Leave empty if no change)",
+  "passwordRequiredLabel": "Password*",
+  "passwordRequiredHintForNewStaff": "Password is required for new staff",
+  "activeUserLabel": "Active User",
+  "permissionPresetLabel": "Select Permission Preset (Optional)",
+  "screenPermissionsLabel": "Screen Permissions:",
+  "notificationPermissionsLabel": "Notification Permissions:",
+  "accessibleKdsScreensLabel": "Accessible KDS Screens:",
+  "noKdsAvailable": "No KDS screen is defined for this business.",
+  "kdsLoadingError": "Failed to load KDS screens: {error}",
+  "updateButton": "Update",
+  "createButton": "Create",
+  "staffUpdateSuccess": "Staff member updated successfully.",
+  "staffCreateSuccess": "Staff member created successfully.",
+  "setupWizardTitle": "Business Setup ({currentPage}/{totalPages})",
+  "setupWizardStep1Title": "1. Create Table Information",
+  "setupWizardStep2Title": "2. Define Kitchen Screens",
+  "setupWizardStep3Title": "3. Create Your Product Categories",
+  "setupWizardStep4Title": "4. Create Main Product Information",
+  "setupWizardStep5Title": "5. Create Product Variants and Prices",
+  "setupWizardStep6Title": "6. Enter Stock Count (Optional)",
+  "setupWizardSuccessMessage": "Business setup completed successfully! 🎉",
+  "setupWizardErrorMessage": "Error while completing setup: {error}",
+  "setupWizardBackButton": "Back",
+  "setupWizardSkipButton": "Skip This Step",
+  "setupWizardFinishButton": "Finish and Save",
+  "setupWizardNextButton": "Next",
+  "takeawayOrderTitle": "Takeaway Order - {customerName}",
+  "guestCustomerName": "Guest",
+  "orderStatusPaid": " (Paid)",
+  "orderStatusCancelled": "Cancelled",
+  "orderStatusRejected": "Rejected",
+  "tooltipPrintReceipt": "Print Receipt",
+  "tooltipShowQr": "Show Customer QR Code",
+  "tooltipCancelOrder": "Cancel Order",
+  "errorNoQrLink": "No QR link found for this order.",
+  "infoLinkCopied": "Link copied to clipboard.",
+  "errorNoPrinters": "No registered printers found. Please add one from Printer Settings.",
+  "infoPrintingCustomerReceipt": "Printing customer receipt...",
+  "errorPrintingReceipt": "Receipt printing error: {error}",
+  "infoPrintingKitchenTicket": "Printing kitchen ticket...",
+  "errorPrintingKitchenTicket": "Kitchen ticket printing error: {error}",
+  "dialogCancelOrderTitle": "Cancel Order",
+  "dialogCancelOrderContent": "Are you sure you want to cancel this order? This action cannot be undone.",
+  "dialogButtonNo": "No",
+  "dialogButtonYesCancel": "Yes, Cancel",
+  "buttonDeliver": "Deliver",
+  "buttonAddExtra": "Add Extra",
+  "buttonRemove": "Remove",
+  "buttonPaymentScreen": "Payment Screen",
+  "statusDelivered": "Delivered",
+  "statusPaidFull": "THIS ORDER HAS BEEN PAID",
+  "statusCancelledFull": "ORDER CANCELED",
+  "statusRejectedFull": "ORDER REJECTED",
+  "errorNoOrderItems": "No order items found.",
+  "infoProductAdded": "Product added successfully.",
+  "errorAddingProduct": "Error while adding product: {statusCode} - {details}",
+  "errorAddingProductGeneral": "An unexpected error occurred while adding product: {error}",
+  "infoProductDeleted": "Product deleted successfully.",
+  "errorDeletingProduct": "Error occurred while deleting product: {statusCode} - {details}",
+  "errorDeletingProductGeneral": "Error: {error}",
+  "infoItemDelivered": "Item delivered.",
+  "errorDeliveringItem": "An error occurred during delivery: {statusCode}",
+  "errorDeliveringItemGeneral": "Delivery error: {error}",
+  "infoPagerAssigned": "Pager assigned to order.",
+  "errorAssigningPager": "Pager assignment error: {statusCode}",
+  "errorAssigningPagerGeneral": "Error while assigning pager: {error}",
+  "infoOrderCancelled": "Order canceled successfully.",
+  "errorCancellingOrder": "Error while canceling order: {statusCode} - {details}",
+  "errorCancellingOrderGeneral": "Cancellation error: {error}",
+  "dialogDeleteItemTitle": "Delete Product",
+  "dialogDeleteItemContent": "Are you sure you want to remove this product from the order?",
+  "dialogButtonDelete": "Delete",
+  "dialogQrTitle": "Customer Order Link (#{orderId})",
+  "dialogButtonClose": "Close",
+  "errorOrderDetailsNotFound": "Order details could not be retrieved or the order may have been deleted.",
+  "errorOrderDetailsUpdate": "Order details update error: {error}",
+  "infoAddingProduct": "Adding product...",
+  "takeawayOrderDetailsTitle": "Takeaway Order Details #{orderId}",
+  "categoryListPageTitle": "Categories",
+  "tooltipAddCategory": "Add Category",
+  "tooltipEdit": "Edit",
+  "tooltipDelete": "Delete",
+  "dialogDeleteCategoryTitle": "Delete Category",
+  "dialogButtonCancel": "Cancel",
+  "dialogButtonDeleteConfirm": "Yes, Delete",
+  "infoCategoryDeleted": "Category deleted successfully.",
+  "errorCategoryDelete": "Error occurred while deleting category: {statusCode} - {details}",
+  "noCategoriesAdded": "No categories have been added yet.",
+  "buttonAddFirstCategory": "Add First Category",
+  "errorFetchingCategories": "An error occurred while fetching the category list: {statusCode}",
+  "unknownCategory": "Unknown Category",
+  "manageMenuPageTitle": "Menu Management",
+  "tooltipAddMenuItem": "Add New Menu Item",
+  "noMenuItemsAdded": "No menu items have been added yet.",
+  "buttonAddFirstMenuItem": "Add First Menu Item",
+  "dialogDeleteMenuItemTitle": "Delete Menu Item",
+  "dialogDeleteMenuItemContent": "Are you sure you want to delete the menu item '{itemName}'? This action cannot be undone.",
+  "infoMenuItemDeleted": "Menu item deleted successfully.",
+  "errorDeletingMenuItem": "Error while deleting menu item: {statusCode} - {details}",
+  "errorDeletingMenuItemGeneral": "Menu item deletion error: {error}",
+  "errorFetchingMenuItems": "An error occurred while fetching menu items: {statusCode}",
+  "addMenuItemTitle": "New Menu Item",
+  "editMenuItemTitle": "Edit Menu Item",
+  "menuItemPhotoNotSelected": "Photo not selected.",
+  "buttonSelectOrChangePhoto": "Select/Change Photo",
+  "menuItemNameLabel": "Product Name",
+  "menuItemNameValidator": "Please enter the product name",
+  "menuItemDescriptionLabel": "Description",
+  "menuItemDescriptionValidator": "Please enter a description",
+  "menuCategoryLabel": "Category (Optional)",
+  "menuCategoryNotSelected": "Category not selected",
+  "infoMenuItemCreated": "Menu item created successfully!",
+  "infoMenuItemUpdated": "Menu item updated successfully!",
+  "errorUploadingPhoto": "An error occurred while uploading the photo to Firebase.",
+  "errorUploadingPhotoGeneral": "Firebase upload error: {error}",
+  "errorLoadingCategories": "Failed to load categories: {statusCode}",
+  "errorLoadingCategoriesGeneral": "Error while loading categories: {error}",
+  "errorMenuItemGeneral": "Error during operation: {statusCode} - {details}",
+  "errorMenuItemApi": "API request error: {error}",
+  "manageVariantPageTitle": "Product Variant Management",
+  "errorFetchingVariants": "An error occurred while fetching variants: {statusCode}",
+  "errorFetchingVariantsGeneral": "Error fetching variants: {error}",
+  "variantPhotoNotSelected": "Photo not selected.",
+  "infoVariantAddedSuccess": "Variant added successfully!",
+  "errorAddingVariant": "Error while adding variant: {statusCode} - {details}",
+  "errorAddingVariantGeneral": "Error during API request: {error}",
+  "dialogDeleteVariantTitle": "Delete Variant",
+  "infoVariantDeletedSuccess": "Variant deleted successfully.",
+  "errorDeletingVariant": "Error while deleting variant: {statusCode} - {details}",
+  "errorDeletingVariantGeneral": "Variant deletion error: {error}",
+  "variantNameLabel": "Variant Name (e.g., Large)",
+  "variantNameValidator": "Please enter the variant name",
+  "variantPriceLabel": "Price*",
+  "variantPriceValidator": "Price is required.",
+  "variantPriceValidatorInvalid": "Please enter a valid price.",
+  "variantIsExtraLabel": "Is it an extra option?",
+  "buttonSelectPhoto": "Select Photo",
+  "buttonAddVariant": "Add Variant",
+  "currentVariantsTitle": "Current Variants",
+  "noVariantsAdded": "No variants have been added for this product yet.",
+  "variantExtraSuffix": " (Extra)",
+  "editVariantPageTitle": "Edit Variant",
+  "variantPhotoNotUploaded": "Photo not uploaded.",
+  "buttonChangePhoto": "Change Photo",
+  "infoVariantUpdatedSuccess": "Variant updated successfully!",
+  "errorUpdatingVariant": "Error while updating variant: {statusCode} - {details}",
+  "errorUpdatingVariantGeneral": "Error during API request: {error}",
+  "homePageTitleBusinessOwner": "Business Dashboard",
+  "homePageTitleStaff": "Staff Dashboard",
+  "homePageTitleKitchenStaff": "Kitchen Dashboard",
+  "homeTabLabel": "Home",
+  "tableTabLabel": "Tables",
+  "takeawayTabLabel": "Takeaway",
+  "kitchenTabLabel": "Kitchen",
+  "kdsSetupTabLabel": "KDS Setup",
+  "notificationsTabLabel": "Notifications",
+  "tooltipGoToHome": "Go to Home",
+  "infoKdsScreensLoading": "Loading KDS screens, please wait...",
+  "infoCreateKdsScreenFirst": "Please create a KDS screen first. You are being redirected to the management page.",
+  "infoNoActiveKdsAvailable": "No active KDS screens are accessible to you.",
+  "dialogSelectKdsScreenTitle": "Select KDS Screen",
+  "infoKdsSelectionPending": "Awaiting KDS selection for kitchen tab...",
+  "buttonCreateKdsScreen": "Create KDS Screen",
+  "infoContentLoading": "Content is loading or you do not have access.",
+  "pendingOrdersPageTitle": "Unpaid Orders",
+  "errorFetchingPendingOrders": "An error occurred while fetching orders.",
+  "noPendingOrdersFound": "No unpaid orders found.",
+  "pendingOrderCardTitleTable": "Table {tableNumber}",
+  "pendingOrderCardTitleTakeaway": "Takeaway Order",
+  "editOrderTitleDetails": "Order Details",
+  "editOrderTitleTakeaway": "Takeaway Order - {customerName}",
+  "editOrderTitleTable": "Table {tableNumber}",
+  "editOrderStatusCreditUnpaid": " (Credit - Unpaid)",
+  "editOrderStatusCreditPaid": " (Credit - Paid)",
+  "editOrderPagerAssigned": "Assigned Pager: {pagerInfo}",
+  "editOrderPagerNotAssigned": "Pager Not Assigned",
+  "buttonChange": "Change",
+  "buttonAssign": "Assign",
+  "editOrderCreditNote": "Credit Note: {note}",
+  "editOrderTooltipAddProduct": "Add New Product",
+  "editOrderButtonCloseCreditPayment": "Close Credit Payment",
+  "editOrderStatusCreditPaymentReceived": "CREDIT PAYMENT RECEIVED",
+  "scheduleTitle": "Roster Planning",
+  "scheduleErrorLoadingData": "Error loading data: {error}",
+  "scheduleErrorFetchingShifts": "Error fetching shifts: {error}",
+  "scheduleErrorCreateShiftTemplateFirst": "Please create a shift template first.",
+  "scheduleTitleAssignShiftForDate": "Assign Shift for {date}",
+  "scheduleErrorNoStaffToAssign": "No staff members to assign found.",
+  "scheduleStatusNoShiftAssigned": "No Shift Assigned",
+  "scheduleTooltipRemoveShift": "Remove Shift",
+  "scheduleHintSelect": "Select...",
+  "scheduleErrorSelectAtLeastOneDay": "Please select at least one day from the calendar.",
+  "scheduleSuccessMultiDayAssignment": "Assignment made for {count} days.",
+  "scheduleErrorMultiDayAssignment": "Error during bulk assignment: {error}",
+  "scheduleButtonMultiSelect": "Multi-Select",
+  "scheduleTooltipManageShiftTemplates": "Manage Shift Templates",
+  "scheduleFabManageSelectedDays": "Manage Selected Days",
+  "scheduleFabManageDay": "Manage Day",
+  "scheduleTooltipAssignToSelectedDays": "Assign to selected days",
+  "scheduleTooltipAssignRemoveForDay": "Assign/remove shift for the selected day",
+  "scheduleNoShiftsForDate": "No shifts for {date}.",
+  "stockScreenTitle": "Stock Management",
+  "stockScreenTooltipAddNew": "Create New Stock Record",
+  "stockScreenNoStockItems": "No products found for stock tracking.\nUse the '+' button to add a new record.",
+  "stockMovementAddition": "Stock Addition (Purchase)",
+  "stockMovementWastage": "Wastage/Loss",
+  "stockMovementAdjustmentIn": "Count Adjustment (Surplus)",
+  "stockMovementAdjustmentOut": "Count Adjustment (Deficit)",
+  "stockDialogMovementTitle": "Stock Movement",
+  "stockDialogQuantityLabel": "Quantity",
+  "stockDialogQuantityEntryLabel": "Entry Quantity",
+  "stockDialogQuantityWastageLabel": "Wastage Quantity",
+  "stockDialogQuantitySurplusLabel": "Surplus Quantity",
+  "stockDialogQuantityDeficitLabel": "Deficit Quantity",
+  "stockDialogErrorEnterQuantity": "Please enter a quantity.",
+  "stockDialogErrorPositiveQuantity": "Please enter a valid positive quantity.",
+  "stockDialogErrorQuantityExceeds": "The amount to be withdrawn cannot exceed the current stock ({quantity}).",
+  "@stockDialogErrorQuantityExceeds": {
+    "placeholders": {
+      "quantity": {
+        "type": "String"
+      }
+    }
+  },
+  "stockDialogDescriptionLabel": "Description (Optional)",
+  "stockDialogSuccessMessage": "{movementName} operation successful.",
+  "@stockDialogSuccessMessage": {
+    "placeholders": {
+      "movementName": {
+        "type": "String"
+      }
+    }
+  },
+  "stockDialogErrorMessage": "Stock movement error: {error}",
+  "@stockDialogErrorMessage": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "stockDialogErrorNoNewVariant": "No new product variants without a stock record found.",
+  "stockDialogCreateTitle": "Create New Stock Record",
+  "stockDialogSelectVariantLabel": "Select Product Variant",
+  "unknownVariant": "Unknown Variant",
+  "unknownProduct": "Product",
+  "stockDialogErrorSelectVariant": "Please select a variant.",
+  "stockDialogInitialQuantityLabel": "Initial Stock Quantity",
+  "stockDialogErrorValidQuantity": "Please enter a valid quantity.",
+  "stockDialogCreateSuccess": "New stock record created successfully.",
+  "stockDialogCreateError": "New stock record error: {error}",
+  "@stockDialogCreateError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "stockCardSettingsSaved": "Settings saved.",
+  "stockCardCurrentStock": "Stock: {quantity}",
+  "@stockCardCurrentStock": {
+    "placeholders": {
+      "quantity": {
+        "type": "String"
+      }
+    }
+  },
+  "stockCardEnableTracking": "Enable Stock Tracking",
+  "stockCardAlertThresholdLabel": "Alert Threshold (Qty)",
+  "stockCardAlertThresholdHint": "e.g., 50 (Leave blank to disable alerts)",
+  "stockCardSaveSettingsButton": "Save Settings",
+  "stockCardOtherActionsTooltip": "Other Actions",
+  "stockCardHistoryButton": "Stock History",
+  "accountSettingsTitle": "Account Settings",
+  "unknownUser": "Unknown",
+  "accountSettingsErrorFetching": "Error fetching account information: {error}",
+  "@accountSettingsErrorFetching": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "photoUploadErrorFirebase": "Failed to upload photo to Firebase.",
+  "accountSettingsSuccessPhotoUpdate": "Profile photo updated successfully.",
+  "accountSettingsErrorUploadingPhotoGeneric": "Error uploading photo: {error}",
+  "@accountSettingsErrorUploadingPhotoGeneric": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "accountSettingsErrorNewPasswordsMismatch": "New passwords do not match.",
+  "accountSettingsSuccessUpdate": "Account information updated successfully.",
+  "accountSettingsSuccessPasswordUpdate": "Your password has been changed successfully. Please log in again.",
+  "accountSettingsSuccessEmailUpdate": "Your email address has been updated successfully.",
+  "accountSettingsErrorUpdate": "Update error: {error}",
+  "@accountSettingsErrorUpdate": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "accountSettingsEmailLabel": "Email",
+  "accountSettingsPasswordChangeSectionTitle": "Password Change (Optional)",
+  "accountSettingsCurrentPasswordLabel": "Current Password",
+  "accountSettingsValidatorEnterCurrentPassword": "Enter your current password to change it.",
+  "accountSettingsNewPasswordLabel": "New Password",
+  "accountSettingsValidatorEnterNewPassword": "Enter your new password to change it.",
+  "accountSettingsConfirmNewPasswordLabel": "Confirm New Password",
+  "accountSettingsValidatorConfirmNewPassword": "Please re-enter your new password.",
+  "accountSettingsErrorPasswordsMismatch": "Passwords do not match.",
+  "accountSettingsSaveChangesButton": "Save Changes",
+  "reportsScreenTitle": "Advanced Report - {filterName}",
+  "@reportsScreenTitle": {
+    "placeholders": {
+      "filterName": {
+        "type": "String"
+      }
+    }
+  },
+  "reportsFilterToday": "Today",
+  "reportsFilterThisWeek": "This Week",
+  "reportsFilterThisMonth": "This Month",
+  "reportsFilterThisYear": "This Year",
+  "reportsFilterCustom": "Custom Date Range",
+  "reportsErrorSelectDateRange": "Please select a custom date range.",
+  "reportsErrorFetching": "An error occurred while fetching the report: {statusCode}",
+  "@reportsErrorFetching": {
+    "placeholders": {
+      "statusCode": {
+        "type": "String"
+      }
+    }
+  },
+  "reportsChartTitleHourly": "Hourly Turnover Distribution ({date})",
+  "@reportsChartTitleHourly": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "reportsChartTitleDailyRange": "Daily Turnover ({startDate} - {endDate})",
+  "@reportsChartTitleDailyRange": {
+    "placeholders": {
+      "startDate": {
+        "type": "String"
+      },
+      "endDate": {
+        "type": "String"
+      }
+    }
+  },
+  "reportsChartTitleDailyThisWeek": "Daily Turnover Distribution (This Week)",
+  "reportsChartTitleMonthlyRange": "Monthly Turnover ({startDate} - {endDate})",
+  "@reportsChartTitleMonthlyRange": {
+    "placeholders": {
+      "startDate": {
+        "type": "String"
+      },
+      "endDate": {
+        "type": "String"
+      }
+    }
+  },
+  "reportsChartTitleMonthlyThisMonth": "Monthly Turnover ({month} {year})",
+  "@reportsChartTitleMonthlyThisMonth": {
+    "placeholders": {
+      "month": {
+        "type": "String"
+      },
+      "year": {
+        "type": "String"
+      }
+    }
+  },
+  "reportsChartTitleMonthlyThisYear": "Monthly Turnover ({year})",
+  "@reportsChartTitleMonthlyThisYear": {
+    "placeholders": {
+      "year": {
+        "type": "String"
+      }
+    }
+  },
+  "reportsChartTitleMonthlyDefault": "Monthly Turnover Distribution",
+  "reportsChartTitleNoData": "Turnover Chart (No Data)",
+  "reportsSummaryHeaderProperty": "Property",
+  "reportsSummaryHeaderValue": "Value",
+  "reportsSummaryTotalTurnover": "Total Turnover",
+  "reportsSummaryTotalOrders": "Total Orders",
+  "reportsSummaryBestSelling": "Best Selling",
+  "reportsSummaryLeastSelling": "Least Selling",
+  "reportsSummaryItemCount": "{count} pieces",
+  "@reportsSummaryItemCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "reportsSummaryNoData": "-",
+  "reportsPickDateTooltip": "Select Date Range",
+  "reportsSelectedDateRange": "Selected Date: {startDate} - {endDate}",
+  "@reportsSelectedDateRange": {
+    "placeholders": {
+      "startDate": {
+        "type": "String"
+      },
+      "endDate": {
+        "type": "String"
+      }
+    }
+  },
+  "pagerManagementTitle": "Pager Management",
+  "pagerTooltipAdd": "Add/Save New Pager",
+  "pagerTooltipScanBle": "Scan Bluetooth Devices",
+  "pagerTooltipRefreshList": "Refresh List",
+  "pagerStatusBle": "BT Status: {status}",
+  "@pagerStatusBle": {
+    "placeholders": {
+      "status": {
+        "type": "String"
+      }
+    }
+  },
+  "pagerStatusBleWaiting": "Awaiting Bluetooth status...",
+  "pagerNoDevicesFound": "No pagers are registered in the system.\nYou can add one with the '+' button or by scanning.",
+  "pagerHeaderInUse": "In-Use Pagers",
+  "pagerHeaderAvailable": "Available Pagers",
+  "pagerHeaderOtherStatus": "Pagers with Other Status",
+  "pagerCardDeviceId": "Device ID: {id}",
+  "@pagerCardDeviceId": {
+    "placeholders": {
+      "id": {
+        "type": "String"
+      }
+    }
+  },
+  "pagerCardStatus": "Status: {status}",
+  "@pagerCardStatus": {
+    "placeholders": {
+      "status": {
+        "type": "String"
+      }
+    }
+  },
+  "pagerCardOrderId": "Order ID: #{id}",
+  "@pagerCardOrderId": {
+    "placeholders": {
+      "id": {
+        "type": "String"
+      }
+    }
+  },
+  "pagerCardNotes": "Notes: {notes}",
+  "@pagerCardNotes": {
+    "placeholders": {
+      "notes": {
+        "type": "String"
+      }
+    }
+  },
+  "pagerMenuSendTestNotification": "Send Test Notification",
+  "pagerMenuMarkAsAvailable": "Mark as Available",
+  "pagerMenuMarkAsCharging": "Mark as Charging",
+  "pagerMenuMarkAsOutOfService": "Mark as Out of Service",
+  "pagerMenuDeleteFromSystem": "Delete from System",
+  "pagerDialogDeleteTitle": "Delete Pager",
+  "pagerInfoDeviceDeleted": "Pager deleted.",
+  "pagerErrorDeleting": "Deletion error: {error}",
+  "@pagerErrorDeleting": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "pagerTestNotificationSuccess": "Test notification ({pagerName}) sent.",
+  "@pagerTestNotificationSuccess": {
+    "placeholders": {
+      "pagerName": {
+        "type": "String"
+      }
+    }
+  },
+  "pagerTestNotificationFailure": "Failed to send notification.",
+  "pagerDefaultDeviceName": "Device",
+  "pagerDialogUpdateStatusTitle": "Update Status",
+  "pagerDialogUpdateStatusContent": "Are you sure you want to change the status of '{pagerName}' to '{status}'?",
+  "@pagerDialogUpdateStatusContent": {
+    "placeholders": {
+      "pagerName": {
+        "type": "String"
+      },
+      "status": {
+        "type": "String"
+      }
+    }
+  },
+  "pagerButtonConfirmChange": "Yes, Change",
+  "pagerInfoStatusUpdated": "Pager status updated.",
+  "pagerErrorStatusUpdate": "Error while updating status: {error}",
+  "@pagerErrorStatusUpdate": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "pagerDialogAddTitle": "Add/Save New Pager",
+  "pagerButtonScanning": "Scanning...",
+  "pagerButtonScanAndSelect": "Scan and Select Bluetooth Devices",
+  "pagerDiscoveredDevicesTitle": "Discovered Bluetooth Devices",
+  "pagerUnknownDevice": "Unknown Device",
+  "pagerInfoNoBleDevicesFound": "No Bluetooth devices found nearby.",
+  "pagerLabelDeviceIdRequired": "Device ID (MAC Address)*",
+  "pagerValidatorDeviceIdRequired": "Device ID is required.",
+  "pagerLabelDeviceNameOptional": "Device Name (Optional)",
+  "pagerLabelNotesOptional": "Notes (Optional)",
+  "pagerButtonAdd": "Add",
+  "pagerStatusAvailable": "Available",
+  "pagerStatusInUse": "In Use",
+  "pagerStatusCharging": "Charging",
+  "pagerStatusLowBattery": "Low Battery",
+  "pagerStatusOutOfService": "Out of Service",
+  "createOrderErrorCannotTransfer": "This order cannot be transferred: {status}",
+  "@createOrderErrorCannotTransfer": {
+    "placeholders": {
+      "status": {
+        "type": "String"
+      }
+    }
+  },
+  "createOrderErrorAlreadyProcessed": "This order has already been processed, canceled, or completed.",
+  "createOrderTooltipGoHome": "Home",
+  "createOrderButtonRetry": "Retry",
+  "manageTablesTitle": "Table Management",
+  "manageTablesErrorLoading": "An error occurred while fetching table information: {statusCode}",
+  "@manageTablesErrorLoading": {
+    "placeholders": {
+      "statusCode": {
+        "type": "String"
+      }
+    }
+  },
+  "manageTablesDialogAddTitle": "Create New Table",
+  "manageTablesDialogEditTitle": "Edit Table",
+  "manageTablesLabelTableNumber": "Table Number",
+  "manageTablesValidatorEnterNumber": "Please enter a table number",
+  "manageTablesValidatorInvalidNumber": "Please enter a valid number",
+  "manageTablesInfoCreated": "Table created successfully!",
+  "manageTablesInfoUpdated": "Table updated successfully!",
+  "manageTablesErrorGeneric": "An error occurred during the operation: {error}",
+  "@manageTablesErrorGeneric": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "manageTablesButtonCreate": "Create",
+  "manageTablesDialogDeleteTitle": "Delete Table",
+  "manageTablesDialogDeleteContent": "Are you sure you want to delete this table? This action cannot be undone.",
+  "manageTablesInfoDeleted": "Table deleted successfully.",
+  "manageTablesErrorDeleting": "Error while deleting table: {error}",
+  "@manageTablesErrorDeleting": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "manageTablesInfoGuestLinkCopied": "Guest QR link copied to clipboard.",
+  "manageTablesErrorNoGuestLink": "No valid guest link found for this table.",
+  "manageTablesDialogQrTitle": "Table {tableNumber} QR Code",
+  "@manageTablesDialogQrTitle": {
+    "placeholders": {
+      "tableNumber": {
+        "type": "String"
+      }
+    }
+  },
+  "manageTablesErrorCreatingQr": "An error occurred while generating the QR Code.",
+  "manageTablesTooltipAdd": "Add New Table",
+  "manageTablesNoTablesFound": "No tables have been added yet.\nUse the '+' button to add a new table.",
+  "manageTablesCardTitle": "Table {tableNumber}",
+  "@manageTablesCardTitle": {
+    "placeholders": {
+      "tableNumber": {
+        "type": "String"
+      }
+    }
+  },
+  "manageTablesCardGuestLink": "Guest Link:",
+  "manageTablesTooltipCopyLink": "Copy Link",
+  "manageTablesTooltipShowQr": "Show QR Code",
+  "notificationsPageTitle": "Notifications",
+  "connectionStatusWaiting": "Awaiting connection status...",
+  "connectionStatusConnected": "Connected to the notification server.",
+  "connectionStatusConnectingOrDisconnected": "Connecting to notification server or disconnected.",
+  "connectionStatusSocketError": "Failed to provide Socket.IO instance.",
+  "notificationTimestamp": "[{timestamp}] {message}",
+  "@notificationTimestamp": {
+    "placeholders": {
+      "timestamp": {
+        "type": "String"
+      },
+      "message": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationConnected": "Successfully connected to the notification server.",
+  "notificationDisconnected": "Disconnected from the notification server.",
+  "notificationConnectionError": "An error occurred while connecting to the notification server.",
+  "notificationSystemError": "A system error occurred in the notification system.",
+  "notificationDefaultOrderStatusUpdate": "An order status has been updated.",
+  "notificationDefaultWaitingListUpdate": "The waiting list has been updated.",
+  "notificationsNoNotifications": "No notifications yet.",
+  "addCampaignTitle": "Create New Campaign",
+  "editCampaignTitle": "Edit Campaign",
+  "campaignNameLabel": "Campaign Name*",
+  "validatorRequiredField": "This field is required.",
+  "campaignDescriptionLabel": "Description",
+  "campaignPriceLabel": "Campaign Price*",
+  "validatorInvalidPositivePrice": "Please enter a valid positive price",
+  "campaignActiveLabel": "Active Campaign",
+  "campaignNoStartDate": "No Start Date",
+  "campaignStartDateLabel": "Start: {date}",
+  "@campaignStartDateLabel": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "campaignNoEndDate": "No End Date",
+  "campaignEndDateLabel": "End: {date}",
+  "@campaignEndDateLabel": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "campaignSelectImageButton": "Select Campaign Image",
+  "campaignImageNotSelected": "Image Not Selected",
+  "campaignErrorAddItem": "You must add at least one product to the campaign.",
+  "campaignErrorSubmit": "An error occurred while saving the campaign: {error}",
+  "@campaignErrorSubmit": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "campaignSuccessCreated": "Campaign created successfully.",
+  "campaignSuccessUpdated": "Campaign updated successfully.",
+  "campaignCreateButton": "Create Campaign",
+  "campaignUpdateButton": "Update Campaign",
+  "newOrderTitle": "New Order - Table {tableNumber}",
+  "@newOrderTitle": {
+    "placeholders": {
+      "tableNumber": {
+        "type": "String"
+      }
+    }
+  },
+  "newOrderLoadingInitialData": "Initial data could not be loaded.",
+  "newOrderLoadingData": "Loading data...",
+  "newOrderWaitingForTableType": "Awaiting table type...",
+  "newOrderTableTypeSingle": "Single",
+  "newOrderTableTypeSplit": "Split",
+  "newOrderNoOwnersEntered": "No table owners entered.",
+  "newOrderOwnersList": "Owners: {owners}",
+  "@newOrderOwnersList": {
+    "placeholders": {
+      "owners": {
+        "type": "String"
+      }
+    }
+  },
+  "newOrderEditOwnersTooltip": "Edit Table Owners",
+  "newOrderCreateOrderButton": "Create Order",
+  "newOrderErrorAddAtLeastOneProduct": "Please add at least one product.",
+  "newOrderErrorMinOwnersForSplit": "At least 2 table owner names must be entered for a split table.",
+  "newOrderSuccess": "Order created successfully.",
+  "newOrderSuccessOffline": "Order saved offline successfully. It will be sent when a connection is established.",
+  "newOrderErrorGeneric": "An error occurred while creating the order ({statusCode}): {details}",
+  "@newOrderErrorGeneric": {
+    "placeholders": {
+      "statusCode": {
+        "type": "String"
+      },
+      "details": {
+        "type": "String"
+      }
+    }
+  },
+  "newOrderErrorCatch": "Order creation error: {error}",
+  "@newOrderErrorCatch": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "dialogTableTypeTitle": "Table Type Selection",
+  "dialogTableTypeContent": "Will this table be used by a single person or split among multiple people?",
+  "dialogTableTypeButtonSingle": "Single Table",
+  "dialogTableTypeButtonSplit": "Split Table",
+  "dialogTableOwnersTitle": "Table Owners",
+  "dialogTableOwnersHint": "Owner Name {number}",
+  "@dialogTableOwnersHint": {
+    "placeholders": {
+      "number": {
+        "type": "String"
+      }
+    }
+  },
+  "dialogTableOwnersAddButton": "Add Table Owner",
+  "dialogButtonConfirmAction": "Confirm",
+  "completedOrdersTitle": "Completed Orders",
+  "completedOrdersUnknown": "Unknown",
+  "completedOrdersInvalidDate": "Invalid Date",
+  "completedOrdersErrorLoadMore": "Failed to load more orders.",
+  "completedOrdersNoOrdersFound": "No completed orders found.",
+  "paymentTypeCreditCard": "Credit Card",
+  "paymentTypeCash": "Cash",
+  "paymentTypeFoodCard": "Food Card",
+  "paymentTypeUnknown": "Unknown",
+  "orderCardTitleTable": "Table {tableNumber} - Order #{orderId}",
+  "@orderCardTitleTable": {
+    "placeholders": {
+      "tableNumber": {
+        "type": "String"
+      },
+      "orderId": {
+        "type": "String"
+      }
+    }
+  },
+  "orderCardTitleTakeaway": "Takeaway - Order #{orderId}",
+  "@orderCardTitleTakeaway": {
+    "placeholders": {
+      "orderId": {
+        "type": "String"
+      }
+    }
+  },
+  "orderCardDetailsButton": "Details",
+  "manageStaffTitle": "Staff Management",
+  "manageStaffErrorFetching": "An error occurred while fetching the staff list: {error}",
+  "@manageStaffErrorFetching": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "manageStaffTooltipAdd": "Add New Staff Member",
+  "manageStaffNoStaff": "No staff members have been added yet.",
+  "manageStaffUnknownStaff": "Unknown Staff",
+  "manageStaffNoEmail": "No email",
+  "manageStaffDialogDeleteTitle": "Delete Staff Member",
+  "manageStaffDialogDeleteContent": "Are you sure you want to delete this staff member? This action cannot be undone.",
+  "manageStaffSuccessDelete": "Staff member deleted successfully.",
+  "manageStaffErrorDelete": "Error while deleting staff member: {error}",
+  "@manageStaffErrorDelete": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "orderDetailTitle": "Order #{orderId} Details",
+  "@orderDetailTitle": {
+    "placeholders": {
+      "orderId": {
+        "type": "String"
+      }
+    }
+  },
+  "durationNotCalculated": "Not calculated",
+  "durationZeroSeconds": "0 sec",
+  "timelineUnitHour": "hr",
+  "timelineUnitMinute": "min",
+  "timelineUnitSecond": "sec",
+  "orderDetailCardGeneralInfo": "General Information",
+  "orderDetailLabelId": "Order ID:",
+  "orderDetailLabelCustomer": "Customer:",
+  "orderDetailLabelType": "Order Type:",
+  "orderDetailTypeTable": "Table",
+  "orderDetailTypeTakeaway": "Takeaway",
+  "orderDetailLabelTableNumber": "Table No:",
+  "orderDetailLabelDate": "Date:",
+  "dataNotAvailable": "-",
+  "orderDetailCardTimeline": "Order Timeline",
+  "timelineApprovalDuration": "Approval Time",
+  "timelineKitchenDuration": "Kitchen Preparation Time",
+  "timelineWaiterPickupDuration": "Waiter Pickup Time",
+  "timelineCustomerDeliveryDuration": "Customer Delivery Time",
+  "timelineTotalDuration": "Total Duration",
+  "takeawayOrderApproved": "Order approved.",
+  "takeawayErrorApproving": "Approval error: {error}",
+  "@takeawayErrorApproving": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "takeawayDialogRejectTitle": "Reject Order",
+  "takeawayDialogRejectContent": "Are you sure you want to reject the products added by the customer?",
+  "takeawayDialogButtonReject": "Yes, Reject",
+  "takeawayOrderRejected": "Order rejected.",
+  "takeawayErrorRejecting": "Rejection error: {error}",
+  "@takeawayErrorRejecting": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "takeawayDialogCancelContent": "Are you sure you want to cancel this order?",
+  "takeawayErrorCancellingWithCode": "Error while canceling order: {statusCode}",
+  "@takeawayErrorCancellingWithCode": {
+    "placeholders": {
+      "statusCode": {
+        "type": "String"
+      }
+    }
+  },
+  "businessSettingsSectionLocalization": "Regional Settings",
+  "@businessSettingsSectionLocalization": {
+    "description": "The title of the currency and timezone section in business settings."
+  },
+  "setupWizardSettingsSaved": "Settings saved",
+  "manageShiftsNoShiftsFound": "No shifts have been created yet.",
+  "defaultCampaignCategoryName": "Campaigns",
+  "@defaultCampaignCategoryName": {
+    "description": "The default category name where campaign products are automatically added."
+  },
+  "campaignKdsAssignmentTitle": "Kitchen Display Required",
+  "@campaignKdsAssignmentTitle": {
+    "description": "Dialog title indicating that a KDS needs to be assigned to the campaign category."
+  },
+  "campaignKdsAssignmentPrompt": "The category '{campaignCategoryName}' has not been assigned a kitchen display yet. Would you like to make an assignment now for this campaign to appear in the kitchen?",
+  "@campaignKdsAssignmentPrompt": {
+    "description": "Text to inform and guide the user to assign a KDS to the campaign category.",
+    "placeholders": {
+      "campaignCategoryName": {
+        "type": "String",
+        "example": "Campaigns"
+      }
+    }
+  },
+  "dialogButtonAssignNow": "Assign Now",
+  "@dialogButtonAssignNow": {
+    "description": "Button text to redirect the user to the KDS assignment screen."
+  },
+  "dialogDeleteCategoryContent": "Are you sure you want to delete this category and all products under it? This action cannot be undone.",
+  "@dialogDeleteCategoryContent": {
+    "description": "Dialog content for category deletion confirmation.",
+    "placeholders": {
+      "categoryName": {
+        "type": "String",
+        "example": "Hot Drinks"
+      }
+    }
+  },
+  "subscriptionErrorWeb": "In-app subscriptions are currently only available through mobile applications.",
+  "subscriptionPurchasing": "Processing purchase...",
+  "planBasic": "Basic Plan",
+  "planSilver": "Silver Plan",
+  "planGold": "Gold Plan",
+  "maxTables": "Max. Number of Tables",
+  "maxStaff": "Max. Number of Staff",
+  "maxKdsScreens": "Max. KDS Screens",
+  "maxCategories": "Max. Categories",
+  "maxMenuItems": "Max. Menu Items",
+  "maxVariants": "Max. Product Variants",
+  "planMonthly": "Month",
+  "planYearly": "Year",
+  "subscriptionRestoring": "Restoring purchases...",
+  "subscriptionRestoreButton": "Restore",
+  "@manageStaffErrorLimitExceeded": {
+    "description": "Subscription staff limit reached error message",
+    "placeholders": {
+      "limit": {
+        "type": "String",
+        "example": "5"
+      }
+    }
+  },
+  "@takeawayOrderDetailsTitle": {
+    "description": "Takeaway order details modal title",
+    "placeholders": {
+      "orderId": {
+        "type": "String"
+      }
+    }
+  },
+  "shiftEndedDialogTitle": "Shift End",
+  "@shiftEndedDialogTitle": {
+    "description": "Title for the dialog shown when a staff member's shift ends."
+  },
+  "shiftEndedDialogContent": "Your active work shift has ended. Please log out. You can no longer perform new actions.",
+  "@shiftEndedDialogContent": {
+    "description": "Content for the shift end dialog."
+  },
+  "logoutButtonText": "Log Out",
+  "@logoutButtonText": {
+    "description": "Text for the logout button."
+  },
+  "shiftEndedLabel": "Shift Ended",
+  "shiftCountdownLabel": "{minutes} min {seconds} sec left",
+  "@shiftCountdownLabel": {
+    "placeholders": {
+      "minutes": {},
+      "seconds": {}
+    }
+  },
+  "shiftLabel": "Shift",
+  "setupCategoriesAddFromTemplateButton": "Add from Templates",
+  "setupCategoriesTemplateDialogTitle": "Category Templates",
+  "setupCategoriesTemplateAddButton": "{count} templates selected - Create",
+  "setupCategoriesSelectFromTemplate": "Select Category from Template",
+  "setupCategoriesNoTemplatesFound": "No templates found",
+  "kdsScreenLabelRequired": "KDS Screen (Required)",
+  "kdsScreenValidator": "Please select a KDS screen",
+  "kdsScreenNotSelected": "KDS Screen Not Selected",
+  "setupMenuItemsAddFromTemplateButton": "Add from Templates",
+  "@setupMenuItemsAddFromTemplateButton": {
+    "description": "Button text for adding menu items from templates"
+  },
+  "setupMenuItemsErrorCategoryNotFound": "Category name not found.",
+  "@setupMenuItemsErrorCategoryNotFound": {
+    "description": "Error message when category name cannot be found"
+  },
+  "setupMenuItemsErrorNoTemplatesForCategory": "No suitable product templates found for this category.",
+  "@setupMenuItemsErrorNoTemplatesForCategory": {
+    "description": "Error message when no templates are found for the selected category"
+  },
+  "setupMenuItemsSuccessAddedFromTemplate": "Successfully added {count} products from templates!",
+  "@setupMenuItemsSuccessAddedFromTemplate": {
+    "description": "Success message when products are added from templates",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "5"
+      }
+    }
+  },
+  "setupMenuItemsErrorLoadingTemplates": "Error loading templates: {error}",
+  "@setupMenuItemsErrorLoadingTemplates": {
+    "description": "Error message when loading templates fails",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Network error"
+      }
+    }
+  },
+  "setupMenuItemsTemplateDialogTitle": "Select Product Templates",
+  "@setupMenuItemsTemplateDialogTitle": {
+    "description": "Title for the template selection dialog"
+  },
+  "setupMenuItemsTemplateSearchLabel": "Search product...",
+  "@setupMenuItemsTemplateSearchLabel": {
+    "description": "Label for the template search field"
+  },
+  "setupMenuItemsTemplateSearchHint": "Enter product name",
+  "@setupMenuItemsTemplateSearchHint": {
+    "description": "Hint text for the template search field"
+  },
+  "setupMenuItemsTemplateSelectAll": "Select All",
+  "@setupMenuItemsTemplateSelectAll": {
+    "description": "Text for select all checkbox when not all visible items are selected"
+  },
+  "setupMenuItemsTemplateDeselectAll": "Deselect All",
+  "@setupMenuItemsTemplateDeselectAll": {
+    "description": "Text for select all checkbox when all visible items are selected"
+  },
+  "setupMenuItemsTemplateItemsShowing": "{count} items showing",
+  "@setupMenuItemsTemplateItemsShowing": {
+    "description": "Subtitle showing how many items are displayed",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "15"
+      }
+    }
+  },
+  "setupMenuItemsTemplateNoTemplatesFound": "No suitable templates found.",
+  "@setupMenuItemsTemplateNoTemplatesFound": {
+    "description": "Message when no templates are available"
+  },
+  "setupMenuItemsTemplateNoSearchResults": "No products matching your search criteria were found.",
+  "@setupMenuItemsTemplateNoSearchResults": {
+    "description": "Message when search returns no results"
+  },
+  "setupMenuItemsTemplateUnnamedTemplate": "Unnamed Template",
+  "@setupMenuItemsTemplateUnnamedTemplate": {
+    "description": "Default name for templates without a name"
+  },
+  "setupMenuItemsTemplateAddSelectedButton": "Add Selected ({count})",
+  "@setupMenuItemsTemplateAddSelectedButton": {
+    "description": "Button text showing how many templates are selected for adding",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "3"
+      }
+    }
+  },
+  "setupMenuItemsTemplateLimitInfo": "Current: {current}, Selected: {selected}, Limit: {limit}",
+  "@setupMenuItemsTemplateLimitInfo": {
+    "description": "Limit information text - current number of products, number of selected templates, and total limit",
+    "placeholders": {
+      "current": {
+        "type": "int",
+        "example": "5"
+      },
+      "selected": {
+        "type": "int",
+        "example": "3"
+      },
+      "limit": {
+        "type": "int",
+        "example": "20"
+      }
+    }
+  },
+  "setupMenuItemsTemplateLimitExceeded": "Limit will be exceeded",
+  "@setupMenuItemsTemplateLimitExceeded": {
+    "description": "Warning message indicating that the limit will be exceeded when a template is selected"
+  },
+  "notificationDefault": "You have a new notification!",
+  "@notificationDefault": {
+    "description": "Default message to be shown for notifications without specific text defined."
+  },
+  "notificationTableInfo": " (Table {tableNumber})",
+  "@notificationTableInfo": {
+    "description": "Additional text used to show the table number in notification texts.",
+    "placeholders": {
+      "tableNumber": {
+        "type": "String",
+        "example": "12"
+      }
+    }
+  },
+  "notificationOrderApprovedForKitchen": "🍳 New Order #{orderId}{tableInfo} sent to kitchen!",
+  "@notificationOrderApprovedForKitchen": {
+    "description": "Message notifying that an approved order has been sent to the kitchen.",
+    "placeholders": {
+      "orderId": {
+        "type": "String"
+      },
+      "tableInfo": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationOrderPreparing": "⏳ Order #{orderId} is being prepared...",
+  "@notificationOrderPreparing": {
+    "description": "Message notifying that an order has started being prepared in the kitchen.",
+    "placeholders": {
+      "orderId": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationOrderReadyForPickup": "🔔 Order #{orderId} is ready - awaiting waiter!",
+  "@notificationOrderReadyForPickup": {
+    "description": "Message notifying that an order is ready in the kitchen and is waiting to be picked up by a waiter.",
+    "placeholders": {
+      "orderId": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationOrderItemAdded": "➕ New item added to order #{orderId}!",
+  "@notificationOrderItemAdded": {
+    "description": "Message notifying that a new item has been added to an existing order.",
+    "placeholders": {
+      "orderId": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationGuestOrderPending": "⏰ Guest order pending approval: #{orderId}",
+  "@notificationGuestOrderPending": {
+    "description": "Message notifying that an order placed by a guest (via QR code) is waiting for staff approval.",
+    "placeholders": {
+      "orderId": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationOrderNeedsReapproval": "🔄 Order #{orderId} needs re-approval!",
+  "@notificationOrderNeedsReapproval": {
+    "description": "Message notifying that an existing order needs re-approval because new items have been added.",
+    "placeholders": {
+      "orderId": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationNewOrder": "🆕 New order received: #{orderId}{tableInfo}",
+  "@notificationNewOrder": {
+    "description": "Fallback text for a general new order notification.",
+    "placeholders": {
+      "orderId": {
+        "type": "String"
+      },
+      "tableInfo": {
+        "type": "String"
+      }
+    }
+  },
+  "ingredientManagementTitle": "Ingredient Stock Management",
+  "ingredientAddTitle": "Add New Ingredient",
+  "ingredientNameLabel": "Ingredient Name",
+  "ingredientInitialStockLabel": "Initial Stock Quantity",
+  "validatorInvalidNumber": "Please enter a valid number.",
+  "addButton": "Add",
+  "ingredientSuccessAdd": "Ingredient added successfully.",
+  "ingredientNoItems": "No ingredients have been added yet.\nTap the '+' button to get started.",
+  "ingredientStockLabel": "Stock: {quantity} {unit}",
+  "@ingredientStockLabel": {
+    "placeholders": {
+      "quantity": {},
+      "unit": {}
+    }
+  },
+  "errorTitle": "Error",
+  "ingredientErrorFetchUnits": "Could not fetch measurement units: {error}",
+  "@ingredientErrorFetchUnits": {
+    "placeholders": {
+      "error": {}
+    }
+  },
+  "ingredientUnitLabel": "Measurement Unit",
+  "ingredientErrorSelectUnit": "Please select a unit.",
+  "recipeFor": "Recipe for {variantName}",
+  "@recipeFor": {
+    "description": "Title of the recipe management screen",
+    "placeholders": {
+      "variantName": {
+        "type": "String",
+        "example": "Large Size"
+      }
+    }
+  },
+  "recipeTitle": "Recipe",
+  "ingredientAddToRecipe": "Add Ingredient to Recipe",
+  "ingredientSelect": "Select Ingredient...",
+  "quantity": "Quantity",
+  "recipeNoIngredients": "No ingredients have been added for this variant yet.",
+  "@ingredientManagementTitle": {},
+  "@ingredientNoItems": {},
+  "@ingredientAddTitle": {},
+  "@ingredientNameLabel": {},
+  "@ingredientInitialStockLabel": {},
+  "@ingredientUnitLabel": {},
+  "@ingredientErrorSelectUnit": {},
+  "@ingredientSuccessAdd": {},
+  "ingredientAdjustStockTitle": "Adjust {ingredientName} Stock",
+  "@ingredientAdjustStockTitle": {
+    "placeholders": {
+      "ingredientName": {}
+    }
+  },
+  "stockMovementTypeLabel": "Movement Type",
+  "@stockMovementTypeLabel": {},
+  "@quantity": {},
+  "descriptionLabel": "Description",
+  "@descriptionLabel": {},
+  "descriptionHintOptional": "Description (Optional)",
+  "@descriptionHintOptional": {},
+  "validatorInvalidPositiveNumber": "Please enter a valid number greater than 0.",
+  "@validatorInvalidPositiveNumber": {},
+  "ingredientSuccessStockUpdate": "Stock updated successfully.",
+  "@ingredientSuccessStockUpdate": {},
+  "ingredientMenuTooltip": "Actions",
+  "@ingredientMenuTooltip": {},
+  "ingredientMenuAdjustStock": "Adjust Stock",
+  "@ingredientMenuAdjustStock": {},
+  "ingredientMenuHistory": "View History",
+  "@ingredientMenuHistory": {},
+  "ingredientHistoryTitle": "{ingredientName} - Stock History",
+  "@ingredientHistoryTitle": {
+    "placeholders": {
+      "ingredientName": {}
+    }
+  },
+  "ingredientHistoryNoMovements": "No stock movements found for this ingredient.",
+  "@ingredientHistoryNoMovements": {},
+  "ingredientHistoryStockBefore": "Previous Quantity",
+  "@ingredientHistoryStockBefore": {},
+  "ingredientHistoryStockAfter": "New Quantity",
+  "@ingredientHistoryStockAfter": {},
+  "@stockMovementAddition": {},
+  "@stockMovementWastage": {},
+  "@stockMovementAdjustmentIn": {},
+  "@stockMovementAdjustmentOut": {},
+  "systemUser": "System",
+  "@systemUser": {},
+  "homeMenuManageIngredientsAndRecipes": "Ingredient and Recipe Management",
+  "@homeMenuManageIngredientsAndRecipes": {
+    "description": "Title of the ingredient and recipe management menu item on the home screen"
+  },
+  "homeMenuSupplierManagement": "Supplier Management",
+  "@homeMenuSupplierManagement": {
+    "description": "Title of the supplier management menu item on the home screen"
+  },
+  "homeMenuPurchaseOrders": "Purchase Orders",
+  "@homeMenuPurchaseOrders": {
+    "description": "Title of the purchase orders menu item on the home screen"
+  },
+  "supplierDeleteTitle": "Delete Supplier",
+  "@supplierDeleteTitle": {
+    "description": "Dialog title for supplier deletion confirmation"
+  },
+  "supplierDeleteConfirmation": "Are you sure you want to delete the supplier named {supplierName}? This action is irreversible.",
+  "@supplierDeleteConfirmation": {
+    "description": "Content for supplier deletion confirmation",
+    "placeholders": {
+      "supplierName": {
+        "type": "String",
+        "example": "Main Food Inc."
+      }
+    }
+  },
+  "supplierDeleteSuccess": "The supplier named {supplierName} was successfully deleted.",
+  "@supplierDeleteSuccess": {
+    "description": "Success message for supplier deletion",
+    "placeholders": {
+      "supplierName": {
+        "type": "String"
+      }
+    }
+  },
+  "supplierManagementTitle": "Supplier Management",
+  "@supplierManagementTitle": {
+    "description": "Title of the supplier management screen"
+  },
+  "supplierNoItems": "No suppliers have been added yet.",
+  "@supplierNoItems": {
+    "description": "Message to display when the supplier list is empty"
+  },
+  "supplierNoContactPerson": "No contact person specified",
+  "@supplierNoContactPerson": {
+    "description": "Text to display when a supplier card has no contact person"
+  },
+  "purchaseOrderListTitle": "Purchase Orders",
+  "@purchaseOrderListTitle": {
+    "description": "Title of the purchase orders list screen"
+  },
+  "purchaseOrderNoItems": "No purchase orders have been created yet.",
+  "@purchaseOrderNoItems": {
+    "description": "Message to display when the purchase order list is empty"
+  },
+  "purchaseOrderLabel": "Order No",
+  "@purchaseOrderLabel": {
+    "description": "Label on the purchase order card"
+  },
+  "purchaseOrderStatusLabel": "Status",
+  "@purchaseOrderStatusLabel": {
+    "description": "Status label on the purchase order card"
+  },
+  "purchaseOrderDateLabel": "Date",
+  "@purchaseOrderDateLabel": {
+    "description": "Date label on the purchase order card"
+  },
+  "purchaseOrderAddButton": "New Purchase Order",
+  "@purchaseOrderAddButton": {
+    "description": "Button text to create a new purchase order"
+  },
+  "ingredientAddToOrder": "Add Ingredient to Order",
+  "@ingredientAddToOrder": {
+    "description": "Dialog title for adding an ingredient to a purchase order"
+  },
+  "purchaseOrderUnitPrice": "Unit Purchase Price",
+  "@purchaseOrderUnitPrice": {
+    "description": "Label for the unit price field in a purchase order"
+  },
+  "purchaseOrderValidationError": "Please select a supplier and add at least one item.",
+  "@purchaseOrderValidationError": {
+    "description": "Validation error message on the purchase order submission form"
+  },
+  "purchaseOrderCreateTitle": "Create New Purchase Order",
+  "@purchaseOrderCreateTitle": {
+    "description": "Title of the new purchase order creation screen"
+  },
+  "purchaseOrderSelectSupplier": "Select Supplier",
+  "@purchaseOrderSelectSupplier": {
+    "description": "Hint text for the supplier selection dropdown menu"
+  },
+  "purchaseOrderTotalCost": "Total Cost",
+  "@purchaseOrderTotalCost": {
+    "description": "Total cost label for a purchase order"
+  },
+  "purchaseOrderAddItemButton": "Add Ingredient",
+  "@purchaseOrderAddItemButton": {
+    "description": "Button text to add a new ingredient to a purchase order"
+  },
+  "purchaseOrderSaveButton": "Save Purchase Order",
+  "@purchaseOrderSaveButton": {
+    "description": "Button text to save the purchase order"
+  },
+  "supplierAddButton": "Add Supplier",
+  "@supplierAddButton": {
+    "description": "Button for adding a new supplier"
+  },
+  "supplierAddDialogTitle": "Add New Supplier",
+  "@supplierAddDialogTitle": {
+    "description": "Dialog title for adding a new supplier"
+  },
+  "supplierEditDialogTitle": "Edit {supplierName}",
+  "@supplierEditDialogTitle": {
+    "description": "Dialog title for editing a supplier",
+    "placeholders": {
+      "supplierName": {
+        "type": "String"
+      }
+    }
+  },
+  "supplierNameLabel": "Supplier Name",
+  "@supplierNameLabel": {
+    "description": "Label for the supplier name input field"
+  },
+  "supplierContactPersonLabel": "Contact Person",
+  "@supplierContactPersonLabel": {
+    "description": "Label for the supplier contact person input field"
+  },
+  "phoneLabel": "Phone",
+  "@phoneLabel": {
+    "description": "Label for the phone number input field"
+  },
+  "addressLabel": "Address",
+  "@addressLabel": {
+    "description": "Label for the address input field"
+  },
+  "dialogButtonCancelOrder": "Cancel Order",
+  "@dialogButtonCancelOrder": {
+    "description": "Menu button to cancel an order"
+  },
+  "purchaseOrderCancelDialogTitle": "Cancel Order",
+  "@purchaseOrderCancelDialogTitle": {
+    "description": "Confirmation dialog title for canceling a purchase order"
+  },
+  "purchaseOrderCancelDialogContent": "Are you sure you want to cancel purchase order #{orderId}?",
+  "@purchaseOrderCancelDialogContent": {
+    "description": "Confirmation dialog content for canceling a purchase order",
+    "placeholders": {
+      "orderId": {
+        "type": "String"
+      }
+    }
+  },
+  "@dialogButtonYesCancel": {
+    "description": "Button to confirm the cancellation action"
+  },
+  "purchaseOrderSuccessCancel": "Purchase order #{orderId} was successfully canceled.",
+  "@purchaseOrderSuccessCancel": {
+    "description": "Success message shown when a purchase order is canceled",
+    "placeholders": {
+      "orderId": {
+        "type": "String"
+      }
+    }
+  },
+  "ingredientNotificationSent": "Notified to supplier",
+  "sendButton": "Send",
+  "ingredientSelectItems": "Select Ingredients",
+  "ingredientSendEmailToSupplier": "Notify Supplier",
+  "ingredientSelectSupplierTitle": "Select Supplier",
+  "ingredientSelectSupplierContent": "Select the supplier to whom the notification will be sent for the selected ingredients.",
+  "ingredientSelectSupplierHint": "Select a supplier...",
+  "ingredientErrorNoSuppliers": "No registered suppliers found in the system.",
+  "ingredientSuccessEmailSent": "Ingredient request successfully sent to the supplier.",
+  "ingredientErrorEmailSending": "An error occurred while sending the email: {error}",
+  "ingredientErrorNoItemsSelected": "Please select at least one ingredient.",
+  "inventoryManagementTitle": "Inventory Management",
+  "@inventoryManagementTitle": {
+    "description": "Title for the inventory management screen"
+  },
+  "menuItemIsFromRecipeLabel": "Is this item prepared from a recipe?",
+  "@menuItemIsFromRecipeLabel": {
+    "description": "Label for the switch to determine if a menu item is made from ingredients"
+  },
+  "menuItemIsFromRecipeSubtitleYes": "Yes, it will be produced from ingredients in the inventory.",
+  "@menuItemIsFromRecipeSubtitleYes": {
+    "description": "Subtitle when the recipe switch is on"
+  },
+  "menuItemIsFromRecipeSubtitleNo": "No, it is a directly sold product (e.g., Canned Coke).",
+  "@menuItemIsFromRecipeSubtitleNo": {
+    "description": "Subtitle when the recipe switch is off"
+  },
+  "menuItemPriceLabel": "Sales Price",
+  "@menuItemPriceLabel": {
+    "description": "Label for the price of a non-recipe menu item"
+  },
+  "homeMenuManageWebsite": "Manage My Website",
+  "@homeMenuManageWebsite": {
+    "description": "Button title for website management in the main menu"
+  },
+  "homeMenuCompletedOrders": "Completed Orders",
+  "@homeMenuCompletedOrders": {},
+  "homeMenuReports": "Reports",
+  "@homeMenuReports": {},
+  "homeMenuShiftSchedule": "Shift Assignments",
+  "@homeMenuShiftSchedule": {},
+  "homeMenuShiftTemplates": "Shift Templates",
+  "@homeMenuShiftTemplates": {},
+  "homeMenuManageTables": "Table Management",
+  "@homeMenuManageTables": {},
+  "websiteSettingsSuccessSave": "Website settings saved successfully.",
+  "@websiteSettingsSuccessSave": {},
+  "websiteSettingsErrorSave": "An error occurred while saving website settings: {details}",
+  "@websiteSettingsErrorSave": {
+    "placeholders": {
+      "details": {
+        "type": "String"
+      }
+    }
+  },
+  "websiteSettingsPickColor": "Pick Color",
+  "@websiteSettingsPickColor": {},
+  "dialogButtonDone": "Done",
+  "@dialogButtonDone": {},
+  "homeMenuWebsiteSettings": "Website Settings",
+  "@homeMenuWebsiteSettings": {},
+  "websiteSettingsSectionAbout": "About Section",
+  "@websiteSettingsSectionAbout": {},
+  "websiteSettingsLabelAboutTitle": "About Title",
+  "@websiteSettingsLabelAboutTitle": {},
+  "websiteSettingsLabelAboutDesc": "About Description",
+  "@websiteSettingsLabelAboutDesc": {},
+  "websiteSettingsLabelAboutImage": "About Image",
+  "@websiteSettingsLabelAboutImage": {},
+  "websiteSettingsSectionContact": "Contact Information",
+  "@websiteSettingsSectionContact": {},
+  "websiteSettingsLabelPhone": "Contact Phone",
+  "@websiteSettingsLabelPhone": {},
+  "websiteSettingsLabelEmail": "Contact Email",
+  "@websiteSettingsLabelEmail": {},
+  "websiteSettingsLabelAddress": "Contact Address",
+  "@websiteSettingsLabelAddress": {},
+  "websiteSettingsLabelWorkingHours": "Working Hours",
+  "@websiteSettingsLabelWorkingHours": {},
+  "websiteSettingsSectionAppearance": "Appearance and Theme",
+  "@websiteSettingsSectionAppearance": {},
+  "websiteSettingsLabelPrimaryColor": "Primary Color",
+  "@websiteSettingsLabelPrimaryColor": {},
+  "websiteSettingsLabelSecondaryColor": "Secondary Color",
+  "@websiteSettingsLabelSecondaryColor": {},
+  "websiteSettingsSectionSocial": "Social Media",
+  "@websiteSettingsSectionSocial": {},
+  "websiteSettingsSectionVisibility": "Visibility Settings",
+  "@websiteSettingsSectionVisibility": {},
+  "websiteSettingsToggleShowMenu": "Show Menu",
+  "@websiteSettingsToggleShowMenu": {},
+  "websiteSettingsToggleShowContact": "Show Contact Info",
+  "@websiteSettingsToggleShowContact": {},
+  "websiteSettingsToggleShowMap": "Show Map",
+  "@websiteSettingsToggleShowMap": {},
+  "buttonSaveChanges": "Save Changes",
+  "@buttonSaveChanges": {},
+  "homeMenuShiftAssignment": "Shift Assignment",
+  "homeMenuReservations": "Reservations",
+  "reservationsTitle": "Reservation Management",
+  "reservationsTabPending": "Pending",
+  "reservationsTabConfirmed": "Confirmed",
+  "reservationsTabPast": "Past",
+  "reservationsNoReservations": "No reservations to display.",
+  "reservationsNoReservationsInThisCategory": "No reservations in this category.",
+  "manageTablesInfoCreatingQrPdf": "Creating PDF file with QR codes...",
+  "@manageTablesInfoCreatingQrPdf": {
+    "description": "Message to inform the user that a PDF file containing QR codes for all tables is being created."
+  },
+  "manageTablesSuccessQrPdfSaved": "PDF file successfully saved to '{filePath}'.",
+  "@manageTablesSuccessQrPdfSaved": {
+    "description": "Message informing that the PDF file has been successfully saved, including the file path.",
+    "placeholders": {
+      "filePath": {
+        "type": "String",
+        "example": "/storage/emulated/0/Download/file.pdf"
+      }
+    }
+  },
+  "dialogButtonOpen": "OPEN",
+  "@dialogButtonOpen": {
+    "description": "Button text used to open a file or application."
+  },
+  "manageTablesErrorCreatingQrPdf": "An error occurred while exporting QR codes to PDF: {error}",
+  "@manageTablesErrorCreatingQrPdf": {
+    "description": "Message informing about an error during PDF creation.",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Could not write to file."
+      }
+    }
+  },
+  "manageTablesTooltipExportQr": "Download QR Codes for All Tables",
+  "@manageTablesTooltipExportQr": {
+    "description": "Tooltip text that appears when hovering over the button to download QR codes for all tables as a PDF."
+  },
+  "manageTablesButtonDownloadQr": "Download QR Code",
+  "manageTablesSuccessQrDownloaded": "QR code downloaded successfully.",
+  "manageTablesErrorQrDownload": "Could not download QR code: {error}",
+  "reservationsTabOthers": "Others",
+  "@reservationsTabOthers": {
+    "description": "Tab title for 'Other' reservation statuses on the reservations screen (e.g., canceled, seated, etc.)"
+  },
+  "reservationsErrorLoading": "An error occurred while loading reservations: {error}",
+  "@reservationsErrorLoading": {
+    "description": "Error message shown when the reservation list cannot be loaded",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Could not connect to server"
+      }
+    }
+  },
+  "reservationsNoReservationsFound": "No reservations to display.",
+  "@reservationsNoReservationsFound": {
+    "description": "Message shown when no reservations are found"
+  },
+  "@reservationsNoReservationsInThisCategory": {
+    "description": "Message shown when there are no reservations in a specific tab (e.g., confirmed)"
+  },
+  "reservationsPartySizeTooltip": "{count} People",
+  "@reservationsPartySizeTooltip": {
+    "description": "Tooltip text showing the number of people on the reservation card",
+    "placeholders": {
+      "count": {
+        "type": "Object"
+      }
+    }
+  },
+  "tableLabel": "Table",
+  "@tableLabel": {
+    "description": "General word 'Table'"
+  },
+  "reservationsConfirmTooltip": "Confirm",
+  "@reservationsConfirmTooltip": {
+    "description": "Tooltip text that appears when hovering over the button to confirm a reservation"
+  },
+  "reservationsCancelTooltip": "Cancel",
+  "@reservationsCancelTooltip": {
+    "description": "Tooltip text that appears when hovering over the button to cancel a reservation"
+  },
+  "reservationsMarkSeatedTooltip": "Mark as seated",
+  "@reservationsMarkSeatedTooltip": {
+    "description": "Tooltip text that appears when hovering over the button to mark a customer as seated"
+  },
+  "reservationsMarkSeatedButton": "Seated",
+  "@reservationsMarkSeatedButton": {
+    "description": "Button text to mark a customer as seated"
+  },
+  "homeMenuBusinessCard": "Business Card Design",
+  "@homeMenuBusinessCard": {
+    "description": "Title of the button in the main menu that redirects to the business card design screen."
+  },
+  "tableLayoutScreenTitle": "Table Layout Planner",
+  "@tableLayoutScreenTitle": {
+    "description": "Title for the table layout editor screen"
+  },
+  "tableLayoutSuccessSave": "Table layout saved successfully.",
+  "@tableLayoutSuccessSave": {
+    "description": "Success message when table layout is saved"
+  },
+  "tableLayoutErrorSave": "An error occurred while saving table layout.",
+  "@tableLayoutErrorSave": {
+    "description": "Error message when table layout fails to save"
+  },
+  "manageTablesTooltipLayoutPlanner": "Plan Table Layout",
+  "@manageTablesTooltipLayoutPlanner": {
+    "description": "Tooltip for the layout planner button on the manage tables screen"
+  },
+  "tableLayoutPaletteAddElements": "Add Elements",
+  "tableLayoutPaletteAddText": "Add Text",
+  "tableLayoutPaletteDefaultText": "New Text",
+  "tableLayoutPaletteAddRectangle": "Add Rectangle",
+  "tableLayoutPaletteAddEllipse": "Add Ellipse",
+  "tableLayoutPaletteAddLine": "Add Line",
+  "tableLayoutPaletteUnplacedTables": "Unplaced Tables ({count})",
+  "@tableLayoutPaletteUnplacedTables": {
+    "description": "Number of unplaced tables",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "tableLayoutPaletteAllTablesPlaced": "All tables have been placed.",
+  "tableLayoutPaletteTableLabel": "Table {tableNumber}",
+  "@tableLayoutPaletteTableLabel": {
+    "description": "Label for a table with its number",
+    "placeholders": {
+      "tableNumber": {
+        "type": "String"
+      }
+    }
+  },
+  "tableLayoutToggleGrid": "Toggle Grid and Alignment",
+  "unplacedTablesTitle": "Unplaced Tables",
+  "templateAddSelectedButton": "Add Selected",
+  "templateVariantRequiredError": "You must add at least one variant to each selected item.",
+  "homeMenuPaymentSettings": "Payment Settings",
+  "@homeMenuPaymentSettings": {
+    "description": "Title of the payment settings menu card on the home screen"
+  },
+  "paymentTypeQrCode": "Pay with QR Code",
+  "qrPaymentScreenTitle": "Pay with QR Code",
+  "qrPaymentInstruction": "Scan the QR code with your bank's mobile app",
+  "qrPaymentErrorInitiate": "Error initiating QR payment: {error}",
+  "qrPaymentErrorTimeout": "QR payment timed out",
+  "qrPaymentErrorFailedOrExpired": "QR payment failed or expired",
+  "paymentSuccessMessage": "Payment completed successfully!",
+  "dialogButtonBack": "Back",
+  "orderTotalLabel": "Total Amount:",
+  "qrPaymentSecondsLeft": "seconds left",
+  "takeawayErrorAssigningPagerWithCode": "Error assigning device: {statusCode}",
+  "@takeawayErrorAssigningPagerWithCode": {
+    "placeholders": {
+      "statusCode": {
+        "type": "String"
+      }
+    }
+  },
+  "takeawayTooltipNewOrder": "New Takeaway Order",
+  "takeawayNoActiveOrders": "There are no active takeaway orders.",
+  "takeawayOrderFormTitle": "New Takeaway Order",
+  "takeawayOrderFormErrorLoadingData": "Error loading data: {error}",
+  "@takeawayOrderFormErrorLoadingData": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "takeawayOrderFormErrorCustomerInfo": "Please enter the customer information completely.",
+  "takeawayOrderFormErrorAddProduct": "Please add at least one product.",
+  "takeawayOrderFormSuccess": "Takeaway order created successfully.",
+  "takeawayOrderFormSuccessOffline": "Order saved offline. It will be sent when a connection is established.",
+  "takeawayOrderFormErrorCreating": "An error occurred while creating the order.",
+  "takeawayOrderFormErrorCreatingWithCode": "Error creating order: {statusCode}",
+  "@takeawayOrderFormErrorCreatingWithCode": {
+    "placeholders": {
+      "statusCode": {
+        "type": "String"
+      }
+    }
+  },
+  "takeawayOrderFormErrorCreatingGeneric": "Error: {error}",
+  "@takeawayOrderFormErrorCreatingGeneric": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "takeawayOrderFormCustomerNameLabel": "Customer Name Surname*",
+  "takeawayOrderFormCustomerNameValidator": "Customer name is required.",
+  "takeawayOrderFormCustomerPhoneLabel": "Phone Number*",
+  "takeawayOrderFormCustomerPhoneValidator": "Phone number is required.",
+  "takeawayOrderFormCreateButton": "Create Order",
+  "staffPerformanceScreenTitle": "Staff Performance Report",
+  "staffPerformanceErrorFetching": "An error occurred while fetching performance data: {error}",
+  "@staffPerformanceErrorFetching": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "staffPerformanceTimeRangeToday": "Today",
+  "staffPerformanceTimeRangeThisWeek": "This Week",
+  "staffPerformanceTimeRangeThisMonth": "This Month",
+  "staffPerformanceTimeRangeLast7Days": "Last 7 Days",
+  "staffPerformanceTimeRangeLast30Days": "Last 30 Days",
+  "staffPerformanceTimeRangeCustom": "Custom Date Range",
+  "staffPerformancePickDateTooltip": "Select Date Range",
+  "staffPerformanceNoData": "No staff with reporting permissions were found.",
+  "staffPerformanceOrderCountLabel": "Sales Order Count: {count}",
+  "@staffPerformanceOrderCountLabel": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "staffPerformancePreparedItemsLabel": "Prepared Item Count: {count}",
+  "@staffPerformancePreparedItemsLabel": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "staffPerformanceChipSalesPermission": "Sales Permission",
+  "staffPerformanceChipKdsPermission": "KDS: {names}",
+  "@staffPerformanceChipKdsPermission": {
+    "placeholders": {
+      "names": {
+        "type": "String"
+      }
+    }
+  },
+  "manageCampaignsScreenTitle": "Campaign Management",
+  "manageCampaignsTooltipAdd": "Add New Campaign",
+  "manageCampaignsErrorFetching": "Error loading campaigns: {error}",
+  "@manageCampaignsErrorFetching": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "manageCampaignsNoCampaigns": "No campaigns have been created yet.",
+  "manageCampaignsDeleteDialogTitle": "Delete Campaign",
+  "manageCampaignsDeleteDialogContent": "Are you sure you want to delete the campaign named '{campaignName}'? This action cannot be undone.",
+  "@manageCampaignsDeleteDialogContent": {
+    "placeholders": {
+      "campaignName": {
+        "type": "String"
+      }
+    }
+  },
+  "manageCampaignsDeleteDialogConfirmButton": "Yes, Delete",
+  "manageCampaignsSuccessDelete": "The '{campaignName}' campaign has been deleted.",
+  "@manageCampaignsSuccessDelete": {
+    "placeholders": {
+      "campaignName": {
+        "type": "String"
+      }
+    }
+  },
+  "manageCampaignsErrorDelete": "Error deleting campaign: {error}",
+  "@manageCampaignsErrorDelete": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "manageCampaignsStatusActive": "Active",
+  "manageCampaignsStatusInactive": "Inactive",
+  "manageCampaignsStartDate": "Start: {date}",
+  "@manageCampaignsStartDate": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "manageCampaignsEndDate": " - End: {date}",
+  "@manageCampaignsEndDate": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "creditSalesScreenTitle": "Credit Sales Management",
+  "creditSalesUnknown": "Unknown",
+  "creditSalesInvalidDate": "Invalid Date",
+  "creditSalesErrorFetching": "Error fetching credit sales: {error}",
+  "@creditSalesErrorFetching": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "creditSalesErrorLoadMore": "Could not load more data.",
+  "creditSalesNoActiveOrders": "There are no active credit sales orders.",
+  "creditSalesCardOrderId": "Order ID: #{orderId}",
+  "@creditSalesCardOrderId": {
+    "placeholders": {
+      "orderId": {
+        "type": "String"
+      }
+    }
+  },
+  "creditSalesCardCustomer": "Customer: {name}",
+  "@creditSalesCardCustomer": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "creditSalesCardPhone": "Phone: {phone}",
+  "@creditSalesCardPhone": {
+    "placeholders": {
+      "phone": {
+        "type": "String"
+      }
+    }
+  },
+  "creditSalesCardNotes": "Notes: {notes}",
+  "@creditSalesCardNotes": {
+    "placeholders": {
+      "notes": {
+        "type": "String"
+      }
+    }
+  },
+  "creditSalesCardCreditDate": "Credit Date: {date}",
+  "@creditSalesCardCreditDate": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "creditSalesCardPayButton": "Make Payment",
+  "kdsScreenTitle": "KDS: {screenName}",
+  "@kdsScreenTitle": {
+    "placeholders": {
+      "screenName": {
+        "type": "String"
+      }
+    }
+  },
+  "kdsScreenTooltipGoHome": "Home",
+  "kdsScreenTooltipBack": "Back",
+  "kdsScreenTooltipRefresh": "Refresh",
+  "kdsScreenSnackbarOrderUpdated": "Order status updated.",
+  "kdsScreenErrorFetching": "Error fetching KDS orders: {error}",
+  "@kdsScreenErrorFetching": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "kdsScreenButtonRetry": "Retry",
+  "kdsScreenNoOrders": "There are no orders to prepare for this KDS screen.",
+  "manageShiftsScreenTitle": "Shift Templates",
+  "manageShiftsTooltipAdd": "Add New Shift Template",
+  "manageShiftsDeleteDialogTitle": "Delete Shift",
+  "manageShiftsDeleteDialogContent": "The '{shiftName}' shift template will be deleted. All assignments using this template will also be deleted. Are you sure?",
+  "@manageShiftsDeleteDialogContent": {
+    "placeholders": {
+      "shiftName": {
+        "type": "String"
+      }
+    }
+  },
+  "manageShiftsSuccessDelete": "'{shiftName}' has been deleted.",
+  "@manageShiftsSuccessDelete": {
+    "placeholders": {
+      "shiftName": {
+        "type": "String"
+      }
+    }
+  },
+  "manageShiftsAddDialogTitle": "New Shift Template",
+  "manageShiftsEditDialogTitle": "Edit Shift",
+  "manageShiftsShiftNameLabel": "Shift Name",
+  "manageShiftsStartTimeLabel": "Start: {time}",
+  "@manageShiftsStartTimeLabel": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "manageShiftsEndTimeLabel": "End: {time}",
+  "@manageShiftsEndTimeLabel": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "manageShiftsSelectButton": "Select",
+  "manageShiftsColorLabel": "Shift Color",
+  "generalYes": "Yes",
+  "generalNo": "No",
+  "manageKdsScreenTitle": "KDS Screen Management",
+  "manageKdsTooltipAdd": "Add New KDS Screen",
+  "manageKdsErrorLoading": "Error loading KDS Screens: {error}",
+  "@manageKdsErrorLoading": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "manageKdsAddDialogTitle": "New KDS Screen",
+  "manageKdsEditDialogTitle": "Edit KDS Screen",
+  "manageKdsNameLabel": "Screen Name*",
+  "manageKdsNameValidator": "Screen name is required.",
+  "manageKdsDescriptionLabel": "Description (Optional)",
+  "manageKdsIsActiveLabel": "Is Active?",
+  "manageKdsDeleteDialogTitle": "Delete KDS Screen",
+  "manageKdsDeleteDialogContent": "Are you sure you want to delete the KDS screen named '{screenName}'? The redirection of categories assigned to this screen will be removed.",
+  "@manageKdsDeleteDialogContent": {
+    "placeholders": {
+      "screenName": {
+        "type": "String"
+      }
+    }
+  },
+  "manageKdsSuccessDelete": "The '{screenName}' KDS screen was successfully deleted.",
+  "@manageKdsSuccessDelete": {
+    "placeholders": {
+      "screenName": {
+        "type": "String"
+      }
+    }
+  },
+  "manageKdsErrorDelete": "Error deleting KDS screen: {error}",
+  "@manageKdsErrorDelete": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "manageKdsNoScreensFound": "No KDS screens have been created yet.",
+  "manageKdsCreateFirstButton": "Create First KDS Screen",
+  "manageKdsNoDescription": "No description",
+  "manageKdsListItemSubtitle": "{description}\nSlug: {slug} - Active: {isActive}",
+  "@manageKdsListItemSubtitle": {
+    "placeholders": {
+      "description": {
+        "type": "String"
+      },
+      "slug": {
+        "type": "String"
+      },
+      "isActive": {
+        "type": "String"
+      }
+    }
+  },
+  "passwordResetTitle": "Forgot Password",
+  "passwordResetSuccessMessage": "A password reset code has been sent to your email address. Please check your email.",
+  "passwordResetInstruction": "Enter your registered email address. We will send you a password reset code.",
+  "passwordResetSendCodeButton": "Send Reset Code",
+  "passwordResetConfirmTitle": "Create New Password",
+  "passwordResetConfirmSuccessMessage": "Your password has been reset successfully. Please log in with your new password.",
+  "passwordResetConfirmInstruction": "Enter the 6-digit code sent to your email and your new password.",
+  "passwordResetConfirmCodeLabel": "Reset Code",
+  "passwordResetConfirmCodeValidator": "Please enter the reset code.",
+  "passwordResetConfirmCodeLengthValidator": "The code must be 6 digits long.",
+  "passwordResetConfirmResetButton": "Reset Password",
+  "createCategoryScreenTitle": "Create Product Category",
+  "createCategoryErrorLoadingParents": "Error loading parent categories: {error}",
+  "@createCategoryErrorLoadingParents": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "createCategoryPhotoNotSelected": "Photo not selected.",
+  "createCategorySuccess": "Category created successfully!",
+  "createCategoryError": "Error creating category: {statusCode} - {details}",
+  "@createCategoryError": {
+    "placeholders": {
+      "statusCode": {
+        "type": "String"
+      },
+      "details": {
+        "type": "String"
+      }
+    }
+  },
+  "createCategoryButton": "Create Category",
+  "stockHistoryScreenTitle": "{variantName} - Stock History",
+  "@stockHistoryScreenTitle": {
+    "placeholders": {
+      "variantName": {
+        "type": "String"
+      }
+    }
+  },
+  "stockHistoryFiltersTitle": "Filters:",
+  "stockHistorySelectDateRange": "Select Date Range",
+  "stockHistoryDateRangeDisplay": "{startDate} - {endDate}",
+  "@stockHistoryDateRangeDisplay": {
+    "placeholders": {
+      "startDate": {
+        "type": "String"
+      },
+      "endDate": {
+        "type": "String"
+      }
+    }
+  },
+  "stockHistoryMovementTypeLabel": "Movement Type",
+  "stockHistoryMovementTypeAll": "All",
+  "stockHistoryMovementTypeInitial": "Initial Stock",
+  "stockHistoryMovementTypeSale": "Sale",
+  "stockHistoryMovementTypeReturn": "Customer Return",
+  "stockHistoryMovementTypeAdjIn": "Count Adjustment (Surplus)",
+  "stockHistoryMovementTypeAdjOut": "Count Adjustment (Deficit)",
+  "stockHistoryMovementTypeWastage": "Wastage/Loss",
+  "stockHistoryMovementTypeManual": "Manual Adjustment",
+  "stockHistoryNoMovements": "No stock movements were found.",
+  "stockHistoryMovementTitle": "{movementType}: {change}",
+  "@stockHistoryMovementTitle": {
+    "placeholders": {
+      "movementType": {
+        "type": "String"
+      },
+      "change": {
+        "type": "String"
+      }
+    }
+  },
+  "stockHistoryQuantityChange": "Before: {before} → After: {after}",
+  "@stockHistoryQuantityChange": {
+    "placeholders": {
+      "before": {
+        "type": "String"
+      },
+      "after": {
+        "type": "String"
+      }
+    }
+  },
+  "stockHistoryDateLabel": "Date: {date}",
+  "@stockHistoryDateLabel": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "stockHistoryUserLabel": "User: {username}",
+  "@stockHistoryUserLabel": {
+    "placeholders": {
+      "username": {
+        "type": "String"
+      }
+    }
+  },
+  "stockHistoryDescriptionLabel": "Description: {description}",
+  "@stockHistoryDescriptionLabel": {
+    "placeholders": {
+      "description": {
+        "type": "String"
+      }
+    }
+  },
+  "stockHistoryRelatedOrderLabel": "Related Order: #{orderId}",
+  "@stockHistoryRelatedOrderLabel": {
+    "placeholders": {
+      "orderId": {
+        "type": "String"
+      }
+    }
+  },
+  "manageVariantListScreenTitle": "Menu Item Variants",
+  "manageVariantListItemId": "ID: {id}",
+  "manageVariantListErrorLoading": "An error occurred while loading menu items.",
+  "@manageVariantListItemId": {
+    "placeholders": {
+      "id": {
+        "type": "String"
+      }
+    }
+  },
+  "pagerAssignmentScreenTitle": "Select Idle Pager",
+  "pagerAssignmentTooltipRefresh": "Refresh List",
+  "pagerAssignmentErrorNoAvailable": "No suitable idle pagers are currently available.",
+  "pagerAssignmentErrorNoRegistered": "No pagers are registered in the system.",
+  "pagerAssignmentErrorFetch": "Error fetching idle pagers: {error}",
+  "@pagerAssignmentErrorFetch": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "pagerAssignmentDefaultError": "No idle pagers are available to assign.",
+  "pagerAssignmentStatusLabel": "Status: {status}",
+  "@pagerAssignmentStatusLabel": {
+    "placeholders": {
+      "status": {
+        "type": "String"
+      }
+    }
+  },
+  "paymentProcessingScreenTitle": "Payment Process",
+  "paymentProcessingTableLabel": "Table: {tableNumber}",
+  "@paymentProcessingTableLabel": {
+    "placeholders": {
+      "tableNumber": {
+        "type": "String"
+      }
+    }
+  },
+  "paymentProcessingSelectTypeLabel": "Select Payment Type:",
+  "paymentProcessingSuccess": "Payment completed successfully!",
+  "paymentProcessingError": "An error occurred while completing the payment.",
+  "setupCategoriesErrorSelectKds": "Please select a KDS screen where the category will be displayed.",
+  "setupCategoriesSuccessAdded": "'{categoryName}' category was successfully added.",
+  "setupCategoriesDeleteDialogContent": "Are you sure you want to delete the '{categoryName}' category and (if any) all its subcategories? This action will remove the product links from the category.",
+  "setupCategoriesInfoDeleted": "The '{categoryName}' category was deleted.",
+  "setupCategoriesErrorDeleting": "Error deleting category: {error}",
+  "setupCategoriesDescription": "Organize your menu by categorizing your orders and products.",
+  "setupCategoriesMainCategory": "Main Category",
+  "setupCategoriesKdsLoading": "Loading KDS Screens...",
+  "setupCategoriesErrorDefineKdsFirst": "Please define a KDS screen first.",
+  "setupCategoriesLabelDisplayKds": "Display KDS Screen*",
+  "setupCategoriesHintSelectKds": "Select a KDS Screen",
+  "setupCategoriesValidatorSelectKds": "Please select a KDS screen.",
+  "setupCategoriesSelectImageLabel": "Select Category Image\n(Optional)",
+  "setupCategoriesAddButton": "Add Category",
+  "setupCategoriesAddedTitle": "Added Categories",
+  "setupCategoriesSubtitleParent": " (Parent Category: {parentName})",
+  "setupCategoriesSubtitleKdsName": " (KDS: {kdsName})",
+  "setupCategoriesSubtitleKdsId": " (KDS ID: {kdsId})",
+  "setupCategoriesKdsNotAssigned": "KDS Not Assigned",
+  "setupCategoriesDeleteTooltip": "Delete Category",
+  "setupCategoriesDeleteFallbackName": "this category",
+  "setupStockErrorEnterQuantity": "Quantity not entered for {itemName} - {variantName}.",
+  "setupStockErrorInvalidQuantity": "Please enter a valid quantity for {itemName} - {variantName}.",
+  "setupStockSuccessUpdated": "Stock for {itemName} - {variantName} updated: {quantity}",
+  "setupStockErrorUpdating": "Error updating stock for {itemName} - {variantName}: {error}",
+  "setupStockUnknownProduct": "Unknown Product",
+  "setupStockErrorNoVariants": "Please create products and variants in previous steps for stock tracking.",
+  "setupStockDescription": "Enter the initial stock quantities for your products. You can complete this step later.",
+  "setupStockNoStockEntered": "No stock has been entered yet.",
+  "setupStockLastUpdate": "Last Update: {date}",
+  "dateTimeFormat": "dd.MM.yy HH:mm",
+  "setupStockQuantityHint": "Quantity",
+  "setupKdsErrorLoadingExisting": "Could not load existing screens: {error}",
+  "setupKdsDefaultKitchen": "Kitchen",
+  "setupKdsDefaultBar": "Bar",
+  "setupKdsErrorEnterOneName": "Please enter at least one valid screen name.",
+  "setupKdsSuccessCreated": "{count} new KDS screen(s) created.",
+  "setupKdsDeleteDialogTitle": "Delete Screen",
+  "setupKdsDeleteDialogContent": "Are you sure you want to delete the screen named '{screenName}'?",
+  "setupKdsInfoDeleted": "'{screenName}' has been deleted.",
+  "setupKdsErrorDeleting": "Deletion error: {error}",
+  "setupKdsEditDialogTitle": "Edit Screen",
+  "setupKdsEditDialogNameLabel": "Screen Name",
+  "setupKdsEditDialogActiveLabel": "Active",
+  "setupKdsErrorUpdating": "Update error: {error}",
+  "setupKdsDescription": "How many screens do you want to divide your order process into? (e.g., Kitchen, Bar, Patisserie)",
+  "setupKdsNewLabel": "Number of New Screens*",
+  "setupKdsScreenNameLabel": "Screen {number} Name*",
+  "setupKdsScreenNameValidator": "Screen name cannot be empty.",
+  "setupKdsAddButton": "Add New Screen(s)",
+  "setupKdsExistingTitle": "Existing KDS Screens",
+  "setupKdsNoScreensYet": "No KDS screens have been created yet.",
+  "setupKdsStatusLabel": "Status: {status}",
+  "setupKdsStatusActive": "Active",
+  "setupKdsStatusInactive": "Inactive",
+  "setupTablesErrorLoadingExisting": "An error occurred while loading existing tables.",
+  "setupTablesSuccessCreated": "{count} new table(s) were successfully created.\nTotal tables: {total}",
+  "setupTablesDescription": "Create all your tables instantly by entering the total number of tables in your establishment. You can view the automatically generated QR menus for each table after completing the setup screen.",
+  "setupTablesLabelQuantity": "Number of Tables to Create",
+  "setupTablesButtonCreate": "Create Tables",
+  "setupTablesLoadingExisting": "Loading existing tables...",
+  "setupTablesTotalCreated": "Total Tables Created: {count}",
+  "setupMenuItemsErrorSelectCategory": "Please select a category for the product.",
+  "setupMenuItemsSuccessAdded": "The '{productName}' product was successfully added.",
+  "setupMenuItemsInfoDeleted": "The '{productName}' product was deleted.",
+  "setupMenuItemsDescription": "Add your menu items. You can add prices and variants in the next step.",
+  "setupMenuItemsNameLabel": "Product Name*",
+  "setupMenuItemsNameValidator": "Product name is required.",
+  "setupMenuItemsDescriptionLabel": "Description (Optional)",
+  "setupMenuItemsLoadingCategories": "Loading categories...",
+  "setupMenuItemsErrorCreateCategoryFirst": "Please create a category first or go back to the previous step.",
+  "setupMenuItemsSelectCategoryLabel": "Select Category*",
+  "setupMenuItemsSelectCategoryValidator": "Please select a category.",
+  "setupMenuItemsSelectImageLabel": "Select Product Image\n(Optional)",
+  "setupMenuItemsAddButton": "Add Product",
+  "setupMenuItemsAddedTitle": "Added Products",
+  "setupMenuItemsNoCategory": "Uncategorized",
+  "setupMenuItemsDeleteTooltip": "Delete Product",
+  "setupVariantsErrorLoadingMenuItems": "Error loading menu items: {error}",
+  "setupVariantsErrorLoadingVariants": "Error loading variants: {error}",
+  "setupVariantsErrorSelectMainProductFirst": "Please select a main product first.",
+  "setupVariantsSuccessAdded": "The '{variantName}' variant was successfully added.",
+  "setupVariantsLoadingMainProducts": "Loading main products...",
+  "setupVariantsErrorCreateMainProductFirst": "Please create a main product first (Previous Step).",
+  "setupVariantsLabelSelectMainProduct": "Main Product to Add Variant to*",
+  "setupVariantsValidatorSelectMainProduct": "Please select a main product.",
+  "setupVariantsTitleAddNew": "Add New Variant: {productName}",
+  "setupVariantsLabelVariantName": "Variant Name* (e.g., Large, Spicy)",
+  "setupVariantsLabelSelectImage": "Select Variant Image\n(Optional)",
+  "setupVariantsTitleAddedFor": "Variants Added for {productName}",
+  "setupVariantsLoading": "Loading variants...",
+  "setupVariantsHintSelectProductToView": "Select a main product to view its variants.",
+  "setupVariantsNoVariantsForProduct": "No variants have been added for {productName} yet.",
+  "homeMenuStaffSchedule": "Staff Schedule",
+  "homeMenuKds": "Kitchen Display System",
+  "homeMenuKdsSettings": "KDS Settings",
+  "homeMenuGeneralReport": "General Reports",
+  "homeMenuStaffPerformance": "Staff Performance",
+  "homeMenuCreditSales": "Credit Sales",
+  "homeMenuStaffManagement": "Staff Management",
+  "homeMenuMenuItems": "Menu Items",
+  "homeMenuProductVariants": "Product Variants",
+  "homeMenuStockManagement": "Stock Management",
+  "homeMenuTableManagement": "Table Management",
+  "homeMenuCategoryManagement": "Category Management",
+  "homeMenuCampaignManagement": "Campaign Management",
+  "homeMenuPaidOrders": "Paid Orders",
+  "homeMenuActiveTableOrders": "Active Table Orders",
+  "homeMenuActiveTakeawayOrders": "Active Takeaway Orders",
+  "homeMenuWaitingCustomers": "Waiting Customers",
+  "homeMenuPagerManagement": "Pager Management",
+  "homeMenuPrinterSettings": "Printer Settings",
+  "homeMenuAccountSettings": "Account Settings",
+  "dialogTransferErrorNoEmptyTables": "No empty tables suitable for transfer were found!",
+  "dialogTransferTitle": "Table Transfer",
+  "dialogTransferContent": "Transfer the order from table {tableNumber}?",
+  "@dialogTransferContent": {
+    "placeholders": {
+      "tableNumber": {
+        "type": "String"
+      }
+    }
+  },
+  "dialogTransferDropdownLabel": "Select New Table",
+  "dialogTransferButtonTransfer": "Transfer",
+  "takeawayCardErrorItemPickup": "Could not mark item as picked up (Code: {statusCode})",
+  "@takeawayCardErrorItemPickup": {
+    "placeholders": {
+      "statusCode": {
+        "type": "String"
+      }
+    }
+  },
+  "takeawayCardErrorItemPickupGeneric": "An error occurred while picking up the item: {error}",
+  "@takeawayCardErrorItemPickupGeneric": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "takeawayCardTooltipDelivered": "Delivered to Customer",
+  "takeawayCardTooltipMarkAsPickedUp": "Mark as Picked Up",
+  "takeawayCardTooltipDeliverToCustomer": "Deliver to Customer",
+  "kdsStatusWaitingForApproval": "Waiting for Approval",
+  "takeawayCardStatusSyncPending": "Awaiting Synchronization...",
+  "buttonApprove": "Approve",
+  "buttonReject": "Reject",
+  "takeawayCardTooltipPagerInfo": "Assigned Pager: {pagerInfo}",
+  "@takeawayCardTooltipPagerInfo": {
+    "placeholders": {
+      "pagerInfo": {
+        "type": "String"
+      }
+    }
+  },
+  "takeawayCardTooltipAssignPager": "Assign Pager",
+  "paymentTypeCredit": "Credit",
+  "waitingCustomerDialogEditTitle": "Edit Customer",
+  "waitingCustomerDialogNameLabel": "Name Surname*",
+  "waitingCustomerDialogNameValidator": "Name cannot be empty",
+  "waitingCustomerDialogPhoneLabel": "Phone",
+  "waitingCustomerDialogPartySizeLabel": "Party Size*",
+  "waitingCustomerDialogPartySizeValidatorRequired": "Party size cannot be empty",
+  "waitingCustomerDialogPartySizeValidatorPositive": "Enter a valid positive number",
+  "waitingCustomerDialogNotesLabel": "Notes (Optional)",
+  "waitingCustomerDialogWaitingLabel": "Waiting",
+  "waitingCustomerDialogDeleteTitle": "Delete Customer",
+  "waitingCustomerDialogDeleteContent": "Are you sure you want to delete the customer with ID: {customerId}?",
+  "@waitingCustomerDialogDeleteContent": {
+    "placeholders": {
+      "customerId": {
+        "type": "String"
+      }
+    }
+  },
+  "addCustomerFormNameLabel": "Name Surname*",
+  "addCustomerFormAddButton": "Add Customer",
+  "waitingCustomerTableWaitingTime": "{minutes} min",
+  "@waitingCustomerTableWaitingTime": {
+    "placeholders": {
+      "minutes": {
+        "type": "String"
+      }
+    }
+  },
+  "waitingCustomerTableNoCustomers": "No waiting customers.",
+  "waitingCustomerTableColOrder": "Order",
+  "waitingCustomerTableColName": "Name",
+  "waitingCustomerTableColPhone": "Phone",
+  "waitingCustomerTableColWaitingTime": "Waiting\nTime",
+  "waitingCustomerTableColActions": "Actions",
+  "multiDayShiftDialogTitle": "Assign for {count} Days",
+  "@multiDayShiftDialogTitle": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "multiDayShiftDialogSelectedDatesLabel": "Selected Dates: ",
+  "multiDayShiftDialogStep1": "1. Select Staff:",
+  "multiDayShiftDialogStep2": "2. Select Shift:",
+  "multiDayShiftDialogHint": "Select a shift template...",
+  "multiDayShiftDialogValidator": "Please select a shift.",
+  "waitingCustomerButtonLabel": "Waiting ({count} people)",
+  "@waitingCustomerButtonLabel": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationEventGuestOrderPendingApproval": "Guest Order Pending Approval",
+  "notificationEventOrderPendingApproval": "Registered User Order Pending Approval",
+  "notificationEventExistingOrderNeedsReapproval": "Existing Order Needs Reapproval",
+  "notificationEventNewApprovedOrder": "New Approved Order",
+  "notificationEventOrderApprovedForKitchen": "Order Sent to Kitchen",
+  "notificationEventOrderPreparingUpdate": "Order is Being Prepared",
+  "notificationEventOrderReadyForPickupUpdate": "Order is Ready in the Kitchen",
+  "notificationEventOrderPickedUpByWaiter": "Order Picked Up by Waiter",
+  "notificationEventOrderOutForDeliveryUpdate": "Order Ready for Delivery",
+  "notificationEventOrderItemDelivered": "Item Delivered",
+  "notificationEventOrderFullyDelivered": "Order Fully Delivered",
+  "notificationEventOrderCompletedUpdate": "Order Completed",
+  "notificationEventOrderCancelledUpdate": "Order Cancelled",
+  "notificationEventOrderRejectedUpdate": "Order Rejected",
+  "notificationEventOrderUpdated": "Order Updated",
+  "notificationEventOrderItemAdded": "Item Added to Order",
+  "notificationEventOrderItemRemoved": "Item Removed from Order",
+  "notificationEventOrderItemUpdated": "Order Item Updated",
+  "notificationEventOrderTransferred": "Order Transferred to Another Table",
+  "notificationEventWaitingCustomerAdded": "New Waiting Customer",
+  "notificationEventWaitingCustomerUpdated": "Waiting Customer Update",
+  "notificationEventWaitingCustomerRemoved": "Waiting Customer Removed",
+  "notificationEventStockAdjusted": "Stock Adjusted",
+  "notificationEventPagerStatusUpdated": "Pager Status Updated",
+  "orderStatusPendingApproval": "Pending Approval",
+  "orderStatusApproved": "Approved",
+  "orderStatusPreparing": "Preparing",
+  "orderStatusReadyForPickup": "Ready for Pickup",
+  "orderStatusReadyForDelivery": "Ready for Delivery",
+  "orderStatusCompleted": "Completed",
+  "orderStatusPendingSync": "Pending Synchronization",
+  "unknown": "Unknown",
+  "creditPaymentTitle": "Credit Record",
+  "creditPaymentValidationError": "Name and phone fields cannot be left blank.",
+  "creditPaymentSuccess": "Credit record created successfully!",
+  "creditPaymentErrorWithDetails": "An error occurred during credit record creation: {statusCode} - {details}",
+  "creditPaymentCustomerNameLabel": "Customer Name Surname*",
+  "creditPaymentPhoneLabel": "Phone*",
+  "creditPaymentNotesLabel": "Notes (Optional)",
+  "creditPaymentSaveButton": "Save as Credit",
+  "orderItemQuantity": "Quantity: {count}",
+  "@orderItemQuantity": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "orderItemExtrasLabel": "Extras:",
+  "orderItemUnknownExtra": "Unknown Extra",
+  "orderItemTableOwner": "Table Owner: {owner}",
+  "@orderItemTableOwner": {
+    "placeholders": {
+      "owner": {
+        "type": "String"
+      }
+    }
+  },
+  "orderItemStatusDelivered": "Delivered",
+  "orderItemTooltipAddExtra": "Add Extra",
+  "orderItemTooltipRemove": "Remove",
+  "kdsStatusDisplayNoActionNeeded": "{kdsName}: No Action Needed",
+  "@kdsStatusDisplayNoActionNeeded": {
+    "description": "Title indicating that no action is required for this order on the KDS screen.",
+    "placeholders": {
+      "kdsName": {
+        "type": "String",
+        "example": "Kitchen"
+      }
+    }
+  },
+  "kdsStatusDisplaySentToKitchen": "{kdsName}: Sent to Kitchen",
+  "@kdsStatusDisplaySentToKitchen": {
+    "description": "Title indicating that the order has been newly sent to the relevant KDS screen.",
+    "placeholders": {
+      "kdsName": {
+        "type": "String",
+        "example": "Kitchen"
+      }
+    }
+  },
+  "kdsStatusDisplayPreparing": "{kdsName}: {readyCount}/{totalCount} item(s) are being prepared",
+  "@kdsStatusDisplayPreparing": {
+    "description": "Title showing the number of items in the preparation phase on the KDS screen.",
+    "placeholders": {
+      "kdsName": {
+        "type": "String",
+        "example": "Bar"
+      },
+      "readyCount": {
+        "type": "String",
+        "example": "1"
+      },
+      "totalCount": {
+        "type": "String",
+        "example": "3"
+      }
+    }
+  },
+  "kdsStatusDisplayReadyForPickup": "{kdsName}: All items are ready, awaiting waiter",
+  "@kdsStatusDisplayReadyForPickup": {
+    "description": "Title indicating that all items on the KDS screen are ready and waiting to be picked up by the waiter.",
+    "placeholders": {
+      "kdsName": {
+        "type": "String",
+        "example": "Kitchen"
+      }
+    }
+  },
+  "kdsStatusDisplayAllPickedUp": "{kdsName}: All items picked up",
+  "@kdsStatusDisplayAllPickedUp": {
+    "description": "Title indicating that all items on the KDS screen have been picked up by the waiter.",
+    "placeholders": {
+      "kdsName": {
+        "type": "String",
+        "example": "Kitchen"
+      }
+    }
+  },
+  "kdsStatusDisplayDefault": "{kdsName}: Status Unknown",
+  "@kdsStatusDisplayDefault": {
+    "description": "Default status text for the KDS title.",
+    "placeholders": {
+      "kdsName": {
+        "type": "String",
+        "example": "Kitchen"
+      }
+    }
+  },
+  "waitingCustomerErrorFetchList": "Could not fetch customer list ({statusCode}) - {details}",
+  "@waitingCustomerErrorFetchList": {
+    "placeholders": {
+      "statusCode": {
+        "type": "String"
+      },
+      "details": {
+        "type": "String"
+      }
+    }
+  },
+  "waitingCustomerErrorFetchListGeneric": "Error fetching customer list: {error}",
+  "@waitingCustomerErrorFetchListGeneric": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "waitingCustomerErrorNameEmpty": "Name cannot be empty.",
+  "waitingCustomerErrorPartySizePositive": "Party size must be a positive value.",
+  "waitingCustomerSuccessAdd": "Customer added successfully.",
+  "waitingCustomerErrorAdd": "Error adding customer: {statusCode} - {details}",
+  "@waitingCustomerErrorAdd": {
+    "placeholders": {
+      "statusCode": {
+        "type": "String"
+      },
+      "details": {
+        "type": "String"
+      }
+    }
+  },
+  "waitingCustomerErrorAddGeneric": "Error adding customer: {error}",
+  "@waitingCustomerErrorAddGeneric": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "waitingCustomerSuccessUpdate": "Customer updated successfully.",
+  "waitingCustomerErrorUpdate": "Error updating customer: {statusCode} - {details}",
+  "@waitingCustomerErrorUpdate": {
+    "placeholders": {
+      "statusCode": {
+        "type": "String"
+      },
+      "details": {
+        "type": "String"
+      }
+    }
+  },
+  "waitingCustomerErrorUpdateGeneric": "Error updating customer: {error}",
+  "@waitingCustomerErrorUpdateGeneric": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "waitingCustomerInfoDeleting": "Deleting customer...",
+  "waitingCustomerSuccessDelete": "Customer deleted successfully.",
+  "waitingCustomerErrorDelete": "Error deleting customer: {statusCode} - {details}",
+  "@waitingCustomerErrorDelete": {
+    "placeholders": {
+      "statusCode": {
+        "type": "String"
+      },
+      "details": {
+        "type": "String"
+      }
+    }
+  },
+  "waitingCustomerErrorDeleteGeneric": "Error deleting customer: {error}",
+  "@waitingCustomerErrorDeleteGeneric": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "pagerServiceErrorFetch": "Could not fetch pagers: {statusCode}",
+  "@pagerServiceErrorFetch": {
+    "placeholders": {
+      "statusCode": {
+        "type": "String"
+      }
+    }
+  },
+  "pagerServiceErrorFetchGeneric": "Error fetching pagers: {error}",
+  "@pagerServiceErrorFetchGeneric": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "pagerServiceErrorCreate": "Could not create pager: {statusCode} - {details}",
+  "@pagerServiceErrorCreate": {
+    "placeholders": {
+      "statusCode": {
+        "type": "String"
+      },
+      "details": {
+        "type": "String"
+      }
+    }
+  },
+  "pagerServiceErrorCreateGeneric": "Error creating pager: {error}",
+  "@pagerServiceErrorCreateGeneric": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "pagerServiceErrorUpdateNoData": "No data found to update.",
+  "pagerServiceErrorUpdate": "Could not update pager: {statusCode} - {details}",
+  "@pagerServiceErrorUpdate": {
+    "placeholders": {
+      "statusCode": {
+        "type": "String"
+      },
+      "details": {
+        "type": "String"
+      }
+    }
+  },
+  "pagerServiceErrorUpdateGeneric": "Error updating pager: {error}",
+  "@pagerServiceErrorUpdateGeneric": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "pagerServiceErrorDelete": "Could not delete pager: {statusCode}",
+  "@pagerServiceErrorDelete": {
+    "placeholders": {
+      "statusCode": {
+        "type": "String"
+      }
+    }
+  },
+  "pagerServiceErrorDeleteGeneric": "Error deleting pager: {error}",
+  "@pagerServiceErrorDeleteGeneric": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "bleStatusNotConnected": "Not connected",
+  "bleStatusUnsupportedWeb": "Bluetooth LE is not supported on web platform.",
+  "bleStatusUnsupportedDevice": "Bluetooth LE is not supported on this device.",
+  "bleStatusOn": "Bluetooth is on, device is discoverable.",
+  "bleStatusOff": "Bluetooth is off.",
+  "bleStatusPermissionsRequired": "Bluetooth permissions required.",
+  "bleStatusScanning": "Scanning for pagers...",
+  "bleStatusScanError": "Scan error: {error}",
+  "@bleStatusScanError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "bleStatusScanStopped": "Scan stopped.",
+  "bleStatusDeviceFound": "{count} devices found.",
+  "@bleStatusDeviceFound": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "bleStatusDeviceNotFound": "Device not found.",
+  "bleStatusConnectingTo": "Connecting to {deviceName}...",
+  "@bleStatusConnectingTo": {
+    "placeholders": {
+      "deviceName": {
+        "type": "String"
+      }
+    }
+  },
+  "bleStatusConnectedTo": "Connected to {deviceName}.",
+  "@bleStatusConnectedTo": {
+    "placeholders": {
+      "deviceName": {
+        "type": "String"
+      }
+    }
+  },
+  "bleStatusCouldNotConnectTo": "Could not connect to {deviceName}.",
+  "@bleStatusCouldNotConnectTo": {
+    "placeholders": {
+      "deviceName": {
+        "type": "String"
+      }
+    }
+  },
+  "bleStatusDisconnectedFrom": "Disconnected from {deviceName}.",
+  "@bleStatusDisconnectedFrom": {
+    "placeholders": {
+      "deviceName": {
+        "type": "String"
+      }
+    }
+  },
+  "bleStatusDisconnectError": "Error while disconnecting.",
+  "bleStatusDiscoveringServices": "Discovering services and characteristics...",
+  "bleStatusDiscoveringServicesError": "Service discovery error.",
+  "bleStatusCharacteristicFound": "Command characteristic found. Device is ready.",
+  "bleStatusCharacteristicNotFound": "Appropriate service/characteristic not found.",
+  "bleStatusCommandSent": "Command sent.",
+  "bleStatusCommandError": "Command sending error.",
+  "bleStatusCommandFailed": "Command failed to send: No connection.",
+  "bleStatusPreparingNotificationFor": "Preparing notification for pager ID '{pagerId}'...",
+  "@bleStatusPreparingNotificationFor": {
+    "placeholders": {
+      "pagerId": {
+        "type": "String"
+      }
+    }
+  },
+  "bleStatusCouldNotConnectForNotification": "Could not connect to or device is not ready for pager ID '{pagerId}'.",
+  "@bleStatusCouldNotConnectForNotification": {
+    "placeholders": {
+      "pagerId": {
+        "type": "String"
+      }
+    }
+  },
+  "bleStatusNotificationSent": "Notification sent to device ID '{pagerId}'.",
+  "@bleStatusNotificationSent": {
+    "placeholders": {
+      "pagerId": {
+        "type": "String"
+      }
+    }
+  },
+  "bleStatusNotificationError": "Error while sending notification to device ID '{pagerId}'.",
+  "@bleStatusNotificationError": {
+    "placeholders": {
+      "pagerId": {
+        "type": "String"
+      }
+    }
+  },
+  "bleStatusDeviceNotFoundAfterScan": "Pager ID '{pagerId}' not found after scan.",
+  "@bleStatusDeviceNotFoundAfterScan": {
+    "placeholders": {
+      "pagerId": {
+        "type": "String"
+      }
+    }
+  },
+  "bleDeviceNameUnknown": "Unknown Device",
+  "bleDeviceNameSearchedById": "Searched by ID",
+  "bleDeviceNameNotFound": "NOT FOUND",
+  "language": "Application Language",
+  "unknownErrorOccurred": "An unknown error occurred.",
+  "addOrderItemDialogSelectionError": "Please make the necessary selections.",
+  "variantSelectionDialogTitle": "Variant Selection: {itemName}",
+  "@variantSelectionDialogTitle": {
+    "placeholders": {
+      "itemName": {
+        "type": "String"
+      }
+    }
+  },
+  "variantSelectionDialogTableOwnerLabel": "Table Owner",
+  "variantSelectionDialogTableOwnerValidator": "Please select a table owner.",
+  "variantSelectionDialogVariantLabel": "Variant",
+  "variantSelectionDialogVariantValidator": "Please select a variant.",
+  "variantSelectionDialogExtrasLabel": "Extra Options:",
+  "tooltipDecrement": "Decrement",
+  "variantSelectionDialogQuantity": "{quantity} Pcs",
+  "@variantSelectionDialogQuantity": {
+    "placeholders": {
+      "quantity": {
+        "type": "String"
+      }
+    }
+  },
+  "tooltipIncrement": "Increment",
+  "variantSelectionDialogAddToCartButton": "Add to Cart",
+  "tableOrderDetailsModalUpdateError": "Could not update order status.",
+  "newOrderNotificationTitleNew": "New Order!",
+  "newOrderNotificationTitleUpdate": "Order Updated",
+  "newOrderNotificationDefaultMessage": "A new transaction was made.",
+  "newOrderNotificationUpdateTable": "'{itemName}' added to order for table {tableNumber}.",
+  "@newOrderNotificationUpdateTable": {
+    "placeholders": {
+      "itemName": {
+        "type": "String"
+      },
+      "tableNumber": {
+        "type": "String"
+      }
+    }
+  },
+  "newOrderNotificationUpdateTakeaway": "'{itemName}' added to takeaway order.",
+  "@newOrderNotificationUpdateTakeaway": {
+    "placeholders": {
+      "itemName": {
+        "type": "String"
+      }
+    }
+  },
+  "newOrderNotificationUpdateTakeawayWithCustomer": "'{itemName}' added to takeaway order ({customerName}).",
+  "@newOrderNotificationUpdateTakeawayWithCustomer": {
+    "placeholders": {
+      "itemName": {
+        "type": "String"
+      },
+      "customerName": {
+        "type": "String"
+      }
+    }
+  },
+  "newOrderNotificationUpdateGeneric": "'{itemName}' added to the order.",
+  "@newOrderNotificationUpdateGeneric": {
+    "placeholders": {
+      "itemName": {
+        "type": "String"
+      }
+    }
+  },
+  "newOrderNotificationNewOrderTable": "New order received for table {tableNumber}. First item: '{itemName}'.",
+  "@newOrderNotificationNewOrderTable": {
+    "placeholders": {
+      "tableNumber": {
+        "type": "String"
+      },
+      "itemName": {
+        "type": "String"
+      }
+    }
+  },
+  "newOrderNotificationNewOrderTakeaway": "New takeaway order received. First item: '{itemName}'.",
+  "@newOrderNotificationNewOrderTakeaway": {
+    "placeholders": {
+      "itemName": {
+        "type": "String"
+      }
+    }
+  },
+  "newOrderNotificationNewOrderTakeawayWithCustomer": "New takeaway order received ({customerName}). First item: '{itemName}'.",
+  "@newOrderNotificationNewOrderTakeawayWithCustomer": {
+    "placeholders": {
+      "customerName": {
+        "type": "String"
+      },
+      "itemName": {
+        "type": "String"
+      }
+    }
+  },
+  "newOrderNotificationNewOrderGeneric": "New order received. First item: '{itemName}'.",
+  "@newOrderNotificationNewOrderGeneric": {
+    "placeholders": {
+      "itemName": {
+        "type": "String"
+      }
+    }
+  },
+  "newOrderNotificationOrderId": "Order ID: {orderId}",
+  "@newOrderNotificationOrderId": {
+    "placeholders": {
+      "orderId": {
+        "type": "String"
+      }
+    }
+  },
+  "newOrderNotificationTableNumber": "Table No: {tableNumber}",
+  "@newOrderNotificationTableNumber": {
+    "placeholders": {
+      "tableNumber": {
+        "type": "String"
+      }
+    }
+  },
+  "newOrderNotificationCustomerName": "Customer: {customerName}",
+  "@newOrderNotificationCustomerName": {
+    "placeholders": {
+      "customerName": {
+        "type": "String"
+      }
+    }
+  },
+  "okButtonText": "OK",
+  "categoryAll": "All",
+  "menuNoProductsInCategory": "No products found in the selected category.",
+  "menuVariantsAvailable": "Variants available",
+  "basketTitle": "Cart",
+  "removeFromBasketTooltip": "Remove from Cart",
+  "tableTypeModalOwnersTitle": "Enter Table Owners (Min 2)",
+  "continueButtonText": "Continue",
+  "kitchenDialogTitleDefault": "New Order at the Kitchen!",
+  "kitchenDialogTitleWithKds": "New Order Sent to {kdsName}!",
+  "@kitchenDialogTitleWithKds": {
+    "placeholders": {
+      "kdsName": {
+        "type": "String"
+      }
+    }
+  },
+  "kitchenDialogMessageDefault": "A new order has been confirmed and sent to the kitchen!",
+  "kitchenDialogMessageTable": "A new order for table {tableNumber} has been confirmed and sent to the kitchen.",
+  "@kitchenDialogMessageTable": {
+    "placeholders": {
+      "tableNumber": {
+        "type": "String"
+      }
+    }
+  },
+  "kitchenDialogMessageTakeawayCustomer": "Takeaway order for {customerName} has been confirmed and sent to the kitchen.",
+  "@kitchenDialogMessageTakeawayCustomer": {
+    "placeholders": {
+      "customerName": {
+        "type": "String"
+      }
+    }
+  },
+  "kitchenDialogMessageTakeawayId": "Takeaway order (ID: {orderId}) has been confirmed and sent to the kitchen.",
+  "@kitchenDialogMessageTakeawayId": {
+    "placeholders": {
+      "orderId": {
+        "type": "String"
+      }
+    }
+  },
+  "tableCellItemPickupErrorWithDetails": "Could not pick up item: {statusCode} - {details}",
+  "@tableCellItemPickupErrorWithDetails": {
+    "placeholders": {
+      "statusCode": {
+        "type": "String"
+      },
+      "details": {
+        "type": "String"
+      }
+    }
+  },
+  "tableCellItemPickupErrorGeneric": "Item pickup error: {error}",
+  "@tableCellItemPickupErrorGeneric": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "tableCellDeliverErrorWithStatus": "Error during delivery: {statusCode}",
+  "@tableCellDeliverErrorWithStatus": {
+    "placeholders": {
+      "statusCode": {
+        "type": "String"
+      }
+    }
+  },
+  "tableCellDeliverErrorGeneric": "Delivery error: {error}",
+  "@tableCellDeliverErrorGeneric": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "tableCellDefaultTitle": "Table {tableNumber}",
+  "@tableCellDefaultTitle": {
+    "placeholders": {
+      "tableNumber": {
+        "type": "String"
+      }
+    }
+  },
+  "tableCellTooltipDeliveredToCustomer": "Delivered to Customer",
+  "tableCellTooltipMarkAsPickedUpByWaiter": "Mark as Picked Up by Waiter",
+  "tableCellTooltipDeliverToCustomer": "Deliver to Customer",
+  "kdsStatusPreparing": "Preparing at the Kitchen",
+  "tableCellTooltipWaitingForKitchen": "Waiting for Kitchen Confirmation",
+  "newItemSuffix": " (New)",
+  "tableCellNoOrderItems": "No Order Items",
+  "addOrEditButton": "Add/Edit",
+  "addProductOrEditTooltip": "Add / Edit Product",
+  "otherActionsTooltip": "Other Actions",
+  "transferTableMenuItem": "Transfer Table",
+  "cancelOrderMenuItem": "Cancel Order",
+  "readyForPickupTitle": "Kitchen Ready!",
+  "readyForPickupMessageDefault": "An order is ready at the kitchen, waiting for the waiter!",
+  "readyForPickupMessageTable": "Order for table {tableNumber} is ready at the kitchen, waiting to be picked up by the waiter.",
+  "@readyForPickupMessageTable": {
+    "placeholders": {
+      "tableNumber": {
+        "type": "String"
+      }
+    }
+  },
+  "readyForPickupMessageTakeawayCustomer": "Takeaway order for {customerName} is ready at the kitchen, waiting to be picked up by the waiter.",
+  "@readyForPickupMessageTakeawayCustomer": {
+    "placeholders": {
+      "customerName": {
+        "type": "String"
+      }
+    }
+  },
+  "readyForPickupMessageTakeawayId": "Takeaway order (ID: {orderId}) is ready at the kitchen, waiting to be picked up by the waiter.",
+  "@readyForPickupMessageTakeawayId": {
+    "placeholders": {
+      "orderId": {
+        "type": "String"
+      }
+    }
+  },
+  "kdsCouldNotMarkPreparing": "Could not mark item as preparing: {statusCode}",
+  "@kdsCouldNotMarkPreparing": {
+    "placeholders": {
+      "statusCode": {
+        "type": "String"
+      }
+    }
+  },
+  "kdsCouldNotMarkReady": "Could not mark item as ready: {statusCode}",
+  "@kdsCouldNotMarkReady": {
+    "placeholders": {
+      "statusCode": {
+        "type": "String"
+      }
+    }
+  },
+  "kdsNoItemsForKds": "No items for this KDS.",
+  "kdsTooltipStartPreparing": "Start Preparing",
+  "kdsTooltipMarkAsReady": "Mark as Ready",
+  "infoTransferringTable": "Transferring table...",
+  "infoTransferSuccess": "Table transfer successful.",
+  "errorTransferringTable": "Error during table transfer: {statusCode} - {details}",
+  "@errorTransferringTable": {
+    "placeholders": {
+      "statusCode": {
+        "type": "String"
+      },
+      "details": {
+        "type": "String"
+      }
+    }
+  },
+  "errorTransferGeneric": "Transfer error: {error}",
+  "@errorTransferGeneric": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "infoCancellingOrder": "Cancelling order...",
+  "errorUnknownServer": "Unknown server error.",
+  "errorDuringCancellation": "Error during cancellation.",
+  "errorCancellingOrderWithDetails": "Error during order cancellation: {statusCode} - {details}",
+  "@errorCancellingOrderWithDetails": {
+    "placeholders": {
+      "statusCode": {
+        "type": "String"
+      },
+      "details": {
+        "type": "String"
+      }
+    }
+  },
+  "errorCancellationGeneric": "Cancellation error: {error}",
+  "@errorCancellationGeneric": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "infoApprovingOrder": "Approving order...",
+  "infoGuestOrderApproved": "Guest order approved.",
+  "errorApprovingOrder": "Error during order approval: {statusCode} - {details}",
+  "@errorApprovingOrder": {
+    "placeholders": {
+      "statusCode": {
+        "type": "String"
+      },
+      "details": {
+        "type": "String"
+      }
+    }
+  },
+  "errorApprovalGeneric": "Order approval error: {error}",
+  "@errorApprovalGeneric": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "infoRejectingOrder": "Rejecting order...",
+  "infoGuestOrderRejected": "Guest order rejected.",
+  "errorRejectingOrder": "Error during order rejection: {statusCode} - {details}",
+  "@errorRejectingOrder": {
+    "placeholders": {
+      "statusCode": {
+        "type": "String"
+      },
+      "details": {
+        "type": "String"
+      }
+    }
+  },
+  "errorRejectionGeneric": "Order rejection error: {error}",
+  "@errorRejectionGeneric": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "orderItemLineTotal": "Line Total: {amount} {currency}",
+  "@orderItemLineTotal": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "currency": {
+        "type": "String"
+      }
+    }
+  },
+  "pendingOrderCardSubtitle": "Total Amount: {formattedAmount}",
+  "@pendingOrderCardSubtitle": {
+    "description": "Subtitle showing the total amount on the pending order card.",
+    "placeholders": {
+      "formattedAmount": {
+        "type": "String",
+        "example": "₺45.50"
+      }
+    }
+  },
+  "paymentProcessingAmountLabel": "Amount to Pay: {formattedAmount}",
+  "@paymentProcessingAmountLabel": {
+    "description": "Total amount to be paid on the payment screen.",
+    "placeholders": {
+      "formattedAmount": {
+        "type": "String",
+        "example": "₺120,00"
+      }
+    }
+  },
+  "staffPerformanceTurnoverLabel": "Sales Turnover: {amount} {currency}",
+  "@staffPerformanceTurnoverLabel": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "currency": {
+        "type": "String"
+      }
+    }
+  },
+  "creditSalesCardTotalAmount": "Total Amount: {amount} {currency}",
+  "@creditSalesCardTotalAmount": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "currency": {
+        "type": "String"
+      }
+    }
+  },
+  "campaignItemDetails": "Qty: {quantity} - Normal Price: {price} {currency}",
+  "@campaignItemDetails": {
+    "placeholders": {
+      "quantity": {
+        "type": "String"
+      },
+      "price": {
+        "type": "String"
+      },
+      "currency": {
+        "type": "String"
+      }
+    }
+  },
+  "campaignContentTitle": "Campaign Content (Normal Total: {total} {currency})",
+  "@campaignContentTitle": {
+    "placeholders": {
+      "total": {
+        "type": "String"
+      },
+      "currency": {
+        "type": "String"
+      }
+    }
+  },
+  "variantPriceDisplay": "{name} - {price} {currency}",
+  "@variantPriceDisplay": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "price": {
+        "type": "String"
+      },
+      "currency": {
+        "type": "String"
+      }
+    }
+  },
+  "orderCardSubtitleDetails": "Amount: {totalAmount}\nPayment: {paymentType}\nDate: {displayDate}\nTime: {displayTime}",
+  "@orderCardSubtitleDetails": {
+    "placeholders": {
+      "totalAmount": {
+        "type": "String"
+      },
+      "paymentType": {
+        "type": "String"
+      },
+      "displayDate": {
+        "type": "String"
+      },
+      "displayTime": {
+        "type": "String"
+      }
+    }
+  },
+  "paymentModalTotalAmount": "Total: {amount} {currency} ({paymentType})",
+  "@paymentModalTotalAmount": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "currency": {
+        "type": "String"
+      },
+      "paymentType": {
+        "type": "String"
+      }
+    }
+  },
+  "newOrderBasketTotal": "Cart Total: {totalAmount} ({currency})",
+  "@newOrderBasketTotal": {
+    "placeholders": {
+      "totalAmount": {
+        "type": "String"
+      },
+      "currency": {
+        "type": "String"
+      }
+    }
+  },
+  "newOrderBasketTotalLabel": "Total: {formattedAmount}",
+  "@newOrderBasketTotalLabel": {
+    "description": "Label showing the total of the new order cart.",
+    "placeholders": {
+      "formattedAmount": {
+        "type": "String",
+        "example": "₺110,00"
+      }
+    }
+  },
+  "businessSettingsTitle": "Business Settings",
+  "homeMenuBusinessSettings": "Business Settings",
+  "businessSettingsCurrencyLabel": "Business Currency",
+  "businessSettingsSuccess": "Settings saved successfully.",
+  "businessSettingsError": "Error saving settings: {error}",
+  "@businessSettingsError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "permissionViewReports": "View Reports",
+  "permissionManageCreditSales": "Manage Credit Sales",
+  "permissionManageMenu": "Manage Menu",
+  "permissionManageStock": "Manage Stock",
+  "permissionManageTables": "Manage Tables",
+  "permissionViewCompletedOrders": "View Completed Orders",
+  "permissionViewPendingOrders": "View Pending Orders",
+  "permissionTakeOrders": "Take Orders",
+  "permissionManageStaff": "Manage Staff",
+  "permissionManageWaitingCustomers": "Manage Waiting Customers",
+  "permissionViewAccountSettings": "View Account Settings",
+  "permissionManageKds": "Manage Kitchen Display System",
+  "permissionManageKdsScreens": "Manage KDS Screen Definitions",
+  "permissionManagePagers": "Manage Pagers",
+  "permissionManageCampaigns": "Manage Campaigns",
+  "buttonSave": "Save",
+  "logout": "Logout",
+  "errorLoadingInitialData": "Error loading initial data: {details}",
+  "@errorLoadingInitialData": {
+    "placeholders": {
+      "details": {
+        "type": "String"
+      }
+    }
+  },
+  "errorFirebaseUploadFailed": "Firebase file upload failed.",
+  "categoryNameLabelRequired": "Category Name*",
+  "categoryNameValidator": "Please enter a category name.",
+  "parentCategoryLabel": "Parent Category",
+  "dialogDeleteVariantContent": "Are you sure you want to delete the variant '{variantName}'?",
+  "@dialogDeleteVariantContent": {
+    "placeholders": {
+      "variantName": {
+        "type": "String"
+      }
+    }
+  },
+  "currencyTL": "₺",
+  "currencySymbol": "₺",
+  "editOrderErrorFetchingBusinessName": "Error fetching business name: {error}",
+  "@editOrderErrorFetchingBusinessName": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "editOrderErrorLoadingCategories": "An error occurred while loading categories.",
+  "editOrderErrorAddingProductWithStatus": "An error occurred while adding product (Code: {statusCode}): {details}",
+  "@editOrderErrorAddingProductWithStatus": {
+    "placeholders": {
+      "statusCode": {
+        "type": "String"
+      },
+      "details": {
+        "type": "String"
+      }
+    }
+  },
+  "editOrderErrorUpdatingPagerStatus": "Error updating pager status: {error}",
+  "@editOrderErrorUpdatingPagerStatus": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "editOrderErrorUpdatingPagerOnCancel": "Error updating pager on order cancellation: {error}",
+  "@editOrderErrorUpdatingPagerOnCancel": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "editOrderPrintCustomerReceipt": "Print Customer Receipt",
+  "editOrderPrintKitchenTicket": "Print Kitchen Ticket",
+  "editOrderTotal": "Grand Total: {totalAmount}",
+  "@editOrderTotal": {
+    "placeholders": {
+      "totalAmount": {
+        "type": "String"
+      }
+    }
+  },
+  "yourBusiness": "Your Business",
+  "orderTypeTable": "Table",
+  "orderTypeTakeaway": "Takeaway",
+  "waitingCustomersTitle": "Waiting Customers",
+  "addNewCustomerButtonLabel": "Add New Customer",
+  "pagerDialogDeleteContent": "Are you sure you want to delete the pager '{pagerName}'?",
+  "@pagerDialogDeleteContent": {
+    "placeholders": {
+      "pagerName": {
+        "type": "String"
+      }
+    }
+  },
+  "manageCampaignsCardSubtitle": "Price: {price} {currency} | Active: {isActive}",
+  "@manageCampaignsCardSubtitle": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      },
+      "currency": {
+        "type": "String"
+      },
+      "isActive": {
+        "type": "String"
+      }
+    }
+  },
+  "printerSettingsErrorLoadingSavedPrinters": "Error loading saved printers: {error}",
+  "@printerSettingsErrorLoadingSavedPrinters": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "printerSettingsErrorIpExists": "A printer with this IP address already exists.",
+  "printerSettingsDeleteTitle": "Delete Printer",
+  "printerSettingsDeleteConfirmation": "Are you sure you want to delete the printer '{printerName}'?",
+  "@printerSettingsDeleteConfirmation": {
+    "placeholders": {
+      "printerName": {
+        "type": "String"
+      }
+    }
+  },
+  "printerSettingsSuccessDeleted": "The printer '{printerName}' has been successfully deleted.",
+  "@printerSettingsSuccessDeleted": {
+    "placeholders": {
+      "printerName": {
+        "type": "String"
+      }
+    }
+  },
+  "printerSettingsErrorDiscoveryNotSupportedOnWeb": "Printer discovery is not supported on the web platform.",
+  "printerSettingsErrorDuringDiscovery": "Error during printer discovery: {error}",
+  "@printerSettingsErrorDuringDiscovery": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "printerSettingsInfoTesting": "Testing printer '{printerName}'...",
+  "@printerSettingsInfoTesting": {
+    "placeholders": {
+      "printerName": {
+        "type": "String"
+      }
+    }
+  },
+  "printerSettingsSuccessTestPrint": "Test print successful!",
+  "printerSettingsErrorTestPrintFailed": "Test print failed.",
+  "printerSettingsErrorDuringTest": "Error during test: {error}",
+  "@printerSettingsErrorDuringTest": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "printerSettingsTitleAddManual": "Add Manual Printer",
+  "printerSettingsTitleSaveDiscovered": "Save Discovered Printer",
+  "printerSettingsLabelNameHint": "Printer Name (e.g., Kitchen Printer)",
+  "printerSettingsValidatorNameEmpty": "Printer name cannot be empty.",
+  "printerSettingsLabelIpHint": "IP Address (e.g., 192.168.1.100)",
+  "printerSettingsValidatorIpEmpty": "IP address cannot be empty.",
+  "printerSettingsValidatorIpInvalid": "Please enter a valid IP address.",
+  "printerSettingsLabelType": "Printer Type",
+  "printerSettingsTypeKitchen": "Kitchen",
+  "printerSettingsTypeReceipt": "Receipt",
+  "printerSettingsValidatorTypeEmpty": "Please select a printer type.",
+  "printerSettingsTitle": "Printer Settings",
+  "printerSettingsStateDiscovering": "Searching for printers...",
+  "printerSettingsButtonDiscover": "Discover Printers on Network",
+  "printerSettingsNoPrintersFound": "No saved printers found.",
+  "printerSettingsHeaderDiscovered": "Discovered Printers",
+  "printerSettingsTooltipSaveDiscovered": "Save this printer",
+  "printerSettingsHeaderSaved": "Saved Printers",
+  "printerSettingsPrinterTypeLabel": "Type: {type}",
+  "@printerSettingsPrinterTypeLabel": {
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "printerSettingsTooltipTestPrint": "Send Test Print",
+  "printerSettingsButtonAddManual": "Add Manual Printer",
+  "printerSettingsTooltipAddManual": "Add manual printer with IP address",
+  "newOrderBasketQuantity": "Quantity: {quantity}",
+  "@newOrderBasketQuantity": {
+    "placeholders": {
+      "quantity": {
+        "type": "String"
+      }
+    }
+  },
+  "extrasLabel": "Extras:",
+  "lineItemTotal": "{amount} {currency}",
+  "@lineItemTotal": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "currency": {
+        "type": "String"
+      }
+    }
+  },
+  "tableOwnerLabel": "Owner: {name}",
+  "@tableOwnerLabel": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "paymentModalErrorWithDetails": "Payment error (Code: {statusCode}): {details}",
+  "@paymentModalErrorWithDetails": {
+    "placeholders": {
+      "statusCode": {
+        "type": "String"
+      },
+      "details": {
+        "type": "String"
+      }
+    }
+  },
+  "menuCampaignPrice": "Campaign Price: {price} {currency}",
+  "@menuCampaignPrice": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      },
+      "currency": {
+        "type": "String"
+      }
+    }
+  },
+  "newOrderBasketEmpty": "Your cart is empty.",
+  "newOrderBasketExtras": "Extras: {extrasList}",
+  "@newOrderBasketExtras": {
+    "placeholders": {
+      "extrasList": {
+        "type": "String"
+      }
+    }
+  },
+  "orderItemButtonDeliver": "Deliver",
+  "errorUsernameExists": "This username is already in use.",
+  "errorEmailExists": "This email address is already in use.",
+  "parentCategoryHint": "No parent category selected",
+  "infoCategoryUpdatedSuccess": "Category updated successfully.",
+  "errorUpdatingCategory": "Error updating category (Code: {statusCode}): {details}",
+  "@errorUpdatingCategory": {
+    "placeholders": {
+      "statusCode": {
+        "type": "String"
+      },
+      "details": {
+        "type": "String"
+      }
+    }
+  },
+  "errorUpdatingCategoryGeneral": "General error updating category: {error}",
+  "@errorUpdatingCategoryGeneral": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "editCategoryPageTitle": "Edit Category",
+  "infoKdsLoading": "Loading KDS screens...",
+  "kdsScreenLabel": "KDS Screen",
+  "noKdsForBusiness": "No KDS found for the business.",
+  "buttonUpdateCategory": "Update Category",
+  "errorLoadingDataWithDetails": "Error loading data: {details}",
+  "@errorLoadingDataWithDetails": {
+    "placeholders": {
+      "details": {
+        "type": "String"
+      }
+    }
+  },
+  "errorUploadingPhotoWithDetails": "Error uploading photo: {details}",
+  "@errorUploadingPhotoWithDetails": {
+    "placeholders": {
+      "details": {
+        "type": "String"
+      }
+    }
+  },
+  "campaignNoProductsAdded": "No products have been added yet.",
+  "campaignAddProductButton": "Add Product",
+  "productSelectorNoProducts": "No products found.",
+  "variantDisplayPrice": "{name} ({price} {currency})",
+  "@variantDisplayPrice": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "price": {
+        "type": "String"
+      },
+      "currency": {
+        "type": "String"
+      }
+    }
+  },
+  "setupWizardStepLocalizationTitle": "Step 1: Language and Currency",
+  "setupLocalizationDescription": "Select the language to be used throughout the application and the currency to be shown in the menus. You can change these settings later in account settings.",
+  "setupWizardSaveAndContinueButton": "Save and Continue",
+  "setupWizardErrorSavingSettings": "Error saving settings: {errorDetails}",
+  "@setupWizardErrorSavingSettings": {
+    "description": "Message shown when an error occurs while saving settings.",
+    "placeholders": {
+      "errorDetails": {
+        "type": "String",
+        "example": "Network error"
+      }
+    }
+  },
+  "subscriptionScreenTitle": "Subscription Management",
+  "@subscriptionScreenTitle": {
+    "description": "Title of the subscription and purchase screen"
+  },
+  "subscriptionErrorLoadingProducts": "Could not load subscription options. Please try again.",
+  "@subscriptionErrorLoadingProducts": {
+    "description": "Error shown when in-app purchase products fail to fetch."
+  },
+  "subscriptionScreenHeader": "Subscribe to Continue Using the Application",
+  "@subscriptionScreenHeader": {
+    "description": "Main header informing the user on the subscription screen."
+  },
+  "subscriptionStatusTrial": "You have {days} days left in your trial. Click to subscribe.",
+  "@subscriptionStatusTrial": {
+    "description": "Shows the number of days remaining in the trial.",
+    "placeholders": {
+      "days": {
+        "type": "String",
+        "example": "5"
+      }
+    }
+  },
+  "subscriptionStatusTrialLastDay": "Less than 1 day left in your trial!",
+  "@subscriptionStatusTrialLastDay": {
+    "description": "Message shown on the last day of the trial."
+  },
+  "subscriptionStatusTrialEnded": "Your trial period has ended!",
+  "@subscriptionStatusTrialEnded": {
+    "description": "Message shown when the trial period ends."
+  },
+  "subscriptionStatusInactive": "Your subscription is inactive. Please subscribe to continue.",
+  "@subscriptionStatusInactive": {
+    "description": "Message shown for inactive or canceled subscriptions."
+  },
+  "subscriptionStatusButtonSubscribe": "Subscribe",
+  "@subscriptionStatusButtonSubscribe": {
+    "description": "Button text that redirects to the subscription screen."
+  },
+  "loginErrorSubscriptionExpired": "You cannot log in because your subscription has expired. Please renew it.",
+  "@loginErrorSubscriptionExpired": {
+    "description": "Login error message shown when the business owner's subscription has expired."
+  },
+  "setupTablesErrorNoTablesCreated": "You must create at least one table before continuing.",
+  "@setupTablesErrorNoTablesCreated": {
+    "description": "Warning shown when trying to continue without creating any tables in the setup wizard."
+  },
+  "setupKdsErrorNoScreensCreated": "You must create at least one KDS screen before continuing.",
+  "@setupKdsErrorNoScreensCreated": {
+    "description": "Warning shown when trying to continue without creating any KDS screens in the setup wizard."
+  },
+  "setupCategoriesErrorNoCategoriesCreated": "You must create at least one category before continuing.",
+  "@setupCategoriesErrorNoCategoriesCreated": {
+    "description": "Warning shown when trying to continue without creating any categories in the setup wizard."
+  },
+  "setupMenuItemsErrorNoItemsCreated": "You must create at least one product before continuing.",
+  "@setupMenuItemsErrorNoItemsCreated": {
+    "description": "Warning shown when trying to continue without creating any menu items in the setup wizard."
+  },
+  "setupVariantsErrorNoVariantsCreated": "You must create at least one variant for each product (e.g., Standard Price) before continuing.",
+  "@setupVariantsErrorNoVariantsCreated": {
+    "description": "Warning shown when trying to continue without creating any variants in the setup wizard."
+  },
+  "setupTablesTotalCreatedWithLimit": "Current Number of Tables: {currentCount} / {limit}",
+  "@setupTablesTotalCreatedWithLimit": {
+    "description": "Text showing the current number of tables and the limit in the setup wizard.",
+    "placeholders": {
+      "currentCount": {
+        "type": "String",
+        "example": "7"
+      },
+      "limit": {
+        "type": "String",
+        "example": "10"
+      }
+    }
+  },
+  "setupKdsTotalCreatedWithLimit": "Current Number of KDS Screens: {currentCount} / {limit}",
+  "@setupKdsTotalCreatedWithLimit": {
+    "description": "Text showing the current number of KDS screens and the total limit in the setup wizard.",
+    "placeholders": {
+      "currentCount": {
+        "type": "String",
+        "example": "1"
+      },
+      "limit": {
+        "type": "String",
+        "example": "2"
+      }
+    }
+  },
+  "setupCategoriesTotalCreatedWithLimit": "{count} / {limit} Categories Created",
+  "@setupCategoriesTotalCreatedWithLimit": {
+    "description": "Text showing the current number of categories and the limit in the setup wizard.",
+    "placeholders": {
+      "currentCount": {
+        "type": "String",
+        "example": "3"
+      },
+      "limit": {
+        "type": "String",
+        "example": "4"
+      }
+    }
+  },
+  "setupMenuItemsTotalCreatedWithLimit": "Current Number of Products: {currentCount} / {limit}",
+  "@setupMenuItemsTotalCreatedWithLimit": {
+    "description": "Text showing the current number of menu items and the limit in the setup wizard.",
+    "placeholders": {
+      "currentCount": {
+        "type": "String",
+        "example": "15"
+      },
+      "limit": {
+        "type": "String",
+        "example": "20"
+      }
+    }
+  },
+  "setupVariantsTotalCreatedWithLimit": "Total Number of Variants: {currentCount} / {limit}",
+  "@setupVariantsTotalCreatedWithLimit": {
+    "description": "Text showing the current number of variants and the limit in the setup wizard.",
+    "placeholders": {
+      "currentCount": {
+        "type": "String",
+        "example": "35"
+      },
+      "limit": {
+        "type": "String",
+        "example": "50"
+      }
+    }
+  },
+  "manageStaffTotalWithLimit": "Number of Staff: {currentCount} / {limit}",
+  "@manageStaffTotalWithLimit": {
+    "description": "Text showing the current number of staff and the limit on the staff management screen.",
+    "placeholders": {
+      "currentCount": {
+        "type": "String",
+        "example": "1"
+      },
+      "limit": {
+        "type": "String",
+        "example": "2"
+      }
+    }
+  },
+  "dialogLimitReachedTitle": "Limit Reached",
+  "@dialogLimitReachedTitle": {
+    "description": "Dialog title shown when a subscription limit is reached."
+  },
+  "dialogButtonLater": "Later",
+  "@dialogButtonLater": {
+    "description": "The 'cancel' or 'later' button in the limit reached dialog."
+  },
+  "dialogButtonUpgradePlan": "Upgrade Plan",
+  "@dialogButtonUpgradePlan": {
+    "description": "The action button in the limit reached dialog."
+  },
+  "setupTablesErrorLimitReached": "You have reached your table creation limit. Please upgrade your subscription plan to add new tables.",
+  "@setupTablesErrorLimitReached": {
+    "description": "Error message shown when the table creation limit is exceeded."
+  },
+  "setupKdsErrorLimitReached": "You have reached your KDS screen creation limit. Please upgrade your subscription plan to add new screens.",
+  "@setupKdsErrorLimitReached": {
+    "description": "Error message shown when the KDS screen creation limit is exceeded."
+  },
+  "setupMenuItemsErrorLimitReached": "You have reached your product creation limit. Please upgrade your subscription plan to add new products.",
+  "@setupMenuItemsErrorLimitReached": {
+    "description": "Error message shown when the new menu item creation limit is exceeded."
+  },
+  "setupTablesErrorLimitExceeded": "You have exceeded your table limit ({maxTables}). You cannot add {newTables} more tables to your current {currentTables}.",
+  "setupKdsErrorLimitExceeded": "You have exceeded your KDS Screen limit ({maxKds}). You cannot add {newKds} more screens to your current {currentKds}.",
+  "createCategoryErrorLimitExceeded": "You have reached your category creation limit ({maxCategories}). Please upgrade your plan to add a new category.",
+  "createMenuItemErrorLimitExceeded": "You have reached your product creation limit ({maxMenuItems}). Please upgrade your plan to add a new product.",
+  "manageKdsErrorLimitExceeded": "You have reached your KDS Screen creation limit ({maxKds}). Please upgrade your plan to add a new screen.",
+  "manageTablesErrorLimitExceeded": "You have reached your table creation limit ({maxTables}). Please upgrade your plan to add a new table.",
+  "createVariantErrorLimitExceeded": "You have reached your variant/option creation limit ({maxVariants}). Please upgrade your plan to add a new variant.",
+  "menuItemKdvRateLabel": "VAT Rate",
+  "kdvRateValidatorRequired": "Please enter a VAT rate.",
+  "kdvRateValidatorInvalid": "Please enter a valid rate between 0 and 100.",
+  "categoryKdvRateLabel": "Default VAT Rate (%)",
+  "categoryDefaultKdvRateLabel": "Default VAT Rate (%)",
+  "reportsExportToExcelTooltip": "Export Report to Excel",
+  "reportsErrorNoDataToExport": "No data to export.",
+  "reportsErrorExportFailed": "Error exporting report: {errorDetails}",
+  "@reportsErrorExportFailed": {
+    "description": "Error message that occurs during export to Excel.",
+    "placeholders": {
+      "errorDetails": {
+        "type": "String",
+        "example": "File could not be written."
+      }
+    }
+  },
+  "setupWizardStepStaffTitle": "Add Staff",
+  "errorLoadingData": "Error loading data: {error}",
+  "@errorLoadingData": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "setupStaffDialogTitle": "Add New Staff Member",
+  "roleLabel": "Role",
+  "roleStaff": "Waiter (Order Authorized)",
+  "roleKitchenStaff": "Kitchen Staff (KDS Authorized)",
+  "buttonAdd": "Add",
+  "setupStaffDescription": "You can now add your staff who will take orders and work in the kitchen. The shifts you assign will ensure that staff can only log in during the specified days and hours.",
+  "addStaffButtonLabel": "Add Staff",
+  "setupStaffAddedTitle": "Added Staff Members",
+  "noStaffAdded": "No staff members have been added yet.",
+  "setupStaffTotalCreatedWithLimit": "{count} / {limit} Staff Created",
+  "@setupStaffTotalCreatedWithLimit": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      },
+      "limit": {
+        "type": "String"
+      }
+    }
+  },
+  "kdsAccessSelectionTitle": "Accessible Kitchen Screens",
+  "kdsAccessNoKdsAvailable": "No active KDS screens available to assign. Please create a KDS screen in the previous step.",
+  "setupStaffShowOtherPermissions": "Show Other Screen Permissions",
+  "setupStaffShowOtherNotifications": "Show Other Notification Permissions",
+  "setupStaffAssignShiftButton": "Assign Shift",
+  "setupStaffErrorAssignShift": "Please assign at least one shift to all added staff before continuing.",
+  "setupStaffRedirectingToSchedule": "Redirecting to shift assignment screen for {staffName}...",
+  "@setupStaffRedirectingToSchedule": {
+    "placeholders": {
+      "staffName": {
+        "type": "String"
+      }
+    }
+  },
+  "setupStaffShiftAssigned": "Shift assigned.",
+  "setupStaffShiftNotAssigned": "Shift not assigned! You must assign a shift to continue.",
+  "scheduleSetupWizardPrompt": "Please assign at least one shift to the new staff member to continue.",
+  "homeSectionOrderKitchen": "Order & Kitchen Management",
+  "@homeSectionOrderKitchen": {
+    "description": "Title of the Order and Kitchen management section on the main screen."
+  },
+  "homeSectionMenuStock": "Menu & Stock Management",
+  "@homeSectionMenuStock": {
+    "description": "Title of the Menu and Stock management section on the main screen."
+  },
+  "homeSectionBusinessManagement": "Business Management",
+  "@homeSectionBusinessManagement": {
+    "description": "Title of the business management section, such as Staff, Tables, and Credit, on the main screen."
+  },
+  "homeSectionReports": "Reports & Analytics",
+  "@homeSectionReports": {
+    "description": "Title of the Reports and Analytics section on the main screen."
+  },
+  "homeSectionSettings": "Settings",
+  "@homeSectionSettings": {
+    "description": "Title of the General Settings section on the main screen."
+  },
+  "searchPlaceholder": "Search Menu...",
+  "@searchPlaceholder": {
+    "description": "Hint text that appears inside the menu search bar on the main screen."
+  },
+  "searchNoResults": "No search results found.",
+  "@searchNoResults": {
+    "description": "Text shown when no results are found in the menu search on the main screen."
+  },
+  "loginErrorNoShiftScheduled": "You cannot log in as you do not have a shift scheduled for today.",
+  "@loginErrorNoShiftScheduled": {
+    "description": "Login error message shown when the user does not have a shift assigned for that day."
+  },
+  "loginErrorNoActiveShift": "You do not have an active shift right now. Please try again during your shift hours.",
+  "@loginErrorNoActiveShift": {
+    "description": "Login error message shown when the user does not have a shift at the current time."
+  },
+  "loginErrorNetwork": "Could not establish an internet connection. Please check your network settings.",
+  "@loginErrorNetwork": {
+    "description": "Message shown when there is a network error."
+  },
+  "loginErrorGeneric": "An unexpected error occurred during login. Please try again.",
+  "@loginErrorGeneric": {
+    "description": "General message shown for all other unexpected errors."
+  },
+  "businessSettingsTimezoneLabel": "Business Timezone",
+  "@businessSettingsTimezoneLabel": {
+    "description": "Label for timezone selection in business settings."
+  },
+  "businessSettingsTimezoneValidator": "Please select a timezone.",
+  "@businessSettingsTimezoneValidator": {
+    "description": "Error message shown when a timezone is not selected."
+  },
+  "businessSettingsErrorLoading": "Error loading business information: {error}",
+  "@businessSettingsErrorLoading": {
+    "description": "Error shown if data cannot be retrieved when opening the business settings screen.",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Network error"
+      }
+    }
+  },
+  "voiceGuideActive": "Voice Guide Active",
+  "tooltipUnmute": "Unmute",
+  "tooltipMute": "Mute",
+  "tooltipReplayGuide": "Replay Guide",
+  "languageNameTr": "Turkish",
+  "languageNameEn": "English",
+  "languageNameDe": "German",
+  "languageNameEs": "Spanish",
+  "languageNameAr": "Arabic",
+  "languageNameIt": "Italian",
+  "languageNameZh": "Chinese",
+  "languageNameRu": "Russian",
+  "currencyNameTRY": "Turkish Lira (₺)",
+  "currencyNameUSD": "US Dollar ($)",
+  "currencyNameEUR": "Euro (€)",
+  "currencyNameGBP": "British Pound (£)",
+  "timeZoneNameIstanbul": "(GMT+3) Istanbul",
+  "timeZoneNameLondon": "(GMT+0) London",
+  "timeZoneNameBerlin": "(GMT+1) Berlin",
+  "timeZoneNameNewYork": "(GMT-5) New York",
+  "timeZoneNameDubai": "(GMT+4) Dubai",
+  "timeZoneNameTokyo": "(GMT+9) Tokyo",
+  "welcomeMessageTr": "Hoş geldiniz",
+  "welcomeMessageEn": "Welcome",
+  "welcomeMessageDe": "Willkommen",
+  "welcomeMessageEs": "Bienvenido",
+  "welcomeMessageAr": "أهلاً وسهلاً",
+  "welcomeMessageIt": "Benvenuto",
+  "welcomeMessageZh": "欢迎",
+  "welcomeMessageRu": "добро пожаловать",
+  "welcomeMessageFr": "Bienvenue",
+  "setupCategoriesQuickStartTitle": "Quick Start",
+  "setupCategoriesQuickStartDescription": "Get started quickly by creating categories from ready-made templates!",
+  "setupCategoriesAddFromTemplateButton": "Add from Template",
+  "setupCategoriesSuccessFromTemplate": "Categories were successfully created from the template!",
+  "setupCategoriesErrorFromTemplate": "Error creating categories from template: {errorDetails}",
+  "@setupCategoriesErrorFromTemplate": {
+    "placeholders": {
+      "errorDetails": {
+        "type": "String"
+      }
+    }
+  },
+  "setupCategoriesErrorLoadingTemplates": "An error occurred while loading templates: {errorDetails}",
+  "@setupCategoriesErrorLoadingTemplates": {
+    "placeholders": {
+      "errorDetails": {
+        "type": "String"
+      }
+    }
+  },
+  "setupCategoriesManualAddTitle": "Manual Category Entry",
+  "categoryDefaultKdvRateLabel": "Default VAT Rate (%)",
+  "setupCategoriesMainCategory": "Main Category",
+  "setupCategoriesKdsLoading": "Loading KDS Screens...",
+  "setupCategoriesErrorDefineKdsFirst": "First, you must define a screen from Settings > KDS Screens.",
+  "setupCategoriesLabelDisplayKds": "Kitchen Display Screen to Show On",
+  "setupCategoriesHintSelectKds": "Select a kitchen screen",
+  "setupCategoriesValidatorSelectKds": "Please select a kitchen screen.",
+  "setupCategoriesAddButton": "Add Category",
+  "setupCategoriesErrorSelectKds": "Please select a kitchen screen for the category to be displayed on.",
+  "setupCategoriesSuccessAdded": "Category \"{categoryName}\" added successfully.",
+  "@setupCategoriesSuccessAdded": {
+    "placeholders": {
+      "categoryName": {
+        "type": "String"
+      }
+    }
+  },
+  "setupCategoriesErrorCreating": "Error creating category: {errorDetails}",
+    "@setupCategoriesErrorCreating": {
+    "placeholders": {
+      "errorDetails": {
+        "type": "String"
+      }
+    }
+  },
+  "errorLoadingData": "Error loading data: {error}",
+  "@errorLoadingData": {
+    "description": "Error message shown when initial data fails to load.",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Network error"
+      }
+    }
+  },
+  "categoryLimitInfo": "Current: {current}, Selected: {selected}, Limit: {limit}",
+  "@categoryLimitInfo": {
+    "description": "Informational text showing category counts and the subscription limit.",
+    "placeholders": {
+      "current": {
+        "type": "int",
+        "example": "5"
+      },
+      "selected": {
+        "type": "int",
+        "example": "3"
+      },
+      "limit": {
+        "type": "int",
+        "example": "10"
+      }
+    }
+  },
+  "searchCategoryTemplateLabel": "Search Category Templates",
+  "@searchCategoryTemplateLabel": {
+    "description": "Label for the search input field for category templates."
+  },
+  "searchCategoryTemplateHint": "Search by category name...",
+  "@searchCategoryTemplateHint": {
+    "description": "Hint text for the category template search field."
+  },
+  "selectAll": "Select All",
+  "@selectAll": {
+    "description": "Button text to select all visible items."
+  },
+  "deselectAll": "Deselect All",
+  "@deselectAll": {
+    "description": "Button text to deselect all visible items."
+  },
+  "templatesDisplayed": "Displaying: {count} templates",
+  "@templatesDisplayed": {
+    "description": "Subtitle indicating how many templates are currently visible in the list.",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "15"
+      }
+    }
+  },
+  "noTemplatesFound": "No templates found",
+  "@noTemplatesFound": {
+    "description": "Message shown when no category templates are available at all."
+  },
+  "noTemplatesMatchSearch": "No category templates found\nmatching your search criteria.",
+  "@noTemplatesMatchSearch": {
+    "description": "Message shown when a search yields no results."
+  },
+  "iconInfo": "Icon: {iconName}",
+  "@iconInfo": {
+    "description": "Subtitle for a template list item, indicating its icon.",
+    "placeholders": {
+      "iconName": {
+        "type": "String",
+        "example": "coffee_cup"
+      }
+    }
+  },
+  "limitWillBeExceeded": "Limit will be exceeded",
+  "@limitWillBeExceeded": {
+    "description": "Warning message on a list item indicating that selecting it would exceed the user's plan limit."
+  },
+  "createTemplateButtonWithCount": "Create {count} Templates",
+  "@createTemplateButtonWithCount": {
+    "description": "Text for the main action button to create selected templates, including the count.",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "5"
+      }
+    }
+  },
+  "setupCategoriesErrorCreating": "Error creating categories: {errorDetails}",
+  "@setupCategoriesErrorCreating": {
+    "description": "Error message shown when creating categories fails.",
+    "placeholders": {
+      "errorDetails": {
+        "type": "String",
+        "example": "API returned 500"
+      }
+    }
+  },
+  "quickStartTitle": "Quick Start",
+  "@quickStartTitle": {
+    "description": "Title for the 'Quick Start' section on the menu items page."
+  },
+  "quickStartDescription": "Quickly add ready-made items for popular categories",
+  "@quickStartDescription": {
+    "description": "Description for the 'Quick Start' section, encouraging users to add items from templates."
+  },
+  "addFromTemplateButton": "Add from Template",
+  "@addFromTemplateButton": {
+    "description": "Label for the button that opens the template selection dialog for menu items."
+  },
+  "menuItemsAddedSuccess": "{count,plural, =1{1 item successfully added!} other{# items successfully added!}}",
+  "@menuItemsAddedSuccess": {
+    "description": "Success message shown after adding one or more menu items from templates.",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "5"
+      }
+    }
+  },
+  "menuItemsAddedError": "No items could be added. Please try again.",
+  "@menuItemsAddedError": {
+    "description": "Error message shown when no menu items could be added from templates."
+  },
+  "errorCreatingCustomProduct": "Error creating custom product: {error}",
+  "@errorCreatingCustomProduct": {
+    "description": "Error message thrown when creating a custom menu item fails.",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Invalid price"
+      }
+    }
+  },
+  "menuItemService_errorBusinessInfoMissing": "Business information is missing. Please restart the application.",
+  "menuItemService_errorInvalidCategory": "Invalid category. Please select a different category.",
+  "menuItemService_errorProductAlreadyExists": "A product with this name already exists. Please try a different name.",
+  "menuItemService_errorPriceRequiredForManualProduct": "Price must be specified for a manual product.",
+  "menuItemService_errorAuthorization": "Authorization error. Please log in again.",
+  "menuItemService_errorForbidden": "You are not authorized for this action.",
+  "menuItemService_errorProductLimitReached": "You have reached your product adding limit.",
+  "menuItemService_errorCreatingCustomProduct": "Error creating custom product: {error}",
+  "@menuItemService_errorCreatingCustomProduct": {
+      "description": "A generic error message when creating a custom product.",
+      "placeholders": {
+          "error": {
+              "type": "String",
+              "example": "Network error"
+          }
+      }
+  },
+  "menuItemService_unnamedProduct": "Unnamed Product",
+  "menuItemService_errorCouldNotCreateUniqueName": "Could not make the product name unique. Please try a different name manually.",
+  "menuItemService_errorCreatingProduct": "An error occurred while creating the product: {error}",
+  "@menuItemService_errorCreatingProduct": {
+      "description": "Generic product creation error.",
+      "placeholders": {
+          "error": {
+              "type": "String",
+              "example": "API error"
+          }
+      }
+  },
+  "menuItemService_errorVariantImageUploadFailed": "Failed to upload variant image.",
+  "menuItemService_errorFetchingTemplateData": "An error occurred while fetching template data.",
+  "menuItemService_errorNetworkFetchingTemplate": "Network error while fetching template data: {error}",
+  "@menuItemService_errorNetworkFetchingTemplate": {
+      "description": "Network error message when fetching template data.",
+      "placeholders": {
+          "error": {
+              "type": "String",
+              "example": "Connection timed out"
+          }
+      }
+  },
+  "menuItemService_errorFirebaseUploadFailed": "File upload failed.",
+  "manualMenuItemAddTitle": "Add Product Manually",
+  "currencySymbol": "$ ",
+  "menuItemPriceHint": "e.g., 25.50",
+  "selectCategoryFirst": "Please select a category first",
+  "loadingTemplates": "Loading templates...",
+  "noTemplatesFoundForCategory": "No templates found for this category",
+  "addCustomProduct": "Add Custom Product",
+  "noProductsFoundForSearchCriteria": "No products found matching\nyour search criteria.",
+  "deselectAll": "Deselect All",
+  "selectAll": "Select All",
+  "addNewProduct": "Add New Product",
+  "unnamedProduct": "Unnamed Product",
+  "limitWillBeExceeded": "Limit will be exceeded",
+  "productTypeRecipe": "From Recipe",
+  "productTypeManual": "Manual",
+  "priceLabel": "Price",
+  "variants": "Variants",
+  "variantsAddedCount": "{count} variants added",
+  "@variantsAddedCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "add": "Add",
+  "edit": "Edit",
+
+
+
+
+
+  "menuItemVariantsDialogErrorLoadingVariants": "Error loading variants: {error}",
+  "@menuItemVariantsDialogErrorLoadingVariants": {
+      "placeholders": {
+          "error": {
+              "type": "String"
+          }
+      }
+  },
+  "menuItemVariantsDialogQuickAddVariant": "Quick Add Variant:",
+  "menuItemVariantsDialogLoadingTemplates": "Loading templates...",
+  "menuItemVariantsDialogLimitReachedContent": "You have reached your variant adding limit ({limit}). Upgrade your plan to add more variants.",
+  "@menuItemVariantsDialogLimitReachedContent": {
+      "placeholders": {
+          "limit": {
+              "type": "int"
+          }
+      }
+  },
+  "menuItemVariantsDialogFirebaseUploadFailed": "Firebase upload failed",
+  "menuItemVariantsDialogErrorUploadingPhoto": "Error uploading photo: {error}",
+  "@menuItemVariantsDialogErrorUploadingPhoto": {
+      "placeholders": {
+          "error": {
+              "type": "String"
+          }
+      }
+  },
+  "menuItemVariantsDialogVariantAddedSuccess": "Variant \"{variantName}\" added successfully!",
+  "@menuItemVariantsDialogVariantAddedSuccess": {
+      "placeholders": {
+          "variantName": {
+              "type": "String"
+          }
+      }
+  },
+  "menuItemVariantsDialogDeleteVariantTitle": "Delete Variant",
+  "menuItemVariantsDialogDeleteVariantContent": "Are you sure you want to delete the \"{variantName}\" variant?",
+  "@menuItemVariantsDialogDeleteVariantContent": {
+      "placeholders": {
+          "variantName": {
+              "type": "String"
+          }
+      }
+  },
+  "menuItemVariantsDialogVariantDeletedSuccess": "\"{variantName}\" variant deleted",
+  "@menuItemVariantsDialogVariantDeletedSuccess": {
+      "placeholders": {
+          "variantName": {
+              "type": "String"
+          }
+      }
+  },
+  "menuItemVariantsDialogErrorDeletingVariant": "Error deleting variant: {error}",
+  "@menuItemVariantsDialogErrorDeletingVariant": {
+      "placeholders": {
+          "error": {
+              "type": "String"
+          }
+      }
+  },
+  "menuItemVariantsDialogUnnamedProduct": "Unnamed Product",
+  "menuItemVariantsDialogTitle": "Variant Management - {menuItemName}",
+  "@menuItemVariantsDialogTitle": {
+      "placeholders": {
+          "menuItemName": {
+              "type": "String"
+          }
+      }
+  },
+  "menuItemVariantsDialogCurrentVariants": "Current Variants ({count}):",
+  "@menuItemVariantsDialogCurrentVariants": {
+      "placeholders": {
+          "count": {
+              "type": "int"
+          }
+      }
+  },
+  "menuItemVariantsDialogExtraTag": "Extra",
+  "menuItemVariantsDialogDeleteVariantTooltip": "Delete Variant",
+  "menuItemVariantsDialogNoVariantsAdded": "No variants added yet",
+  "menuItemVariantsDialogNoVariantsDescription": "You can add variants such as size or extra options for this product",
+  "menuItemVariantsDialogAddNewVariant": "Add New Variant:",
+  "menuItemVariantsDialogVariantNameLabel": "Variant Name",
+  "menuItemVariantsDialogVariantNameHint": "Large, Small, Extra...",
+  "menuItemVariantsDialogVariantNameRequired": "Variant name is required",
+  "menuItemVariantsDialogPriceLabel": "Price",
+  "menuItemVariantsDialogPriceRequired": "Price is required",
+  "menuItemVariantsDialogInvalidPrice": "Invalid price",
+  "menuItemVariantsDialogExtraOptionTitle": "Extra option",
+  "menuItemVariantsDialogExtraOptionSubtitle": "Is it a feature with an extra fee?",
+  "menuItemVariantsDialogVariantPhotoOptional": "Variant Photo (Optional)",
+  "menuItemVariantsDialogSelectImage": "Select Image",
+  "menuItemVariantsDialogAddingButton": "Adding...",
+  "menuItemVariantsDialogAddVariantButton": "Add Variant",
+  "menuItemVariantsDialogCloseButton": "Close",
+  "templateCategoryDropdownLabel": "Select Category",
+  "templateCategoryDropdownUnknownCategory": "Unknown Category",
+  "templateCategoryDropdownHint": "Select a category...",
+  "dialogDeleteMenuItemContent": "Are you sure you want to delete the item {menuItemName}?",
+  "@dialogDeleteMenuItemContent": {
+    "placeholders": {
+      "menuItemName": {
+        "type": "String",
+        "example": "Cheeseburger"
+      }
+    }
+  },
+  "snackbarMenuItemDeleted": "Item {menuItemName} has been deleted",
+  "@snackbarMenuItemDeleted": {
+    "placeholders": {
+      "menuItemName": {
+        "type": "String",
+        "example": "Cheeseburger"
+      }
+    }
+  },
+  "snackbarMenuItemDeleteError": "Error deleting item: {error}",
+  "@snackbarMenuItemDeleteError": {
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Network error"
+      }
+    }
+  },
+  "snackbarUploadingPhotoFor": "Uploading photo for {menuItemName}...",
+  "@snackbarUploadingPhotoFor": {
+    "placeholders": {
+      "menuItemName": {
+        "type": "String",
+        "example": "Cheeseburger"
+      }
+    }
+  },
+  "snackbarPhotoUpdateSuccess": "Photo for {menuItemName} updated successfully!",
+  "@snackbarPhotoUpdateSuccess": {
+    "placeholders": {
+      "menuItemName": {
+        "type": "String",
+        "example": "Cheeseburger"
+      }
+    }
+  },
+  "snackbarPhotoUploadFailed": "Failed to upload photo",
+  "snackbarPhotoUploadError": "Error while uploading photo: {error}",
+  "@snackbarPhotoUploadError": {
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Upload failed"
+      }
+    }
+  },
+  "firebaseUploadError": "Firebase upload error: {error}",
+  "@firebaseUploadError": {
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Permission denied"
+      }
+    }
+  },
+  "apiUpdateError": "API update error: {error}",
+  "@apiUpdateError": {
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Not found"
+      }
+    }
+  },
+  "dialogPhotoSourceTitle": "Photo Source",
+  "dialogPhotoSourceContent": "Where do you want to select the photo from?",
+  "photoSourceGallery": "Gallery",
+  "photoSourceCamera": "Camera",
+  "uncategorized": "Uncategorized",
+  "unnamedProduct": "Unnamed Product",
+  "vatRate": "VAT {kdvRate}%",
+  "@vatRate": {
+    "placeholders": {
+      "kdvRate": {
+        "type": "String",
+        "example": "10"
+      }
+    }
+  },
+  "addPhoto": "Add\nPhoto",
+  "tooltipEdit": "Edit",
+  "tooltipDelete": "Delete",
+  "badgeNew": "NEW",
+  "productNameRequired": "Product name is required",
+  "genericError": "Error: {error}",
+  "@genericError": {
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "No network connection"
+      }
+    }
+  },
+  "addNewProductTitle": "Add New Product",
+  "quickAddProductTitle": "Quick Product Add",
+  "quickAddProductInfo": "• The product is created based on a recipe by default.\n• You can edit the price, manual/recipe settings, and variants later.\n• It will appear in the product list after being added.",
+  "productNameLabel": "Product Name",
+  "productNameHint": "e.g., Special Pizza, Fruit Juice, Homemade Meal...",
+  "dialogButtonCancel": "Cancel",
+  "addingButtonLabel": "Adding...",
+  "addProductButtonLabel": "Add Product",
+  "audioGuideActive": "Audio Guide Active",
+  "tooltipUnmute": "Unmute",
+  "tooltipMute": "Mute",
+  "tooltipReplayGuide": "Replay Guide",
+  "categoryLimitIndicator": "{count} / {limit} Categories Created",
+  "@categoryLimitIndicator": {
+    "description": "Shows the user's current category count and their limit.",
+    "placeholders": {
+      "count": {
+        "type": "String",
+        "example": "5"
+      },
+      "limit": {
+        "type": "String",
+        "example": "20"
+      }
+    }
+  },
+  "selectImageButton": "Select Image",
+  "addProductFromTemplateTitle": "Add Product from Template",
+  "itemSelectionInfo": "Current: {currentCount}, Selected: {selectedCount}",
+  "@itemSelectionInfo": {
+    "description": "Shows the current and selected item count on the template selection screen.",
+    "placeholders": {
+      "currentCount": {
+        "type": "String",
+        "example": "50"
+      },
+      "selectedCount": {
+        "type": "String",
+        "example": "12"
+      }
+    }
+  },
+  "totalVariantsInfo": "Total Variants: {count}",
+  "@totalVariantsInfo": {
+    "description": "Shows the total number of variants for the selected items.",
+    "placeholders": {
+      "count": {
+        "type": "String",
+        "example": "25"
+      }
+    }
+  },
+  "searchProductLabel": "Search Product",
+  "searchProductHint": "Search by product name...",
+  "setupCategoriesUnnamedCategory": "Unnamed Category",
+  "setupCategoriesKdsInfoWithId": "KDS ID: {id}",
+  "setupCategoriesSubCategoryLabel": "Sub: {parentName}",
+  "setupCategoriesVatRateLabel": "VAT {rate}%",
+  "buttonDelete": "Delete",
+  "imagePickerSelectButton": "Select Image"
+}

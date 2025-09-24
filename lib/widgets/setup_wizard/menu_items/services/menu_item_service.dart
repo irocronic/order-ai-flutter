@@ -2,13 +2,14 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/foundation.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart'; // YENİ: Dil dosyası import edildi
 import '../../../../services/api_service.dart';
 import '../../../../services/firebase_storage_service.dart';
 import '../../../../models/menu_item.dart';
 import '../../../../models/menu_item_variant.dart';
 import '../models/menu_item_form_data.dart';
 import '../models/variant_template_config.dart';
-import '../utils/newly_added_tracker.dart'; // ✅ YENİ: Import ekle
+import '../utils/newly_added_tracker.dart';
 import 'package:path/path.dart' as p;
 import 'dart:io';
 
@@ -32,11 +33,12 @@ class MenuItemService {
     required String token,
     required int businessId,
     required MenuItemFormData formData,
+    required AppLocalizations l10n, // YENİ: l10n parametresi eklendi
   }) async {
     String? imageUrl;
     
     if (formData.hasImage) {
-      imageUrl = await _uploadImage(businessId, formData);
+      imageUrl = await _uploadImage(businessId, formData, l10n); // YENİ: l10n doorlandı
     }
 
     await ApiService.createMenuItemForBusiness(
@@ -56,14 +58,14 @@ class MenuItemService {
     required MenuItemFormData formData,
     required bool isFromRecipe,
     double? price,
+    required AppLocalizations l10n, // YENİ: l10n parametresi eklendi
   }) async {
     String? imageUrl;
     
     if (formData.hasImage) {
-      imageUrl = await _uploadImage(businessId, formData);
+      imageUrl = await _uploadImage(businessId, formData, l10n); // YENİ: l10n doorlandı
     }
 
-    // --- GÜNCELLENDİ: businessId parametresi eklendi ---
     await ApiService.createMenuItemSmart(
       token,
       name: formData.name,
@@ -73,11 +75,10 @@ class MenuItemService {
       kdvRate: formData.kdvRate,
       isFromRecipe: isFromRecipe,
       price: price,
-      businessId: businessId, // YENİ: businessId eklendi
+      businessId: businessId,
     );
   }
 
-  // ✅ GÜNCELLENME: Özel ürün oluşturma metodu - tracker eklendi
   Future<Map<String, dynamic>> createMenuItemCustom({
     required String token,
     required String name,
@@ -86,6 +87,7 @@ class MenuItemService {
     required double? price,
     required int businessId,
     required List<MenuItemVariant>? variants,
+    required AppLocalizations l10n, // YENİ: l10n parametresi eklendi
   }) async {
     try {
       if (kDebugMode) {
@@ -98,7 +100,6 @@ class MenuItemService {
         print('  - Variants: ${variants?.length ?? 0}');
       }
 
-      // Mevcut ürünleri kontrol et ve benzersiz isim oluştur
       final existingMenuItems = await ApiService.fetchMenuItemsForBusiness(token);
       final uniqueName = _generateUniqueProductName(name, existingMenuItems);
       
@@ -106,10 +107,9 @@ class MenuItemService {
         print('📝 Duplicate custom product name detected. Original: "$name", Unique: "$uniqueName"');
       }
 
-      // Custom menu item oluştur
       final menuItemResponse = await ApiService.createMenuItemSmart(
         token,
-        name: uniqueName, // Benzersiz isim kullan
+        name: uniqueName,
         description: '',
         categoryId: targetCategoryId,
         imageUrl: null,
@@ -126,7 +126,6 @@ class MenuItemService {
 
       final menuItemId = menuItemResponse['id'];
       
-      // ✅ YENİ: Gerçek ürün ID'sini tracker'a ekle
       if (menuItemId != null) {
         NewlyAddedTracker.markSingleItemAsNew(menuItemId);
         if (kDebugMode) {
@@ -134,7 +133,6 @@ class MenuItemService {
         }
       }
 
-      // Varyantları oluştur
       if (variants != null && variants.isNotEmpty && menuItemId != null) {
         if (kDebugMode) {
           print('📤 Creating ${variants.length} variants for custom menu item $menuItemId');
@@ -158,7 +156,6 @@ class MenuItemService {
             if (kDebugMode) {
               print('❌ Error creating variant ${variant.name}: $variantError');
             }
-            // Tek varyant hatası tüm işlemi durdurmasın
             continue;
           }
         }
@@ -174,63 +171,58 @@ class MenuItemService {
         print('❌ Custom menu item creation error: $e');
       }
       
-      // Hata türü analizi
       final errorStr = e.toString().toLowerCase();
       if (errorStr.contains('business') && errorStr.contains('zorunlu')) {
-        throw Exception('İşletme bilgisi eksik. Lütfen uygulamayı yeniden başlatın.');
+        throw Exception(l10n.menuItemService_errorBusinessInfoMissing);
       } else if (errorStr.contains('invalid') && errorStr.contains('category')) {
-        throw Exception('Geçersiz kategori. Lütfen farklı bir kategori seçin.');
+        throw Exception(l10n.menuItemService_errorInvalidCategory);
       } else if (errorStr.contains('already exists') || errorStr.contains('unique') || errorStr.contains('benzersiz')) {
-        throw Exception('Bu isimde bir ürün zaten mevcut. Lütfen farklı bir isim deneyin.');
+        throw Exception(l10n.menuItemService_errorProductAlreadyExists);
       } else if (errorStr.contains('price') && errorStr.contains('required')) {
-        throw Exception('Manuel ürün için fiyat belirtmek zorunludur.');
+        throw Exception(l10n.menuItemService_errorPriceRequiredForManualProduct);
       } else if (errorStr.contains('401') || errorStr.contains('unauthorized')) {
-        throw Exception('Yetki hatası. Lütfen tekrar giriş yapın.');
+        throw Exception(l10n.menuItemService_errorAuthorization);
       } else if (errorStr.contains('403') || errorStr.contains('forbidden')) {
-        throw Exception('Bu işlem için yetkiniz bulunmuyor.');
+        throw Exception(l10n.menuItemService_errorForbidden);
       } else if (errorStr.contains('limit')) {
-        throw Exception('Ürün ekleme limitinize ulaştınız.');
+        throw Exception(l10n.menuItemService_errorProductLimitReached);
       } else {
-        throw Exception('Özel ürün oluşturulurken hata: $e');
+        throw Exception(l10n.menuItemService_errorCreatingCustomProduct(e.toString()));
       }
     }
   }
 
-  // --- YENİ EKLENEN: Benzersiz isim oluşturma fonksiyonu ---
   String _generateUniqueProductName(String baseName, List<dynamic> existingMenuItems) {
-    // Mevcut ürünlerin isimlerini al
     final existingNames = existingMenuItems
         .map((item) => item['name']?.toString() ?? '')
         .where((name) => name.isNotEmpty)
         .toSet();
     
-    // Eğer baseName zaten yoksa, onu kullan
     if (!existingNames.contains(baseName)) {
       return baseName;
     }
     
-    // Varsa, sayı ekleyerek benzersiz hale getir
     int counter = 1;
     String uniqueName;
     
     do {
       uniqueName = '$baseName ($counter)';
       counter++;
-    } while (existingNames.contains(uniqueName) && counter < 100); // Max 100 deneme
+    } while (existingNames.contains(uniqueName) && counter < 100);
     
     return uniqueName;
   }
 
-  // --- GÜNCELLENME: Template'ten gelişmiş ürün oluşturma - tracker eklendi ---
   Future<void> createMenuItemFromTemplateAdvanced({
     required String token,
     required int templateId,
     required int targetCategoryId,
     required bool isFromRecipe,
     double? price,
-    int? businessId, // YENİ: businessId parametresi eklendi
-    List<MenuItemVariant>? variants, // YENİ: Varyant listesi eklendi
-    VariantTemplateConfig? variantConfig, // YENİ: Varyant config eklendi
+    int? businessId,
+    List<MenuItemVariant>? variants,
+    VariantTemplateConfig? variantConfig,
+    required AppLocalizations l10n, // YENİ: l10n parametresi eklendi
   }) async {
     
     if (kDebugMode) {
@@ -241,35 +233,32 @@ class MenuItemService {
     }
     
     try {
-      // Template data al
-      final templateData = await _fetchTemplateData(token, templateId);
+      final templateData = await _fetchTemplateData(token, templateId, l10n);
       
       if (kDebugMode) {
         print("📄 Template data alındı: ${templateData.keys.toList()}");
         print("📄 Template details: name=${templateData['name']}, kdv_rate=${templateData['kdv_rate']}");
       }
       
-      // --- YENİ EKLENEN: Mevcut ürünleri kontrol et ---
       final existingMenuItems = await ApiService.fetchMenuItemsForBusiness(token);
-      final baseName = templateData['name'] ?? 'İsimsiz Ürün';
+      final baseName = templateData['name'] ?? l10n.menuItemService_unnamedProduct;
       final uniqueName = _generateUniqueProductName(baseName, existingMenuItems);
       
       if (kDebugMode && uniqueName != baseName) {
         print("📝 Duplicate name detected. Original: '$baseName', Unique: '$uniqueName'");
       }
       
-      // --- DEĞİŞTİRİLDİ: businessId parametresi eklendi ---
       try {
         final createdMenuItem = await ApiService.createMenuItemSmart(
           token,
-          name: uniqueName, // YENİ: Benzersiz isim kullan
+          name: uniqueName,
           description: templateData['description'] ?? '',
           categoryId: targetCategoryId,
           imageUrl: templateData['image'],
           kdvRate: (templateData['kdv_rate'] ?? 10.0).toDouble(),
           isFromRecipe: isFromRecipe,
           price: price,
-          businessId: businessId, // YENİ: businessId eklendi
+          businessId: businessId,
         );
         
         if (kDebugMode) {
@@ -277,7 +266,6 @@ class MenuItemService {
           print("📋 Created menu item data: $createdMenuItem");
         }
         
-        // ✅ YENİ: Template ürün ID'sini tracker'a ekle
         final menuItemId = createdMenuItem['id'] ?? createdMenuItem['menu_item_id'];
         if (menuItemId != null) {
           NewlyAddedTracker.markSingleItemAsNew(menuItemId);
@@ -286,7 +274,6 @@ class MenuItemService {
           }
         }
         
-        // --- YENİ EKLENEN: Varyantları da oluştur ---
         if (variants != null && variants.isNotEmpty && createdMenuItem != null) {
           if (menuItemId != null) {
             await _createVariantsForMenuItem(
@@ -311,24 +298,22 @@ class MenuItemService {
         if (kDebugMode) {
           print("💥 ApiService.createMenuItemSmart error: $apiError");
           print("📋 Request data was:");
-          print("   name: $uniqueName"); // YENİ: Unique name logla
+          print("   name: $uniqueName");
           print("   description: ${templateData['description'] ?? ''}");
           print("   categoryId: $targetCategoryId");
           print("   imageUrl: ${templateData['image']}");
           print("   kdvRate: ${(templateData['kdv_rate'] ?? 10.0).toDouble()}");
           print("   isFromRecipe: $isFromRecipe");
           print("   price: $price");
-          print("   businessId: $businessId"); // YENİ: businessId logı
+          print("   businessId: $businessId");
         }
         
-        // Hata türü analizi
         final errorStr = apiError.toString().toLowerCase();
         if (errorStr.contains('business') && errorStr.contains('zorunlu')) {
-          throw Exception('İşletme bilgisi eksik. Lütfen uygulamayı yeniden başlatın.');
+          throw Exception(l10n.menuItemService_errorBusinessInfoMissing);
         } else if (errorStr.contains('invalid') && errorStr.contains('category')) {
-          throw Exception('Geçersiz kategori. Lütfen farklı bir kategori seçin.');
+          throw Exception(l10n.menuItemService_errorInvalidCategory);
         } else if (errorStr.contains('already exists') || errorStr.contains('unique') || errorStr.contains('benzersiz')) {
-          // Bu durumda bile hala duplicate error alınıyorsa, daha aggressive unique name oluştur
           final timestamp = DateTime.now().millisecondsSinceEpoch;
           final fallbackName = "${baseName}_$timestamp";
           
@@ -353,7 +338,6 @@ class MenuItemService {
               print("✅ Fallback name worked: '$fallbackName'");
             }
             
-            // ✅ YENİ: Fallback ürün için de tracker'a ekle
             final retryMenuItemId = retryMenuItem['id'] ?? retryMenuItem['menu_item_id'];
             if (retryMenuItemId != null) {
               NewlyAddedTracker.markSingleItemAsNew(retryMenuItemId);
@@ -362,24 +346,23 @@ class MenuItemService {
               }
             }
             
-            return; // Başarılı olduysa çık
+            return;
           } catch (retryError) {
             if (kDebugMode) {
               print("💥 Even fallback name failed: $retryError");
             }
-            throw Exception('Ürün ismi benzersiz hale getirilemedi. Lütfen manuel olarak farklı bir isim deneyin.');
+            throw Exception(l10n.menuItemService_errorCouldNotCreateUniqueName);
           }
         } else if (errorStr.contains('price') && errorStr.contains('required')) {
-          throw Exception('Manuel ürün için fiyat belirtmek zorunludur.');
+          throw Exception(l10n.menuItemService_errorPriceRequiredForManualProduct);
         } else if (errorStr.contains('401') || errorStr.contains('unauthorized')) {
-          throw Exception('Yetki hatası. Lütfen tekrar giriş yapın.');
+          throw Exception(l10n.menuItemService_errorAuthorization);
         } else if (errorStr.contains('403') || errorStr.contains('forbidden')) {
-          throw Exception('Bu işlem için yetkiniz bulunmuyor.');
+          throw Exception(l10n.menuItemService_errorForbidden);
         } else if (errorStr.contains('limit')) {
-          throw Exception('Ürün ekleme limitinize ulaştınız.');
+          throw Exception(l10n.menuItemService_errorProductLimitReached);
         } else {
-          // Genel hata
-          throw Exception('Ürün oluşturulurken bir hata oluştu: ${apiError.toString()}');
+          throw Exception(l10n.menuItemService_errorCreatingProduct(apiError.toString()));
         }
       }
       
@@ -387,7 +370,6 @@ class MenuItemService {
       if (kDebugMode) {
         print("💥 Template creation error: $e");
         
-        // Hata türü analizi
         if (e.toString().contains('404')) {
           print("❌ 404 Error - Template bulunamadı");
         } else if (e.toString().contains('400')) {
@@ -404,7 +386,6 @@ class MenuItemService {
     }
   }
 
-  // --- DÜZELTME: Varyant oluşturma metodu güncellendi ---
   Future<void> _createVariantsForMenuItem({
     required String token,
     required int menuItemId,
@@ -417,7 +398,6 @@ class MenuItemService {
       try {
         String? variantImageUrl;
         
-        // DÜZELTME: Varyant görselini variant objesinden al
         if (variant.image.isNotEmpty && variant.image != '') {
           variantImageUrl = variant.image;
           
@@ -425,16 +405,14 @@ class MenuItemService {
             print("🔗 Using variant image URL: $variantImageUrl");
           }
         }
-        // Eski kod: variantConfig'den fotoğraf almaya çalışıyordu
         
-        // --- API ÇAĞRISINA FOTOĞRAF URL'İNİ EKLE ---
         await ApiService.createMenuItemVariant(
           token,
           menuItemId,
           variant.name,
           variant.price,
           variant.isExtra,
-          variantImageUrl, // ✅ Bu URL şimdi doğru şekilde geçiriliyor
+          variantImageUrl,
         );
         
         if (kDebugMode) {
@@ -445,16 +423,15 @@ class MenuItemService {
         if (kDebugMode) {
           print("❌ Error creating variant ${variant.name}: $e");
         }
-        // Tek varyant hatası tüm işlemi durdurmasın
         continue;
       }
     }
   }
 
-  // --- YENİ EKLENEN: Varyant görseli upload etme ---
   Future<String?> _uploadVariantImage({
     required int businessId,
     required VariantTemplateConfig variantConfig,
+    required AppLocalizations l10n, // YENİ: l10n parametresi eklendi
   }) async {
     if (!variantConfig.hasVariantImage) return null;
     
@@ -472,13 +449,13 @@ class MenuItemService {
     );
     
     if (imageUrl == null) {
-      throw Exception('Varyant görseli upload failed');
+      throw Exception(l10n.menuItemService_errorVariantImageUploadFailed);
     }
     
     return imageUrl;
   }
 
-  Future<Map<String, dynamic>> _fetchTemplateData(String token, int templateId) async {
+  Future<Map<String, dynamic>> _fetchTemplateData(String token, int templateId, AppLocalizations l10n) async {
     if (kDebugMode) {
       print("📥 Fetching template data: $templateId");
     }
@@ -506,17 +483,17 @@ class MenuItemService {
         if (kDebugMode) {
           print("❌ Template fetch error: ${response.statusCode} - ${response.body}");
         }
-        throw Exception("Template data fetch failed: ${response.statusCode} - ${response.body}");
+        throw Exception(l10n.menuItemService_errorFetchingTemplateData);
       }
     } catch (e) {
       if (kDebugMode) {
         print("❌ Network error while fetching template: $e");
       }
-      throw Exception("Template verisi alınırken ağ hatası: $e");
+      throw Exception(l10n.menuItemService_errorNetworkFetchingTemplate(e.toString()));
     }
   }
 
-  Future<String?> _uploadImage(int businessId, MenuItemFormData formData) async {
+  Future<String?> _uploadImage(int businessId, MenuItemFormData formData, AppLocalizations l10n) async {
     String fileName = formData.pickedImageXFile != null
         ? p.basename(formData.pickedImageXFile!.path)
         : 'menu_item_${DateTime.now().millisecondsSinceEpoch}.jpg';
@@ -531,7 +508,7 @@ class MenuItemService {
     );
     
     if (imageUrl == null) {
-      throw Exception('Firebase upload failed');
+      throw Exception(l10n.menuItemService_errorFirebaseUploadFailed);
     }
     
     return imageUrl;

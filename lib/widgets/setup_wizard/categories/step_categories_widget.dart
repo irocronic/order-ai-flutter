@@ -150,10 +150,10 @@ class StepCategoriesWidgetState extends State<StepCategoriesWidget> {
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(Icons.volume_up, color: Colors.green, size: 16),
+                      const Icon(Icons.volume_up, color: Colors.green, size: 16),
                       const SizedBox(width: 4),
                       Text(
-                        'Sesli Rehber Aktif',
+                        l10n.audioGuideActive,
                         style: TextStyle(
                           color: Colors.green.shade700,
                           fontSize: 12,
@@ -176,11 +176,11 @@ class StepCategoriesWidgetState extends State<StepCategoriesWidget> {
                     _audioService.toggleMute();
                   });
                 },
-                tooltip: isMuted ? 'Sesi Aç' : 'Sesi Kapat',
+                tooltip: isMuted ? l10n.tooltipUnmute : l10n.tooltipMute,
                 style: IconButton.styleFrom(
                   backgroundColor: isMuted 
-                    ? Colors.red.withOpacity(0.2) 
-                    : Colors.blue.withOpacity(0.2),
+                      ? Colors.red.withOpacity(0.2) 
+                      : Colors.blue.withOpacity(0.2),
                   padding: const EdgeInsets.all(12),
                 ),
               ),
@@ -195,7 +195,7 @@ class StepCategoriesWidgetState extends State<StepCategoriesWidget> {
                 onPressed: _audioService.isMuted ? null : () {
                   _audioService.playCategoriesStepAudio(context: context);
                 },
-                tooltip: 'Rehberi Tekrar Çal',
+                tooltip: l10n.tooltipReplayGuide,
                 style: IconButton.styleFrom(
                   backgroundColor: Colors.orange.withOpacity(0.2),
                   padding: const EdgeInsets.all(8),
@@ -314,7 +314,10 @@ class StepCategoriesWidgetState extends State<StepCategoriesWidget> {
               valueListenable: UserSession.limitsNotifier,
               builder: (context, limits, child) {
                 return Text(
-                  '${categories.length} / ${limits.maxCategories} Kategori Oluşturuldu',
+                  l10n.categoryLimitIndicator(
+                    categories.length.toString(), 
+                    limits.maxCategories.toString()
+                  ),
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 18,

@@ -71,7 +71,7 @@ class _MenuItemVariantsDialogState extends State<MenuItemVariantsDialog> {
 
     try {
       final variantsData = await ApiService.fetchVariantsForMenuItem(
-        widget.token, 
+        widget.token,
         widget.menuItem['id']
       );
       
@@ -82,8 +82,9 @@ class _MenuItemVariantsDialogState extends State<MenuItemVariantsDialog> {
       }
     } catch (e) {
       if (mounted) {
+        final l10n = AppLocalizations.of(context)!;
         setState(() {
-          _message = 'Varyantlar yüklenirken hata: ${e.toString().replaceFirst("Exception: ", "")}';
+          _message = l10n.menuItemVariantsDialogErrorLoadingVariants(e.toString().replaceFirst("Exception: ", ""));
         });
       }
     } finally {
@@ -193,6 +194,7 @@ class _MenuItemVariantsDialogState extends State<MenuItemVariantsDialog> {
 
   Widget _buildQuickVariantChips() {
     if (_variantTemplates.isEmpty) return const SizedBox.shrink();
+    final l10n = AppLocalizations.of(context)!;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -203,7 +205,7 @@ class _MenuItemVariantsDialogState extends State<MenuItemVariantsDialog> {
             Icon(Icons.flash_on, color: Colors.orange, size: 16),
             const SizedBox(width: 4),
             Text(
-              'Hızlı Varyant Ekle:',
+              l10n.menuItemVariantsDialogQuickAddVariant,
               style: TextStyle(
                 color: Colors.grey.shade700,
                 fontSize: 13,
@@ -212,7 +214,7 @@ class _MenuItemVariantsDialogState extends State<MenuItemVariantsDialog> {
             ),
             if (_isLoadingTemplates) ...[
               const SizedBox(width: 8),
-              SizedBox(
+              const SizedBox(
                 width: 12,
                 height: 12,
                 child: CircularProgressIndicator(
@@ -236,7 +238,7 @@ class _MenuItemVariantsDialogState extends State<MenuItemVariantsDialog> {
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
-                      'Şablonlar yükleniyor...',
+                      l10n.menuItemVariantsDialogLoadingTemplates,
                       style: TextStyle(color: Colors.grey.shade600),
                     ),
                   ),
@@ -353,7 +355,7 @@ class _MenuItemVariantsDialogState extends State<MenuItemVariantsDialog> {
       context: context,
       builder: (ctx) => AlertDialog(
         title: Text(l10n.dialogLimitReachedTitle),
-        content: Text('Varyant ekleme limitinize ulaştınız (${currentLimits.maxVariants}). Daha fazla varyant eklemek için planınızı yükseltin.'),
+        content: Text(l10n.menuItemVariantsDialogLimitReachedContent(currentLimits.maxVariants)),
         actions: [
           TextButton(
             child: Text(l10n.dialogButtonLater),
@@ -378,6 +380,7 @@ class _MenuItemVariantsDialogState extends State<MenuItemVariantsDialog> {
   Future<void> _addVariant() async {
     if (!_formKey.currentState!.validate()) return;
     if (!mounted) return;
+    final l10n = AppLocalizations.of(context)!;
 
     // Limit kontrolü
     final currentLimits = UserSession.limitsNotifier.value;
@@ -410,12 +413,12 @@ class _MenuItemVariantsDialogState extends State<MenuItemVariantsDialog> {
         );
         
         if (imageUrl == null) {
-          throw Exception('Firebase upload başarısız');
+          throw Exception(l10n.menuItemVariantsDialogFirebaseUploadFailed);
         }
       } catch (e) {
         if (mounted) {
           setState(() {
-            _message = 'Fotoğraf yüklenirken hata: $e';
+            _message = l10n.menuItemVariantsDialogErrorUploadingPhoto(e.toString());
             _isSubmitting = false;
           });
         }
@@ -435,7 +438,7 @@ class _MenuItemVariantsDialogState extends State<MenuItemVariantsDialog> {
 
       if (mounted) {
         setState(() {
-          _successMessage = 'Varyant "${_variantNameController.text.trim()}" başarıyla eklendi!';
+          _successMessage = l10n.menuItemVariantsDialogVariantAddedSuccess(_variantNameController.text.trim());
           _variantNameController.clear();
           _variantPriceController.clear();
           _isExtraFlag = false;
@@ -477,8 +480,8 @@ class _MenuItemVariantsDialogState extends State<MenuItemVariantsDialog> {
     final confirm = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: Text('Varyant Sil'),
-        content: Text('$variantName varyantını silmek istediğinizden emin misiniz?'),
+        title: Text(l10n.menuItemVariantsDialogDeleteVariantTitle),
+        content: Text(l10n.menuItemVariantsDialogDeleteVariantContent(variantName)),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(false),
@@ -504,7 +507,7 @@ class _MenuItemVariantsDialogState extends State<MenuItemVariantsDialog> {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('$variantName varyantı silindi'),
+              content: Text(l10n.menuItemVariantsDialogVariantDeletedSuccess(variantName)),
               backgroundColor: Colors.green,
               duration: const Duration(seconds: 2),
             ),
@@ -516,7 +519,7 @@ class _MenuItemVariantsDialogState extends State<MenuItemVariantsDialog> {
       } catch (e) {
         if (mounted) {
           setState(() {
-            _message = 'Varyant silinirken hata: ${e.toString().replaceFirst("Exception: ", "")}';
+            _message = l10n.menuItemVariantsDialogErrorDeletingVariant(e.toString().replaceFirst("Exception: ", ""));
           });
           
           Future.delayed(const Duration(seconds: 4), () {
@@ -534,7 +537,7 @@ class _MenuItemVariantsDialogState extends State<MenuItemVariantsDialog> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final menuItemName = widget.menuItem['name'] ?? 'İsimsiz Ürün';
+    final menuItemName = widget.menuItem['name'] ?? l10n.menuItemVariantsDialogUnnamedProduct;
 
     return Dialog(
       insetPadding: const EdgeInsets.all(16.0),
@@ -552,7 +555,7 @@ class _MenuItemVariantsDialogState extends State<MenuItemVariantsDialog> {
                 const SizedBox(width: 8),
                 Expanded(
                   child: Text(
-                    'Varyant Yönetimi - $menuItemName',
+                    l10n.menuItemVariantsDialogTitle(menuItemName),
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
@@ -586,7 +589,7 @@ class _MenuItemVariantsDialogState extends State<MenuItemVariantsDialog> {
                       )
                     else if (_variants.isNotEmpty) ...[
                       Text(
-                        'Mevcut Varyantlar (${_variants.length}):',
+                        l10n.menuItemVariantsDialogCurrentVariants(_variants.length),
                         style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
@@ -681,7 +684,7 @@ class _MenuItemVariantsDialogState extends State<MenuItemVariantsDialog> {
                                             borderRadius: BorderRadius.circular(8),
                                           ),
                                           child: Text(
-                                            'Ekstra',
+                                            l10n.menuItemVariantsDialogExtraTag,
                                             style: TextStyle(
                                               fontSize: 10,
                                               color: Colors.orange.shade700,
@@ -703,7 +706,7 @@ class _MenuItemVariantsDialogState extends State<MenuItemVariantsDialog> {
                                 size: 20,
                                 color: Colors.red.shade600,
                               ),
-                              tooltip: 'Varyantı Sil',
+                              tooltip: l10n.menuItemVariantsDialogDeleteVariantTooltip,
                             ),
                           ],
                         ),
@@ -728,7 +731,7 @@ class _MenuItemVariantsDialogState extends State<MenuItemVariantsDialog> {
                             ),
                             const SizedBox(height: 8),
                             Text(
-                              'Henüz varyant eklenmemiş',
+                              l10n.menuItemVariantsDialogNoVariantsAdded,
                               style: TextStyle(
                                 fontSize: 16,
                                 color: Colors.grey.shade600,
@@ -737,7 +740,7 @@ class _MenuItemVariantsDialogState extends State<MenuItemVariantsDialog> {
                             ),
                             const SizedBox(height: 4),
                             Text(
-                              'Bu ürün için boyut, ekstra seçenek gibi varyantlar ekleyebilirsiniz',
+                              l10n.menuItemVariantsDialogNoVariantsDescription,
                               style: TextStyle(
                                 fontSize: 12,
                                 color: Colors.grey.shade500,
@@ -752,7 +755,7 @@ class _MenuItemVariantsDialogState extends State<MenuItemVariantsDialog> {
                     
                     // Yeni Varyant Ekleme Formu
                     Text(
-                      'Yeni Varyant Ekle:',
+                      l10n.menuItemVariantsDialogAddNewVariant,
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
@@ -772,17 +775,17 @@ class _MenuItemVariantsDialogState extends State<MenuItemVariantsDialog> {
                                 flex: 3,
                                 child: TextFormField(
                                   controller: _variantNameController,
-                                  decoration: const InputDecoration(
-                                    labelText: 'Varyant Adı',
-                                    hintText: 'Büyük, Küçük, Ekstra...',
-                                    border: OutlineInputBorder(),
-                                    contentPadding: EdgeInsets.symmetric(
+                                  decoration: InputDecoration(
+                                    labelText: l10n.menuItemVariantsDialogVariantNameLabel,
+                                    hintText: l10n.menuItemVariantsDialogVariantNameHint,
+                                    border: const OutlineInputBorder(),
+                                    contentPadding: const EdgeInsets.symmetric(
                                       horizontal: 12, 
                                       vertical: 16
                                     ),
                                   ),
                                   validator: (v) => (v == null || v.isEmpty) 
-                                      ? 'Varyant adı gerekli' 
+                                      ? l10n.menuItemVariantsDialogVariantNameRequired 
                                       : null,
                                   enabled: !_isSubmitting,
                                 ),
@@ -792,11 +795,11 @@ class _MenuItemVariantsDialogState extends State<MenuItemVariantsDialog> {
                                 flex: 2,
                                 child: TextFormField(
                                   controller: _variantPriceController,
-                                  decoration: const InputDecoration(
-                                    labelText: 'Fiyat',
+                                  decoration: InputDecoration(
+                                    labelText: l10n.menuItemVariantsDialogPriceLabel,
                                     prefixText: '₺',
-                                    border: OutlineInputBorder(),
-                                    contentPadding: EdgeInsets.symmetric(
+                                    border: const OutlineInputBorder(),
+                                    contentPadding: const EdgeInsets.symmetric(
                                       horizontal: 12, 
                                       vertical: 16
                                     ),
@@ -810,9 +813,9 @@ class _MenuItemVariantsDialogState extends State<MenuItemVariantsDialog> {
                                     )
                                   ],
                                   validator: (v) {
-                                    if (v == null || v.isEmpty) return 'Fiyat gerekli';
+                                    if (v == null || v.isEmpty) return l10n.menuItemVariantsDialogPriceRequired;
                                     if (double.tryParse(v.replaceAll(',', '.')) == null) {
-                                      return 'Geçersiz fiyat';
+                                      return l10n.menuItemVariantsDialogInvalidPrice;
                                     }
                                     return null;
                                   },
@@ -832,8 +835,8 @@ class _MenuItemVariantsDialogState extends State<MenuItemVariantsDialog> {
                             children: [
                               Expanded(
                                 child: CheckboxListTile(
-                                  title: const Text('Ekstra seçenek'),
-                                  subtitle: const Text('Ek ücretli özellik mi?'),
+                                  title: Text(l10n.menuItemVariantsDialogExtraOptionTitle),
+                                  subtitle: Text(l10n.menuItemVariantsDialogExtraOptionSubtitle),
                                   value: _isExtraFlag,
                                   onChanged: _isSubmitting 
                                       ? null 
@@ -867,7 +870,7 @@ class _MenuItemVariantsDialogState extends State<MenuItemVariantsDialog> {
                                     ),
                                     const SizedBox(width: 8),
                                     Text(
-                                      'Varyant Fotoğrafı (Opsiyonel)',
+                                      l10n.menuItemVariantsDialogVariantPhotoOptional,
                                       style: TextStyle(
                                         fontSize: 14,
                                         fontWeight: FontWeight.bold,
@@ -895,7 +898,7 @@ class _MenuItemVariantsDialogState extends State<MenuItemVariantsDialog> {
                                         ),
                                         onPressed: _isSubmitting ? null : _pickImage,
                                         icon: const Icon(Icons.photo_library_outlined),
-                                        label: const Text('Resim Seç'),
+                                        label: Text(l10n.menuItemVariantsDialogSelectImage),
                                       ),
                                     ),
                                   ],
@@ -912,13 +915,13 @@ class _MenuItemVariantsDialogState extends State<MenuItemVariantsDialog> {
                             child: ElevatedButton.icon(
                               onPressed: _isSubmitting ? null : _addVariant,
                               icon: _isSubmitting 
-                                  ? SizedBox(
+                                  ? const SizedBox(
                                       width: 20, 
                                       height: 20, 
                                       child: CircularProgressIndicator(strokeWidth: 2)
                                     )
                                   : const Icon(Icons.add, size: 20),
-                              label: Text(_isSubmitting ? 'Ekleniyor...' : 'Varyant Ekle'),
+                              label: Text(_isSubmitting ? l10n.menuItemVariantsDialogAddingButton : l10n.menuItemVariantsDialogAddVariantButton),
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: _isSubmitting ? Colors.grey : Colors.blue,
                                 foregroundColor: Colors.white,
@@ -984,7 +987,7 @@ class _MenuItemVariantsDialogState extends State<MenuItemVariantsDialog> {
                 Expanded(
                   child: TextButton(
                     onPressed: () => Navigator.of(context).pop(),
-                    child: const Text('Kapat'),
+                    child: Text(l10n.menuItemVariantsDialogCloseButton),
                   ),
                 ),
               ],

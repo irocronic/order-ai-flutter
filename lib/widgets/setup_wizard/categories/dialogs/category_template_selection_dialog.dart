@@ -1,3 +1,5 @@
+// lib/widgets/setup_wizard/categories/dialogs/category_template_selection_dialog.dart
+
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../../../models/kds_screen_model.dart';
@@ -22,18 +24,18 @@ class CategoryTemplateSelectionDialog extends StatefulWidget {
 class _CategoryTemplateSelectionDialogState
     extends State<CategoryTemplateSelectionDialog> {
   final _formKey = GlobalKey<FormState>();
-  
+
   // Arama ile ilgili değişkenler
   List<dynamic> _allTemplates = [];
   List<dynamic> _filteredTemplates = [];
   final TextEditingController _searchController = TextEditingController();
-  
+
   final List<int> _selectedTemplates = [];
   List<KdsScreenModel> _kdsScreens = [];
   int? _selectedKdsScreenId;
   bool _isLoading = true;
   bool _isSubmitting = false;
-  
+
   // Mevcut kategori sayısını takip etmek için
   int _currentCategoryCount = 0;
 
@@ -54,6 +56,7 @@ class _CategoryTemplateSelectionDialogState
   Future<void> _fetchInitialData() async {
     if (!mounted) return;
     setState(() => _isLoading = true);
+    
     try {
       final results = await Future.wait([
         ApiService.fetchCategoryTemplates(),
@@ -71,8 +74,10 @@ class _CategoryTemplateSelectionDialogState
       }
     } catch (e) {
       if (mounted) {
+        // Hata anında çeviriye erişmek için 'l10n' burada tanımlanır.
+        final l10n = AppLocalizations.of(context)!;
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Veriler yüklenirken hata: ${e.toString()}')),
+          SnackBar(content: Text(l10n.errorLoadingData(e.toString()))),
         );
       }
     } finally {
@@ -222,8 +227,8 @@ class _CategoryTemplateSelectionDialogState
                     child: Text(
                       l10n.setupCategoriesSelectFromTemplate,
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
+                            fontWeight: FontWeight.bold,
+                          ),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -266,7 +271,11 @@ class _CategoryTemplateSelectionDialogState
                                     const SizedBox(width: 6),
                                     Expanded(
                                       child: Text(
-                                        'Mevcut: $_currentCategoryCount, Seçilen: ${_selectedTemplates.length}, Limit: ${currentLimits.maxCategories}',
+                                        l10n.categoryLimitInfo(
+                                          _currentCategoryCount,
+                                          _selectedTemplates.length,
+                                          currentLimits.maxCategories
+                                        ),
                                         style: TextStyle(
                                           fontSize: 11,
                                           color: Colors.blue.shade700,
@@ -282,8 +291,8 @@ class _CategoryTemplateSelectionDialogState
                               TextField(
                                 controller: _searchController,
                                 decoration: InputDecoration(
-                                  labelText: 'Kategori Şablonu Ara',
-                                  hintText: 'Kategori adı ile ara...',
+                                  labelText: l10n.searchCategoryTemplateLabel,
+                                  hintText: l10n.searchCategoryTemplateHint,
                                   prefixIcon: const Icon(Icons.search, size: 18),
                                   border: const OutlineInputBorder(),
                                   contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
@@ -305,11 +314,11 @@ class _CategoryTemplateSelectionDialogState
                               if (hasVisibleItems)
                                 CheckboxListTile(
                                   title: Text(
-                                    allVisibleSelected ? 'Tümünü Bırak' : 'Tümünü Seç',
+                                    allVisibleSelected ? l10n.deselectAll : l10n.selectAll,
                                     style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
                                   ),
                                   subtitle: Text(
-                                    'Görüntülenen: ${_filteredTemplates.length} şablon',
+                                    l10n.templatesDisplayed(_filteredTemplates.length),
                                     style: const TextStyle(fontSize: 11),
                                   ),
                                   value: allVisibleSelected,
@@ -362,16 +371,16 @@ class _CategoryTemplateSelectionDialogState
                                   borderRadius: BorderRadius.circular(4.0),
                                 ),
                                 child: _allTemplates.isEmpty
-                                    ? const Center(child: Text('Şablon bulunamadı'))
+                                    ? Center(child: Text(l10n.noTemplatesFound))
                                     : _filteredTemplates.isEmpty
-                                        ? const Center(
+                                        ? Center(
                                             child: Column(
                                               mainAxisAlignment: MainAxisAlignment.center,
                                               children: [
                                                 Icon(Icons.search_off, size: 32, color: Colors.grey),
                                                 SizedBox(height: 6),
                                                 Text(
-                                                  'Arama kriterlerinize uygun\nkategori şablonu bulunamadı.',
+                                                  l10n.noTemplatesMatchSearch,
                                                   style: TextStyle(fontSize: 12, color: Colors.grey),
                                                   textAlign: TextAlign.center,
                                                 ),
@@ -402,7 +411,7 @@ class _CategoryTemplateSelectionDialogState
                                                   children: [
                                                     if (template['icon_name'] != null && template['icon_name'].toString().isNotEmpty)
                                                       Text(
-                                                        'İkon: ${template['icon_name']}',
+                                                        l10n.iconInfo(template['icon_name']),
                                                         style: TextStyle(
                                                           fontSize: 10,
                                                           color: Colors.grey.shade600,
@@ -410,7 +419,7 @@ class _CategoryTemplateSelectionDialogState
                                                       ),
                                                     if (wouldExceedLimit)
                                                       Text(
-                                                        'Limit aşılacak', 
+                                                        l10n.limitWillBeExceeded, 
                                                         style: TextStyle(
                                                           color: Colors.red,
                                                           fontSize: 10,
@@ -470,7 +479,7 @@ class _CategoryTemplateSelectionDialogState
                               width: 14,
                               child: CircularProgressIndicator(strokeWidth: 2))
                           : Text(
-                              '${_selectedTemplates.length} şablon - ${l10n.createButton}',
+                              l10n.createTemplateButtonWithCount(_selectedTemplates.length),
                               style: const TextStyle(fontSize: 12),
                               overflow: TextOverflow.ellipsis,
                             ),

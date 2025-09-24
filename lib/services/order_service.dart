@@ -98,15 +98,14 @@ class OrderService {
     );
   }
   
-  // <<< GÜNCELLEME BAŞLANGICI: Metod imzası ve içeriği değiştirildi >>>
   /// Bir siparişi ödenmiş olarak işaretler. Çevrimdışı ise kuyruğa ekler.
   static Future<http.Response> markOrderAsPaid({
     required String token,
-    required AppOrder.Order order, // Artık tam sipariş nesnesini alıyor
+    required AppOrder.Order order,
     required String paymentType,
     required double amount,
   }) async {
-    final orderIdentifier = order.syncId; // syncId getter'ı doğru ID'yi (geçici veya kalıcı) döndürür
+    final orderIdentifier = order.syncId;
 
     if (ConnectivityService.instance.isOnlineNotifier.value) {
       debugPrint("[OrderService] (Online) markOrderAsPaid. Order ID: $orderIdentifier");
@@ -126,7 +125,6 @@ class OrderService {
       final tempPaymentId = uuid.v4();
       
       final syncPayload = {
-        // CRITICAL CHANGE: Artık siparişin geçici/kalıcı syncId'si payload'a ekleniyor.
         'orderId': orderIdentifier,
         'payment_type': paymentType,
         'amount': amount.toStringAsFixed(2),
@@ -134,7 +132,6 @@ class OrderService {
       debugPrint("--- OFFLINE PAYMENT PAYLOAD ---");
       debugPrint("Order ID to be synced: $orderIdentifier (${orderIdentifier.runtimeType})");
       debugPrint("Payload map: $syncPayload");
-      // --- END LOG ---
       
       final payloadJson = jsonEncode(syncPayload);
       final payloadBase64 = base64Encode(utf8.encode(payloadJson));
@@ -147,7 +144,6 @@ class OrderService {
       await CacheService.instance.addToSyncQueue(syncItem);
       debugPrint("[OrderService] (Offline) 'mark_as_paid' kuyruğa eklendi. Sync ID: $tempPaymentId");
 
-      // Önbellekteki siparişi 'ödendi' olarak güncelle
       final cacheBox = CacheService.instance.tempOrdersBox;
       Map<String, dynamic>? cachedOrder = Map<String, dynamic>.from(cacheBox.get(orderIdentifier.toString()) ?? {});
       
@@ -176,6 +172,32 @@ class OrderService {
         throw Exception("Çevrimdışı sipariş önbellekte bulunamadı.");
       }
     }
+  }
+
+  static Future<Map<String, dynamic>> initiateQrPayment({
+    required String token,
+    required int orderId,
+  }) async {
+    final response = await http.post(
+      ApiService.getUrl('/orders/$orderId/initiate-qr-payment/'),
+      headers: ApiService.getHeaders(token),
+    );
+    return ApiService.handleResponse(response);
+  }
+
+  static Future<Map<String, dynamic>> checkQrPaymentStatus({
+    required String token,
+    required int orderId,
+    required String transactionId,
+  }) async {
+    final uri = ApiService.getUrl('/orders/$orderId/check-qr-payment-status/').replace(
+      queryParameters: {'transaction_id': transactionId},
+    );
+    final response = await http.get(
+      uri,
+      headers: ApiService.getHeaders(token),
+    );
+    return ApiService.handleResponse(response);
   }
 
   static Future<List<dynamic>> fetchMenuItems(String token) async {
@@ -412,83 +434,175 @@ class OrderService {
     }
   }
   
-  static Future<http.Response> markOrderItemDelivered({ required String token, required int orderId, required int orderItemId, }) async {
-    if (!ConnectivityService.instance.isOnlineNotifier.value) { throw Exception("Çevrimdışı modda ürün teslim edilemez."); }
+  static Future<http.Response> markOrderItemDelivered({ 
+    required String token, 
+    required int orderId, 
+    required int orderItemId, 
+  }) async {
+    if (!ConnectivityService.instance.isOnlineNotifier.value) { 
+      throw Exception("Çevrimdışı modda ürün teslim edilemez."); 
+    }
     final url = ApiService.getUrl('/orders/$orderId/deliver-item/');
     final String body = jsonEncode({'order_item_id': orderItemId});
-    return await http.post( url, headers: {"Content-Type": "application/json", "Authorization": "Bearer $token"}, body: body, );
+    return await http.post( 
+      url, 
+      headers: {"Content-Type": "application/json", "Authorization": "Bearer $token"}, 
+      body: body, 
+    );
   }
 
-  static Future<http.Response> markItemPickedUpByWaiter({ required String token, required int orderItemId, }) async {
-    if (!ConnectivityService.instance.isOnlineNotifier.value) { throw Exception("Çevrimdışı modda bu işlem yapılamaz."); }
+  static Future<http.Response> markItemPickedUpByWaiter({ 
+    required String token, 
+    required int orderItemId, 
+  }) async {
+    if (!ConnectivityService.instance.isOnlineNotifier.value) { 
+      throw Exception("Çevrimdışı modda bu işlem yapılamaz."); 
+    }
     final url = ApiService.getUrl('/order_items/$orderItemId/mark-picked-up/');
-    return await http.post( url, headers: {"Content-Type": "application/json", "Authorization": "Bearer $token"}, body: jsonEncode({}), );
+    return await http.post( 
+      url, 
+      headers: {"Content-Type": "application/json", "Authorization": "Bearer $token"}, 
+      body: jsonEncode({}), 
+    );
   }
   
-  static Future<PaginatedResponse<AppOrder.Order>> fetchCompletedOrdersPaginated({ required String token, int page = 1, }) async {
-    if (!ConnectivityService.instance.isOnlineNotifier.value) { throw Exception("Çevrimdışı modda tamamlanmış siparişlere ulaşılamaz."); }
+  static Future<PaginatedResponse<AppOrder.Order>> fetchCompletedOrdersPaginated({ 
+    required String token, 
+    int page = 1, 
+  }) async {
+    if (!ConnectivityService.instance.isOnlineNotifier.value) { 
+      throw Exception("Çevrimdışı modda tamamlanmış siparişlere ulaşılamaz."); 
+    }
     final url = ApiService.getUrl('/orders/').replace(queryParameters: {'is_paid': 'true', 'page': page.toString()});
     final response = await http.get(url, headers: {"Authorization": "Bearer $token"});
     if (response.statusCode == 200) {
       final decodedBody = jsonDecode(utf8.decode(response.bodyBytes));
-      if (decodedBody is Map<String, dynamic> && decodedBody.containsKey('results')) { return PaginatedResponse.fromJson(decodedBody, (json) => AppOrder.Order.fromJson(json)); } 
-      else { throw Exception('API yanıtı beklenmedik bir formatta.'); }
-    } else { throw Exception('Ödenmiş siparişler alınamadı: ${response.statusCode}'); }
+      if (decodedBody is Map<String, dynamic> && decodedBody.containsKey('results')) { 
+        return PaginatedResponse.fromJson(decodedBody, (json) => AppOrder.Order.fromJson(json)); 
+      } else { 
+        throw Exception('API yanıtı beklenmedik bir formatta.'); 
+      }
+    } else { 
+      throw Exception('Ödenmiş siparişler alınamadı: ${response.statusCode}'); 
+    }
   }
 
-  static Future<PaginatedResponse<AppOrder.Order>> fetchCreditSales({ required String token, int page = 1, }) async {
-    if (!ConnectivityService.instance.isOnlineNotifier.value) { throw Exception("Çevrimdışı modda veresiye listesine ulaşılamaz."); }
+  static Future<PaginatedResponse<AppOrder.Order>> fetchCreditSales({ 
+    required String token, 
+    int page = 1, 
+  }) async {
+    if (!ConnectivityService.instance.isOnlineNotifier.value) { 
+      throw Exception("Çevrimdışı modda veresiye listesine ulaşılamaz."); 
+    }
     final url = ApiService.getUrl('/orders/credit-sales/').replace(queryParameters: {'page': page.toString()});
     final response = await http.get(url, headers: {"Authorization": "Bearer $token"});
     if (response.statusCode == 200) {
       final decodedBody = jsonDecode(utf8.decode(response.bodyBytes));
-      if (decodedBody is Map<String, dynamic>) { return PaginatedResponse.fromJson(decodedBody, (json) => AppOrder.Order.fromJson(json)); } 
-      else { throw Exception('Veresiye siparişleri API yanıtı beklenmedik bir formatta.'); }
-    } else { throw Exception('Veresiye siparişleri alınamadı: ${response.statusCode}'); }
+      if (decodedBody is Map<String, dynamic>) { 
+        return PaginatedResponse.fromJson(decodedBody, (json) => AppOrder.Order.fromJson(json)); 
+      } else { 
+        throw Exception('Veresiye siparişleri API yanıtı beklenmedik bir formatta.'); 
+      }
+    } else { 
+      throw Exception('Veresiye siparişleri alınamadı: ${response.statusCode}'); 
+    }
   }
 
-  static Future<http.Response> saveCreditPayment({ required String token, required int orderId, String? customerName, String? customerPhone, String? notes, }) async {
-    if (!ConnectivityService.instance.isOnlineNotifier.value) { throw Exception("Çevrimdışı modda veresiye kaydı oluşturulamz."); }
+  static Future<http.Response> saveCreditPayment({ 
+    required String token, 
+    required int orderId, 
+    String? customerName, 
+    String? customerPhone, 
+    String? notes, 
+  }) async {
+    if (!ConnectivityService.instance.isOnlineNotifier.value) { 
+      throw Exception("Çevrimdışı modda veresiye kaydı oluşturulamaz."); 
+    }
     final url = ApiService.getUrl('/orders/$orderId/credit/');
     final Map<String, dynamic> payload = {};
     if (customerName != null) payload['customer_name'] = customerName;
     if (customerPhone != null) payload['customer_phone'] = customerPhone;
     if (notes != null) payload['notes'] = notes;
-    return await http.post( url, headers: {"Content-Type": "application/json", "Authorization": "Bearer $token"}, body: jsonEncode(payload), );
+    return await http.post( 
+      url, 
+      headers: {"Content-Type": "application/json", "Authorization": "Bearer $token"}, 
+      body: jsonEncode(payload), 
+    );
   }
   
   static Future<http.Response> cancelOrder(String token, int orderId) async {
-    if (!ConnectivityService.instance.isOnlineNotifier.value) { throw Exception("Çevrimdışı modda sipariş iptal edilemez."); }
+    if (!ConnectivityService.instance.isOnlineNotifier.value) { 
+      throw Exception("Çevrimdışı modda sipariş iptal edilemez."); 
+    }
     final url = ApiService.getUrl('/orders/$orderId/');
-    return await http.delete( url, headers: {"Authorization": "Bearer $token"}, );
+    return await http.delete( 
+      url, 
+      headers: {"Authorization": "Bearer $token"}, 
+    );
   }
 
-  static Future<http.Response> approveGuestOrder({ required String token, required int orderId, }) async {
-    if (!ConnectivityService.instance.isOnlineNotifier.value) { throw Exception("Çevrimdışı modda sipariş onaylanamaz."); }
+  static Future<http.Response> approveGuestOrder({ 
+    required String token, 
+    required int orderId, 
+  }) async {
+    if (!ConnectivityService.instance.isOnlineNotifier.value) { 
+      throw Exception("Çevrimdışı modda sipariş onaylanamaz."); 
+    }
     final url = ApiService.getUrl('/orders/$orderId/approve-guest-order/');
-    return await http.post( url, headers: {"Authorization": "Bearer $token"}, );
+    return await http.post( 
+      url, 
+      headers: {"Authorization": "Bearer $token"}, 
+    );
   }
 
-  static Future<http.Response> rejectGuestOrder({ required String token, required int orderId, }) async {
-    if (!ConnectivityService.instance.isOnlineNotifier.value) { throw Exception("Çevrimdışı modda sipariş reddedilemez."); }
+  static Future<http.Response> rejectGuestOrder({ 
+    required String token, 
+    required int orderId, 
+  }) async {
+    if (!ConnectivityService.instance.isOnlineNotifier.value) { 
+      throw Exception("Çevrimdışı modda sipariş reddedilemez."); 
+    }
     final url = ApiService.getUrl('/orders/$orderId/reject-guest-order/');
-    return await http.post( url, headers: {"Authorization": "Bearer $token"}, );
+    return await http.post( 
+      url, 
+      headers: {"Authorization": "Bearer $token"}, 
+    );
   }
 
-  static Future<http.Response> markOrderPickedUpByWaiter({ required String token, required int orderId, }) async {
-    if (!ConnectivityService.instance.isOnlineNotifier.value) { throw Exception("Çevrimdışı modda bu işlem yapılamaz."); }
+  static Future<http.Response> markOrderPickedUpByWaiter({ 
+    required String token, 
+    required int orderId, 
+  }) async {
+    if (!ConnectivityService.instance.isOnlineNotifier.value) { 
+      throw Exception("Çevrimdışı modda bu işlem yapılamaz."); 
+    }
     final url = ApiService.getUrl('/orders/$orderId/mark-picked-up-by-waiter/');
-    return await http.post( url, headers: {"Content-Type": "application/json", "Authorization": "Bearer $token"}, );
+    return await http.post( 
+      url, 
+      headers: {"Content-Type": "application/json", "Authorization": "Bearer $token"}, 
+    );
   }
   
   static Future<int> fetchActiveTableOrderCount(String token, int businessId) async {
     if (!ConnectivityService.instance.isOnlineNotifier.value) return 0;
-    final url = ApiService.getUrl('/orders/').replace(queryParameters: { 'business_id': businessId.toString(), 'order_type': 'table', 'is_paid': 'false', 'exclude_status': 'rejected,cancelled,completed', });
+    final url = ApiService.getUrl('/orders/').replace(queryParameters: { 
+      'business_id': businessId.toString(), 
+      'order_type': 'table', 
+      'is_paid': 'false', 
+      'exclude_status': 'rejected,cancelled,completed', 
+    });
     try {
       final response = await http.get(url, headers: {"Authorization": "Bearer $token"});
-      if (response.statusCode == 200) { final decodedBody = jsonDecode(utf8.decode(response.bodyBytes)); if (decodedBody is Map<String, dynamic> && decodedBody.containsKey('count')) { return decodedBody['count'] as int? ?? 0; } }
+      if (response.statusCode == 200) { 
+        final decodedBody = jsonDecode(utf8.decode(response.bodyBytes)); 
+        if (decodedBody is Map<String, dynamic> && decodedBody.containsKey('count')) { 
+          return decodedBody['count'] as int? ?? 0; 
+        } 
+      }
       return 0;
-    } catch (e) { return 0; }
+    } catch (e) { 
+      return 0; 
+    }
   }
 
   static Future<int> fetchActiveTakeawayOrderCount(String token, int businessId) async {
@@ -501,7 +615,12 @@ class OrderService {
         return 0;
       }
     }
-    final url = ApiService.getUrl('/orders/').replace(queryParameters: { 'business_id': businessId.toString(), 'order_type': 'takeaway', 'is_paid': 'false', 'exclude_status': 'rejected,cancelled,completed', });
+    final url = ApiService.getUrl('/orders/').replace(queryParameters: { 
+      'business_id': businessId.toString(), 
+      'order_type': 'takeaway', 
+      'is_paid': 'false', 
+      'exclude_status': 'rejected,cancelled,completed', 
+    });
     try {
       final response = await http.get(url, headers: {"Authorization": "Bearer $token"});
       if (response.statusCode == 200) { 
@@ -511,22 +630,41 @@ class OrderService {
         } 
       }
       return 0;
-    } catch (e) { return 0; }
+    } catch (e) { 
+      return 0; 
+    }
   }
 
   static Future<http.Response> updateOrder(String token, int orderId, Map<String, dynamic> data) async {
-    if (!ConnectivityService.instance.isOnlineNotifier.value) { throw Exception("Çevrimdışı modda sipariş güncellenemez."); }
+    if (!ConnectivityService.instance.isOnlineNotifier.value) { 
+      throw Exception("Çevrimdışı modda sipariş güncellenemez."); 
+    }
     final url = ApiService.getUrl('/orders/$orderId/');
-    return await http.patch( url, headers: {"Content-Type": "application/json", "Authorization": "Bearer $token"}, body: jsonEncode(data), );
+    return await http.patch( 
+      url, 
+      headers: {"Content-Type": "application/json", "Authorization": "Bearer $token"}, 
+      body: jsonEncode(data), 
+    );
   }
 
-  static Future<Map<String, dynamic>?> fetchOrderDetails({ required String token, required int orderId, }) async {
-    if (!ConnectivityService.instance.isOnlineNotifier.value) { throw Exception("Çevrimdışı modda sipariş detaylarına ulaşılamaz."); }
+  static Future<Map<String, dynamic>?> fetchOrderDetails({ 
+    required String token, 
+    required int orderId, 
+  }) async {
+    if (!ConnectivityService.instance.isOnlineNotifier.value) { 
+      throw Exception("Çevrimdışı modda sipariş detaylarına ulaşılamaz."); 
+    }
     final url = ApiService.getUrl('/orders/$orderId/');
     try {
       final response = await http.get(url, headers: {"Authorization": "Bearer $token"});
-      if (response.statusCode == 200) { return jsonDecode(utf8.decode(response.bodyBytes)); } else { return null; }
-    } catch (e) { return null; }
+      if (response.statusCode == 200) { 
+        return jsonDecode(utf8.decode(response.bodyBytes)); 
+      } else { 
+        return null; 
+      }
+    } catch (e) { 
+      return null; 
+    }
   }
 
   static Future<PaginatedResponse<AppOrder.Order>> fetchTakeawayOrdersPaginated({

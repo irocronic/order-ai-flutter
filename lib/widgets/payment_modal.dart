@@ -1,12 +1,13 @@
 // lib/widgets/payment_modal.dart
 
-import 'dart:convert'; // HATA DÜZELTİLDİ: 'dart.convert' yerine 'dart:convert'
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../services/order_service.dart';
 import 'credit_payment_modal.dart';
 import '../models/order.dart' as AppOrder;
 import '../utils/currency_formatter.dart';
+import '../screens/qr_payment_screen.dart'; // YENİ EKRAN İÇİN IMPORT
 
 class PaymentModal extends StatefulWidget {
   final String token;
@@ -27,7 +28,7 @@ class PaymentModal extends StatefulWidget {
 }
 
 class _PaymentModalState extends State<PaymentModal> {
-  bool _isSubmitting = false;
+  bool _isProcessing = false;
   String _currentPaymentType = '';
 
   Future<void> _submitPayment(String paymentType) async {
@@ -35,7 +36,7 @@ class _PaymentModalState extends State<PaymentModal> {
     final l10n = AppLocalizations.of(context)!;
 
     setState(() {
-      _isSubmitting = true;
+      _isProcessing = true;
       _currentPaymentType = paymentType;
     });
 
@@ -73,7 +74,7 @@ class _PaymentModalState extends State<PaymentModal> {
       }
     } finally {
       if (mounted) {
-        setState(() => _isSubmitting = false);
+        setState(() => _isProcessing = false);
       }
     }
   }
@@ -149,22 +150,22 @@ class _PaymentModalState extends State<PaymentModal> {
               children: [
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(backgroundColor: Colors.white.withOpacity(0.8), foregroundColor: Colors.black, elevation: 4, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16))),
-                  onPressed: _isSubmitting ? null : () => _submitPayment('credit_card'),
-                  child: _isSubmitting && _currentPaymentType == 'credit_card' ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 3, color: Colors.blueAccent,)) : Text(l10n.paymentTypeCreditCard),
+                  onPressed: _isProcessing ? null : () => _submitPayment('credit_card'),
+                  child: _isProcessing && _currentPaymentType == 'credit_card' ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 3, color: Colors.blueAccent,)) : Text(l10n.paymentTypeCreditCard),
                 ),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(backgroundColor: Colors.white.withOpacity(0.8), foregroundColor: Colors.black, elevation: 4, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16))),
-                  onPressed: _isSubmitting ? null : () => _submitPayment('cash'),
-                  child: _isSubmitting && _currentPaymentType == 'cash' ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 3, color: Colors.blueAccent,)) : Text(l10n.paymentTypeCash),
+                  onPressed: _isProcessing ? null : () => _submitPayment('cash'),
+                  child: _isProcessing && _currentPaymentType == 'cash' ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 3, color: Colors.blueAccent,)) : Text(l10n.paymentTypeCash),
                 ),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(backgroundColor: Colors.white.withOpacity(0.8), foregroundColor: Colors.black, elevation: 4, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16))),
-                  onPressed: _isSubmitting ? null : () => _submitPayment('food_card'),
-                  child: _isSubmitting && _currentPaymentType == 'food_card' ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 3, color: Colors.blueAccent,)) : Text(l10n.paymentTypeFoodCard),
+                  onPressed: _isProcessing ? null : () => _submitPayment('food_card'),
+                  child: _isProcessing && _currentPaymentType == 'food_card' ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 3, color: Colors.blueAccent,)) : Text(l10n.paymentTypeFoodCard),
                 ),
               ],
             ),
-             const SizedBox(height: 16),
+            const SizedBox(height: 16),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.orangeAccent.withOpacity(0.8),
@@ -172,8 +173,41 @@ class _PaymentModalState extends State<PaymentModal> {
                   elevation: 4,
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                   padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12)),
-              onPressed: _isSubmitting ? null : _handleCreditSale,
-              child: _isSubmitting ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 3, color: Colors.white)) : Text(l10n.paymentTypeCredit, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+              onPressed: _isProcessing ? null : _handleCreditSale,
+              child: _isProcessing ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 3, color: Colors.white)) : Text(l10n.paymentTypeCredit, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+            ),
+            const SizedBox(height: 16),
+            // YENİ EKLENEN QR İLE ÖDE BUTONU
+            ElevatedButton.icon(
+              icon: const Icon(Icons.qr_code_2),
+              label: Text(l10n.paymentTypeQrCode, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.deepPurple.shade400,
+                foregroundColor: Colors.white,
+                minimumSize: const Size(double.infinity, 50),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+              ),
+              onPressed: _isProcessing
+                  ? null
+                  : () {
+                      // Önce mevcut modalı kapat
+                      Navigator.of(context).pop(); 
+                      // Sonra QR ödeme ekranını aç
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (ctx) => QrPaymentScreen(
+                            order: widget.order,
+                            token: widget.token,
+                          ),
+                        ),
+                      ).then((paymentResult) {
+                        // QR ekranından bir sonuçla dönülürse
+                        if (paymentResult == true) {
+                          // Ödeme başarılı, ana sipariş ekranına haber ver.
+                          widget.onSuccess();
+                        }
+                      });
+                    },
             ),
           ],
         ),

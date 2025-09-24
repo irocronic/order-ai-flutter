@@ -40,8 +40,8 @@ class _QuickStartSectionState extends State<QuickStartSection> {
   bool _isAddingFromTemplates = false;
 
   Future<void> _openTemplateSelectionDialog() async {
+    final l10n = AppLocalizations.of(context)!;
     if (widget.availableCategories.isEmpty) {
-      final l10n = AppLocalizations.of(context)!;
       widget.onMessageChanged(
         l10n.setupMenuItemsErrorCreateCategoryFirst,
         isError: true,
@@ -65,8 +65,6 @@ class _QuickStartSectionState extends State<QuickStartSection> {
   }
 
   Future<void> _handleTemplateSelectionResult(Map<String, dynamic> result) async {
-    final l10n = AppLocalizations.of(context)!;
-    
     // YENİ FORMAT: selectedTemplates varsa onu kullan
     if (result.containsKey('selectedTemplates')) {
       final List<dynamic> selectedTemplates = result['selectedTemplates'];
@@ -175,6 +173,7 @@ class _QuickStartSectionState extends State<QuickStartSection> {
               price: price,
               businessId: businessId,
               variants: variants.isNotEmpty ? variants : null,
+              l10n: l10n, // HATA GİDERİLDİ: l10n parametresi eklendi
             );
           }
           successCount++;
@@ -195,12 +194,12 @@ class _QuickStartSectionState extends State<QuickStartSection> {
       if (mounted) {
         if (successCount > 0) {
           widget.onMessageChanged(
-            '$successCount ürün başarıyla eklendi!',
+            l10n.menuItemsAddedSuccess(successCount),
           );
           widget.onMenuItemsAdded();
         } else {
           widget.onMessageChanged(
-            'Hiçbir ürün eklenemedi. Lütfen tekrar deneyin.',
+            l10n.menuItemsAddedError,
             isError: true,
           );
         }
@@ -281,6 +280,7 @@ class _QuickStartSectionState extends State<QuickStartSection> {
     required int businessId,
     required List<MenuItemVariant>? variants,
   }) async {
+    final l10n = AppLocalizations.of(context)!;
     try {
       if (kDebugMode) {
         print('🆕 Creating custom menu item:');
@@ -301,6 +301,7 @@ class _QuickStartSectionState extends State<QuickStartSection> {
         price: price,
         businessId: businessId,
         variants: variants,
+        l10n: l10n, // HATA GİDERİLDİ: l10n parametresi eklendi
       );
 
       if (kDebugMode) {
@@ -310,7 +311,7 @@ class _QuickStartSectionState extends State<QuickStartSection> {
       if (kDebugMode) {
         print('❌ Custom menu item creation error: $e');
       }
-      throw Exception('Özel ürün oluşturulurken hata: $e');
+      throw Exception(l10n.errorCreatingCustomProduct(e.toString()));
     }
   }
 
@@ -355,7 +356,7 @@ class _QuickStartSectionState extends State<QuickStartSection> {
 
       if (mounted) {
         widget.onMessageChanged(
-          '${createdItems.length} ürün başarıyla eklendi!',
+          l10n.menuItemsAddedSuccess(createdItems.length),
         );
         widget.onMenuItemsAdded();
       }
@@ -395,7 +396,7 @@ class _QuickStartSectionState extends State<QuickStartSection> {
           const SizedBox(height: 8),
           // ✅ GÜNCELLENME: Kategoriler sayfasındaki gibi büyük başlık
           Text(
-            'Hızlı Başlangıç',
+            l10n.quickStartTitle,
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
@@ -405,7 +406,7 @@ class _QuickStartSectionState extends State<QuickStartSection> {
           const SizedBox(height: 8),
           // ✅ GÜNCELLENME: Kategoriler sayfasındaki gibi açıklama metni
           Text(
-            'Popüler kategoriler için hazır ürünleri hızla ekleyin',
+            l10n.quickStartDescription,
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 14,
@@ -431,10 +432,10 @@ class _QuickStartSectionState extends State<QuickStartSection> {
                         )
                       ),
                       const SizedBox(width: 8),
-                      const Text('Şablondan Ürün Ekle'),
+                      Text(l10n.addFromTemplateButton),
                     ],
                   )
-                : const Text('Şablondan Ürün Ekle'),
+                : Text(l10n.addFromTemplateButton),
             onPressed: _isAddingFromTemplates || widget.availableCategories.isEmpty
                 ? null
                 : _openTemplateSelectionDialog,

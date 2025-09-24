@@ -50,7 +50,7 @@ class _MenuItemsListSectionState extends State<MenuItemsListSection> {
       context: context,
       builder: (ctx) => AlertDialog(
         title: Text(l10n.dialogDeleteMenuItemTitle),
-        content: Text('${menuItemName} ürününü silmek istediğinizden emin misiniz?'),
+        content: Text(l10n.dialogDeleteMenuItemContent(menuItemName)),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(false),
@@ -69,14 +69,14 @@ class _MenuItemsListSectionState extends State<MenuItemsListSection> {
         await ApiService.deleteMenuItem(widget.token, menuItemId);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('${menuItemName} ürünü silindi'),
+            content: Text(l10n.snackbarMenuItemDeleted(menuItemName)),
             backgroundColor: Colors.orangeAccent,
           ),
         );
         widget.onMenuItemDeleted();
       } catch (e) {
         widget.onMessageChanged(
-          'Ürün silinirken hata: ${e.toString().replaceFirst("Exception: ", "")}',
+          l10n.snackbarMenuItemDeleteError(e.toString().replaceFirst("Exception: ", "")),
           isError: true,
         );
       }
@@ -85,6 +85,7 @@ class _MenuItemsListSectionState extends State<MenuItemsListSection> {
 
   // 📷 YENİ EKLENEN: Fotoğraf upload işlevi
   Future<void> _uploadPhoto(int menuItemId, String menuItemName) async {
+    final l10n = AppLocalizations.of(context)!;
     try {
       // Loading durumunu başlat
       setState(() {
@@ -120,7 +121,7 @@ class _MenuItemsListSectionState extends State<MenuItemsListSection> {
         SnackBar(
           content: Row(
             children: [
-              SizedBox(
+              const SizedBox(
                 width: 20,
                 height: 20,
                 child: CircularProgressIndicator(
@@ -129,7 +130,7 @@ class _MenuItemsListSectionState extends State<MenuItemsListSection> {
                 ),
               ),
               const SizedBox(width: 12),
-              Text('$menuItemName için fotoğraf yükleniyor...'),
+              Text(l10n.snackbarUploadingPhotoFor(menuItemName)),
             ],
           ),
           duration: const Duration(seconds: 30),
@@ -148,7 +149,7 @@ class _MenuItemsListSectionState extends State<MenuItemsListSection> {
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('$menuItemName fotoğrafı başarıyla güncellendi!'),
+            content: Text(l10n.snackbarPhotoUpdateSuccess(menuItemName)),
             backgroundColor: Colors.green,
             duration: const Duration(seconds: 3),
           ),
@@ -157,14 +158,14 @@ class _MenuItemsListSectionState extends State<MenuItemsListSection> {
         // Listeyi yenile
         widget.onMenuItemDeleted(); // Bu callback aslında refresh işlevi görüyor
       } else {
-        throw Exception('Fotoğraf upload edilemedi');
+        throw Exception(l10n.snackbarPhotoUploadFailed);
       }
 
     } catch (e) {
       ScaffoldMessenger.of(context).hideCurrentSnackBar();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Fotoğraf yüklenirken hata: ${e.toString()}'),
+          content: Text(l10n.snackbarPhotoUploadError(e.toString())),
           backgroundColor: Colors.red,
           duration: const Duration(seconds: 4),
         ),
@@ -180,26 +181,27 @@ class _MenuItemsListSectionState extends State<MenuItemsListSection> {
 
   // 📷 YENİ EKLENEN: Fotoğraf kaynağı seçim dialog'u
   Future<ImageSource?> _showImageSourceDialog() async {
+    final l10n = AppLocalizations.of(context)!;
     return await showDialog<ImageSource>(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Fotoğraf Kaynağı'),
-          content: const Text('Fotoğrafı nereden seçmek istiyorsunuz?'),
+          title: Text(l10n.dialogPhotoSourceTitle),
+          content: Text(l10n.dialogPhotoSourceContent),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: const Text('İptal'),
+              child: Text(l10n.dialogButtonCancel),
             ),
             TextButton.icon(
               onPressed: () => Navigator.of(context).pop(ImageSource.gallery),
               icon: const Icon(Icons.photo_library),
-              label: const Text('Galeri'),
+              label: Text(l10n.photoSourceGallery),
             ),
             TextButton.icon(
               onPressed: () => Navigator.of(context).pop(ImageSource.camera),
               icon: const Icon(Icons.camera_alt),
-              label: const Text('Kamera'),
+              label: Text(l10n.photoSourceCamera),
             ),
           ],
         );
@@ -209,6 +211,7 @@ class _MenuItemsListSectionState extends State<MenuItemsListSection> {
 
   // 📷 YENİ EKLENEN: Firebase'e fotoğraf upload
   Future<String?> _uploadImageToFirebase(XFile image, int menuItemId) async {
+    final l10n = AppLocalizations.of(context)!;
     try {
       String fileName = p.basename(image.path);
       String firebaseFileName = "menu_items/${menuItemId}/${DateTime.now().millisecondsSinceEpoch}_$fileName";
@@ -236,17 +239,18 @@ class _MenuItemsListSectionState extends State<MenuItemsListSection> {
       return imageUrl;
     } catch (e) {
       debugPrint('❌ Firebase upload error: $e');
-      throw Exception('Firebase upload hatası: $e');
+      throw Exception(l10n.firebaseUploadError(e.toString()));
     }
   }
 
   // 📷 YENİ EKLENEN: API'de ürün fotoğrafını güncelle
   Future<void> _updateMenuItemPhoto(int menuItemId, String imageUrl) async {
+    final l10n = AppLocalizations.of(context)!;
     try {
       await ApiService.updateMenuItemPhoto(widget.token, menuItemId, imageUrl);
     } catch (e) {
       debugPrint('❌ API update error: $e');
-      throw Exception('API güncelleme hatası: $e');
+      throw Exception(l10n.apiUpdateError(e.toString()));
     }
   }
 
@@ -268,6 +272,7 @@ class _MenuItemsListSectionState extends State<MenuItemsListSection> {
   }
 
   String _getCategoryName(dynamic menuItem) {
+    final l10n = AppLocalizations.of(context)!;
     try {
       if (menuItem != null && menuItem is Map<String, dynamic>) {
         final category = menuItem['category'];
@@ -319,10 +324,11 @@ class _MenuItemsListSectionState extends State<MenuItemsListSection> {
     } catch (e) {
       debugPrint('❌ Category name error: $e');
     }
-    return 'Kategori Yok';
+    return l10n.uncategorized;
   }
 
   String _getMenuItemName(dynamic menuItem) {
+    final l10n = AppLocalizations.of(context)!;
     try {
       if (menuItem != null && menuItem is Map<String, dynamic>) {
         final name = menuItem['name'];
@@ -343,7 +349,7 @@ class _MenuItemsListSectionState extends State<MenuItemsListSection> {
     } catch (e) {
       debugPrint('❌ Menu item name error: $e');
     }
-    return 'İsimsiz Ürün';
+    return l10n.unnamedProduct;
   }
 
   int? _getMenuItemId(dynamic menuItem) {
@@ -628,7 +634,7 @@ class _MenuItemsListSectionState extends State<MenuItemsListSection> {
                                     borderRadius: BorderRadius.circular(12),
                                   ),
                                   child: isUploading
-                                      ? Center(
+                                      ? const Center(
                                           child: SizedBox(
                                             width: 20,
                                             height: 20,
@@ -641,15 +647,15 @@ class _MenuItemsListSectionState extends State<MenuItemsListSection> {
                                       : Column(
                                           mainAxisAlignment: MainAxisAlignment.center,
                                           children: [
-                                            Icon(
+                                            const Icon(
                                               Icons.camera_alt,
                                               color: Colors.white,
                                               size: 16,
                                             ),
                                             const SizedBox(height: 2),
                                             Text(
-                                              'Fotoğraf\nEkle',
-                                              style: TextStyle(
+                                              l10n.addPhoto,
+                                              style: const TextStyle(
                                                 color: Colors.white,
                                                 fontSize: 8,
                                                 fontWeight: FontWeight.bold,
@@ -685,7 +691,7 @@ class _MenuItemsListSectionState extends State<MenuItemsListSection> {
                                       ? null 
                                       : () => _uploadPhoto(menuItemId, menuItemName),
                                   child: isUploading
-                                      ? Center(
+                                      ? const Center(
                                           child: SizedBox(
                                             width: 12,
                                             height: 12,
@@ -695,7 +701,7 @@ class _MenuItemsListSectionState extends State<MenuItemsListSection> {
                                             ),
                                           ),
                                         )
-                                      : Icon(
+                                      : const Icon(
                                           Icons.camera_alt,
                                           size: 12,
                                           color: Colors.white,
@@ -789,7 +795,7 @@ class _MenuItemsListSectionState extends State<MenuItemsListSection> {
                           ),
                           const SizedBox(width: 3),
                           Text(
-                            'KDV ${kdvRate}%',
+                            l10n.vatRate(kdvRate),
                             style: TextStyle(
                               fontSize: 9,
                               color: isNewlyAdded 
@@ -812,12 +818,12 @@ class _MenuItemsListSectionState extends State<MenuItemsListSection> {
                           child: SizedBox(
                             height: 32,
                             child: IconButton(
-                              icon: Icon(
+                              icon: const Icon(
                                 Icons.tune,
                                 color: Colors.white,
                                 size: 16,
                               ),
-                              tooltip: 'Düzenle', // Hover/Long press metni
+                              tooltip: l10n.tooltipEdit, // Hover/Long press metni
                               onPressed: () => _openVariantsDialog(menuItem as Map<String, dynamic>),
                               style: IconButton.styleFrom(
                                 backgroundColor: Colors.orange.shade600,
@@ -844,12 +850,12 @@ class _MenuItemsListSectionState extends State<MenuItemsListSection> {
                           child: SizedBox(
                             height: 32,
                             child: IconButton(
-                              icon: Icon(
+                              icon: const Icon(
                                 Icons.delete_outline,
                                 color: Colors.white,
                                 size: 16,
                               ),
-                              tooltip: 'Sil', // Hover/Long press metni
+                              tooltip: l10n.tooltipDelete, // Hover/Long press metni
                               onPressed: () => _deleteMenuItem(context, menuItemId, menuItemName),
                               style: IconButton.styleFrom(
                                 backgroundColor: Colors.red.shade600,
@@ -896,15 +902,15 @@ class _MenuItemsListSectionState extends State<MenuItemsListSection> {
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(
+                      const Icon(
                         Icons.fiber_new,
                         color: Colors.white,
                         size: 12,
                       ),
                       const SizedBox(width: 2),
                       Text(
-                        'YENİ',
-                        style: TextStyle(
+                        l10n.badgeNew,
+                        style: const TextStyle(
                           color: Colors.white,
                           fontSize: 8,
                           fontWeight: FontWeight.bold,

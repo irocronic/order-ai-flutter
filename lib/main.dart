@@ -485,6 +485,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       ],
       supportedLocales: const [
         Locale('tr', ''),
+        Locale('en', ''),
       ],
       theme: ThemeData(
         primarySwatch: Colors.blue,

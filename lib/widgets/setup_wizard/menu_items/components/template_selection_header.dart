@@ -1,5 +1,6 @@
 // lib/widgets/setup_wizard/menu_items/components/template_selection_header.dart
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class TemplateSelectionHeader extends StatelessWidget {
   final VoidCallback onClose;
@@ -11,6 +12,8 @@ class TemplateSelectionHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
       decoration: BoxDecoration(
@@ -24,7 +27,7 @@ class TemplateSelectionHeader extends StatelessWidget {
         children: [
           Expanded(
             child: Text(
-              'Şablondan Ürün Ekle',
+              l10n.addProductFromTemplateTitle,
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
                 fontWeight: FontWeight.bold,
               ),

@@ -42,9 +42,8 @@ class _ManualFormSectionState extends State<ManualFormSection>
   final CategoryFormData _formData = CategoryFormData();
   
   bool _isSubmitting = false;
-  bool _isExpanded = false; // 🔽 EKLENDI: Collapse/expand state
+  bool _isExpanded = false;
 
-  // 🔽 EKLENDI: Animation controller
   late AnimationController _animationController;
   late Animation<double> _expandAnimation;
 
@@ -53,7 +52,6 @@ class _ManualFormSectionState extends State<ManualFormSection>
     super.initState();
     _updateKdsSelection();
     
-    // 🔽 EKLENDI: Animation setup
     _animationController = AnimationController(
       duration: const Duration(milliseconds: 300),
       vsync: this,
@@ -67,7 +65,7 @@ class _ManualFormSectionState extends State<ManualFormSection>
   @override
   void dispose() {
     _formData.dispose();
-    _animationController.dispose(); // 🔽 EKLENDI
+    _animationController.dispose();
     super.dispose();
   }
 
@@ -87,7 +85,6 @@ class _ManualFormSectionState extends State<ManualFormSection>
     }
   }
 
-  // 🔽 EKLENDI: Toggle expand/collapse
   void _toggleExpanded() {
     setState(() {
       _isExpanded = !_isExpanded;
@@ -102,9 +99,9 @@ class _ManualFormSectionState extends State<ManualFormSection>
   Future<void> _addCategory() async {
     if (!_formKey.currentState!.validate()) return;
 
+    final l10n = AppLocalizations.of(context)!;
     final currentLimits = UserSession.limitsNotifier.value;
     if (widget.categories.length >= currentLimits.maxCategories) {
-      final l10n = AppLocalizations.of(context)!;
       if (mounted) {
         showDialog(
           context: context,
@@ -118,7 +115,6 @@ class _ManualFormSectionState extends State<ManualFormSection>
     }
 
     if (widget.availableKdsScreens.isNotEmpty && _formData.selectedKdsScreenId == null) {
-      final l10n = AppLocalizations.of(context)!;
       widget.onMessageChanged(l10n.setupCategoriesErrorSelectKds, isError: true);
       return;
     }
@@ -133,7 +129,6 @@ class _ManualFormSectionState extends State<ManualFormSection>
       );
 
       if (mounted) {
-        final l10n = AppLocalizations.of(context)!;
         widget.onMessageChanged(l10n.setupCategoriesSuccessAdded(_formData.nameController.text.trim()));
         _formData.clear();
         _updateKdsSelection();
@@ -142,9 +137,8 @@ class _ManualFormSectionState extends State<ManualFormSection>
       }
     } catch (e) {
       if (mounted) {
-        final l10n = AppLocalizations.of(context)!;
         widget.onMessageChanged(
-          l10n.setupCategoriesErrorDeleting(e.toString().replaceFirst("Exception: ", "")),
+          l10n.setupCategoriesErrorCreating(e.toString().replaceFirst("Exception: ", "")),
           isError: true
         );
       }
@@ -189,7 +183,6 @@ class _ManualFormSectionState extends State<ManualFormSection>
       ),
       child: Column(
         children: [
-          // 🔽 EKLENDI: Collapsible Header
           InkWell(
             onTap: _toggleExpanded,
             borderRadius: BorderRadius.circular(12),
@@ -205,7 +198,7 @@ class _ManualFormSectionState extends State<ManualFormSection>
                   const SizedBox(width: 8),
                   Expanded(
                     child: Text(
-                      'Manuel Kategori Ekleme',
+                      l10n.setupCategoriesManualAddTitle,
                       style: TextStyle(
                         fontSize: 16, 
                         fontWeight: FontWeight.bold, 
@@ -213,7 +206,6 @@ class _ManualFormSectionState extends State<ManualFormSection>
                       ),
                     ),
                   ),
-                  // 🔽 EKLENDI: Expand/Collapse icon with animation
                   AnimatedRotation(
                     turns: _isExpanded ? 0.5 : 0.0,
                     duration: const Duration(milliseconds: 300),
@@ -228,7 +220,6 @@ class _ManualFormSectionState extends State<ManualFormSection>
             ),
           ),
           
-          // 🔽 EKLENDI: Animated collapsible content
           SizeTransition(
             sizeFactor: _expandAnimation,
             child: Container(
@@ -238,7 +229,6 @@ class _ManualFormSectionState extends State<ManualFormSection>
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    // 🔽 EKLENDI: Divider line
                     Divider(
                       color: Colors.white.withOpacity(0.3),
                       height: 1,
@@ -246,7 +236,6 @@ class _ManualFormSectionState extends State<ManualFormSection>
                     ),
                     const SizedBox(height: 16),
                     
-                    // Kategori Adı
                     TextFormField(
                       controller: _formData.nameController,
                       style: textStyle,
@@ -260,7 +249,6 @@ class _ManualFormSectionState extends State<ManualFormSection>
                     ),
                     const SizedBox(height: 16),
                     
-                    // KDV Oranı
                     TextFormField(
                       controller: _formData.kdvController,
                       style: textStyle,
@@ -284,7 +272,6 @@ class _ManualFormSectionState extends State<ManualFormSection>
                     ),
                     const SizedBox(height: 16),
                     
-                    // Üst Kategori Dropdown
                     DropdownButtonFormField<dynamic>(
                       isExpanded: true,
                       value: _formData.selectedParentCategory,
@@ -316,11 +303,9 @@ class _ManualFormSectionState extends State<ManualFormSection>
                     ),
                     const SizedBox(height: 16),
                     
-                    // KDS Dropdown
                     _buildKdsDropdown(inputDecoration, textStyle, l10n),
                     const SizedBox(height: 16),
                     
-                    // Resim Picker
                     ImagePickerWidget(
                       onImageChanged: (imageFile, imageBytes) {
                         _formData.setImage(imageFile, imageBytes);
@@ -328,7 +313,6 @@ class _ManualFormSectionState extends State<ManualFormSection>
                     ),
                     const SizedBox(height: 24),
                     
-                    // Submit Button
                     ElevatedButton.icon(
                       icon: _isSubmitting
                           ? const SizedBox.shrink()

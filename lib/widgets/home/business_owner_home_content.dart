@@ -33,6 +33,9 @@ import 'home_grid_view.dart';
 import 'subscription_status_card.dart';
 import '../../screens/reservations_screen.dart';
 import '../../screens/business_card_designer_screen.dart';
+// +++ YENİ EKLENEN IMPORT +++
+import '../../screens/payment_settings_screen.dart';
+
 
 class BusinessOwnerHomeContent extends StatefulWidget {
   final String token;
@@ -384,10 +387,9 @@ class _BusinessOwnerHomeContentState extends State<BusinessOwnerHomeContent> {
                               shouldRefreshWaitingCountNotifier.value = true;
                             }));
                   }),
-          // Yeni Rezervasyonlar kartı burada eklendi:
           HomeMenuItem(
             icon: Icons.book_online,
-            title: l10n.homeMenuReservations, // Düzeltilmiş satır
+            title: l10n.homeMenuReservations,
             baseColor: Colors.purple,
             permissionKey: '',
             onTapBuilder: (ctx) => () => Navigator.push(
@@ -517,13 +519,17 @@ class _BusinessOwnerHomeContentState extends State<BusinessOwnerHomeContent> {
                       builder: (_) => BusinessSettingsScreen(
                           token: widget.token,
                           businessId: widget.businessId)))),
-
-
-
-
-
-
-          // ================= YENİ EKLENECEK KISIM BAŞLANGICI =================
+                          
+          // ++++++++++++++++ İSTEDİĞİNİZ DEĞİŞİKLİK BURADA EKLENDİ ++++++++++++++++
+          HomeMenuItem(
+            icon: Icons.payment,
+            title: l10n.homeMenuPaymentSettings, // .arb dosyanıza eklediğiniz anahtar
+            baseColor: Colors.deepPurple.shade500,
+            requiresBusinessOwner: true,
+            onTapBuilder: (ctx) => () => Navigator.push(
+                ctx, MaterialPageRoute(builder: (_) => const PaymentSettingsScreen()))),
+          // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+                          
           HomeMenuItem(
               icon: Icons.contact_mail_outlined,
               title: l10n.homeMenuBusinessCard, // .arb dosyanıza eklediğiniz anahtar
@@ -531,16 +537,6 @@ class _BusinessOwnerHomeContentState extends State<BusinessOwnerHomeContent> {
               requiresBusinessOwner: true,
               onTapBuilder: (ctx) => () => Navigator.push(
                   ctx, MaterialPageRoute(builder: (_) => const BusinessCardDesignerScreen()))),
-          // ================= YENİ EKLENECEK KISIM SONU =====================
-
-
-
-
-
-
-
-
-
           HomeMenuItem(
               icon: Icons.web_outlined,
               title: l10n.homeMenuManageWebsite,
@@ -574,15 +570,15 @@ class _BusinessOwnerHomeContentState extends State<BusinessOwnerHomeContent> {
                           token: widget.token,
                           businessId: widget.businessId)))),
           HomeMenuItem(
-              icon: Icons.more_time,
-              title: l10n.homeMenuShiftTemplates,
-              baseColor: Colors.lightBlue.shade300,
-              permissionKey: PermissionKeys.manageStaff,
-              requiresBusinessOwner: true,
-              onTapBuilder: (ctx) => () => Navigator.push(
-                  ctx,
-                  MaterialPageRoute(builder: (_) => const ManageShiftsScreen()),
-                ),
+            icon: Icons.more_time,
+            title: l10n.homeMenuShiftTemplates,
+            baseColor: Colors.lightBlue.shade300,
+            permissionKey: PermissionKeys.manageStaff,
+            requiresBusinessOwner: true,
+            onTapBuilder: (ctx) => () => Navigator.push(
+              ctx,
+              MaterialPageRoute(builder: (_) => const ManageShiftsScreen()),
+            ),
           ),
           HomeMenuItem(
               icon: Icons.view_compact_alt_outlined,

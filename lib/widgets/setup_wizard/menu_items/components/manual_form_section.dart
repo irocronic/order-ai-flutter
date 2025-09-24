@@ -39,13 +39,13 @@ class _ManualFormSectionState extends State<ManualFormSection>
   final MenuItemFormData _formData = MenuItemFormData();
   
   bool _isSubmitting = false;
-  bool _isExpanded = false; // 🔽 EKLENDI: Collapse/expand state
+  bool _isExpanded = false; // Collapse/expand state
   
-  // --- YENİ EKLENEN: Reçeteli ürün özelliği için değişkenler ---
-  bool _isFromRecipe = true; // Varsayılan olarak ürünün reçeteli olduğunu varsayalım
+  // Reçeteli ürün özelliği için değişkenler
+  bool _isFromRecipe = true; 
   final TextEditingController _priceController = TextEditingController(); // Reçetesiz ürün fiyatı için
 
-  // 🔽 EKLENDI: Animation controller
+  // Animation controller
   late AnimationController _animationController;
   late Animation<double> _expandAnimation;
 
@@ -53,7 +53,7 @@ class _ManualFormSectionState extends State<ManualFormSection>
   void initState() {
     super.initState();
     
-    // 🔽 EKLENDI: Animation setup
+    // Animation setup
     _animationController = AnimationController(
       duration: const Duration(milliseconds: 300),
       vsync: this,
@@ -67,12 +67,12 @@ class _ManualFormSectionState extends State<ManualFormSection>
   @override
   void dispose() {
     _formData.dispose();
-    _priceController.dispose(); // --- YENİ EKLENEN: Price controller dispose
-    _animationController.dispose(); // 🔽 EKLENDI
+    _priceController.dispose();
+    _animationController.dispose();
     super.dispose();
   }
 
-  // 🔽 EKLENDI: Toggle expand/collapse
+  // Toggle expand/collapse
   void _toggleExpanded() {
     setState(() {
       _isExpanded = !_isExpanded;
@@ -102,7 +102,6 @@ class _ManualFormSectionState extends State<ManualFormSection>
     });
   }
 
-  // --- YENİ EKLENEN: Form temizleme metodu güncellemesi ---
   void _clearForm() {
     _formData.clear();
     _priceController.clear();
@@ -112,16 +111,15 @@ class _ManualFormSectionState extends State<ManualFormSection>
   }
 
   Future<void> _addMenuItem() async {
+    final l10n = AppLocalizations.of(context)!;
     if (!_formKey.currentState!.validate()) return;
     if (_formData.selectedCategoryId == null && widget.availableCategories.isNotEmpty) {
-      final l10n = AppLocalizations.of(context)!;
       widget.onMessageChanged(l10n.setupMenuItemsErrorSelectCategory, isError: true);
       return;
     }
 
     final currentLimits = UserSession.limitsNotifier.value;
     if (await _menuItemService.getCurrentMenuItemCount(widget.token) >= currentLimits.maxMenuItems) {
-      final l10n = AppLocalizations.of(context)!;
       if (mounted) {
         showDialog(
           context: context,
@@ -137,25 +135,23 @@ class _ManualFormSectionState extends State<ManualFormSection>
     setState(() => _isSubmitting = true);
 
     try {
-      // --- YENİ EKLENEN: Reçeteli/reçetesiz ürün için farklı servis çağrıları ---
       await _menuItemService.createMenuItemSmart(
         token: widget.token,
         businessId: widget.businessId,
         formData: _formData,
         isFromRecipe: _isFromRecipe,
         price: _isFromRecipe ? null : double.tryParse(_priceController.text.replaceAll(',', '.')),
+        l10n: l10n,
       );
 
       if (mounted) {
-        final l10n = AppLocalizations.of(context)!;
         widget.onMessageChanged(l10n.setupMenuItemsSuccessAdded(_formData.nameController.text.trim()));
-        _clearForm(); // --- GÜNCELLENDİ: Yeni form temizleme metodu
+        _clearForm();
         FocusScope.of(context).unfocus();
         widget.onMenuItemAdded();
       }
     } catch (e) {
       if (mounted) {
-        final l10n = AppLocalizations.of(context)!;
         widget.onMessageChanged(
           l10n.errorUploadingPhotoGeneral(e.toString().replaceFirst("Exception: ", "")),
           isError: true
@@ -202,7 +198,7 @@ class _ManualFormSectionState extends State<ManualFormSection>
       ),
       child: Column(
         children: [
-          // 🔽 EKLENDI: Collapsible Header
+          // Collapsible Header
           InkWell(
             onTap: _toggleExpanded,
             borderRadius: BorderRadius.circular(12),
@@ -218,7 +214,7 @@ class _ManualFormSectionState extends State<ManualFormSection>
                   const SizedBox(width: 8),
                   Expanded(
                     child: Text(
-                      'Manuel Ürün Ekleme',
+                      l10n.manualMenuItemAddTitle, // GÜNCELLENDİ
                       style: TextStyle(
                         fontSize: 16, 
                         fontWeight: FontWeight.bold, 
@@ -226,7 +222,7 @@ class _ManualFormSectionState extends State<ManualFormSection>
                       ),
                     ),
                   ),
-                  // 🔽 EKLENDI: Expand/Collapse icon with animation
+                  // Expand/Collapse icon with animation
                   AnimatedRotation(
                     turns: _isExpanded ? 0.5 : 0.0,
                     duration: const Duration(milliseconds: 300),
@@ -241,7 +237,7 @@ class _ManualFormSectionState extends State<ManualFormSection>
             ),
           ),
           
-          // 🔽 EKLENDI: Animated collapsible content
+          // Animated collapsible content
           SizeTransition(
             sizeFactor: _expandAnimation,
             child: Container(
@@ -251,7 +247,7 @@ class _ManualFormSectionState extends State<ManualFormSection>
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    // 🔽 EKLENDI: Divider line
+                    // Divider line
                     Divider(
                       color: Colors.white.withOpacity(0.3),
                       height: 1,
@@ -313,7 +309,7 @@ class _ManualFormSectionState extends State<ManualFormSection>
                     ),
                     const SizedBox(height: 16),
                     
-                    // --- YENİ EKLENEN: Reçeteli/Reçetesiz ürün seçimi ---
+                    // Reçeteli/Reçetesiz ürün seçimi
                     Container(
                       padding: const EdgeInsets.all(12.0),
                       decoration: BoxDecoration(
@@ -343,7 +339,6 @@ class _ManualFormSectionState extends State<ManualFormSection>
                               setState(() {
                                 _isFromRecipe = value;
                                 if (value) {
-                                  // Reçeteli ürüne geçerken fiyat alanını temizle
                                   _priceController.clear();
                                 }
                               });
@@ -361,9 +356,9 @@ class _ManualFormSectionState extends State<ManualFormSection>
                               style: textStyle,
                               decoration: inputDecoration.copyWith(
                                 labelText: l10n.menuItemPriceLabel,
-                                prefixText: '₺ ',
+                                prefixText: l10n.currencySymbol, // GÜNCELLENDİ
                                 prefixIcon: const Icon(Icons.monetization_on_outlined),
-                                hintText: 'Örn: 25.50',
+                                hintText: l10n.menuItemPriceHint, // GÜNCELLENDİ
                               ),
                               keyboardType: const TextInputType.numberWithOptions(decimal: true),
                               inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'^\d*[\.,]?\d{0,2}'))],

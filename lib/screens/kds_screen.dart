@@ -2,6 +2,9 @@
 
 import '../services/notification_center.dart';
 import '../services/refresh_manager.dart';
+import '../mixins/kds_recovery_mixin.dart';
+import '../mixins/kds_dialog_mixin.dart';
+import '../mixins/kds_button_action_mixin.dart';
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -11,9 +14,7 @@ import 'package:collection/collection.dart';
 import '../services/kds_service.dart';
 import '../services/socket_service.dart';
 import '../services/user_session.dart';
-import '../widgets/kds/kds_order_card.dart';
-import '../widgets/dialogs/order_approved_for_kitchen_dialog.dart';
-import '../widgets/dialogs/order_ready_for_pickup_dialog.dart';
+import '../widgets/kds/enhanced_kds_order_card.dart';
 import '../utils/notifiers.dart';
 import '../models/notification_event_types.dart';
 import '../models/kds_screen_model.dart';
@@ -43,68 +44,117 @@ class KdsScreen extends StatefulWidget {
 }
 
 class _KdsScreenState extends State<KdsScreen>
-    with RouteAware, WidgetsBindingObserver, AutomaticKeepAliveClientMixin {
+    with RouteAware, 
+         WidgetsBindingObserver, 
+         AutomaticKeepAliveClientMixin,
+         KdsRecoveryMixin,
+         KdsDialogMixin,
+         KdsButtonActionMixin {
   
   List<dynamic> _kdsOrders = [];
   bool _isLoading = true;
   String _errorMessage = '';
   Timer? _refreshTimer;
   bool _isInitialLoadComplete = false;
-  bool _isDialogShowing = false;
-
-  // Ekran durumu takibi
-  bool _isCurrent = false;
-  bool _isAppInForeground = true;
-  bool _isJoinedToRoom = false;
   bool _isDisposed = false;
   bool _isNavigationInProgress = false;
   DateTime? _lastRefreshTime;
-
-  // Pending notifications store
-  List<Map<String, dynamic>> _pendingNotifications = [];
-
-  // Dialog yönetimi için kontroller
-  bool _dialogBlocked = false;
-  Timer? _dialogBlockTimer;
-  final Set<String> _activeDialogs = <String>{};
   
-  // 🚨 Multi-Strategy Recovery System
-  Timer? _immediateRecoveryTimer;
-  Timer? _shortDelayRecoveryTimer;
-  Timer? _mediumDelayRecoveryTimer;
-  Timer? _forceRecoveryTimer;
-  Timer? _roomStabilityTimer;
-  bool _isProcessingPending = false;
-  bool _recoveryInProgress = false;
-  
-  // App resume tracking with stability
-  DateTime? _lastBackgroundTime;
-  DateTime? _lastRoomJoinTime;
-  bool _needsDataRefreshOnResume = false;
-  bool _roomConnectionStable = false;
-  int _roomJoinAttempts = 0;
+  // 🔥 YENİ: KDS Screen level action management
+  final Map<String, bool> _screenActionStates = {};
+  late OverlayEntry? _overlayEntry;
 
-  // 🆕 YENI: NotificationCenter callback function'ları
+  // Screen state tracking
+  bool _isCurrent = false;
+
+  // NotificationCenter callback functions
   late Function(Map<String, dynamic>) _refreshAllScreensCallback;
   late Function(Map<String, dynamic>) _screenBecameActiveCallback;
 
   @override
   bool get wantKeepAlive => true;
 
+  // Mixin implementations
+  @override
+  String get kdsScreenSlug => widget.kdsScreenSlug;
+  
+  @override
+  SocketService get socketService => widget.socketService;
+  
+  @override
+  bool get isDisposed => _isDisposed;
+  
+  @override
+  bool get isCurrent => _isCurrent;
+  
+  @override
+  DateTime? get lastRefreshTime => _lastRefreshTime;
+  
+  @override
+  set lastRefreshTime(DateTime? value) => _lastRefreshTime = value;
+  
+  @override
+  bool get isNavigationInProgress => _isNavigationInProgress;
+
+  // KdsButtonActionMixin implementations
+  @override
+  String get token => widget.token;
+
+  @override
+  void onActionSuccess(String actionType, dynamic result) {
+    debugPrint("[KdsScreen-${widget.kdsScreenSlug}] Action success: $actionType");
+    _safeRefreshDataWithThrottling();
+  }
+
+  @override
+  void onActionError(String actionType, String error) {
+    debugPrint("[KdsScreen-${widget.kdsScreenSlug}] Action error [$actionType]: $error");
+  }
+
+  @override
+  void showLoadingFeedback(String message) {
+    _showOverlayFeedback(Colors.blue, Icons.hourglass_empty, message);
+  }
+
+  @override
+  void showSuccessFeedback(String message) {
+    _showOverlayFeedback(Colors.green, Icons.check_circle, message);
+  }
+
+  @override
+  void showErrorFeedback(String message) {
+    _showOverlayFeedback(Colors.red, Icons.error, message);
+  }
+
+  @override
+  Future<void> fetchKdsOrders() async => _fetchKdsOrders();
+
+  @override
+  void leaveKdsRoom() => _leaveKdsRoom();
+
+  @override
+  void emergencyStopAllOperations() => _emergencyStopAllOperations();
+
+  @override
+  void safeRefreshDataWithThrottling() => _safeRefreshDataWithThrottling();
+
   @override
   void initState() {
     super.initState();
-    debugPrint("[KdsScreen-${widget.kdsScreenSlug}] 🚀 initState with Multi-Strategy Recovery & NotificationCenter");
+    debugPrint("[KdsScreen-${widget.kdsScreenSlug}] 🚀 initState with Enhanced Action Management");
     
     WidgetsBinding.instance.addObserver(this);
     
+    // Initialize overlay entry
+    _overlayEntry = null;
+    
     // Notifier listeners
-    orderStatusUpdateNotifier.addListener(_handleSocketOrderUpdate);
-    newOrderNotificationDataNotifier.addListener(_handleLoudNotification);
+    orderStatusUpdateNotifier.addListener(handleSocketOrderUpdate);
+    newOrderNotificationDataNotifier.addListener(handleLoudNotification);
 
-    // 🆕 YENI: NotificationCenter listener'ları ekle
+    // NotificationCenter listeners
     _refreshAllScreensCallback = (data) {
-      if (!_isDisposed && mounted && _shouldProcessUpdate()) {
+      if (!_isDisposed && mounted && shouldProcessUpdate()) {
          final eventType = data['eventType'] as String?;
         debugPrint("[KdsScreen-${widget.kdsScreenSlug}] 📡 Global refresh received: $eventType");
         _safeRefreshDataWithThrottling();
@@ -114,7 +164,7 @@ class _KdsScreenState extends State<KdsScreen>
     _screenBecameActiveCallback = (data) {
       if (!_isDisposed && mounted && _isCurrent) {
         debugPrint("[KdsScreen-${widget.kdsScreenSlug}] 📱 Screen became active notification received");
-        _processPendingNotifications();
+        processPendingNotifications();
       }
     };
 
@@ -125,7 +175,7 @@ class _KdsScreenState extends State<KdsScreen>
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) {
         debugPrint("[KdsScreen-${widget.kdsScreenSlug}] PostFrameCallback - Initialization completed.");
-        _joinKdsRoomWithStability();
+        joinKdsRoomWithStability();
       }
     });
   }
@@ -148,340 +198,136 @@ class _KdsScreenState extends State<KdsScreen>
   @override
   void dispose() {
     _isDisposed = true;
-    debugPrint("[KdsScreen-${widget.kdsScreenSlug}] 🔄 dispose with cleanup");
+    debugPrint("[KdsScreen-${widget.kdsScreenSlug}] 🔄 dispose with enhanced cleanup");
     
-    _cleanupDialogs();
+    // Cleanup mixins
+    disposeRecoveryMixin();
+    disposeDialogMixin();
+    disposeKdsButtonActionMixin();
+    
+    // Cleanup overlay
+    _overlayEntry?.remove();
+    _overlayEntry = null;
     
     routeObserver.unsubscribe(this);
     WidgetsBinding.instance.removeObserver(this);
     
-    // 🚨 Tüm recovery timer'larını iptal et
-    _cancelAllRecoveryTimers();
     _refreshTimer?.cancel();
-    _dialogBlockTimer?.cancel();
-    _roomStabilityTimer?.cancel();
     
-    orderStatusUpdateNotifier.removeListener(_handleSocketOrderUpdate);
-    newOrderNotificationDataNotifier.removeListener(_handleLoudNotification);
+    orderStatusUpdateNotifier.removeListener(handleSocketOrderUpdate);
+    newOrderNotificationDataNotifier.removeListener(handleLoudNotification);
     
-    // 🆕 YENI: NotificationCenter listener'ları kaldır
+    // NotificationCenter cleanup
     NotificationCenter.instance.removeObserver('refresh_all_screens', _refreshAllScreensCallback);
     NotificationCenter.instance.removeObserver('screen_became_active', _screenBecameActiveCallback);
     
-    _leaveKdsRoom();
+    // Clear screen-level states
+    _screenActionStates.clear();
     
     super.dispose();
   }
 
-  // 🚨 Recovery timer'larını iptal et
-  void _cancelAllRecoveryTimers() {
-    _immediateRecoveryTimer?.cancel();
-    _shortDelayRecoveryTimer?.cancel();
-    _mediumDelayRecoveryTimer?.cancel();
-    _forceRecoveryTimer?.cancel();
-  }
-
-  void _cleanupDialogs() {
-    _dialogBlocked = true;
-    _isDialogShowing = false;
-    _activeDialogs.clear();
+  // 🔥 Enhanced overlay feedback system
+  void _showOverlayFeedback(Color color, IconData icon, String message) {
+    _overlayEntry?.remove();
     
-    NavigatorSafeZone.markBusy('dialog_cleanup');
+    if (!mounted) return;
     
-    final context = navigatorKey.currentContext;
-    if (context != null) {
-      try {
-        Navigator.of(context).popUntil((route) {
-          return route is! DialogRoute;
-        });
-      } catch (e) {
-        debugPrint('[KdsScreen] Dialog cleanup error: $e');
-      }
-    }
+    final overlay = Overlay.of(context);
+    _overlayEntry = OverlayEntry(
+      builder: (context) => Positioned(
+        top: MediaQuery.of(context).size.height * 0.1,
+        left: 20,
+        right: 20,
+        child: Material(
+          color: Colors.transparent,
+          child: Center(
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeOutBack,
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+              decoration: BoxDecoration(
+                color: color.withOpacity(0.95),
+                borderRadius: BorderRadius.circular(25),
+                boxShadow: const [
+                  BoxShadow(
+                    color: Colors.black26,
+                    blurRadius: 12,
+                    offset: Offset(0, 6),
+                  ),
+                ],
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(icon, color: Colors.white, size: 24),
+                  const SizedBox(width: 12),
+                  Flexible(
+                    child: Text(
+                      message,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
     
-    Timer(const Duration(milliseconds: 300), () {
-      NavigatorSafeZone.markFree('dialog_cleanup');
-    });
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (_isDisposed) return;
+    overlay.insert(_overlayEntry!);
     
-    super.didChangeAppLifecycleState(state);
-    
-    switch (state) {
-      case AppLifecycleState.paused:
-        _lastBackgroundTime = DateTime.now();
-        _needsDataRefreshOnResume = true;
-        _roomConnectionStable = false;
-        debugPrint('[KdsScreen-${widget.kdsScreenSlug}] ⏸️ App paused at ${_lastBackgroundTime}');
-        
-        // 🔧 Smart delayed emergency stop - hızlı geçişleri filtrele
-        Timer(const Duration(milliseconds: 800), () {
-          if (!mounted || _isDisposed) return;
-          if (WidgetsBinding.instance.lifecycleState != AppLifecycleState.resumed) {
-            _emergencyStopAllOperations();
-            debugPrint('[KdsScreen-${widget.kdsScreenSlug}] 🛑 Emergency stop executed after delay');
-          }
-        });
-        break;
-        
-      case AppLifecycleState.resumed:
-        _isAppInForeground = true;
-        debugPrint('[KdsScreen-${widget.kdsScreenSlug}] ▶️ App resumed - smart recovery starting');
-        
-        // 🚨 Smart recovery with multiple strategies
-        _smartMultiRecovery();
-        break;
-        
-      case AppLifecycleState.hidden:
-        _lastBackgroundTime = DateTime.now();
-        _needsDataRefreshOnResume = true;
-        debugPrint('[KdsScreen-${widget.kdsScreenSlug}] 👁️ App hidden - light mode');
-        break;
-      case AppLifecycleState.inactive:
-        debugPrint('[KdsScreen-${widget.kdsScreenSlug}] 💤 App inactive - ignored');
-        break;
-        
-      default:
-        break;
-    }
-  }
-
-  // 🚨 Smart Multi Recovery System
-  void _smartMultiRecovery() {
-    if (_isDisposed || !mounted || _recoveryInProgress) return;
-    
-    _recoveryInProgress = true;
-    _cancelAllRecoveryTimers();
-    
-    // Background duration analizi
-    final backgroundDuration = _lastBackgroundTime != null 
-        ? DateTime.now().difference(_lastBackgroundTime!) 
-        : Duration.zero;
-        
-    final isLongBackground = backgroundDuration.inSeconds > 30;
-    final isShortBackground = backgroundDuration.inSeconds < 2;
-    
-    debugPrint('[KdsScreen-${widget.kdsScreenSlug}] 🧠 Smart Multi Recovery - Background: ${backgroundDuration.inSeconds}s');
-    
-    if (isShortBackground) {
-      // Hızlı geçiş - sadece immediate recovery
-      debugPrint('[KdsScreen-${widget.kdsScreenSlug}] ⚡ Fast transition detected - minimal recovery');
-      _immediateRecoveryTimer = Timer(const Duration(milliseconds: 50), () {
-        _attemptRecovery('fast_transition');
-        _recoveryInProgress = false;
-      });
-      return;
-    }
-    
-    // Strategy 1: Immediate attempt (100ms delay)
-    _immediateRecoveryTimer = Timer(const Duration(milliseconds: 100), () {
-      if (!_isDisposed && mounted && _isCurrent) {
-        if (_attemptRecovery('immediate')) {
-          debugPrint('[KdsScreen-${widget.kdsScreenSlug}] ✅ Immediate recovery successful');
-          _recoveryInProgress = false;
-          return;
-        }
-      }
-    });
-    
-    // Strategy 2: Short delay (500ms)
-    _shortDelayRecoveryTimer = Timer(const Duration(milliseconds: 500), () {
-      if (!_isDisposed && mounted && _isCurrent && _recoveryInProgress) {
-        if (_attemptRecovery('short_delay')) {
-          debugPrint('[KdsScreen-${widget.kdsScreenSlug}] ✅ Short delay recovery successful');
-          _recoveryInProgress = false;
-          return;
-        }
-      }
-    });
-    
-    // Strategy 3: Medium delay (1.5s) - for longer backgrounds
-    if (isLongBackground) {
-      _mediumDelayRecoveryTimer = Timer(const Duration(milliseconds: 1500), () {
-        if (!_isDisposed && mounted && _isCurrent && _recoveryInProgress) {
-          if (_attemptRecovery('medium_delay_refresh')) {
-            debugPrint('[KdsScreen-${widget.kdsScreenSlug}] ✅ Medium delay recovery with refresh successful');
-            _recoveryInProgress = false;
-            return;
-          }
-        }
-      });
-    }
-    
-    // Strategy 4: Force recovery (3s) - ignore locks
-    _forceRecoveryTimer = Timer(const Duration(seconds: 3), () {
-      if (!_isDisposed && mounted && _isCurrent && _recoveryInProgress) {
-        debugPrint('[KdsScreen-${widget.kdsScreenSlug}] 🔥 Force recovery attempt - bypassing locks');
-        _forceRecovery();
-        _recoveryInProgress = false;
+    Timer(const Duration(milliseconds: 2500), () {
+      if (_overlayEntry != null && _overlayEntry!.mounted) {
+        _overlayEntry!.remove();
+        _overlayEntry = null;
       }
     });
   }
 
-  // 🚨 Attempt recovery with different strategies
-  bool _attemptRecovery(String strategy) {
-    // Lifecycle check
-    if (WidgetsBinding.instance.lifecycleState != AppLifecycleState.resumed) {
-      debugPrint('[KdsScreen-${widget.kdsScreenSlug}] Recovery blocked - not resumed ($strategy)');
-      return false;
-    }
+  void _emergencyStopAllOperations() {
+    _isNavigationInProgress = false;
+    isAppInForeground = false;
+    dialogBlocked = true;
+    isDialogShowing = false;
+    activeDialogs.clear();
+    isProcessingPending = false;
+    recoveryInProgress = false;
+    roomConnectionStable = false;
     
-    // Navigator check (relaxed for immediate/fast strategies)
-    final bypassLocks = strategy.contains('immediate') || strategy.contains('fast');
-    if (!bypassLocks && (NavigatorSafeZone.isBusy || BuildLockManager.isLocked)) {
-      debugPrint('[KdsScreen-${widget.kdsScreenSlug}] Recovery blocked - Navigator/Build busy ($strategy)');
-      return false;
-    }
+    // Clear screen action states
+    _screenActionStates.clear();
     
-    try {
-      debugPrint('[KdsScreen-${widget.kdsScreenSlug}] 🔄 Recovery ($strategy) starting...');
-      
-      _dialogBlocked = false;
-      
-      // Free locks if not bypassing
-      if (!bypassLocks) {
-        NavigatorSafeZone.markFree('emergency_stop');
-      }
-      
-      // Smart room join with stability
-      _joinKdsRoomWithStability();
-      
-      // Smart data refresh based on strategy
-      if (strategy.contains('refresh') || strategy.contains('medium') || _needsDataRefreshOnResume) {
-        debugPrint('[KdsScreen-${widget.kdsScreenSlug}] 🔄 Force refreshing stale data');
-        _forceFreshDataRefresh();
-      } else if (!strategy.contains('fast')) {
-        _safeRefreshDataWithThrottling();
-      }
-      
-      // Process pending notifications with strategy-based delay
-      final delay = strategy.contains('immediate') || strategy.contains('fast') 
-          ? const Duration(milliseconds: 100) 
-          : const Duration(milliseconds: 400);
-          
-      Timer(delay, () {
-        if (!_isDisposed && mounted) {
-          _processPendingNotifications();
-        }
-      });
-      
-      _needsDataRefreshOnResume = false;
-      
-      return true;
-    } catch (e) {
-      debugPrint('[KdsScreen-${widget.kdsScreenSlug}] Recovery ($strategy) failed: $e');
-      return false;
+    // Stop all timers
+    cancelAllRecoveryTimers();
+    dialogBlockTimer?.cancel();
+    _refreshTimer?.cancel();
+    roomStabilityTimer?.cancel();
+    
+    NavigatorSafeZone.markBusy('emergency_stop');
+    
+    debugPrint('[KdsScreen-${widget.kdsScreenSlug}] 🛑 Emergency stop - all operations halted');
+  }
+
+  void _leaveKdsRoom() {
+    if (isJoinedToRoom) {
+      isJoinedToRoom = false;
+      roomConnectionStable = false;
+      roomStabilityTimer?.cancel();
+      debugPrint('[KdsScreen-${widget.kdsScreenSlug}] 👋 Left KDS room.');
     }
   }
 
-  // 🚨 Force recovery - ignore all locks
-  void _forceRecovery() {
-    try {
-      debugPrint('[KdsScreen-${widget.kdsScreenSlug}] 🔥 FORCE recovery - ignoring all locks and constraints');
-      
-      _dialogBlocked = false;
-      _isProcessingPending = false;
-      
-      // Force free all locks
-      NavigatorSafeZone.markFree('emergency_stop');
-      NavigatorSafeZone.markFree('force_recovery');
-      BuildLockManager.unlockBuild('force_recovery');
-      
-      // Force room join
-      _forceJoinKdsRoom();
-      
-      // Force data refresh
-      _forceFreshDataRefresh();
-      
-      Timer(const Duration(milliseconds: 300), () {
-        if (!_isDisposed && mounted) {
-          _processPendingNotifications();
-        }
-      });
-      
-      _needsDataRefreshOnResume = false;
-      
-    } catch (e) {
-      debugPrint('[KdsScreen-${widget.kdsScreenSlug}] Force recovery failed: $e');
-    }
-  }
-
-  // 🚨 Smart Room Join with Stability
-  void _joinKdsRoomWithStability() {
-    if (!_isCurrent || _isDisposed || !mounted) return;
-    
-    // Prevent rapid join/leave cycles
-    final now = DateTime.now();
-    if (_lastRoomJoinTime != null && now.difference(_lastRoomJoinTime!).inMilliseconds < 1000) {
-      debugPrint('[KdsScreen-${widget.kdsScreenSlug}] 🚫 Room join throttled - too frequent');
-      return;
-    }
-    
-    _lastRoomJoinTime = now;
-    _roomJoinAttempts++;
-    
-    if (!widget.socketService.isConnected) {
-      debugPrint('[KdsScreen-${widget.kdsScreenSlug}] 🚫 Socket not connected, scheduling retry');
-      // Retry after socket connects
-      Timer(const Duration(seconds: 2), () {
-        if (!_isDisposed && mounted && widget.socketService.isConnected) {
-          _joinKdsRoomWithStability();
-        }
-      });
-      return;
-    }
-    
-    try {
-      widget.socketService.joinKdsRoom(widget.kdsScreenSlug);
-      _isJoinedToRoom = true;
-      debugPrint('[KdsScreen-${widget.kdsScreenSlug}] ✅ Joined KDS room (attempt: $_roomJoinAttempts)');
-      
-      // Mark as stable after successful join
-      _roomStabilityTimer?.cancel();
-      _roomStabilityTimer = Timer(const Duration(seconds: 3), () {
-        _roomConnectionStable = true;
-        debugPrint('[KdsScreen-${widget.kdsScreenSlug}] 🟢 Room connection marked as stable');
-      });
-      
-    } catch (e) {
-      debugPrint('[KdsScreen-${widget.kdsScreenSlug}] ❌ Room join failed: $e');
-      _isJoinedToRoom = false;
-    }
-  }
-
-  // 🚨 Force Room Join (bypasses all checks)
-  void _forceJoinKdsRoom() {
-    try {
-      if (widget.socketService.isConnected) {
-        widget.socketService.joinKdsRoom(widget.kdsScreenSlug);
-        _isJoinedToRoom = true;
-        _roomConnectionStable = true;
-        debugPrint('[KdsScreen-${widget.kdsScreenSlug}] 🔥 FORCE joined KDS room');
-      }
-    } catch (e) {
-      debugPrint('[KdsScreen-${widget.kdsScreenSlug}] Force room join failed: $e');
-    }
-  }
-
-  // Force data refresh
-  void _forceFreshDataRefresh() {
-    if (_isDisposed || !mounted) return;
-    
-    // Throttling'i bypass et
-    _lastRefreshTime = null;
-    
-    debugPrint('[KdsScreen-${widget.kdsScreenSlug}] 💪 Force fresh data refresh');
-    _fetchKdsOrders();
-  }
-
-  // 🆕 YENI: Throttled refresh using RefreshManager
   void _safeRefreshDataWithThrottling() {
     if (_isNavigationInProgress || _isDisposed || !mounted) return;
     
-    if (_shouldProcessUpdate()) {
+    if (shouldProcessUpdate()) {
       final refreshKey = 'kds_screen_${widget.kdsScreenSlug}';
       RefreshManager.throttledRefresh(refreshKey, () async {
         await _fetchKdsOrders();
@@ -489,49 +335,12 @@ class _KdsScreenState extends State<KdsScreen>
     }
   }
 
-  void _emergencyStopAllOperations() {
-    _isNavigationInProgress = false;
-    _isAppInForeground = false;
-    _dialogBlocked = true;
-    _isDialogShowing = false;
-    _activeDialogs.clear();
-    _isProcessingPending = false;
-    _recoveryInProgress = false;
-    _roomConnectionStable = false;
-    
-    // Tüm timer'ları durdur
-    _cancelAllRecoveryTimers();
-    _dialogBlockTimer?.cancel();
-    _refreshTimer?.cancel();
-    _roomStabilityTimer?.cancel();
-    
-    NavigatorSafeZone.markBusy('emergency_stop');
-    
-    debugPrint('[KdsScreen-${widget.kdsScreenSlug}] 🛑 Emergency stop - all operations halted');
-  }
-
-  void _blockDialogsTemporarily() {
-    _dialogBlocked = true;
-    _dialogBlockTimer?.cancel();
-    
-    _dialogBlockTimer = Timer(const Duration(seconds: 2), () {
-      if (mounted && !_isDisposed) {
-        _dialogBlocked = false;
-      }
-    });
-  }
-
-  void _unblockDialogs() {
-    _dialogBlockTimer?.cancel();
-    _dialogBlocked = false;
-  }
-
-  // RouteAware metodları
+  // RouteAware methods
   @override
   void didPush() {
     _isCurrent = true;
     debugPrint("[KdsScreen-${widget.kdsScreenSlug}] ➡️ didPush - Screen pushed.");
-    _joinKdsRoomWithStability();
+    joinKdsRoomWithStability();
     super.didPush();
   }
 
@@ -541,23 +350,23 @@ class _KdsScreenState extends State<KdsScreen>
     _isCurrent = true;
     debugPrint("[KdsScreen-${widget.kdsScreenSlug}] ⬅️ didPopNext - Screen returned to foreground.");
     
-    _unblockDialogs();
+    unblockDialogs();
     
-    // PostFrameCallback ile data refresh check
+    // PostFrameCallback for data refresh check
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!_isDisposed && mounted) {
-        if (_roomConnectionStable) {
-          // Eğer uzun süre başka ekrandaydık, data refresh yap
-          if (_needsDataRefreshOnResume) {
+        if (roomConnectionStable) {
+          // If we were away for long time, refresh data
+          if (needsDataRefreshOnResume) {
             debugPrint('[KdsScreen-${widget.kdsScreenSlug}] 🔄 didPopNext - refreshing stale data');
-            _forceFreshDataRefresh();
-            _needsDataRefreshOnResume = false;
+            forceFreshDataRefresh();
+            needsDataRefreshOnResume = false;
           } else {
             _safeRefreshDataWithThrottling();
           }
-          _processPendingNotifications();
+          processPendingNotifications();
         } else {
-          _joinKdsRoomWithStability();
+          joinKdsRoomWithStability();
         }
       }
     });
@@ -570,10 +379,10 @@ class _KdsScreenState extends State<KdsScreen>
     _isCurrent = false;
     debugPrint("[KdsScreen-${widget.kdsScreenSlug}] ⏭️ didPushNext - Screen pushed to background.");
     _isNavigationInProgress = false;
-    _blockDialogsTemporarily();
+    blockDialogsTemporarily();
     
     // Navigation background tracking
-    _needsDataRefreshOnResume = true;
+    needsDataRefreshOnResume = true;
     
     super.didPushNext();
   }
@@ -584,89 +393,14 @@ class _KdsScreenState extends State<KdsScreen>
     _isCurrent = false;
     debugPrint("[KdsScreen-${widget.kdsScreenSlug}] ⬅️ didPop - Screen is being popped.");
     _leaveKdsRoom();
-    _cleanupDialogs();
+    cleanupDialogs();
     super.didPop();
-  }
-
-  bool _shouldProcessUpdate() {
-    return mounted && _isCurrent && _isAppInForeground && !_isDisposed;
-  }
-
-  bool _shouldShowDialog() {
-    return _shouldProcessUpdate() && !_dialogBlocked && !_isDialogShowing && 
-           !BuildLockManager.isLocked && NavigatorSafeZone.canNavigate();
-  }
-
-  void _joinKdsRoomIfNeeded() {
-    // Use the stable version
-    _joinKdsRoomWithStability();
-  }
-
-  void _leaveKdsRoom() {
-    if (_isJoinedToRoom) {
-      _isJoinedToRoom = false;
-      _roomConnectionStable = false;
-      _roomStabilityTimer?.cancel();
-      debugPrint('[KdsScreen-${widget.kdsScreenSlug}] 👋 Left KDS room.');
-    }
-  }
-
-  void _processPendingNotifications() {
-    if (_isProcessingPending || _isDisposed || !mounted) {
-      debugPrint('[KdsScreen-${widget.kdsScreenSlug}] Pending processing blocked');
-      return;
-    }
-    
-    if (_pendingNotifications.isEmpty) {
-      debugPrint('[KdsScreen-${widget.kdsScreenSlug}] No pending notifications');
-      return;
-    }
-    
-    if (!_shouldProcessUpdate() || _dialogBlocked) {
-      debugPrint('[KdsScreen-${widget.kdsScreenSlug}] Pending processing conditions not met');
-      return;
-    }
-    
-    _isProcessingPending = true;
-    debugPrint('[KdsScreen-${widget.kdsScreenSlug}] 📨 Processing ${_pendingNotifications.length} pending notifications.');
-    
-    // İlk bildirimi işle
-    if (_pendingNotifications.isNotEmpty) {
-      final notification = _pendingNotifications.removeAt(0);
-      
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (!_isDisposed && mounted && _shouldShowDialog()) {
-          _processNotificationSafely(notification);
-        }
-        
-        // Sonraki notification'ları kısa sürede işle
-        if (_pendingNotifications.isNotEmpty && !_isDisposed && mounted) {
-          Timer(const Duration(milliseconds: 1500), () {
-            _isProcessingPending = false;
-            _processPendingNotifications();
-          });
-        } else {
-          _isProcessingPending = false;
-        }
-      });
-    } else {
-      _isProcessingPending = false;
-    }
-  }
-
-  void _processNotificationSafely(Map<String, dynamic> data) {
-    if (!_shouldShowDialog()) return;
-    
-    final String? eventType = data['event_type'] as String?;
-    if (eventType == null) return;
-    
-    _showNotificationDialog(data, eventType);
   }
 
   void _safeNavigate(VoidCallback navigationAction) {
     if (_isNavigationInProgress || _isDisposed || !mounted || 
         !NavigatorSafeZone.canNavigate() || BuildLockManager.isLocked) {
-      print('[KDS] Navigation blocked - system busy');
+      debugPrint('[KDS] Navigation blocked - system busy');
       return;
     }
     
@@ -687,144 +421,23 @@ class _KdsScreenState extends State<KdsScreen>
     }
   }
 
-  void _showNotificationDialog(Map<String, dynamic> data, String eventType) {
-    if (!NavigatorSafeZone.canNavigate() || !_shouldShowDialog()) return;
-    
-    final navigatorState = navigatorKey.currentState;
-    if (navigatorState == null || !navigatorState.mounted) return;
-    
-    try {
-      if (navigatorState.userGestureInProgress) {
-        debugPrint('[KdsScreen] Navigator busy with user gesture, dialog skipped');
-        return;
-      }
-    } catch (e) {
-      debugPrint('[KdsScreen] Navigator state check failed: $e');
-      return;
-    }
-    
-    if (_activeDialogs.contains(eventType)) {
-      debugPrint("[KdsScreen-${widget.kdsScreenSlug}] Dialog type '$eventType' already active, skipping.");
-      return;
-    }
-    
-    final context = navigatorKey.currentContext ?? this.context;
-    if (!mounted || context == null) return;
-    
-    Widget? dialogWidget;
-    switch (eventType) {
-      case NotificationEventTypes.orderApprovedForKitchen:
-        dialogWidget = OrderApprovedForKitchenDialog(notificationData: data, onAcknowledge: () {});  
-        break;
-      case NotificationEventTypes.orderReadyForPickupUpdate:
-        dialogWidget = OrderReadyForPickupDialog(notificationData: data, onAcknowledge: () {});
-        break;
-      case NotificationEventTypes.orderItemAdded:
-        dialogWidget = OrderApprovedForKitchenDialog(notificationData: data, onAcknowledge: () {});
-        break;
-    }
-
-    if (dialogWidget != null && !_isDisposed && mounted) {
-      debugPrint("[KdsScreen-${widget.kdsScreenSlug}] 📱 Bildirim diyalogu gösteriliyor: $eventType");
-      
-      NavigatorSafeZone.markBusy('dialog_show');
-      
-      _isDialogShowing = true;
-      _activeDialogs.add(eventType);
-      
-      showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (_) => dialogWidget!,
-      ).then((_) {
-        if (mounted && !_isDisposed) {
-          _isDialogShowing = false;
-          _activeDialogs.remove(eventType);
-          shouldRefreshTablesNotifier.value = true;
-          debugPrint("[KdsScreen-${widget.kdsScreenSlug}] ✅ Dialog kapatıldı: $eventType");
-        }
-        NavigatorSafeZone.markFree('dialog_show');
-      }).catchError((error) {
-        debugPrint("[KdsScreen-${widget.kdsScreenSlug}] ❌ Dialog error: $error");
-        if (mounted && !_isDisposed) {
-          _isDialogShowing = false;
-          _activeDialogs.remove(eventType);
-        }
-        NavigatorSafeZone.markFree('dialog_show');
-      });
-    } else {
-      NavigatorSafeZone.markFree('dialog_show');
-    }
-  }
-
-  void _handleLoudNotification() {
-    final data = newOrderNotificationDataNotifier.value;
-    
-    if (data == null || _dialogBlocked || BuildLockManager.isLocked || NavigatorSafeZone.isBusy) {
-      if (data != null) newOrderNotificationDataNotifier.value = null;
-      return;
-    }
-
-    if (!_shouldShowDialog()) {
-      if (data != null) {
-        debugPrint("[KdsScreen-${widget.kdsScreenSlug}] Ekran/dialog durumu uygun değil, bildirim bekletiliyor.");
-        _pendingNotifications.add(Map<String, dynamic>.from(data));
-      }
-      if (data != null) newOrderNotificationDataNotifier.value = null;
-      return;
-    }
-
-    final String? eventType = data['event_type'] as String?;
-    if (eventType == null || !UserSession.hasNotificationPermission(eventType)) {
-      newOrderNotificationDataNotifier.value = null;
-      return;
-    }
-    
-    final String? kdsSlugInEvent = data['kds_slug'] as String?;
-    if (kdsSlugInEvent != null && kdsSlugInEvent != widget.kdsScreenSlug) {
-      newOrderNotificationDataNotifier.value = null;
-      return;
-    }
-    
-    _showNotificationDialog(data, eventType);
-    newOrderNotificationDataNotifier.value = null;
-  }
-
-  void _handleSocketOrderUpdate() {
-    final data = orderStatusUpdateNotifier.value;
-    if (data != null) {
-      final String? eventType = data['event_type'] as String?;
-      final String? kdsSlugInEvent = data['kds_slug'] as String?;
-
-      if (kdsSlugInEvent == null || kdsSlugInEvent == widget.kdsScreenSlug) {
-        debugPrint("[KdsScreen-${widget.kdsScreenSlug}] 📡 Socket update received: '$eventType'");
-        
-        if (_shouldProcessUpdate()) {
-          debugPrint("[KdsScreen-${widget.kdsScreenSlug}] 🔄 Refreshing data...");
-          _safeRefreshDataWithThrottling();
-        } else {
-          debugPrint("[KdsScreen-${widget.kdsScreenSlug}] 📋 Screen inactive, adding to pending list.");
-          _pendingNotifications.add(Map<String, dynamic>.from(data));
-        }
-      } else {
-        debugPrint("[KdsScreen-${widget.kdsScreenSlug}] 🚫 Event for other KDS ('$kdsSlugInEvent'), ignoring.");
-      }
-
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (mounted && orderStatusUpdateNotifier.value == data) {
-          orderStatusUpdateNotifier.value = null;
-        }
-      });
-    }
-  }
-
   Future<void> _fetchKdsOrdersWithLoadingIndicator() async {
     if (!mounted || _isDisposed) return;
+    
+    // 🔥 Check if refresh action can be performed
+    final refreshActionKey = 'refresh_${widget.kdsScreenSlug}';
+    if (!canPerformAction(refreshActionKey)) {
+      debugPrint('[KdsScreen-${widget.kdsScreenSlug}] 🚫 Refresh blocked - too frequent');
+      return;
+    }
+    
     setState(() {
       _isLoading = true;
       _errorMessage = '';
     });
+    
     await _fetchKdsOrders();
+    
     if (mounted && !_isDisposed) {
       setState(() {
         _isLoading = false;
@@ -836,10 +449,15 @@ class _KdsScreenState extends State<KdsScreen>
   Future<void> _fetchKdsOrders() async {
     if (!mounted || _isDisposed) return;
     final l10n = AppLocalizations.of(context)!;
+    
     try {
       debugPrint('[KdsScreen-${widget.kdsScreenSlug}] 📦 Fetching KDS orders...');
-      final orders =
-          await KdsService.fetchKDSOrders(widget.token, widget.kdsScreenSlug);
+      
+      final orders = await KdsService.fetchKDSOrders(widget.token, widget.kdsScreenSlug).timeout(
+        const Duration(seconds: 15),
+        onTimeout: () => throw TimeoutException('KDS orders fetch timeout', const Duration(seconds: 15)),
+      );
+      
       if (mounted && !_isDisposed) {
         setState(() {
           _kdsOrders = orders;
@@ -854,9 +472,30 @@ class _KdsScreenState extends State<KdsScreen>
           _kdsOrders = [];
         });
       }
-      debugPrint(
-          "[KdsScreen-${widget.kdsScreenSlug}] ❌ Error fetching KDS orders: $_errorMessage");
+      debugPrint("[KdsScreen-${widget.kdsScreenSlug}] ❌ Error fetching KDS orders: $_errorMessage");
     }
+  }
+
+  // 🔥 Enhanced refresh button with action management
+  void _handleRefreshButton() {
+    final refreshActionKey = 'manual_refresh_${widget.kdsScreenSlug}';
+    
+    if (!canPerformAction(refreshActionKey)) {
+      _showOverlayFeedback(
+        Colors.orange, 
+        Icons.warning, 
+        'Lütfen bir önceki yenileme işleminin bitmesini bekleyin'
+      );
+      return;
+    }
+    
+    handleKdsAction(
+      actionKey: refreshActionKey,
+      actionType: 'refresh_orders',
+      parameters: {},
+      loadingMessage: 'KDS siparişleri yenileniyor...',
+      successMessage: 'Siparişler güncellendi!',
+    );
   }
 
   @override
@@ -930,10 +569,10 @@ class _KdsScreenState extends State<KdsScreen>
               Color indicatorColor;
               IconData indicatorIcon;
               
-              if (status == 'Bağlandı' && _roomConnectionStable) {
+              if (status == 'Bağlandı' && roomConnectionStable) {
                 indicatorColor = Colors.green;
                 indicatorIcon = Icons.wifi;
-              } else if (status.contains('bekleniyor') || status.contains('deneniyor') || _isJoinedToRoom) {
+              } else if (status.contains('bekleniyor') || status.contains('deneniyor') || isJoinedToRoom) {
                 indicatorColor = Colors.orange;
                 indicatorIcon = Icons.wifi_tethering;
               } else {
@@ -944,7 +583,7 @@ class _KdsScreenState extends State<KdsScreen>
               return Padding(
                 padding: const EdgeInsets.only(right: 8.0),
                 child: GestureDetector(
-                  onTap: _joinKdsRoomWithStability,
+                  onTap: joinKdsRoomWithStability,
                   child: Container(
                     padding: const EdgeInsets.all(4),
                     decoration: BoxDecoration(
@@ -958,8 +597,8 @@ class _KdsScreenState extends State<KdsScreen>
                           color: indicatorColor,
                           size: 16,
                         ),
-                        // Bekleyen bildirim göstergesi
-                        if (_pendingNotifications.isNotEmpty)
+                        // Pending notification indicator
+                        if (pendingNotifications.isNotEmpty)
                           Positioned(
                             right: 0,
                             top: 0,
@@ -972,7 +611,7 @@ class _KdsScreenState extends State<KdsScreen>
                               ),
                               child: Center(
                                 child: Text(
-                                  '${_pendingNotifications.length}',
+                                  '${pendingNotifications.length}',
                                   style: const TextStyle(
                                     color: Colors.white,
                                     fontSize: 6,
@@ -982,8 +621,8 @@ class _KdsScreenState extends State<KdsScreen>
                               ),
                             ),
                           ),
-                        // Dialog blokaj göstergesi
-                        if (_dialogBlocked || BuildLockManager.isLocked || NavigatorSafeZone.isBusy)
+                        // Dialog block indicator
+                        if (dialogBlocked || BuildLockManager.isLocked || NavigatorSafeZone.isBusy)
                           Positioned(
                             left: 0,
                             bottom: 0,
@@ -996,8 +635,8 @@ class _KdsScreenState extends State<KdsScreen>
                               ),
                             ),
                           ),
-                        // Processing göstergesi
-                        if (_isProcessingPending)
+                        // Processing indicator
+                        if (isProcessingPending)
                           Positioned(
                             right: 0,
                             bottom: 0,
@@ -1010,8 +649,8 @@ class _KdsScreenState extends State<KdsScreen>
                               ),
                             ),
                           ),
-                        // Data staleness göstergesi
-                        if (_needsDataRefreshOnResume)
+                        // Data staleness indicator
+                        if (needsDataRefreshOnResume)
                           Positioned(
                             left: 0,
                             top: 0,
@@ -1024,8 +663,8 @@ class _KdsScreenState extends State<KdsScreen>
                               ),
                             ),
                           ),
-                        // 🚨 Recovery göstergesi
-                        if (_recoveryInProgress)
+                        // Recovery indicator
+                        if (recoveryInProgress)
                           Positioned(
                             bottom: 0,
                             right: 4,
@@ -1045,11 +684,30 @@ class _KdsScreenState extends State<KdsScreen>
               );
             },
           ),
-          IconButton(
-            icon: const Icon(Icons.refresh, color: Colors.white),
-            tooltip: l10n.kdsScreenTooltipRefresh,
-            onPressed: _isLoading ? null : _fetchKdsOrdersWithLoadingIndicator,
-          )
+          // 🔥 Enhanced refresh button
+          Builder(
+            builder: (context) {
+              final refreshActionKey = 'manual_refresh_${widget.kdsScreenSlug}';
+              final isRefreshing = isActionProcessing(refreshActionKey);
+              
+              if (isRefreshing) {
+                return Padding(
+                  padding: const EdgeInsets.only(right: 8.0),
+                  child: buildEnhancedLoadingIndicator(
+                    color: Colors.white,
+                    message: 'Yenileniyor...',
+                    size: 24,
+                  ),
+                );
+              }
+              
+              return IconButton(
+                icon: const Icon(Icons.refresh, color: Colors.white),
+                tooltip: l10n.kdsScreenTooltipRefresh,
+                onPressed: _isLoading ? null : _handleRefreshButton,
+              );
+            },
+          ),
         ],
       ),
       body: Container(
@@ -1076,7 +734,7 @@ class _KdsScreenState extends State<KdsScreen>
                         ElevatedButton.icon(
                           icon: const Icon(Icons.refresh),
                           label: Text(l10n.kdsScreenButtonRetry),
-                          onPressed: _fetchKdsOrdersWithLoadingIndicator,
+                          onPressed: _handleRefreshButton,
                           style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.orangeAccent.shade100,
                               foregroundColor: Colors.black87),
@@ -1102,7 +760,7 @@ class _KdsScreenState extends State<KdsScreen>
                           ElevatedButton.icon(
                             icon: const Icon(Icons.refresh_rounded),
                             label: Text(l10n.kdsScreenTooltipRefresh),
-                            onPressed: _fetchKdsOrdersWithLoadingIndicator,
+                            onPressed: _handleRefreshButton,
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.blueGrey.shade50,
                               foregroundColor: Colors.blueGrey.shade900,
@@ -1122,7 +780,7 @@ class _KdsScreenState extends State<KdsScreen>
                           itemCount: _kdsOrders.length,
                           itemBuilder: (context, index) {
                             final order = _kdsOrders[index];
-                            return KdsOrderCard(
+                            return EnhancedKdsOrderCard( // 🔥 Updated to use enhanced card
                               key: ValueKey(order['id']),
                               orderData: order,
                               token: widget.token,

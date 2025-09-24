@@ -20,9 +20,7 @@ import '../models/campaign_menu_item.dart';
 import '../models/menu_item.dart' as AppMenuItem;
 import '../models/menu_item_variant.dart';
 import '../widgets/add_order_item_dialog.dart';
-// YENİ: Kategori düzenleme ekranına yönlendirme için import eklendi.
 import 'edit_category_screen.dart';
-
 
 class AddEditCampaignScreen extends StatefulWidget {
   final String token;
@@ -59,7 +57,7 @@ class _AddEditCampaignScreenState extends State<AddEditCampaignScreen> {
 
   bool _isLoading = false;
   bool _isLoadingMenuItems = true;
-  String _errorMessageKey = ''; // Hata anahtarını ve detayını tutar
+  String _errorMessageKey = '';
 
   double _calculatedNormalTotal = 0.0;
 
@@ -84,10 +82,10 @@ class _AddEditCampaignScreenState extends State<AddEditCampaignScreen> {
   
   @override
   void didChangeDependencies() {
-      super.didChangeDependencies();
-      if (_isLoadingMenuItems) { // Sadece ilk seferde çalıştır
-          _fetchInitialData();
-      }
+    super.didChangeDependencies();
+    if (_isLoadingMenuItems) {
+      _fetchInitialData();
+    }
   }
 
   @override
@@ -95,11 +93,16 @@ class _AddEditCampaignScreenState extends State<AddEditCampaignScreen> {
     _nameController.dispose();
     _descriptionController.dispose();
     _campaignPriceController.dispose();
+    
+    // Image resources cleanup
+    _pickedImageXFile = null;
+    _webImageBytes = null;
+    
     super.dispose();
   }
 
   Future<void> _fetchInitialData() async {
-    if(!mounted) return;
+    if (!mounted) return;
     try {
       final results = await Future.wait([
         OrderService.fetchMenuItems(widget.token),
@@ -115,7 +118,7 @@ class _AddEditCampaignScreenState extends State<AddEditCampaignScreen> {
           _availableCategories = categoryData;
           _errorMessageKey = '';
           _recalculateNormalTotal();
-          _isLoadingMenuItems = false; // Yükleme tamamlandı
+          _isLoadingMenuItems = false;
         });
       }
     } catch (e) {
@@ -129,44 +132,45 @@ class _AddEditCampaignScreenState extends State<AddEditCampaignScreen> {
   void _openAddItemDialog() async {
     if (!mounted) return;
     await showDialog(
-        context: context,
-        builder: (_) => AddOrderItemDialog(
-              token: widget.token,
-              allMenuItems: _availableMenuItems,
-              categories: _availableCategories,
-              tableUsers: const [],
-              onItemsAdded: (menuItem, variant, extras, tableUser) {
-                if (mounted) {
-                  setState(() {
-                    const int quantity = 1;
-                    final existingIndex = _selectedCampaignItems.indexWhere((ci) =>
-                        ci.menuItemId == menuItem.id && ci.variantId == variant?.id);
+      context: context,
+      builder: (_) => AddOrderItemDialog(
+        token: widget.token,
+        allMenuItems: _availableMenuItems,
+        categories: _availableCategories,
+        tableUsers: const [],
+        onItemsAdded: (menuItem, variant, extras, tableUser) {
+          if (mounted) {
+            setState(() {
+              const int quantity = 1;
+              final existingIndex = _selectedCampaignItems.indexWhere((ci) =>
+                  ci.menuItemId == menuItem.id && ci.variantId == variant?.id);
 
-                    if (existingIndex != -1) {
-                      _selectedCampaignItems[existingIndex] = CampaignMenuItem(
-                        id: _selectedCampaignItems[existingIndex].id,
-                        menuItemId: menuItem.id,
-                        menuItemName: menuItem.name,
-                        variantId: variant?.id,
-                        variantName: variant?.name,
-                        quantity: (_selectedCampaignItems[existingIndex].quantity + quantity).toInt(),
-                        originalPrice: variant?.price ?? 0.0,
-                      );
-                    } else {
-                      _selectedCampaignItems.add(CampaignMenuItem(
-                        menuItemId: menuItem.id,
-                        menuItemName: menuItem.name,
-                        variantId: variant?.id,
-                        variantName: variant?.name,
-                        quantity: quantity,
-                        originalPrice: variant?.price ?? 0.0,
-                      ));
-                    }
-                    _recalculateNormalTotal();
-                  });
-                }
-              },
-            ));
+              if (existingIndex != -1) {
+                _selectedCampaignItems[existingIndex] = CampaignMenuItem(
+                  id: _selectedCampaignItems[existingIndex].id,
+                  menuItemId: menuItem.id,
+                  menuItemName: menuItem.name,
+                  variantId: variant?.id,
+                  variantName: variant?.name,
+                  quantity: (_selectedCampaignItems[existingIndex].quantity + quantity).toInt(),
+                  originalPrice: variant?.price ?? 0.0,
+                );
+              } else {
+                _selectedCampaignItems.add(CampaignMenuItem(
+                  menuItemId: menuItem.id,
+                  menuItemName: menuItem.name,
+                  variantId: variant?.id,
+                  variantName: variant?.name,
+                  quantity: quantity,
+                  originalPrice: variant?.price ?? 0.0,
+                ));
+              }
+              _recalculateNormalTotal();
+            });
+          }
+        },
+      ),
+    );
   }
 
   void _recalculateNormalTotal() {
@@ -182,7 +186,7 @@ class _AddEditCampaignScreenState extends State<AddEditCampaignScreen> {
         }
       }
     }
-    if(mounted) setState(() => _calculatedNormalTotal = total);
+    if (mounted) setState(() => _calculatedNormalTotal = total);
   }
 
   Future<void> _pickImage() async {
@@ -206,15 +210,17 @@ class _AddEditCampaignScreenState extends State<AddEditCampaignScreen> {
     } else if (!kIsWeb && _pickedImageXFile != null) {
       return Image.file(File(_pickedImageXFile!.path), height: 100, width: 100, fit: BoxFit.cover);
     } else if (_currentImageUrl != null && _currentImageUrl!.isNotEmpty) {
-      return Image.network(_currentImageUrl!, height: 100, width: 100, fit: BoxFit.cover,
+      return Image.network(
+        _currentImageUrl!, 
+        height: 100, 
+        width: 100, 
+        fit: BoxFit.cover,
         errorBuilder: (c,e,s) => const Icon(Icons.broken_image, size: 50),
       );
     }
     return Text(l10n.campaignImageNotSelected);
   }
 
-  // --- YENİ METOT ---
-  /// Kampanya oluşturulduktan sonra "Kampanyalar" kategorisinin KDS atamasını kontrol eder.
   Future<void> _handlePostCampaignCreation(BuildContext buildContext) async {
     final l10n = AppLocalizations.of(buildContext)!;
     try {
@@ -232,14 +238,20 @@ class _AddEditCampaignScreenState extends State<AddEditCampaignScreen> {
               title: Text(l10n.campaignKdsAssignmentTitle),
               content: Text(l10n.campaignKdsAssignmentPrompt(campaignCategoryName)),
               actions: [
-                TextButton(onPressed: () => Navigator.of(ctx).pop(false), child: Text(l10n.dialogButtonLater)),
-                ElevatedButton(onPressed: () => Navigator.of(ctx).pop(true), child: Text(l10n.dialogButtonAssignNow)),
+                TextButton(
+                  onPressed: () => Navigator.of(ctx).pop(false), 
+                  child: Text(l10n.dialogButtonLater)
+                ),
+                ElevatedButton(
+                  onPressed: () => Navigator.of(ctx).pop(true), 
+                  child: Text(l10n.dialogButtonAssignNow)
+                ),
               ],
             ),
           );
           
           if (assignNow == true && mounted) {
-            Navigator.pop(context, true); // Önce kampanya oluşturma ekranını kapat
+            Navigator.pop(context, true);
             await Navigator.push(
               context,
               MaterialPageRoute(
@@ -247,11 +259,11 @@ class _AddEditCampaignScreenState extends State<AddEditCampaignScreen> {
                   token: widget.token,
                   category: campaignCategory,
                   businessId: widget.businessId,
-                  onMenuUpdated: () {}, // Bu ekrandan sonra özel bir aksiyon gerekmiyor
+                  onMenuUpdated: () {},
                 ),
               ),
             );
-            return; // Yönlendirme yapıldığı için metottan çık
+            return;
           }
         }
       }
@@ -259,7 +271,6 @@ class _AddEditCampaignScreenState extends State<AddEditCampaignScreen> {
       debugPrint("KDS atama kontrolü sırasında hata: $e");
     }
 
-    // Eğer KDS ataması gerekmiyorsa veya kullanıcı "Daha Sonra" dediyse, normal şekilde çık
     if (mounted) {
       Navigator.pop(context, true);
     }
@@ -270,7 +281,7 @@ class _AddEditCampaignScreenState extends State<AddEditCampaignScreen> {
     if (!_formKey.currentState!.validate()) return;
     
     if (_selectedCampaignItems.isEmpty) {
-      if(mounted) setState(() => _errorMessageKey = "campaignErrorAddItem");
+      if (mounted) setState(() => _errorMessageKey = "campaignErrorAddItem");
       return;
     }
     if (!mounted) return;
@@ -283,13 +294,16 @@ class _AddEditCampaignScreenState extends State<AddEditCampaignScreen> {
     String? imageUrl = _currentImageUrl;
     if (_pickedImageXFile != null || _webImageBytes != null) {
       try {
-        String fileName = _pickedImageXFile != null ? p.basename(_pickedImageXFile!.path) : 'campaign_img_${DateTime.now().millisecondsSinceEpoch}.jpg';
+        String fileName = _pickedImageXFile != null 
+            ? p.basename(_pickedImageXFile!.path) 
+            : 'campaign_img_${DateTime.now().millisecondsSinceEpoch}.jpg';
         String firebaseFileName = "business_${widget.businessId}/campaigns/${DateTime.now().millisecondsSinceEpoch}_$fileName";
         imageUrl = await FirebaseStorageService.uploadImage(
           imageFile: _pickedImageXFile != null ? File(_pickedImageXFile!.path) : null,
           imageBytes: _webImageBytes,
           fileName: firebaseFileName,
-          folderPath: 'campaign_images');
+          folderPath: 'campaign_images'
+        );
         if (imageUrl == null) throw Exception(l10n.errorFirebaseUploadFailed);
       } catch (e) {
         if (mounted) setState(() {
@@ -323,7 +337,6 @@ class _AddEditCampaignScreenState extends State<AddEditCampaignScreen> {
               backgroundColor: Colors.green
             ),
           );
-          // YENİ: KDS atama kontrolü ve yönlendirme mantığı
           await _handlePostCampaignCreation(context);
         }
       } else {
@@ -349,44 +362,53 @@ class _AddEditCampaignScreenState extends State<AddEditCampaignScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // build metodunun geri kalanı aynı kalabilir, bu yüzden kısaltıldı.
-    // ... (build metodunun içeriği burada)
     final l10n = AppLocalizations.of(context)!;
     String displayErrorMessage = '';
     if (_errorMessageKey.isNotEmpty) {
-        final parts = _errorMessageKey.split('|');
-        final key = parts[0];
-        final details = parts.length > 1 ? parts[1] : '';
-        switch (key) {
-            case "errorLoadingDataWithDetails": displayErrorMessage = l10n.errorLoadingDataWithDetails(details); break;
-            case "campaignErrorAddItem": displayErrorMessage = l10n.campaignErrorAddItem; break;
-            case "errorUploadingPhotoWithDetails": displayErrorMessage = l10n.errorUploadingPhotoWithDetails(details); break;
-            case "campaignErrorSubmit": displayErrorMessage = l10n.campaignErrorSubmit(details); break;
-        }
+      final parts = _errorMessageKey.split('|');
+      final key = parts[0];
+      final details = parts.length > 1 ? parts[1] : '';
+      switch (key) {
+        case "errorLoadingDataWithDetails": 
+          displayErrorMessage = l10n.errorLoadingDataWithDetails(details); 
+          break;
+        case "campaignErrorAddItem": 
+          displayErrorMessage = l10n.campaignErrorAddItem; 
+          break;
+        case "errorUploadingPhotoWithDetails": 
+          displayErrorMessage = l10n.errorUploadingPhotoWithDetails(details); 
+          break;
+        case "campaignErrorSubmit": 
+          displayErrorMessage = l10n.campaignErrorSubmit(details); 
+          break;
+      }
     }
+    
     return Scaffold(
       appBar: AppBar(
         title: Text(
           widget.campaignMenu == null ? l10n.addCampaignTitle : l10n.editCampaignTitle, 
           style: const TextStyle(color: Colors.white)
         ),
-          flexibleSpace: Container(
+        flexibleSpace: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
               colors: [Colors.blue.shade900, Colors.blue.shade400],
-              begin: Alignment.topLeft, end: Alignment.bottomRight,
+              begin: Alignment.topLeft, 
+              end: Alignment.bottomRight,
             ),
           ),
         ),
         iconTheme: const IconThemeData(color: Colors.white),
       ),
       body: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-             colors: [Colors.blue.shade900.withOpacity(0.9), Colors.blue.shade400.withOpacity(0.8)],
-             begin: Alignment.topLeft, end: Alignment.bottomRight,
-           ),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Colors.blue.shade900.withOpacity(0.9), Colors.blue.shade400.withOpacity(0.8)],
+            begin: Alignment.topLeft, 
+            end: Alignment.bottomRight,
           ),
+        ),
         child: _isLoadingMenuItems
             ? const Center(child: CircularProgressIndicator(color: Colors.white))
             : SingleChildScrollView(
@@ -402,30 +424,104 @@ class _AddEditCampaignScreenState extends State<AddEditCampaignScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          TextFormField(controller: _nameController, decoration: InputDecoration(labelText: l10n.campaignNameLabel, border: const OutlineInputBorder()), validator: (v) => (v == null || v.isEmpty) ? l10n.validatorRequiredField : null),
+                          TextFormField(
+                            controller: _nameController, 
+                            decoration: InputDecoration(
+                              labelText: l10n.campaignNameLabel, 
+                              border: const OutlineInputBorder()
+                            ), 
+                            validator: (v) => (v == null || v.isEmpty) ? l10n.validatorRequiredField : null
+                          ),
                           const SizedBox(height: 12),
-                          TextFormField(controller: _descriptionController, decoration: InputDecoration(labelText: l10n.campaignDescriptionLabel, border: const OutlineInputBorder()), maxLines: 2),
+                          TextFormField(
+                            controller: _descriptionController, 
+                            decoration: InputDecoration(
+                              labelText: l10n.campaignDescriptionLabel, 
+                              border: const OutlineInputBorder()
+                            ), 
+                            maxLines: 2
+                          ),
                           const SizedBox(height: 12),
                           TextFormField(
                             controller: _campaignPriceController,
-                            decoration: InputDecoration(labelText: l10n.campaignPriceLabel, prefixText: l10n.currencyTL, border: const OutlineInputBorder()),
+                            decoration: InputDecoration(
+                              labelText: l10n.campaignPriceLabel, 
+                              prefixText: l10n.currencyTL, 
+                              border: const OutlineInputBorder()
+                            ),
                             keyboardType: const TextInputType.numberWithOptions(decimal: true),
                             inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d{0,2}'))],
-                            validator: (v) => (v == null || v.isEmpty || (double.tryParse(v) ?? -1) <=0 ) ? l10n.validatorInvalidPositivePrice : null
+                            validator: (v) => (v == null || v.isEmpty || (double.tryParse(v) ?? -1) <= 0) 
+                                ? l10n.validatorInvalidPositivePrice : null
                           ),
                           const SizedBox(height: 12),
-                          SwitchListTile(title: Text(l10n.campaignActiveLabel), value: _isActive, onChanged: (val) => setState(()=> _isActive = val), activeColor: Theme.of(context).primaryColor),
+                          SwitchListTile(
+                            title: Text(l10n.campaignActiveLabel), 
+                            value: _isActive, 
+                            onChanged: (val) => setState(() => _isActive = val), 
+                            activeColor: Theme.of(context).primaryColor
+                          ),
                           const SizedBox(height: 12),
-                          Row(children: [Expanded(child: Text(_startDate == null ? l10n.campaignNoStartDate : l10n.campaignStartDateLabel(DateFormat('dd/MM/yyyy').format(_startDate!)))), IconButton(icon: const Icon(Icons.calendar_today), onPressed: () async { final date = await showDatePicker(context: context, initialDate: _startDate ?? DateTime.now(), firstDate: DateTime(2000), lastDate: DateTime(2100)); if(date != null && mounted) setState(()=>_startDate = date);})]),
-                          Row(children: [Expanded(child: Text(_endDate == null ? l10n.campaignNoEndDate : l10n.campaignEndDateLabel(DateFormat('dd/MM/yyyy').format(_endDate!)))), IconButton(icon: const Icon(Icons.calendar_today), onPressed: () async { final date = await showDatePicker(context: context, initialDate: _endDate ?? _startDate ?? DateTime.now(), firstDate: _startDate ?? DateTime(2000), lastDate: DateTime(2100)); if(date != null && mounted) setState(()=>_endDate = date);})]),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Text(_startDate == null 
+                                    ? l10n.campaignNoStartDate 
+                                    : l10n.campaignStartDateLabel(DateFormat('dd/MM/yyyy').format(_startDate!))
+                                )
+                              ), 
+                              IconButton(
+                                icon: const Icon(Icons.calendar_today), 
+                                onPressed: () async { 
+                                  final date = await showDatePicker(
+                                    context: context, 
+                                    initialDate: _startDate ?? DateTime.now(), 
+                                    firstDate: DateTime(2000), 
+                                    lastDate: DateTime(2100)
+                                  ); 
+                                  if (date != null && mounted) setState(() => _startDate = date);
+                                }
+                              )
+                            ]
+                          ),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Text(_endDate == null 
+                                    ? l10n.campaignNoEndDate 
+                                    : l10n.campaignEndDateLabel(DateFormat('dd/MM/yyyy').format(_endDate!))
+                                )
+                              ), 
+                              IconButton(
+                                icon: const Icon(Icons.calendar_today), 
+                                onPressed: () async { 
+                                  final date = await showDatePicker(
+                                    context: context, 
+                                    initialDate: _endDate ?? _startDate ?? DateTime.now(), 
+                                    firstDate: _startDate ?? DateTime(2000), 
+                                    lastDate: DateTime(2100)
+                                  ); 
+                                  if (date != null && mounted) setState(() => _endDate = date);
+                                }
+                              )
+                            ]
+                          ),
                           const SizedBox(height: 10),
-                            Center(child: _buildImagePreview(l10n)),
-                            TextButton.icon(onPressed: _pickImage, icon: const Icon(Icons.image), label: Text(l10n.campaignSelectImageButton)),
+                          Center(child: _buildImagePreview(l10n)),
+                          TextButton.icon(
+                            onPressed: _pickImage, 
+                            icon: const Icon(Icons.image), 
+                            label: Text(l10n.campaignSelectImageButton)
+                          ),
                           const SizedBox(height: 16),
                           const Divider(),
-                          Text(l10n.campaignContentTitle(_calculatedNormalTotal.toStringAsFixed(2), l10n.currencySymbol), style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                          Text(
+                            l10n.campaignContentTitle(_calculatedNormalTotal.toStringAsFixed(2), l10n.currencySymbol), 
+                            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)
+                          ),
                           const SizedBox(height: 8),
-                          if (_selectedCampaignItems.isEmpty) Text(l10n.campaignNoProductsAdded),
+                          if (_selectedCampaignItems.isEmpty) 
+                            Text(l10n.campaignNoProductsAdded),
                           ListView.builder(
                             shrinkWrap: true,
                             physics: const NeverScrollableScrollPhysics(),
@@ -435,11 +531,15 @@ class _AddEditCampaignScreenState extends State<AddEditCampaignScreen> {
                               return ListTile(
                                 leading: const Icon(Icons.shopping_basket_outlined),
                                 title: Text("${campaignItem.menuItemName ?? l10n.unknownProduct} ${campaignItem.variantName != null ? '(${campaignItem.variantName})' : ''}"),
-                                subtitle: Text(l10n.campaignItemDetails(campaignItem.quantity.toString(), campaignItem.originalPrice?.toStringAsFixed(2) ?? 'N/A', l10n.currencySymbol)),
+                                subtitle: Text(l10n.campaignItemDetails(
+                                  campaignItem.quantity.toString(), 
+                                  campaignItem.originalPrice?.toStringAsFixed(2) ?? 'N/A', 
+                                  l10n.currencySymbol
+                                )),
                                 trailing: IconButton(
                                   icon: const Icon(Icons.remove_circle_outline, color: Colors.red),
                                   onPressed: () {
-                                    if(mounted) {
+                                    if (mounted) {
                                       setState(() {
                                         _selectedCampaignItems.removeAt(index);
                                         _recalculateNormalTotal();
@@ -456,16 +556,22 @@ class _AddEditCampaignScreenState extends State<AddEditCampaignScreen> {
                             onPressed: _isLoadingMenuItems ? null : _openAddItemDialog,
                           ),
                           const SizedBox(height: 20),
-                          if (displayErrorMessage.isNotEmpty) Text(displayErrorMessage, style: const TextStyle(color: Colors.redAccent, fontWeight: FontWeight.bold)),
+                          if (displayErrorMessage.isNotEmpty) 
+                            Text(
+                              displayErrorMessage, 
+                              style: const TextStyle(color: Colors.redAccent, fontWeight: FontWeight.bold)
+                            ),
                           const SizedBox(height: 8),
                           ElevatedButton(
                             onPressed: _isLoading ? null : _submitCampaign,
                             style: ElevatedButton.styleFrom(
-                                backgroundColor: Theme.of(context).primaryColor,
-                                foregroundColor: Colors.white,
-                                padding: const EdgeInsets.symmetric(vertical: 12)
+                              backgroundColor: Theme.of(context).primaryColor,
+                              foregroundColor: Colors.white,
+                              padding: const EdgeInsets.symmetric(vertical: 12)
                             ),
-                            child: _isLoading ? const CircularProgressIndicator(color: Colors.white) : Text(widget.campaignMenu == null ? l10n.campaignCreateButton : l10n.campaignUpdateButton),
+                            child: _isLoading 
+                                ? const CircularProgressIndicator(color: Colors.white) 
+                                : Text(widget.campaignMenu == null ? l10n.campaignCreateButton : l10n.campaignUpdateButton),
                           ),
                         ],
                       ),

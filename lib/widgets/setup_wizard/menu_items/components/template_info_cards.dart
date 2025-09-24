@@ -1,5 +1,6 @@
 // lib/widgets/setup_wizard/menu_items/components/template_info_cards.dart
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../models/variant_template_config.dart';
 
@@ -17,6 +18,8 @@ class TemplateInfoCards extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Column(
       children: [
         // Limit bilgisi
@@ -30,11 +33,14 @@ class TemplateInfoCards extends StatelessWidget {
           ),
           child: Row(
             children: [
-              Icon(Icons.info_outline, color: Colors.blue, size: 16),
+              const Icon(Icons.info_outline, color: Colors.blue, size: 16),
               const SizedBox(width: 6),
               Expanded(
                 child: Text(
-                  'Mevcut: $currentMenuItemCount, Seçilen: ${selectedTemplateIds.length}',
+                  l10n.itemSelectionInfo(
+                    currentMenuItemCount.toString(),
+                    selectedTemplateIds.length.toString(),
+                  ),
                   style: TextStyle(
                     fontSize: 11,
                     color: Colors.blue.shade700,
@@ -60,7 +66,7 @@ class TemplateInfoCards extends StatelessWidget {
             ),
             child: Row(
               children: [
-                Icon(Icons.tune, color: Colors.green, size: 16),
+                const Icon(Icons.tune, color: Colors.green, size: 16),
                 const SizedBox(width: 6),
                 Expanded(
                   child: Builder(
@@ -78,7 +84,7 @@ class TemplateInfoCards extends StatelessWidget {
                       }
                       final photoText = variantsWithPhoto > 0 ? ' (📸$variantsWithPhoto)' : '';
                       return Text(
-                        'Toplam Varyant: $totalVariants$photoText',
+                        l10n.totalVariantsInfo(totalVariants.toString()) + photoText,
                         style: TextStyle(
                           fontSize: 11,
                           color: Colors.green.shade700,

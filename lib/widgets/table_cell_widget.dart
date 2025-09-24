@@ -59,10 +59,22 @@ class _TableCellWidgetState extends State<TableCellWidget> {
   DateTime? _lastRefreshTime;
   bool _isInRefreshCooldown = false;
   int _pendingRefreshCount = 0;
+
+  // 🔥 YENİ: Enhanced action management
+  final Map<int, Completer<bool>?> _activeRequests = {};
+  final Map<int, Timer?> _debounceTimers = {};
+  final Map<int, String> _optimisticStates = {};
+  final Map<int, int> _retryCounters = {};
   
-  static const int REFRESH_COOLDOWN_MS = 1500; // 1.5 saniye cooldown
+  // 🔥 YENİ: Action completion tracking
+  final Map<int, bool> _completedRequests = {}; // Track completed requests
+  
+  // Constants
+  static const int REFRESH_COOLDOWN_MS = 1500;
   static const int MAX_PENDING_REFRESHES = 3;
-  static const int OPERATION_TIMEOUT_SECONDS = 12;
+  static const int OPERATION_TIMEOUT_SECONDS = 15;
+  static const int DEBOUNCE_DELAY_MS = 800;
+  static const int MAX_RETRY_COUNT = 2;
 
   // NotificationCenter callbacks
   late Function(Map<String, dynamic>) _kdsUpdateCallback;
@@ -97,9 +109,15 @@ class _TableCellWidgetState extends State<TableCellWidget> {
     if (widget.pendingOrder != oldWidget.pendingOrder) {
       _timer?.cancel();
       _startTimerIfNeeded();
-      // Clear processing states for new order
+      // Clear all processing states for new order
       _itemProcessingStates.clear();
       _lastActionTime.clear();
+      _optimisticStates.clear();
+      _retryCounters.clear();
+      _completedRequests.clear(); // 🔥 Clear completion tracking
+      
+      // Cancel any active requests and timers
+      _cleanupActiveRequests();
     }
   }
 
@@ -107,8 +125,35 @@ class _TableCellWidgetState extends State<TableCellWidget> {
   void dispose() {
     _timer?.cancel();
     _refreshCooldownTimer?.cancel();
+    
+    // 🔥 Enhanced cleanup
+    _cleanupActiveRequests();
+    _cleanupDebounceTimers();
     _cleanupNotificationListeners();
+    
     super.dispose();
+  }
+
+  // 🔥 FIXED: Enhanced cleanup methods with completion tracking
+  void _cleanupActiveRequests() {
+    for (var entry in _activeRequests.entries) {
+      final itemId = entry.key;
+      final completer = entry.value;
+      
+      if (completer != null && !completer.isCompleted && !(_completedRequests[itemId] ?? false)) {
+        completer.complete(false);
+        _completedRequests[itemId] = true;
+      }
+    }
+    _activeRequests.clear();
+    _completedRequests.clear();
+  }
+
+  void _cleanupDebounceTimers() {
+    for (var timer in _debounceTimers.values) {
+      timer?.cancel();
+    }
+    _debounceTimers.clear();
   }
 
   void _setupNotificationListeners() {
@@ -125,7 +170,6 @@ class _TableCellWidgetState extends State<TableCellWidget> {
         
         debugPrint('[TableCellWidget] 🔥 KDS update for order #$orderId: $eventType');
         
-        // 🔥 ÇÖZÜM 1: Smart refresh with cooldown
         _smartRefresh(source: 'kds_notification');
         _showKdsUpdateFeedback(eventType);
       }
@@ -150,31 +194,26 @@ class _TableCellWidgetState extends State<TableCellWidget> {
     debugPrint('[TableCellWidget] 🗑️ Listeners cleaned up for table ${widget.table['table_number']}');
   }
 
-  // 🔥 ÇÖZÜM 2: Smart refresh with anti-flickering
+  // Smart refresh with anti-flickering (unchanged)
   void _smartRefresh({required String source}) {
     final now = DateTime.now();
     
-    // 🔥 Cooldown check
     if (_isInRefreshCooldown) {
       _pendingRefreshCount++;
       debugPrint("🔄 [SMART] Refresh cooldown active, pending count: $_pendingRefreshCount (source: $source)");
       
-      // 🔥 Limit pending refreshes to prevent spam
       if (_pendingRefreshCount > MAX_PENDING_REFRESHES) {
         debugPrint("🔄 [SMART] Max pending refreshes reached, skipping");
         return;
       }
       
-      // 🔥 Schedule refresh after cooldown
       _scheduleRefreshAfterCooldown();
       return;
     }
     
-    // 🔥 Execute immediate refresh
     debugPrint("🔄 [SMART] Executing immediate refresh (source: $source)");
     _executeRefresh();
     
-    // 🔥 Start cooldown period
     _startRefreshCooldown();
   }
 
@@ -199,11 +238,10 @@ class _TableCellWidgetState extends State<TableCellWidget> {
       if (mounted) {
         _isInRefreshCooldown = false;
         
-        // 🔥 Execute pending refresh if any
         if (_pendingRefreshCount > 0) {
           debugPrint("🔄 [SMART] Cooldown ended, executing pending refresh");
           _executeRefresh();
-          _startRefreshCooldown(); // Restart cooldown
+          _startRefreshCooldown();
         } else {
           debugPrint("🔄 [SMART] Cooldown ended, no pending refreshes");
         }
@@ -213,143 +251,290 @@ class _TableCellWidgetState extends State<TableCellWidget> {
 
   void _scheduleRefreshAfterCooldown() {
     // This method ensures a refresh happens after cooldown
-    // No additional logic needed as _startRefreshCooldown handles it
   }
 
-  // 🔥 ÇÖZÜM 3: Enhanced item pickup with smart refresh
-  Future<void> _handleItemPickup(int orderItemId, AppLocalizations l10n) async {
-    if (!mounted || _itemProcessingStates[orderItemId] == true) {
-      debugPrint("🔄 [PICKUP] Item $orderItemId conditions not met");
-      return;
+  // 🔥 FIXED: Enhanced button state checker with completion tracking
+  bool _canPerformAction(int orderItemId) {
+    // Check if request is already completed
+    if (_completedRequests[orderItemId] == true) {
+      return false;
     }
-
-    // 🔥 Check if action was recently performed (prevent spam)
-    final lastAction = _lastActionTime[orderItemId];
-    if (lastAction != null && DateTime.now().difference(lastAction).inSeconds < 3) {
-      debugPrint("🔄 [PICKUP] Item $orderItemId action too recent, skipping");
-      return;
-    }
-
-    debugPrint("🔄 [PICKUP] Starting pickup for item $orderItemId");
     
+    // Active request check
+    if (_activeRequests.containsKey(orderItemId) && 
+        _activeRequests[orderItemId] != null && 
+        !_activeRequests[orderItemId]!.isCompleted) {
+      return false;
+    }
+    
+    // Processing state check
+    if (_itemProcessingStates[orderItemId] == true) {
+      return false;
+    }
+    
+    // Debounce timer check
+    if (_debounceTimers[orderItemId]?.isActive == true) {
+      return false;
+    }
+    
+    return true;
+  }
+
+  // 🔥 FIXED: Safe completer completion
+  void _safeCompleteRequest(int orderItemId, bool result) {
+    if (_completedRequests[orderItemId] == true) {
+      debugPrint("🔄 Request for item $orderItemId already completed, skipping");
+      return;
+    }
+    
+    final completer = _activeRequests[orderItemId];
+    if (completer != null && !completer.isCompleted) {
+      completer.complete(result);
+      _completedRequests[orderItemId] = true;
+      debugPrint("🔄 Request for item $orderItemId completed with result: $result");
+    }
+  }
+
+  void _rollbackOptimisticUpdate(int orderItemId) {
+    if (!mounted) return;
     setState(() {
-      _itemProcessingStates[orderItemId] = true;
+      _optimisticStates.remove(orderItemId);
     });
+    _smartRefresh(source: 'rollback');
+  }
 
-    _lastActionTime[orderItemId] = DateTime.now();
+  // 🔥 FIXED: Enhanced item pickup with safe completion
+  Future<void> _handleItemPickup(int orderItemId, AppLocalizations l10n) async {
+    if (!mounted) return;
+    
+    // Cancel any existing request safely
+    if (_activeRequests[orderItemId] != null && !(_completedRequests[orderItemId] ?? false)) {
+      debugPrint("🔄 [PICKUP] Item $orderItemId - Cancelling existing request");
+      _safeCompleteRequest(orderItemId, false);
+    }
+    
+    // Clean up before starting new request
+    _debounceTimers[orderItemId]?.cancel();
+    _completedRequests[orderItemId] = false; // Reset completion tracking
+    
+    // Optimistic UI update
+    if (mounted) {
+      setState(() {
+        _itemProcessingStates[orderItemId] = true;
+        _optimisticStates[orderItemId] = 'picking_up';
+      });
+    }
+    
+    _showOverlayFeedback(Colors.purple, Icons.pan_tool_alt, '👐 Teslim alınıyor...');
+    
+    // Debounced execution
+    _debounceTimers[orderItemId] = Timer(Duration(milliseconds: DEBOUNCE_DELAY_MS), () {
+      if (mounted && !(_completedRequests[orderItemId] ?? false)) {
+        _executePickupAction(orderItemId, l10n);
+      }
+    });
+  }
 
-    // 🔥 Optimistic UI feedback
-    _showOverlayFeedback(Colors.purple, Icons.pan_tool_alt, '👐 İşleniyor...');
-
+  Future<void> _executePickupAction(int orderItemId, AppLocalizations l10n) async {
+    if (!mounted || (_completedRequests[orderItemId] ?? false)) return;
+    
+    // Create new request completer
+    final completer = Completer<bool>();
+    _activeRequests[orderItemId] = completer;
+    _retryCounters[orderItemId] = 0;
+    
     try {
-      final response = await OrderService.markItemPickedUpByWaiter(
-        token: widget.token, 
-        orderItemId: orderItemId
-      ).timeout(
-        const Duration(seconds: OPERATION_TIMEOUT_SECONDS),
-        onTimeout: () {
-          debugPrint("🔄 [PICKUP] API timeout for item $orderItemId");
-          throw TimeoutException('API timeout', const Duration(seconds: OPERATION_TIMEOUT_SECONDS));
-        },
-      );
+      final success = await _performPickupWithRetry(orderItemId, l10n);
       
-      debugPrint("🔄 [PICKUP] Response: ${response.statusCode}");
-      
-      if (mounted) {
-        if (response.statusCode == 200) {
-          // 🔥 Single smart refresh on success
+      if (mounted && !(_completedRequests[orderItemId] ?? false)) {
+        if (success) {
           _smartRefresh(source: 'pickup_success');
           _showOverlayFeedback(Colors.green, Icons.check_circle, '✅ Teslim alındı');
+          _optimisticStates.remove(orderItemId);
         } else {
-          _showErrorSnackbar("Hata: ${response.statusCode}");
-          // 🔥 Even on error, do a smart refresh (might be successful on backend)
-          _smartRefresh(source: 'pickup_error');
+          _rollbackOptimisticUpdate(orderItemId);
+          _showErrorSnackbar("Teslim alma işlemi başarısız oldu");
         }
       }
       
+      _safeCompleteRequest(orderItemId, success);
+      
     } catch (e) {
-      debugPrint("🔄 [PICKUP] Exception: $e");
-      if (mounted) {
-        if (!e.toString().contains('timeout')) {
-          _showErrorSnackbar("Hata: $e");
-        }
-        // 🔥 Always refresh on exception (backend might have succeeded)
-        _smartRefresh(source: 'pickup_exception');
+      debugPrint("🔄 [PICKUP] Critical error: $e");
+      if (mounted && !(_completedRequests[orderItemId] ?? false)) {
+        _rollbackOptimisticUpdate(orderItemId);
+        _showErrorSnackbar("Beklenmeyen hata: ${e.toString()}");
       }
+      _safeCompleteRequest(orderItemId, false);
       
     } finally {
       if (mounted) {
         setState(() {
           _itemProcessingStates[orderItemId] = false;
         });
+        _activeRequests.remove(orderItemId);
+        // Don't remove from _completedRequests here to prevent double completion
       }
     }
   }
 
-  // 🔥 ÇÖZÜM 4: Enhanced delivery with smart refresh
+  // 🔥 FIXED: Enhanced delivery with safe completion
   Future<void> _handleDeliverOrderItem(int orderItemId, AppLocalizations l10n) async {
-    if (!mounted || _itemProcessingStates[orderItemId] == true) {
-      debugPrint("🔄 [DELIVER] Item $orderItemId conditions not met");
-      return;
-    }
-
-    // 🔥 Spam prevention
-    final lastAction = _lastActionTime[orderItemId];
-    if (lastAction != null && DateTime.now().difference(lastAction).inSeconds < 3) {
-      debugPrint("🔄 [DELIVER] Item $orderItemId action too recent, skipping");
-      return;
-    }
-
-    debugPrint("🔄 [DELIVER] Starting delivery for item $orderItemId");
+    if (!mounted) return;
     
-    setState(() {
-      _itemProcessingStates[orderItemId] = true;
-    });
-
-    _lastActionTime[orderItemId] = DateTime.now();
+    // Cancel any existing request safely
+    if (_activeRequests[orderItemId] != null && !(_completedRequests[orderItemId] ?? false)) {
+      debugPrint("🔄 [DELIVER] Item $orderItemId - Cancelling existing request");
+      _safeCompleteRequest(orderItemId, false);
+    }
+    
+    // Clean up before starting new request
+    _debounceTimers[orderItemId]?.cancel();
+    _completedRequests[orderItemId] = false; // Reset completion tracking
+    
+    // Optimistic UI update
+    if (mounted) {
+      setState(() {
+        _itemProcessingStates[orderItemId] = true;
+        _optimisticStates[orderItemId] = 'delivering';
+      });
+    }
+    
     _showOverlayFeedback(Colors.green, Icons.check_circle, '🎉 Teslim ediliyor...');
+    
+    // Debounced execution
+    _debounceTimers[orderItemId] = Timer(Duration(milliseconds: DEBOUNCE_DELAY_MS), () {
+      if (mounted && !(_completedRequests[orderItemId] ?? false)) {
+        _executeDeliveryAction(orderItemId, l10n);
+      }
+    });
+  }
 
+  Future<void> _executeDeliveryAction(int orderItemId, AppLocalizations l10n) async {
+    if (!mounted || (_completedRequests[orderItemId] ?? false)) return;
+    
+    final completer = Completer<bool>();
+    _activeRequests[orderItemId] = completer;
+    _retryCounters[orderItemId] = 0;
+    
     try {
-      final response = await OrderService.markOrderItemDelivered(
-        token: widget.token, 
-        orderId: widget.pendingOrder['id'], 
-        orderItemId: orderItemId
-      ).timeout(
-        const Duration(seconds: OPERATION_TIMEOUT_SECONDS),
-        onTimeout: () {
-          debugPrint("🔄 [DELIVER] API timeout for item $orderItemId");
-          throw TimeoutException('API timeout', const Duration(seconds: OPERATION_TIMEOUT_SECONDS));
-        },
-      );
+      final success = await _performDeliveryWithRetry(orderItemId, l10n);
       
-      debugPrint("🔄 [DELIVER] Response: ${response.statusCode}");
-      
-      if (mounted) {
-        if (response.statusCode == 200) {
-          _smartRefresh(source: 'deliver_success');
+      if (mounted && !(_completedRequests[orderItemId] ?? false)) {
+        if (success) {
+          _smartRefresh(source: 'delivery_success');
           _showOverlayFeedback(Colors.green, Icons.check_circle, '🎉 Teslim edildi');
+          _optimisticStates.remove(orderItemId);
         } else {
-          _showErrorSnackbar("Teslimat hatası: ${response.statusCode}");
-          _smartRefresh(source: 'deliver_error');
+          _rollbackOptimisticUpdate(orderItemId);
+          _showErrorSnackbar("Teslimat işlemi başarısız oldu");
         }
       }
+      
+      _safeCompleteRequest(orderItemId, success);
       
     } catch (e) {
-      debugPrint("🔄 [DELIVER] Exception: $e");
-      if (mounted) {
-        if (!e.toString().contains('timeout')) {
-          _showErrorSnackbar("Teslimat hatası: $e");
-        }
-        _smartRefresh(source: 'deliver_exception');
+      debugPrint("🔄 [DELIVER] Critical error: $e");
+      if (mounted && !(_completedRequests[orderItemId] ?? false)) {
+        _rollbackOptimisticUpdate(orderItemId);
+        _showErrorSnackbar("Beklenmeyen hata: ${e.toString()}");
       }
+      _safeCompleteRequest(orderItemId, false);
       
     } finally {
       if (mounted) {
         setState(() {
           _itemProcessingStates[orderItemId] = false;
         });
+        _activeRequests.remove(orderItemId);
+        // Don't remove from _completedRequests here to prevent double completion
       }
     }
+  }
+
+  Future<bool> _performPickupWithRetry(int orderItemId, AppLocalizations l10n) async {
+    int currentRetry = _retryCounters[orderItemId] ?? 0;
+    
+    while (currentRetry <= MAX_RETRY_COUNT && !(_completedRequests[orderItemId] ?? false)) {
+      try {
+        debugPrint("🔄 [PICKUP] Attempt ${currentRetry + 1}/${MAX_RETRY_COUNT + 1} for item $orderItemId");
+        
+        final response = await OrderService.markItemPickedUpByWaiter(
+          token: widget.token,
+          orderItemId: orderItemId,
+        ).timeout(
+          const Duration(seconds: OPERATION_TIMEOUT_SECONDS),
+          onTimeout: () => throw TimeoutException('Request timeout', const Duration(seconds: OPERATION_TIMEOUT_SECONDS)),
+        );
+        
+        if (response.statusCode == 200) {
+          debugPrint("🔄 [PICKUP] Success on attempt ${currentRetry + 1}");
+          return true;
+        } else if (response.statusCode == 409 || response.statusCode == 400) {
+          debugPrint("🔄 [PICKUP] Business error ${response.statusCode}, not retrying");
+          return false;
+        } else {
+          throw Exception("HTTP ${response.statusCode}: ${response.body}");
+        }
+        
+      } catch (e) {
+        currentRetry++;
+        _retryCounters[orderItemId] = currentRetry;
+        
+        if (currentRetry <= MAX_RETRY_COUNT && !(_completedRequests[orderItemId] ?? false)) {
+          debugPrint("🔄 [PICKUP] Retry $currentRetry after error: $e");
+          await Future.delayed(Duration(seconds: currentRetry * 2));
+        } else {
+          debugPrint("🔄 [PICKUP] Max retries reached or request completed");
+          throw e;
+        }
+      }
+    }
+    
+    return false;
+  }
+
+  Future<bool> _performDeliveryWithRetry(int orderItemId, AppLocalizations l10n) async {
+    int currentRetry = _retryCounters[orderItemId] ?? 0;
+    
+    while (currentRetry <= MAX_RETRY_COUNT && !(_completedRequests[orderItemId] ?? false)) {
+      try {
+        debugPrint("🔄 [DELIVER] Attempt ${currentRetry + 1}/${MAX_RETRY_COUNT + 1} for item $orderItemId");
+        
+        final response = await OrderService.markOrderItemDelivered(
+          token: widget.token,
+          orderId: widget.pendingOrder['id'],
+          orderItemId: orderItemId,
+        ).timeout(
+          const Duration(seconds: OPERATION_TIMEOUT_SECONDS),
+          onTimeout: () => throw TimeoutException('Request timeout', const Duration(seconds: OPERATION_TIMEOUT_SECONDS)),
+        );
+        
+        if (response.statusCode == 200) {
+          debugPrint("🔄 [DELIVER] Success on attempt ${currentRetry + 1}");
+          return true;
+        } else if (response.statusCode == 409 || response.statusCode == 400) {
+          debugPrint("🔄 [DELIVER] Business error ${response.statusCode}, not retrying");
+          return false;
+        } else {
+          throw Exception("HTTP ${response.statusCode}: ${response.body}");
+        }
+        
+      } catch (e) {
+        currentRetry++;
+        _retryCounters[orderItemId] = currentRetry;
+        
+        if (currentRetry <= MAX_RETRY_COUNT && !(_completedRequests[orderItemId] ?? false)) {
+          debugPrint("🔄 [DELIVER] Retry $currentRetry after error: $e");
+          await Future.delayed(Duration(seconds: currentRetry * 2));
+        } else {
+          debugPrint("🔄 [DELIVER] Max retries reached or request completed");
+          throw e;
+        }
+      }
+    }
+    
+    return false;
   }
 
   void _showKdsUpdateFeedback(String? eventType) {
@@ -387,8 +572,9 @@ class _TableCellWidgetState extends State<TableCellWidget> {
     _showOverlayFeedback(feedbackColor, feedbackIcon, feedbackMessage);
   }
 
-  // 🔥 ÇÖZÜM 5: Improved overlay feedback (shorter duration)
   void _showOverlayFeedback(Color color, IconData icon, String message) {
+    if (!mounted) return;
+    
     final overlay = Overlay.of(context);
     late OverlayEntry overlayEntry;
     
@@ -435,7 +621,6 @@ class _TableCellWidgetState extends State<TableCellWidget> {
     
     overlay.insert(overlayEntry);
     
-    // 🔥 Shorter feedback duration
     Timer(const Duration(milliseconds: 1500), () {
       if (overlayEntry.mounted) {
         overlayEntry.remove();
@@ -443,14 +628,27 @@ class _TableCellWidgetState extends State<TableCellWidget> {
     });
   }
 
-  // 🔥 ÇÖZÜM 6: Basitleştirilmiş loading indicator
-  Widget _buildSmoothLoadingIndicator(Color color) {
-    return SizedBox(
-      width: 28, 
-      height: 28,
-      child: CircularProgressIndicator(
-        strokeWidth: 2.5,
-        valueColor: AlwaysStoppedAnimation<Color>(color),
+  Widget _buildEnhancedLoadingIndicator(Color color, String message) {
+    return Tooltip(
+      message: message,
+      child: SizedBox(
+        width: 28,
+        height: 28,
+        child: Stack(
+          children: [
+            CircularProgressIndicator(
+              strokeWidth: 2.5,
+              valueColor: AlwaysStoppedAnimation<Color>(color),
+            ),
+            Center(
+              child: Icon(
+                Icons.more_horiz,
+                size: 12,
+                color: color,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -629,13 +827,14 @@ class _TableCellWidgetState extends State<TableCellWidget> {
     return const SizedBox.shrink();
   }
 
-  // 🔥 ÇÖZÜM 7: Smooth loading states for item rows
   Widget _buildItemRow(Map<String, dynamic> item, AppLocalizations l10n) {
     final bool isDelivered = item['delivered'] == true;
     final String kdsStatus = item['kds_status'] ?? KDS_ITEM_STATUS_PENDING;
     final bool isAwaitingApproval = item['is_awaiting_staff_approval'] == true;
     final int itemId = item['id'] ?? 0;
-    final bool isProcessing = _itemProcessingStates[itemId] ?? false;
+    
+    final bool canPerformAction = _canPerformAction(itemId);
+    final String optimisticState = _optimisticStates[itemId] ?? '';
     
     Widget actionWidget;
 
@@ -644,36 +843,36 @@ class _TableCellWidgetState extends State<TableCellWidget> {
         message: "Müşteriye teslim edildi",
         child: Icon(Icons.check_circle, size: 28, color: Colors.green.shade600),
       );
-    } else if (kdsStatus == KDS_ITEM_STATUS_READY) {
-      actionWidget = isProcessing 
-        ? _buildSmoothLoadingIndicator(Colors.purple.shade600)
+    } else if (kdsStatus == KDS_ITEM_STATUS_READY || optimisticState == 'picking_up') {
+      actionWidget = !canPerformAction
+        ? _buildEnhancedLoadingIndicator(Colors.purple.shade600, "Teslim alınıyor...")
         : IconButton(
-            icon: const Icon(Icons.pan_tool_alt_outlined, size: 28), 
-            color: Colors.purple.shade600, 
-            padding: EdgeInsets.zero, 
-            constraints: const BoxConstraints(), 
-            tooltip: "Garson Teslim Al", 
+            icon: const Icon(Icons.pan_tool_alt_outlined, size: 28),
+            color: Colors.purple.shade600,
+            padding: EdgeInsets.zero,
+            constraints: const BoxConstraints(),
+            tooltip: "Garson Teslim Al",
             onPressed: () => _handleItemPickup(itemId, l10n),
           );
-    } else if (kdsStatus == KDS_ITEM_STATUS_PICKED_UP) {
-      actionWidget = isProcessing
-        ? _buildSmoothLoadingIndicator(Colors.blue.shade600)
+    } else if (kdsStatus == KDS_ITEM_STATUS_PICKED_UP || optimisticState == 'delivering') {
+      actionWidget = !canPerformAction
+        ? _buildEnhancedLoadingIndicator(Colors.blue.shade600, "Teslim ediliyor...")
         : IconButton(
-            icon: const Icon(Icons.room_service_outlined, size: 28), 
-            color: Colors.blue.shade600, 
-            padding: EdgeInsets.zero, 
-            constraints: const BoxConstraints(), 
-            tooltip: "Müşteriye Teslim Et", 
+            icon: const Icon(Icons.room_service_outlined, size: 28),
+            color: Colors.blue.shade600,
+            padding: EdgeInsets.zero,
+            constraints: const BoxConstraints(),
+            tooltip: "Müşteriye Teslim Et",
             onPressed: () => _handleDeliverOrderItem(itemId, l10n),
           );
     } else if (kdsStatus == KDS_ITEM_STATUS_PREPARING) {
       actionWidget = Tooltip(
-        message: l10n.kdsStatusPreparing, 
+        message: l10n.kdsStatusPreparing,
         child: Icon(Icons.whatshot, size: 24, color: Colors.orange.shade800)
       );
     } else {
       actionWidget = Tooltip(
-        message: "Mutfak için bekliyor", 
+        message: "Mutfak için bekliyor",
         child: Icon(Icons.hourglass_empty, size: 22, color: Colors.grey.shade600)
       );
     }

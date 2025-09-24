@@ -23,7 +23,14 @@ class ApiService {
     };
   }
 
-
+  static Map<String, dynamic> handleResponse(http.Response response) {
+    if (response.statusCode >= 200 && response.statusCode < 300) {
+      return jsonDecode(utf8.decode(response.bodyBytes));
+    } else {
+      final errorData = jsonDecode(utf8.decode(response.bodyBytes));
+      throw Exception(errorData['detail'] ?? 'API Hatası: ${response.statusCode}');
+    }
+  }
 
 
   static final String baseUrl = dotenv.env['API_BASE_URL'] ?? 'https://order-ai-7bd2c97ec9ef.herokuapp.com/api';

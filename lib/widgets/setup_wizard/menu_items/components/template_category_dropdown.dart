@@ -1,5 +1,6 @@
 // lib/widgets/setup_wizard/menu_items/components/template_category_dropdown.dart
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class TemplateCategoryDropdown extends StatelessWidget {
   final List<dynamic> availableCategories;
@@ -15,21 +16,23 @@ class TemplateCategoryDropdown extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return DropdownButtonFormField<String>(
       value: selectedCategoryName,
       isExpanded: true,
       dropdownColor: Colors.white,
       iconEnabledColor: Colors.grey.shade600,
-      decoration: const InputDecoration(
-        labelText: 'Kategori Seçin',
-        border: OutlineInputBorder(),
-        contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 12),
+      decoration: InputDecoration(
+        labelText: l10n.templateCategoryDropdownLabel,
+        border: const OutlineInputBorder(),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
         isDense: true,
-        labelStyle: TextStyle(color: Colors.grey),
-        enabledBorder: OutlineInputBorder(
+        labelStyle: const TextStyle(color: Colors.grey),
+        enabledBorder: const OutlineInputBorder(
           borderSide: BorderSide(color: Colors.grey),
         ),
-        focusedBorder: OutlineInputBorder(
+        focusedBorder: const OutlineInputBorder(
           borderSide: BorderSide(color: Colors.blue, width: 2),
         ),
       ),
@@ -44,7 +47,7 @@ class TemplateCategoryDropdown extends StatelessWidget {
           child: Container(
             padding: const EdgeInsets.symmetric(vertical: 4),
             child: Text(
-              category['name'] ?? 'Bilinmeyen Kategori',
+              category['name'] ?? l10n.templateCategoryDropdownUnknownCategory,
               overflow: TextOverflow.ellipsis,
               style: const TextStyle(
                 fontSize: 14,
@@ -56,9 +59,9 @@ class TemplateCategoryDropdown extends StatelessWidget {
         );
       }).toList(),
       onChanged: onCategoryChanged,
-      hint: const Text(
-        'Kategori seçiniz...',
-        style: TextStyle(
+      hint: Text(
+        l10n.templateCategoryDropdownHint,
+        style: const TextStyle(
           color: Colors.grey,
           fontSize: 14,
         ),

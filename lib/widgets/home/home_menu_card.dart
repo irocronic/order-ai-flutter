@@ -1,4 +1,4 @@
-// lib/widgets/home/home_menu_card.dart DOSYASINA EKLEYİN
+// lib/widgets/home/home_menu_card.dart
 
 import 'package:flutter/material.dart';
 import '../../models/home_menu_item.dart';

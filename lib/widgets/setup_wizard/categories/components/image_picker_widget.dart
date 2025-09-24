@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:image_picker/image_picker.dart';
 
 class ImagePickerWidget extends StatefulWidget {
@@ -84,6 +85,8 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -98,7 +101,7 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
             ),
             onPressed: _pickImage,
             icon: const Icon(Icons.photo_library_outlined),
-            label: const Text('Resim Seç'),
+            label: Text(l10n.imagePickerSelectButton),
           ),
         ),
       ],

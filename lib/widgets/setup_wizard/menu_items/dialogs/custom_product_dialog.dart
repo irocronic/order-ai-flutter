@@ -32,14 +32,15 @@ class _CustomProductDialogState extends State<CustomProductDialog> {
   }
 
   void _onConfirm() async {
+    final l10n = AppLocalizations.of(context)!;
     if (!_formKey.currentState!.validate()) return;
 
     final productName = _productNameController.text.trim();
     
     if (productName.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Ürün adı gerekli'),
+        SnackBar(
+          content: Text(l10n.productNameRequired),
           backgroundColor: Colors.red,
         ),
       );
@@ -68,7 +69,7 @@ class _CustomProductDialogState extends State<CustomProductDialog> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Hata: $e'),
+            content: Text(l10n.genericError(e.toString())),
             backgroundColor: Colors.red,
           ),
         );
@@ -115,7 +116,7 @@ class _CustomProductDialogState extends State<CustomProductDialog> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Yeni Ürün Ekle',
+                          l10n.addNewProductTitle,
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
@@ -157,7 +158,7 @@ class _CustomProductDialogState extends State<CustomProductDialog> {
                         Icon(Icons.info_outline, color: Colors.blue.shade600, size: 20),
                         const SizedBox(width: 8),
                         Text(
-                          'Hızlı Ürün Ekleme',
+                          l10n.quickAddProductTitle,
                           style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.bold,
@@ -168,7 +169,7 @@ class _CustomProductDialogState extends State<CustomProductDialog> {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      '• Ürün varsayılan olarak reçeteli oluşturulur\n• Fiyat, manuel/reçeteli ayarları ve varyantları sonradan düzenleyebilirsiniz\n• Eklendikten sonra ürün listesinde görünecektir',
+                      l10n.quickAddProductInfo,
                       style: TextStyle(
                         fontSize: 12,
                         color: Colors.blue.shade600,
@@ -186,8 +187,8 @@ class _CustomProductDialogState extends State<CustomProductDialog> {
                 child: TextFormField(
                   controller: _productNameController,
                   decoration: InputDecoration(
-                    labelText: 'Ürün Adı',
-                    hintText: 'Örn: Özel Pizza, Meyve Suyu, Ev Yemeği...',
+                    labelText: l10n.productNameLabel,
+                    hintText: l10n.productNameHint,
                     border: const OutlineInputBorder(),
                     prefixIcon: const Icon(Icons.fastfood_outlined),
                     enabledBorder: OutlineInputBorder(
@@ -200,7 +201,7 @@ class _CustomProductDialogState extends State<CustomProductDialog> {
                     ),
                   ),
                   style: const TextStyle(fontSize: 16),
-                  validator: (v) => (v == null || v.trim().isEmpty) ? 'Ürün adı gerekli' : null,
+                  validator: (v) => (v == null || v.trim().isEmpty) ? l10n.productNameRequired : null,
                   enabled: !_isCreating,
                   autofocus: true,
                   textInputAction: TextInputAction.done,
@@ -218,9 +219,9 @@ class _CustomProductDialogState extends State<CustomProductDialog> {
                       style: TextButton.styleFrom(
                         padding: const EdgeInsets.symmetric(vertical: 16),
                       ),
-                      child: const Text(
-                        'İptal',
-                        style: TextStyle(fontSize: 16),
+                      child: Text(
+                        l10n.dialogButtonCancel,
+                        style: const TextStyle(fontSize: 16),
                       ),
                     ),
                   ),
@@ -230,7 +231,7 @@ class _CustomProductDialogState extends State<CustomProductDialog> {
                     child: ElevatedButton.icon(
                       onPressed: _isCreating ? null : _onConfirm,
                       icon: _isCreating 
-                          ? SizedBox(
+                          ? const SizedBox(
                               width: 20, 
                               height: 20, 
                               child: CircularProgressIndicator(
@@ -240,7 +241,7 @@ class _CustomProductDialogState extends State<CustomProductDialog> {
                             )
                           : const Icon(Icons.add_circle_outline, size: 20),
                       label: Text(
-                        _isCreating ? 'Ekleniyor...' : 'Ürünü Ekle',
+                        _isCreating ? l10n.addingButtonLabel : l10n.addProductButtonLabel,
                         style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                       ),
                       style: ElevatedButton.styleFrom(

@@ -65,7 +65,7 @@ class CategoriesListSection extends StatelessWidget {
     }
   }
 
-  String _getCategoryName(dynamic category) {
+  String _getCategoryName(dynamic category, AppLocalizations l10n) {
     try {
       if (category != null && category is Map<String, dynamic>) {
         final name = category['name'];
@@ -76,7 +76,7 @@ class CategoriesListSection extends StatelessWidget {
     } catch (e) {
       debugPrint('❌ Category name error: $e');
     }
-    return 'İsimsiz Kategori';
+    return l10n.setupCategoriesUnnamedCategory;
   }
 
   int? _getCategoryId(dynamic category) {
@@ -128,7 +128,7 @@ class CategoriesListSection extends StatelessWidget {
     return '';
   }
 
-  String _getKdsInfo(dynamic category) {
+  String _getKdsInfo(dynamic category, AppLocalizations l10n) {
     try {
       if (category != null && category is Map<String, dynamic>) {
         final assignedKds = category['assigned_kds'];
@@ -142,7 +142,7 @@ class CategoriesListSection extends StatelessWidget {
             if (kdsScreen != null) {
               return kdsScreen.name;
             } else {
-              return 'KDS ID: $assignedKds';
+              return l10n.setupCategoriesKdsInfoWithId(assignedKds);
             }
           }
         }
@@ -239,11 +239,11 @@ class CategoriesListSection extends StatelessWidget {
   }
 
   Widget _buildCategoryCard(BuildContext context, dynamic category, AppLocalizations l10n) {
-    final categoryName = _getCategoryName(category);
+    final categoryName = _getCategoryName(category, l10n);
     final categoryId = _getCategoryId(category);
     final imageUrl = _getCategoryImage(category);
     final parentName = _getParentCategoryName(category);
-    final kdsInfo = _getKdsInfo(category);
+    final kdsInfo = _getKdsInfo(category, l10n);
     final kdvRate = _getKdvRate(category);
 
     return Card(
@@ -313,7 +313,7 @@ class CategoriesListSection extends StatelessWidget {
                 const SizedBox(height: 6),
                 Center(
                   child: Text(
-                    'Alt: $parentName',
+                    l10n.setupCategoriesSubCategoryLabel(parentName),
                     style: TextStyle(
                       fontSize: 11,
                       color: Colors.white.withOpacity(0.7),
@@ -386,7 +386,7 @@ class CategoriesListSection extends StatelessWidget {
                       ),
                       const SizedBox(width: 3),
                       Text(
-                        'KDV ${kdvRate}%',
+                        l10n.setupCategoriesVatRateLabel(kdvRate),
                         style: TextStyle(
                           fontSize: 9,
                           color: Colors.white.withOpacity(0.7),
@@ -406,14 +406,14 @@ class CategoriesListSection extends StatelessWidget {
                     width: double.infinity, // Tam genişlik
                     height: 32, // Sabit yükseklik
                     child: ElevatedButton.icon(
-                      icon: Icon(
+                      icon: const Icon(
                         Icons.delete_outline,
                         color: Colors.white, // 🎨 Beyaz icon
                         size: 14,
                       ),
                       label: Text(
-                        'Sil',
-                        style: TextStyle(
+                        l10n.buttonDelete,
+                        style: const TextStyle(
                           color: Colors.white, // 🎨 Beyaz yazı
                           fontSize: 11,
                           fontWeight: FontWeight.bold, // 🎨 Kalın yazı

@@ -32,6 +32,7 @@ class _QuickStartSectionState extends State<QuickStartSection> {
 
   Future<void> _showTemplateDialog() async {
     setState(() => _isLoadingTemplates = true);
+    final l10n = AppLocalizations.of(context)!;
     
     try {
       final result = await showDialog<Map<String, dynamic>>(
@@ -51,7 +52,7 @@ class _QuickStartSectionState extends State<QuickStartSection> {
               
               Navigator.of(dialogContext).pop({
                 'success': true,
-                'message': 'Kategoriler şablondan başarıyla oluşturuldu!',
+                'message': l10n.setupCategoriesSuccessFromTemplate,
                 'count': templateIds.length,
               });
               
@@ -59,7 +60,7 @@ class _QuickStartSectionState extends State<QuickStartSection> {
               debugPrint('❌ API çağrısı hatalı: $e');
               Navigator.of(dialogContext).pop({
                 'success': false,
-                'message': 'Şablondan kategori oluşturulurken hata: ${e.toString()}',
+                'message': l10n.setupCategoriesErrorFromTemplate(e.toString()),
               });
             }
           },
@@ -101,7 +102,7 @@ class _QuickStartSectionState extends State<QuickStartSection> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Şablonlar yüklenirken hata: ${e.toString()}'),
+            content: Text(l10n.setupCategoriesErrorLoadingTemplates(e.toString())),
             backgroundColor: Colors.red,
           ),
         );
@@ -132,7 +133,7 @@ class _QuickStartSectionState extends State<QuickStartSection> {
           Icon(Icons.auto_awesome, color: Colors.white, size: 32),
           const SizedBox(height: 8),
           Text(
-            'Hızlı Başlangıç',
+            l10n.setupCategoriesQuickStartTitle,
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
@@ -141,7 +142,7 @@ class _QuickStartSectionState extends State<QuickStartSection> {
           ),
           const SizedBox(height: 8),
           Text(
-            'Hazır şablonlardan kategori oluşturarak hızlıca başlayın!',
+            l10n.setupCategoriesQuickStartDescription,
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 14,

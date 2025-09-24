@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../services/api_service.dart';
 import '../../services/user_session.dart';
-import '../../services/setup_wizard_audio_service.dart'; // 🎵 YENİ EKLENEN
+import '../../services/setup_wizard_audio_service.dart';
 import '../../screens/subscription_screen.dart';
 
 class StepTablesWidget extends StatefulWidget {
@@ -35,7 +35,6 @@ class StepTablesWidgetState extends State<StepTablesWidget> {
   late final AppLocalizations l10n;
   bool _didFetchData = false;
 
-  // 🎵 YENİ EKLENEN: Audio servis referansı
   final SetupWizardAudioService _audioService = SetupWizardAudioService.instance;
 
   @override
@@ -46,14 +45,11 @@ class StepTablesWidgetState extends State<StepTablesWidget> {
       _fetchCurrentTableCount();
       _didFetchData = true;
       
-      // 🎵 YENİ EKLENEN: Sesli rehberliği başlat
       _startVoiceGuidance();
     }
   }
 
-  // 🎵 YENİ EKLENEN: Sesli rehberlik başlatma
   void _startVoiceGuidance() {
-    // Biraz bekle ki kullanıcı ekranı görsün
     Future.delayed(const Duration(milliseconds: 2000), () {
       if (mounted) {
         _audioService.playTablesStepAudio(context: context);
@@ -229,8 +225,8 @@ class StepTablesWidgetState extends State<StepTablesWidget> {
     );
   }
 
-  // 🎵 YENİ EKLENEN: Ses kontrol butonu
   Widget _buildAudioControlButton() {
+    final l10n = AppLocalizations.of(context)!;
     return ValueListenableBuilder<bool>(
       valueListenable: ValueNotifier(_audioService.isMuted),
       builder: (context, isMuted, child) {
@@ -255,7 +251,7 @@ class StepTablesWidgetState extends State<StepTablesWidget> {
                       Icon(Icons.volume_up, color: Colors.green, size: 16),
                       const SizedBox(width: 4),
                       Text(
-                        'Sesli Rehber Aktif',
+                        l10n.audioGuideActive,
                         style: TextStyle(
                           color: Colors.green.shade700,
                           fontSize: 12,
@@ -278,7 +274,7 @@ class StepTablesWidgetState extends State<StepTablesWidget> {
                     _audioService.toggleMute();
                   });
                 },
-                tooltip: isMuted ? 'Sesi Aç' : 'Sesi Kapat',
+                tooltip: isMuted ? l10n.audioGuideTooltipUnmute : l10n.audioGuideTooltipMute,
                 style: IconButton.styleFrom(
                   backgroundColor: isMuted 
                     ? Colors.red.withOpacity(0.2) 
@@ -297,7 +293,7 @@ class StepTablesWidgetState extends State<StepTablesWidget> {
                 onPressed: _audioService.isMuted ? null : () {
                   _audioService.playTablesStepAudio(context: context);
                 },
-                tooltip: 'Rehberi Tekrar Çal',
+                tooltip: l10n.audioGuideTooltipReplay,
                 style: IconButton.styleFrom(
                   backgroundColor: Colors.orange.withOpacity(0.2),
                   padding: const EdgeInsets.all(8),
@@ -312,7 +308,6 @@ class StepTablesWidgetState extends State<StepTablesWidget> {
 
   @override
   void dispose() {
-    // Sesli rehberliği durdur
     _audioService.stopAudio();
     super.dispose();
   }
@@ -324,7 +319,6 @@ class StepTablesWidgetState extends State<StepTablesWidget> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          // 🎵 YENİ EKLENEN: Sesli rehber kontrolleri
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [

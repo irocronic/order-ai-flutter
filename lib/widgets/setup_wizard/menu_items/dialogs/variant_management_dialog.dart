@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'dart:io';
 import 'package:path/path.dart' as p;
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../../models/menu_item_variant.dart';
 import '../../../../services/firebase_storage_service.dart';
@@ -37,6 +38,7 @@ class _VariantManagementDialogState extends State<VariantManagementDialog> {
   bool _isUploading = false;
 
   void _addVariant() async {
+    final l10n = AppLocalizations.of(context)!;
     if (!_formKey.currentState!.validate()) return;
 
     final variantName = widget.variantConfig.variantNameController.text.trim();
@@ -44,8 +46,8 @@ class _VariantManagementDialogState extends State<VariantManagementDialog> {
     
     if (variantName.isEmpty || priceText.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Varyant adı ve fiyat gerekli'),
+        SnackBar(
+          content: Text(l10n.snackbarVariantNameAndPriceRequired),
           backgroundColor: Colors.red,
         ),
       );
@@ -55,8 +57,8 @@ class _VariantManagementDialogState extends State<VariantManagementDialog> {
     final price = double.tryParse(priceText.replaceAll(',', '.'));
     if (price == null || price < 0) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Geçerli bir fiyat giriniz'),
+        SnackBar(
+          content: Text(l10n.snackbarInvalidPrice),
           backgroundColor: Colors.red,
         ),
       );
@@ -66,8 +68,8 @@ class _VariantManagementDialogState extends State<VariantManagementDialog> {
     // Fotoğraf zorunlu kontrolü
     if (widget.variantConfig.hasVariantImageEnabled && !widget.variantConfig.hasVariantImage) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Fotoğraf aktif olduğunda varyant fotoğrafı zorunludur'),
+        SnackBar(
+          content: Text(l10n.snackbarVariantPhotoRequiredWhenActive),
           backgroundColor: Colors.red,
         ),
       );
@@ -81,15 +83,15 @@ class _VariantManagementDialogState extends State<VariantManagementDialog> {
         setState(() => _isUploading = true);
         
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
+          SnackBar(
             content: Row(
               children: [
-                SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2)),
-                SizedBox(width: 12),
-                Text('Varyant fotoğrafı yükleniyor...'),
+                const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2)),
+                const SizedBox(width: 12),
+                Text(l10n.snackbarUploadingVariantPhoto),
               ],
             ),
-            duration: Duration(seconds: 30),
+            duration: const Duration(seconds: 30),
           ),
         );
 
@@ -102,7 +104,7 @@ class _VariantManagementDialogState extends State<VariantManagementDialog> {
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Fotoğraf yüklenemedi: $e'),
+            content: Text(l10n.snackbarPhotoUploadFailed(e.toString())),
             backgroundColor: Colors.red,
           ),
         );
@@ -129,7 +131,7 @@ class _VariantManagementDialogState extends State<VariantManagementDialog> {
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text('Varyant "$variantName" eklendi'),
+        content: Text(l10n.snackbarVariantAdded(variantName)),
         backgroundColor: Colors.green,
         duration: const Duration(seconds: 2),
       ),
@@ -157,7 +159,7 @@ class _VariantManagementDialogState extends State<VariantManagementDialog> {
     );
     
     if (imageUrl == null) {
-      throw Exception('Firebase upload başarısız');
+      throw Exception(AppLocalizations.of(context)!.firebaseUploadFailed);
     }
     
     return imageUrl;
@@ -184,14 +186,12 @@ class _VariantManagementDialogState extends State<VariantManagementDialog> {
     });
   }
 
-  // ✅ YENİ EKLENEN: Bekleyen varyant verisi kontrolü
   bool get _hasUnfinishedVariantData {
     final nameText = widget.variantConfig.variantNameController.text.trim();
     final priceText = widget.variantConfig.variantPriceController.text.trim();
     return nameText.isNotEmpty || priceText.isNotEmpty;
   }
 
-  // ✅ YENİ EKLENEN: Tamamla butonuna basıldığında kontrol
   void _onCompletePressed() {
     if (_hasUnfinishedVariantData) {
       _showUnfinishedVariantWarning();
@@ -200,8 +200,8 @@ class _VariantManagementDialogState extends State<VariantManagementDialog> {
     }
   }
 
-  // ✅ YENİ EKLENEN: Bekleyen varyant uyarı dialog'u
   void _showUnfinishedVariantWarning() {
+    final l10n = AppLocalizations.of(context)!;
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -211,11 +211,11 @@ class _VariantManagementDialogState extends State<VariantManagementDialog> {
           ),
           title: Row(
             children: [
-              Icon(Icons.warning_amber, color: Colors.orange, size: 24),
+              const Icon(Icons.warning_amber, color: Colors.orange, size: 24),
               const SizedBox(width: 8),
-              const Text(
-                'Bekleyen Varyant',
-                style: TextStyle(
+              Text(
+                l10n.dialogPendingVariantTitle,
+                style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                 ),
@@ -227,9 +227,9 @@ class _VariantManagementDialogState extends State<VariantManagementDialog> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  'Manuel varyant ekleme formunda doldurulmuş alanlar var.',
-                  style: TextStyle(fontSize: 16),
+                Text(
+                  l10n.dialogPendingVariantContent1,
+                  style: const TextStyle(fontSize: 16),
                 ),
                 const SizedBox(height: 12),
                 Container(
@@ -244,21 +244,21 @@ class _VariantManagementDialogState extends State<VariantManagementDialog> {
                     children: [
                       if (widget.variantConfig.variantNameController.text.trim().isNotEmpty)
                         Text(
-                          '• Varyant Adı: "${widget.variantConfig.variantNameController.text.trim()}"',
+                          l10n.dialogPendingVariantContentName(widget.variantConfig.variantNameController.text.trim()),
                           style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
                         ),
                       if (widget.variantConfig.variantPriceController.text.trim().isNotEmpty)
                         Text(
-                          '• Fiyat: "₺${widget.variantConfig.variantPriceController.text.trim()}"',
+                          l10n.dialogPendingVariantContentPrice(widget.variantConfig.variantPriceController.text.trim()),
                           style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
                         ),
                     ],
                   ),
                 ),
                 const SizedBox(height: 12),
-                const Text(
-                  'Bu varyantı eklemeden çıkmak istiyor musunuz?',
-                  style: TextStyle(
+                Text(
+                  l10n.dialogPendingVariantContent2,
+                  style: const TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w500,
                     color: Colors.black87,
@@ -270,29 +270,28 @@ class _VariantManagementDialogState extends State<VariantManagementDialog> {
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: const Text(
-                'İptal',
-                style: TextStyle(color: Colors.grey),
+              child: Text(
+                l10n.dialogButtonCancel,
+                style: const TextStyle(color: Colors.grey),
               ),
             ),
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop(); // Dialog'u kapat
-                // Form verilerini temizle
                 setState(() {
                   widget.variantConfig.clearVariantForm();
                 });
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Bekleyen varyant verileri temizlendi'),
+                  SnackBar(
+                    content: Text(l10n.snackbarPendingVariantDataCleared),
                     backgroundColor: Colors.orange,
-                    duration: Duration(seconds: 2),
+                    duration: const Duration(seconds: 2),
                   ),
                 );
               },
-              child: const Text(
-                'Sil ve Çık',
-                style: TextStyle(color: Colors.red),
+              child: Text(
+                l10n.dialogButtonDeleteAndExit,
+                style: const TextStyle(color: Colors.red),
               ),
             ),
             ElevatedButton.icon(
@@ -301,7 +300,7 @@ class _VariantManagementDialogState extends State<VariantManagementDialog> {
                 _addVariant(); // Varyantı ekle
               },
               icon: const Icon(Icons.add, size: 18),
-              label: const Text('Varyant Ekle'),
+              label: Text(l10n.buttonAddVariant),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.blue,
                 foregroundColor: Colors.white,
@@ -318,6 +317,7 @@ class _VariantManagementDialogState extends State<VariantManagementDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Dialog(
       insetPadding: const EdgeInsets.all(16.0),
       child: Container(
@@ -334,7 +334,7 @@ class _VariantManagementDialogState extends State<VariantManagementDialog> {
                 const SizedBox(width: 8),
                 Expanded(
                   child: Text(
-                    'Varyant Yönetimi - ${widget.variantConfig.templateName}',
+                    l10n.variantManagementDialogTitle(widget.variantConfig.templateName),
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
@@ -344,7 +344,6 @@ class _VariantManagementDialogState extends State<VariantManagementDialog> {
                 ),
                 IconButton(
                   onPressed: _isUploading ? null : () {
-                    // ✅ YENİ: Close butonunda da kontrol yap
                     if (_hasUnfinishedVariantData) {
                       _showUnfinishedVariantWarning();
                     } else {
@@ -372,7 +371,7 @@ class _VariantManagementDialogState extends State<VariantManagementDialog> {
                           Icon(Icons.flash_on, color: Colors.yellow.shade700, size: 16),
                           const SizedBox(width: 4),
                           Text(
-                            'Hızlı Varyant Ekle:',
+                            l10n.quickAddVariantTitle,
                             style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.bold,
@@ -381,7 +380,7 @@ class _VariantManagementDialogState extends State<VariantManagementDialog> {
                           ),
                           if (widget.isLoadingVariantTemplates) ...[
                             const SizedBox(width: 8),
-                            SizedBox(
+                            const SizedBox(
                               width: 16,
                               height: 16,
                               child: CircularProgressIndicator(
@@ -397,7 +396,7 @@ class _VariantManagementDialogState extends State<VariantManagementDialog> {
                         Container(
                           padding: const EdgeInsets.all(12),
                           child: Text(
-                            'Varyant şablonları yükleniyor...',
+                            l10n.loadingVariantTemplates,
                             style: TextStyle(color: Colors.grey.shade600, fontSize: 12),
                           ),
                         )
@@ -446,7 +445,7 @@ class _VariantManagementDialogState extends State<VariantManagementDialog> {
                     // Mevcut Varyantlar
                     if (widget.variantConfig.variants.isNotEmpty) ...[
                       Text(
-                        'Eklenen Varyantlar (${widget.variantConfig.variants.length}):',
+                        l10n.addedVariantsTitle(widget.variantConfig.variants.length),
                         style: const TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.bold,
@@ -494,7 +493,7 @@ class _VariantManagementDialogState extends State<VariantManagementDialog> {
                                             borderRadius: BorderRadius.circular(8),
                                           ),
                                           child: Text(
-                                            'Ekstra',
+                                            l10n.variantExtraTag,
                                             style: TextStyle(
                                               fontSize: 10,
                                               color: Colors.orange.shade700,
@@ -516,7 +515,7 @@ class _VariantManagementDialogState extends State<VariantManagementDialog> {
                                               Icon(Icons.camera_alt, color: Colors.blue.shade600, size: 12),
                                               const SizedBox(width: 4),
                                               Text(
-                                                'Fotoğraflı',
+                                                l10n.variantWithPhotoTag,
                                                 style: TextStyle(
                                                   fontSize: 10,
                                                   color: Colors.blue.shade700,
@@ -550,7 +549,7 @@ class _VariantManagementDialogState extends State<VariantManagementDialog> {
                     
                     // Manuel Varyant Ekleme Formu
                     Text(
-                      'Manuel Varyant Ekle:',
+                      l10n.manualAddVariantTitle,
                       style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.bold,
@@ -570,13 +569,13 @@ class _VariantManagementDialogState extends State<VariantManagementDialog> {
                                 flex: 3,
                                 child: TextFormField(
                                   controller: widget.variantConfig.variantNameController,
-                                  decoration: const InputDecoration(
-                                    labelText: 'Varyant Adı',
-                                    hintText: 'Büyük, Küçük...',
-                                    border: OutlineInputBorder(),
-                                    contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+                                  decoration: InputDecoration(
+                                    labelText: l10n.variantNameLabel,
+                                    hintText: l10n.variantNameHint,
+                                    border: const OutlineInputBorder(),
+                                    contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
                                   ),
-                                  validator: (v) => (v == null || v.isEmpty) ? 'Varyant adı gerekli' : null,
+                                  validator: (v) => (v == null || v.isEmpty) ? l10n.validatorVariantNameRequired : null,
                                   enabled: !_isUploading,
                                 ),
                               ),
@@ -585,19 +584,19 @@ class _VariantManagementDialogState extends State<VariantManagementDialog> {
                                 flex: 2,
                                 child: TextFormField(
                                   controller: widget.variantConfig.variantPriceController,
-                                  decoration: const InputDecoration(
-                                    labelText: 'Fiyat',
+                                  decoration: InputDecoration(
+                                    labelText: l10n.variantPriceLabel,
                                     prefixText: '₺',
-                                    border: OutlineInputBorder(),
-                                    contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+                                    border: const OutlineInputBorder(),
+                                    contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
                                   ),
                                   keyboardType: const TextInputType.numberWithOptions(decimal: true),
                                   inputFormatters: [
                                     FilteringTextInputFormatter.allow(RegExp(r'^\d*[\.,]?\d{0,2}'))
                                   ],
                                   validator: (v) {
-                                    if (v == null || v.isEmpty) return 'Fiyat gerekli';
-                                    if (double.tryParse(v.replaceAll(',', '.')) == null) return 'Geçersiz fiyat';
+                                    if (v == null || v.isEmpty) return l10n.validatorPriceRequired;
+                                    if (double.tryParse(v.replaceAll(',', '.')) == null) return l10n.validatorInvalidPrice;
                                     return null;
                                   },
                                   enabled: !_isUploading,
@@ -612,8 +611,8 @@ class _VariantManagementDialogState extends State<VariantManagementDialog> {
                             children: [
                               Expanded(
                                 child: CheckboxListTile(
-                                  title: const Text('Ekstra seçenek'),
-                                  subtitle: const Text('Ek ücretli özellik mi?'),
+                                  title: Text(l10n.checkboxExtraOptionTitle),
+                                  subtitle: Text(l10n.checkboxExtraOptionSubtitle),
                                   value: widget.variantConfig.isVariantExtra,
                                   onChanged: _isUploading ? null : (val) => _toggleVariantExtra(val ?? false),
                                   contentPadding: EdgeInsets.zero,
@@ -622,8 +621,8 @@ class _VariantManagementDialogState extends State<VariantManagementDialog> {
                               ),
                               Expanded(
                                 child: CheckboxListTile(
-                                  title: const Text('Fotoğraf ekle'),
-                                  subtitle: const Text('Varyant görseli'),
+                                  title: Text(l10n.checkboxAddPhotoTitle),
+                                  subtitle: Text(l10n.checkboxAddPhotoSubtitle),
                                   value: widget.variantConfig.hasVariantImageEnabled,
                                   onChanged: _isUploading ? null : (val) => _toggleVariantPhoto(val ?? false),
                                   contentPadding: EdgeInsets.zero,
@@ -651,7 +650,7 @@ class _VariantManagementDialogState extends State<VariantManagementDialog> {
                                       Icon(Icons.camera_alt, color: Colors.orange.shade700, size: 20),
                                       const SizedBox(width: 8),
                                       Text(
-                                        'Varyant Fotoğrafı',
+                                        l10n.variantPhotoTitle,
                                         style: TextStyle(
                                           fontSize: 14,
                                           fontWeight: FontWeight.bold,
@@ -667,7 +666,7 @@ class _VariantManagementDialogState extends State<VariantManagementDialog> {
                                             borderRadius: BorderRadius.circular(12),
                                           ),
                                           child: Text(
-                                            '✓ Seçildi',
+                                            l10n.statusSelected,
                                             style: TextStyle(
                                               fontSize: 12,
                                               color: Colors.green.shade700,
@@ -719,9 +718,9 @@ class _VariantManagementDialogState extends State<VariantManagementDialog> {
                             child: ElevatedButton.icon(
                               onPressed: _isUploading ? null : _addVariant,
                               icon: _isUploading 
-                                  ? SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2))
+                                  ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2))
                                   : const Icon(Icons.add, size: 20),
-                              label: Text(_isUploading ? 'Yükleniyor...' : 'Varyant Ekle'),
+                              label: Text(_isUploading ? l10n.statusUploading : l10n.buttonAddVariant),
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: _isUploading ? Colors.grey : Colors.blue,
                                 foregroundColor: Colors.white,
@@ -748,26 +747,25 @@ class _VariantManagementDialogState extends State<VariantManagementDialog> {
                 Expanded(
                   child: TextButton(
                     onPressed: _isUploading ? null : () {
-                      // ✅ YENİ: Kapat butonunda da kontrol yap
                       if (_hasUnfinishedVariantData) {
                         _showUnfinishedVariantWarning();
                       } else {
                         Navigator.of(context).pop(true);
                       }
                     },
-                    child: const Text('Kapat'),
+                    child: Text(l10n.buttonClose),
                   ),
                 ),
                 const SizedBox(width: 12),
                 Expanded(
                   child: ElevatedButton(
-                    onPressed: _isUploading ? null : _onCompletePressed, // ✅ YENİ: Kontrol fonksiyonu
+                    onPressed: _isUploading ? null : _onCompletePressed,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: _isUploading ? Colors.grey : Colors.green,
                       foregroundColor: Colors.white,
                     ),
                     child: Text(
-                      'Tamamla (${widget.variantConfig.variants.length})',
+                      l10n.buttonComplete(widget.variantConfig.variants.length),
                     ),
                   ),
                 ),

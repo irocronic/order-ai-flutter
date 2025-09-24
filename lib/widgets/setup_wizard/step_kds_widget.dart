@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../services/kds_service.dart';
-import '../../services/setup_wizard_audio_service.dart'; // 🎵 YENİ EKLENEN
+import '../../services/setup_wizard_audio_service.dart';
 import '../../models/kds_screen_model.dart';
 import '../../services/user_session.dart';
 import '../../screens/subscription_screen.dart';
@@ -38,7 +38,6 @@ class StepKdsWidgetState extends State<StepKdsWidget> {
   late final AppLocalizations l10n;
   bool _didFetchData = false;
 
-  // 🎵 YENİ EKLENEN: Audio servis referansı
   final SetupWizardAudioService _audioService = SetupWizardAudioService.instance;
 
   @override
@@ -50,14 +49,11 @@ class StepKdsWidgetState extends State<StepKdsWidget> {
       _updateNameControllers(1);
       _didFetchData = true;
       
-      // 🎵 YENİ EKLENEN: Sesli rehberliği başlat
       _startVoiceGuidance();
     }
   }
 
-  // 🎵 YENİ EKLENEN: Sesli rehberlik başlatma
   void _startVoiceGuidance() {
-    // Biraz bekle ki kullanıcı ekranı görsün
     Future.delayed(const Duration(milliseconds: 2000), () {
       if (mounted) {
         _audioService.playKdsStepAudio(context: context);
@@ -67,7 +63,6 @@ class StepKdsWidgetState extends State<StepKdsWidget> {
 
   @override
   void dispose() {
-    // Sesli rehberliği durdur
     _audioService.stopAudio();
     for (var controller in _nameControllers) {
       controller.dispose();
@@ -158,7 +153,6 @@ class StepKdsWidgetState extends State<StepKdsWidget> {
       return;
     }
     
-    // *** DEĞİŞİKLİK BURADA: Artık `UserSession.limitsNotifier`'dan gelen anlık veriyi kullanıyoruz. ***
     final currentLimits = UserSession.limitsNotifier.value;
     if (createdKdsScreens.length + names.length > currentLimits.maxKdsScreens) {
       _showLimitReachedDialog(
@@ -378,8 +372,9 @@ class StepKdsWidgetState extends State<StepKdsWidget> {
     );
   }
 
-  // 🎵 YENİ EKLENEN: Ses kontrol butonu
   Widget _buildAudioControlButton() {
+    // AppLocalizations burada da alınır.
+    final l10n = AppLocalizations.of(context)!;
     return ValueListenableBuilder<bool>(
       valueListenable: ValueNotifier(_audioService.isMuted),
       builder: (context, isMuted, child) {
@@ -404,7 +399,7 @@ class StepKdsWidgetState extends State<StepKdsWidget> {
                       Icon(Icons.volume_up, color: Colors.green, size: 16),
                       const SizedBox(width: 4),
                       Text(
-                        'Sesli Rehber Aktif',
+                        l10n.audioGuideActive,
                         style: TextStyle(
                           color: Colors.green.shade700,
                           fontSize: 12,
@@ -427,7 +422,7 @@ class StepKdsWidgetState extends State<StepKdsWidget> {
                     _audioService.toggleMute();
                   });
                 },
-                tooltip: isMuted ? 'Sesi Aç' : 'Sesi Kapat',
+                tooltip: isMuted ? l10n.audioGuideTooltipUnmute : l10n.audioGuideTooltipMute,
                 style: IconButton.styleFrom(
                   backgroundColor: isMuted 
                     ? Colors.red.withOpacity(0.2) 
@@ -446,7 +441,7 @@ class StepKdsWidgetState extends State<StepKdsWidget> {
                 onPressed: _audioService.isMuted ? null : () {
                   _audioService.playKdsStepAudio(context: context);
                 },
-                tooltip: 'Rehberi Tekrar Çal',
+                tooltip: l10n.audioGuideTooltipReplay,
                 style: IconButton.styleFrom(
                   backgroundColor: Colors.orange.withOpacity(0.2),
                   padding: const EdgeInsets.all(8),
@@ -465,7 +460,6 @@ class StepKdsWidgetState extends State<StepKdsWidget> {
       padding: const EdgeInsets.all(16.0),
       child: Column(
         children: [
-          // 🎵 YENİ EKLENEN: Sesli rehber kontrolleri
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
@@ -608,7 +602,6 @@ class StepKdsWidgetState extends State<StepKdsWidget> {
             ),
           const SizedBox(height: 10),
           if (!_isLoading)
-            // === DEĞİŞİKLİK BURADA: Metin, ValueListenableBuilder ile sarmalandı ===
             ValueListenableBuilder<SubscriptionLimits>(
               valueListenable: UserSession.limitsNotifier,
               builder: (context, limits, child) {

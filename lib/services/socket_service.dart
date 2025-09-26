@@ -466,7 +466,7 @@ class SocketService extends ChangeNotifier {
     }
 
     if (eventType != null && UserSession.hasNotificationPermission(eventType)) {
-      _addNotificationToHistory(data['message'] ?? 'Güncelleme', eventType);
+      _addNotificationToHistory(data['message'] ?? 'Update', eventType);
       if (_loudNotificationEvents.contains(eventType)) {
         GlobalNotificationHandler.instance.addNotification(data);
       } else if (_infoNotificationEvents.contains(eventType)) {
@@ -842,13 +842,13 @@ class SocketService extends ChangeNotifier {
         shouldRefreshWaitingCountNotifier.value = true;
         _processBackgroundQueue();
       });
-      _addNotificationToHistory("Bağlantı başarılı.", "system_connect");
+      _addNotificationToHistory("Connection Successful", "system_connect");
     });
     
     _socket!.onDisconnect((reason) {
       debugPrint("🔌 [SocketService] Bağlantı koptu. Sebep: $reason");
       _setConnectionStatus('Bağlantı koptu. Tekrar deneniyor...');
-      _addNotificationToHistory("Bağlantı koptu.", "system_disconnect");
+      _addNotificationToHistory("Disconnect", "system_disconnect");
 
       _clearConnectWatchdog();
       _clearConnectTimeout();

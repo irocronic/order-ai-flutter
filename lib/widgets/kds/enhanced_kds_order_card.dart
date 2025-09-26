@@ -243,15 +243,15 @@ class _EnhancedKdsOrderCardState extends State<EnhancedKdsOrderCard>
             _buildActionButton(
               actionKey: 'preparing_${orderId}_$orderItemId',
               actionType: 'mark_preparing',
-              label: 'Hazırla',
+              label: l10n.kdsPrepare,
               icon: Icons.whatshot,
               color: Colors.orange,
               parameters: {
                 'orderId': orderId,
                 'orderItemId': orderItemId,
               },
-              loadingMessage: 'Hazırlanıyor...',
-              successMessage: 'Hazırlama başladı',
+              loadingMessage: l10n.kdsPreparing,
+              successMessage: l10n.kdsPreparationStarted,
             ),
           );
           break;
@@ -261,34 +261,34 @@ class _EnhancedKdsOrderCardState extends State<EnhancedKdsOrderCard>
             _buildActionButton(
               actionKey: 'ready_${orderId}_$orderItemId',
               actionType: 'mark_ready',
-              label: 'Hazır',
+              label: l10n.kdsReady,
               icon: Icons.restaurant_menu,
               color: Colors.teal,
               parameters: {
                 'orderId': orderId,
                 'orderItemId': orderItemId,
               },
-              loadingMessage: 'Hazır hale getiriliyor...',
-              successMessage: 'Ürün hazır!',
+              loadingMessage: l10n.kdsMarkingReady,
+              successMessage: l10n.kdsProductReady,
             ),
           );
           break;
           
         case 'ready_kds':
           actions.add(
-            _buildStatusContainer('Hazır', Colors.teal),
+            _buildStatusContainer(l10n.kdsReady, Colors.teal),
           );
           break;
           
         case 'picked_up_kds':
           actions.add(
-            _buildStatusContainer('Tamamlandı', Colors.green),
+            _buildStatusContainer(l10n.kdsCompleted, Colors.green),
           );
           break;
           
         default:
           actions.add(
-            _buildStatusContainer('Bekliyor', Colors.grey),
+            _buildStatusContainer(l10n.kdsWaiting, Colors.grey),
           );
       }
       
@@ -346,6 +346,7 @@ class _EnhancedKdsOrderCardState extends State<EnhancedKdsOrderCard>
     if (!mounted) return const SizedBox.shrink();
     
     try {
+      final l10n = AppLocalizations.of(context)!;
       final orderId = _safeGetInt(widget.orderData, 'id');
       final String status = _safeGetString(widget.orderData, 'status', 'approved');
       
@@ -358,15 +359,15 @@ class _EnhancedKdsOrderCardState extends State<EnhancedKdsOrderCard>
           child: _buildActionButton(
             actionKey: 'start_preparation_$orderId',
             actionType: 'start_preparation',
-            label: 'Hazırlamaya Başla',
+            label: l10n.kdsStartPreparation,
             icon: Icons.play_arrow,
             color: Colors.orange,
             parameters: {
               'orderId': orderId,
               'kdsScreenSlug': 'mutfak',
             },
-            loadingMessage: 'Hazırlama başlatılıyor...',
-            successMessage: 'Hazırlama başladı!',
+            loadingMessage: l10n.kdsStartingPreparation,
+            successMessage: l10n.kdsPreparationStarted,
           ),
         );
       }
@@ -420,7 +421,7 @@ class _EnhancedKdsOrderCardState extends State<EnhancedKdsOrderCard>
                 children: [
                   Expanded(
                     child: Text(
-                      'Sipariş #$displayId',
+                      l10n.kdsOrderNumber(displayId),
                       style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
@@ -436,7 +437,7 @@ class _EnhancedKdsOrderCardState extends State<EnhancedKdsOrderCard>
                       borderRadius: BorderRadius.circular(6),
                     ),
                     child: Text(
-                      _safeGetString(widget.orderData, 'table_number', 'Paket'),
+                      _safeGetString(widget.orderData, 'table_number', l10n.kdsPackage),
                       style: const TextStyle(
                         fontWeight: FontWeight.w500,
                         fontSize: 12,
@@ -469,7 +470,7 @@ class _EnhancedKdsOrderCardState extends State<EnhancedKdsOrderCard>
                           children: [
                             Expanded(
                               child: Text(
-                                '${_safeGetString(item, 'quantity', '1')}x ${_safeGetString(item, 'menu_item_name') ?? _safeGetString(item['menu_item'] ?? {}, 'name', 'Bilinmeyen Ürün')}',
+                                '${_safeGetString(item, 'quantity', '1')}x ${_safeGetString(item, 'menu_item_name') ?? _safeGetString(item['menu_item'] ?? {}, 'name', l10n.kdsUnknownProduct)}',
                                 style: const TextStyle(
                                   fontWeight: FontWeight.w600,
                                   fontSize: 13,
@@ -485,7 +486,7 @@ class _EnhancedKdsOrderCardState extends State<EnhancedKdsOrderCard>
                           Padding(
                             padding: const EdgeInsets.only(top: 4),
                             child: Text(
-                              'Not: ${_safeGetString(item, 'notes')}',
+                              l10n.kdsNote(_safeGetString(item, 'notes')),
                               style: TextStyle(
                                 fontSize: 11,
                                 color: Colors.grey.shade600,
@@ -502,7 +503,7 @@ class _EnhancedKdsOrderCardState extends State<EnhancedKdsOrderCard>
                   padding: const EdgeInsets.all(12),
                   child: Center(
                     child: Text(
-                      'Bu siparişte ürün bulunmuyor',
+                      l10n.kdsNoItemsInOrder,
                       style: TextStyle(
                         color: Colors.grey.shade600,
                         fontStyle: FontStyle.italic,
@@ -521,11 +522,12 @@ class _EnhancedKdsOrderCardState extends State<EnhancedKdsOrderCard>
       );
     } catch (e) {
       debugPrint('Error building KDS card: $e');
+      final l10n = AppLocalizations.of(context);
       return Card(
         child: Container(
           padding: const EdgeInsets.all(16),
           child: Text(
-            'Kart yüklenirken hata oluştu',
+            l10n?.kdsCardError ?? 'An error occurred while loading the card.',
             style: TextStyle(color: Colors.red.shade600),
           ),
         ),

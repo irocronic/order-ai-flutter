@@ -1,5 +1,4 @@
 // lib/main.dart
-// Çalışan Sürüm
 
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -484,8 +483,15 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         GlobalCupertinoLocalizations.delegate,
       ],
       supportedLocales: const [
-        Locale('tr', ''),
         Locale('en', ''),
+        Locale('tr', ''),
+        Locale('it', ''),
+        Locale('de', ''),
+        Locale('zh', ''),
+        Locale('ar', ''),
+        Locale('es', ''),
+        Locale('fr', ''),
+        Locale('ru', ''),
       ],
       theme: ThemeData(
         primarySwatch: Colors.blue,

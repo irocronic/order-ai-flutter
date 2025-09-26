@@ -2,9 +2,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import '../../main.dart'; // navigatorKey için
 
 class NewOrderNotificationDialog extends StatelessWidget {
-  final dynamic notificationData;
+  final Map<String, dynamic> notificationData;
   final VoidCallback onAcknowledge;
 
   const NewOrderNotificationDialog({
@@ -13,68 +14,83 @@ class NewOrderNotificationDialog extends StatelessWidget {
     required this.onAcknowledge,
   }) : super(key: key);
 
-  // +++ YENİ: Mesaj oluşturma mantığını bu yardımcı fonksiyona taşıdık +++
-  // Bu, build metodunu temizler ve kodun okunabilirliğini artırır.
+  /// Bildirim verisinden yerelleştirilmiş başlık ve mesajı oluşturan yardımcı fonksiyon.
+  /// Bu fonksiyon, backend'den gelen yapısal veriyi kullanarak doğru çeviriyi seçer.
   _DialogContent _buildDialogContent(AppLocalizations l10n) {
-    final String? orderType = notificationData['order_type'];
-    final int? tableNumber = notificationData['table_number'];
-    final String? customerName = notificationData['customer_name'];
-    final String? itemName = notificationData['item_name'];
-    final bool isUpdate = notificationData['update'] == true;
+    // Backend'den gelen yapısal veriyi güvenli bir şekilde al
+    final extraData = notificationData['extra_data'] as Map<String, dynamic>?;
+    final messageKey = extraData?['message_key'] as String?;
+    final messageArgs = extraData?['message_args'] as Map<String, dynamic>? ?? {};
 
-    if (isUpdate) {
-      final title = l10n.newOrderNotificationTitleUpdate;
-      String message;
-      if (itemName != null && itemName.isNotEmpty) {
-        if (orderType == 'table' && tableNumber != null) {
-          message = l10n.newOrderNotificationUpdateTable(itemName, tableNumber.toString());
-        } else if (orderType == 'takeaway') {
-          message = customerName != null
-              ? l10n.newOrderNotificationUpdateTakeawayWithCustomer(itemName, customerName)
-              : l10n.newOrderNotificationUpdateTakeaway(itemName);
-        } else {
-          message = l10n.newOrderNotificationUpdateGeneric(itemName);
-        }
-      } else {
-        message = notificationData['message'] ?? l10n.newOrderNotificationDefaultMessage;
-      }
-      return _DialogContent(title: title, message: message);
-    } else { // Yeni sipariş
-      final title = l10n.newOrderNotificationTitleNew;
-      String message;
-      if (itemName != null && itemName.isNotEmpty) {
-        if (orderType == 'table' && tableNumber != null) {
-          message = l10n.newOrderNotificationNewOrderTable(tableNumber.toString(), itemName);
-        } else if (orderType == 'takeaway') {
-          message = customerName != null
-              ? l10n.newOrderNotificationNewOrderTakeawayWithCustomer(customerName, itemName)
-              : l10n.newOrderNotificationNewOrderTakeaway(itemName);
-        } else {
-          message = l10n.newOrderNotificationNewOrderGeneric(itemName);
-        }
-      } else {
-        message = notificationData['message'] ?? l10n.newOrderNotificationDefaultMessage;
-      }
-      return _DialogContent(title: title, message: message);
+    // Geriye dönük uyumluluk için eski usül mesajı hazırda tut
+    final String fallbackMessage = notificationData['message'] as String? ?? l10n.newOrderNotificationDefaultMessage;
+
+    String finalMessage;
+    String finalTitle = l10n.newOrderNotificationTitle; // Varsayılan başlık
+
+    // Gelen anahtar kelimeye (message_key) göre doğru çeviriyi seç ve oluştur
+    switch (messageKey) {
+      case 'orderStatusUpdate':
+        final String orderId = messageArgs['orderId']?.toString() ?? '';
+        
+        // --- GÜNCELLEME BAŞLANGICI ---
+        // Backend'den artık çevrilmiş metin ('statusDisplay') yerine, durum anahtarı ('statusKey') bekliyoruz.
+        final String statusKey = messageArgs['statusKey'] as String? ?? '';
+        
+        // Gelen anahtar kelimeye göre yerelleştirilmiş durum metnini alan fonksiyonu çağırıyoruz.
+        final String localizedStatusDisplay = _getLocalizedStatus(statusKey, l10n);
+        // --- GÜNCELLEME SONU ---
+
+        finalTitle = l10n.orderStatusUpdateTitle;
+        // .arb dosyasındaki ilgili çeviriye parametreleri gönderiyoruz.
+        // Örn: "Order #{orderId} status updated: {statusDisplay}"
+        finalMessage = l10n.orderStatusUpdateMessage(orderId, localizedStatusDisplay);
+        break;
+
+      case 'orderItemAdded':
+        final String orderId = messageArgs['orderId']?.toString() ?? '';
+        final String itemName = messageArgs['itemName'] as String? ?? '';
+
+        finalTitle = l10n.orderItemAddedTitle;
+        // .arb dosyasındaki ilgili çeviriye parametreleri gönderiyoruz.
+        finalMessage = l10n.orderItemAddedMessage(itemName, orderId);
+        break;
+
+      default:
+        // Eğer backend'den yeni yapı (`extra_data`) gelmezse veya bilinmeyen bir `message_key` gelirse,
+        // eski metni doğrudan göster (geriye uyumluluk).
+        finalMessage = fallbackMessage;
+        break;
+    }
+
+    return _DialogContent(title: finalTitle, message: finalMessage);
+  }
+  
+  /// Backend'den gelen durum anahtarını (`statusKey`) yerelleştirilmiş metne çevirir.
+  /// Örn: "statusApproved" -> "Approved (Sent to Kitchen)"
+  String _getLocalizedStatus(String statusKey, AppLocalizations l10n) {
+    switch (statusKey) {
+      case 'statusApproved':
+        return l10n.statusApproved;
+      case 'statusPreparing':
+        return l10n.statusPreparing;
+      case 'statusReadyForPickup':
+        return l10n.statusReadyForPickup;
+      // Diğer tüm durumlar için buraya case ekleyebilirsiniz.
+      default:
+        return statusKey; // Eğer eşleşen bir anahtar yoksa, anahtarın kendisini göster (hata ayıklama için)
     }
   }
-  // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final int? orderId = notificationData['order_id'];
-    final String? orderType = notificationData['order_type'];
-    final int? tableNumber = notificationData['table_number'];
-    final String? customerName = notificationData['customer_name'];
-    final String? itemName = notificationData['item_name'];
-    final bool isUpdate = notificationData['update'] == true;
-
-    // +++ GÜNCELLENDİ: Artık başlık ve mesajı yardımcı fonksiyondan alıyoruz +++
+    
+    // Yardımcı fonksiyondan yerelleştirilmiş başlık ve mesajı al
     final content = _buildDialogContent(l10n);
     final String dialogTitle = content.title;
     final String mainMessage = content.message;
-    // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
     return Dialog(
       backgroundColor: Colors.transparent,
@@ -118,34 +134,22 @@ class NewOrderNotificationDialog extends StatelessWidget {
               ),
               textAlign: TextAlign.center,
             ),
-            const SizedBox(height: 8),
-            if (orderId != null)
-              Text(
-                l10n.newOrderNotificationOrderId(orderId.toString()),
-                style: const TextStyle(color: Colors.white70, fontSize: 12),
-              ),
-            if (orderType == 'table' && tableNumber != null && !(isUpdate && itemName != null))
-              Text(
-                l10n.newOrderNotificationTableNumber(tableNumber.toString()),
-                  style: const TextStyle(color: Colors.white70, fontSize: 12),
-              ),
-            if (orderType == 'takeaway' && customerName != null && !(isUpdate && itemName != null))
-              Text(
-                l10n.newOrderNotificationCustomerName(customerName),
-                  style: const TextStyle(color: Colors.white70, fontSize: 12),
-              ),
             const SizedBox(height: 24),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.white,
-                foregroundColor: Colors.green,
+                foregroundColor: Colors.green.shade800,
                 shadowColor: Colors.black.withOpacity(0.25),
                 elevation: 4,
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                 padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
               ),
               onPressed: () {
-                Navigator.of(context).pop();
+                // Global key kullanarak navigator'a erişmek, dialog'un
+                // her zaman doğru context üzerinden kapanmasını sağlar.
+                if (navigatorKey.currentState?.canPop() ?? false) {
+                  Navigator.of(navigatorKey.currentContext!).pop();
+                }
                 onAcknowledge();
               },
               child: Text(
@@ -160,7 +164,7 @@ class NewOrderNotificationDialog extends StatelessWidget {
   }
 }
 
-// +++ YENİ: Başlık ve mesajı bir arada tutan basit bir yardımcı sınıf +++
+// Başlık ve mesajı bir arada tutan basit bir yardımcı sınıf
 class _DialogContent {
   final String title;
   final String message;

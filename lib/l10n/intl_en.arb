@@ -3581,7 +3581,6 @@
     }
   },
   "setupWizardStepLocalizationTitle": "Step 1: Language and Currency",
-  "setupLocalizationDescription": "Select the language to be used throughout the application and the currency to be shown in the menus. You can change these settings later in account settings.",
   "setupWizardSaveAndContinueButton": "Save and Continue",
   "setupWizardErrorSavingSettings": "Error saving settings: {errorDetails}",
   "@setupWizardErrorSavingSettings": {
@@ -3907,6 +3906,7 @@
   "languageNameIt": "Italian",
   "languageNameZh": "Chinese",
   "languageNameRu": "Russian",
+  "languageNameFr": "French",
   "currencyNameTRY": "Turkish Lira (₺)",
   "currencyNameUSD": "US Dollar ($)",
   "currencyNameEUR": "Euro (€)",
@@ -4386,7 +4386,6 @@
   "dialogButtonCancel": "Cancel",
   "addingButtonLabel": "Adding...",
   "addProductButtonLabel": "Add Product",
-  "audioGuideActive": "Audio Guide Active",
   "tooltipUnmute": "Unmute",
   "tooltipMute": "Mute",
   "tooltipReplayGuide": "Replay Guide",
@@ -4476,5 +4475,334 @@
   "dialogButtonDeleteAndExit": "Delete and Exit",
   "validatorVariantNameRequired": "Variant name is required",
   "validatorPriceRequired": "Price is required",
-  "validatorInvalidPrice": "Invalid price"
+  "validatorInvalidPrice": "Invalid price",
+  "kdsPrepare": "Prepare",
+  "kdsPreparing": "Preparing...",
+  "kdsPreparationStarted": "Preparation started",
+  "kdsReady": "Ready",
+  "kdsMarkingReady": "Marking as ready...",
+  "kdsProductReady": "Product is ready!",
+  "kdsCompleted": "Completed",
+  "kdsWaiting": "Waiting",
+  "kdsStartPreparation": "Start Preparation",
+  "kdsStartingPreparation": "Starting preparation...",
+  "kdsOrderNumber": "Order #{orderId}",
+  "@kdsOrderNumber": {
+      "description": "Header showing the order number on the KDS screen",
+      "placeholders": {
+          "orderId": {
+              "type": "String",
+              "example": "A5B1C"
+          }
+      }
+  },
+  "kdsPackage": "Takeaway",
+  "kdsUnknownProduct": "Unknown Product",
+  "kdsNote": "Note: {noteText}",
+  "@kdsNote": {
+      "description": "Note entered for the order item",
+      "placeholders": {
+          "noteText": {
+              "type": "String"
+          }
+      }
+  },
+  "kdsNoItemsInOrder": "There are no items in this order.",
+  "kdsCardError": "An error occurred while loading the card.",
+  "kdsScreenTitle": "{screenName} KDS",
+  "@kdsScreenTitle": {
+      "description": "The title of the KDS screen",
+      "placeholders": {
+          "screenName": {
+              "type": "String",
+              "example": "Kitchen"
+          }
+      }
+  },
+  "kdsScreenTooltipGoHome": "Go to Home",
+  "kdsScreenTooltipBack": "Back",
+  "kdsScreenTooltipRefresh": "Refresh",
+  "kdsScreenErrorFetching": "Error fetching orders: {error}",
+  "@kdsScreenErrorFetching": {
+      "description": "Error message when KDS orders fail to load",
+      "placeholders": {
+          "error": {
+              "type": "String"
+          }
+      }
+  },
+  "kdsScreenButtonRetry": "Retry",
+  "kdsScreenNoOrders": "No active orders to display.",
+  "kdsScreenWaitForRefresh": "Please wait for the previous refresh to complete.",
+  "kdsScreenRefreshingOrders": "Refreshing KDS orders...",
+  "kdsScreenOrdersUpdated": "Orders updated!",
+  "kdsScreenClosing": "Closing KDS...",
+  "kdsScreenRefreshing": "Refreshing...",
+  "orderStatusUpdate": "Order #{orderId} status updated: {statusDisplay}",
+  "orderItemAdded": "{itemName} was added to Order #{orderId}.",
+  "statusApproved": "Approved (Sent to Kitchen)",
+  "statusPreparing": "Preparing in Kitchen",
+  "statusReadyForPickup": "Ready for Pickup",
+  "newOrderNotificationTitle": "New Order Notification",
+  "orderStatusUpdateTitle": "Order Status Updated",
+  "orderItemAddedTitle": "Order Status Updated",
+  "tableCellPickingUp": "👐 Picking up...",
+  "tableCellPickedUp": "✅ Picked up",
+  "tableCellPickupFailed": "Pickup operation failed",
+  "tableCellUnexpectedError": "Unexpected error: {error}",
+  "@tableCellUnexpectedError": {
+    "description": "A generic error message",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Network error"
+      }
+    }
+  },
+  "tableCellDelivering": "🎉 Delivering...",
+  "tableCellDelivered": "🎉 Delivered",
+  "tableCellDeliveryFailed": "Delivery operation failed",
+  "tableCellKdsPreparing": "Preparing",
+  "tableCellKdsReady": "Ready",
+  "tableCellKdsPickedUp": "Picked Up",
+  "tableCellKdsCompleted": "Completed",
+  "tableCellTooltipDeliveredToCustomer": "Delivered to customer",
+  "tableCellTooltipWaiterPickup": "Waiter Pickup",
+  "tableCellTooltipDeliverToCustomer": "Deliver to Customer",
+  "tableCellTooltipWaitingForKitchen": "Waiting for kitchen",
+  "tableCellUnknownProduct": "Unknown Product",
+  "tableCellNewLabel": " [NEW]",
+  "tableCellNoOrderItems": "No order items",
+  "tableCellTooltipAddOrEditProduct": "Add or edit product",
+  "tableCellTooltipMoreActions": "More actions",
+  "tableCellMenuTransferTable": "Transfer Table",
+  "tableCellMenuCancelOrder": "Cancel Order",
+  "orderStatusUpdateMessage": "Order #{orderId} status updated: {statusDisplay}",
+  "@orderStatusUpdateMessage": {
+    "description": "Notification message when an order status changes.",
+    "placeholders": {
+      "orderId": {},
+      "statusDisplay": {}
+    }
+  },
+  "orderItemAddedMessage": "'{itemName}' was added to order #{orderId}.",
+  "@orderItemAddedMessage": {
+    "description": "Notification message when a new item is added to an order.",
+    "placeholders": {
+      "itemName": {},
+      "orderId": {}
+    }
+  },
+  "websiteSettingsErrorQrCreation": "Could not create QR code.",
+  "@websiteSettingsErrorQrCreation": {
+    "description": "Error message shown when the QR code generation fails."
+  },
+  "websiteSettingsErrorStoragePermission": "Storage permission was not granted.",
+  "@websiteSettingsErrorStoragePermission": {
+    "description": "Error message for when file storage permission is denied."
+  },
+  "websiteSettingsErrorDownloadsFolder": "Downloads folder not found.",
+  "@websiteSettingsErrorDownloadsFolder": {
+    "description": "Error message when the device's downloads directory cannot be located."
+  },
+  "websiteSettingsErrorOpenFile": "Could not open file: {message}",
+  "@websiteSettingsErrorOpenFile": {
+    "description": "Error message when a downloaded file cannot be opened by the system.",
+    "placeholders": {
+      "message": {
+        "type": "String",
+        "example": "No app found to open this file type."
+      }
+    }
+  },
+  "websiteSettingsQrDialogTitle": "Website QR Code",
+  "@websiteSettingsQrDialogTitle": {
+    "description": "Title for the dialog and tooltip related to the website QR code."
+  },
+  "websiteSettingsErrorBusinessNameNotFound": "Business name not found, cannot create QR code.",
+  "@websiteSettingsErrorBusinessNameNotFound": {
+    "description": "Snackbar error message when the business name is missing for QR code generation."
+  },
+  "websiteSettingsSectionMap": "Map Settings",
+  "@websiteSettingsSectionMap": {
+    "description": "Section header for map configuration."
+  },
+  "websiteSettingsLabelLatitude": "Latitude",
+  "@websiteSettingsLabelLatitude": {
+    "description": "Label for the map latitude input field."
+  },
+  "websiteSettingsValidatorLatitude": "Enter a valid latitude (-90 to 90)",
+  "@websiteSettingsValidatorLatitude": {
+    "description": "Validation error for the latitude input field."
+  },
+  "websiteSettingsLabelLongitude": "Longitude",
+  "@websiteSettingsLabelLongitude": {
+    "description": "Label for the map longitude input field."
+  },
+  "websiteSettingsValidatorLongitude": "Enter a valid longitude (-180 to 180)",
+  "@websiteSettingsValidatorLongitude": {
+    "description": "Validation error for the longitude input field."
+  },
+  "websiteSettingsButtonSelectLocation": "Select Location from Map",
+  "@websiteSettingsButtonSelectLocation": {
+    "description": "Button text to open the map picker screen."
+  },
+  "websiteSettingsLabelMapZoom": "Map Zoom Level (1-20)",
+  "@websiteSettingsLabelMapZoom": {
+    "description": "Label for the map zoom level input field."
+  },
+  "websiteSettingsValidatorZoomRequired": "Zoom level is required",
+  "@websiteSettingsValidatorZoomRequired": {
+    "description": "Validation error when the zoom level is empty."
+  },
+  "websiteSettingsValidatorZoomRange": "Enter a valid zoom level (1-20)",
+  "@websiteSettingsValidatorZoomRange": {
+    "description": "Validation error for an out-of-range zoom level."
+  },
+  "websiteSettingsLabelFacebookUrl": "Facebook URL",
+  "@websiteSettingsLabelFacebookUrl": {
+    "description": "Label for the Facebook URL input field."
+  },
+  "websiteSettingsLabelInstagramUrl": "Instagram URL",
+  "@websiteSettingsLabelInstagramUrl": {
+    "description": "Label for the Instagram URL input field."
+  },
+  "websiteSettingsLabelTwitterUrl": "Twitter/X URL",
+  "@websiteSettingsLabelTwitterUrl": {
+    "description": "Label for the Twitter/X URL input field."
+  },
+  "websiteSettingsSectionOnlineActions": "Online Actions",
+  "@websiteSettingsSectionOnlineActions": {
+    "description": "Section header for online reservations and ordering."
+  },
+  "websiteSettingsToggleAllowReservations": "Allow Online Reservations",
+  "@websiteSettingsToggleAllowReservations": {
+    "description": "Label for the switch to enable/disable online reservations."
+  },
+  "websiteSettingsToggleAllowOnlineOrdering": "Allow Online Ordering",
+  "@websiteSettingsToggleAllowOnlineOrdering": {
+    "description": "Label for the switch to enable/disable online ordering."
+  },
+  "websiteSettingsThemeSystem": "System Default",
+  "@websiteSettingsThemeSystem": {
+    "description": "Theme option for system default."
+  },
+  "websiteSettingsThemeLight": "Light Mode",
+  "@websiteSettingsThemeLight": {
+    "description": "Theme option for light mode."
+  },
+  "websiteSettingsThemeDark": "Dark Mode",
+  "@websiteSettingsThemeDark": {
+    "description": "Theme option for dark mode."
+  },
+  "websiteSettingsLabelTheme": "Website Theme",
+  "@websiteSettingsLabelTheme": {
+    "description": "Label for the website theme selection dropdown."
+  },
+  "websiteSettingsButtonUploadImage": "Upload Image",
+  "@websiteSettingsButtonUploadImage": {
+    "description": "Placeholder text inside the image picker widget."
+  },
+  "mapPickerAppBarTitle": "Select Location from Map",
+  "@mapPickerAppBarTitle": {
+    "description": "Title of the map picker screen."
+  },
+  "mapPickerMarkerTitle": "Selected Location",
+  "@mapPickerMarkerTitle": {
+    "description": "Title for the info window of the map marker."
+  },
+  "mapPickerMarkerSnippet": "Is this your business location?",
+  "@mapPickerMarkerSnippet": {
+    "description": "Snippet text for the info window of the map marker."
+  },
+  "mapPickerSearchHint": "Search for a restaurant or address...",
+  "@mapPickerSearchHint": {
+    "description": "Hint text for the location search bar."
+  },
+  "mapPickerConfirmButton": "Confirm This Location",
+  "@mapPickerConfirmButton": {
+    "description": "Label for the button to confirm the selected location."
+  },
+  "mapPickerUnknownPlace": "Unknown Place",
+  "@mapPickerUnknownPlace": {
+    "description": "Fallback text for a search result without a description."
+  },
+  "mapPickerErrorApiKey": "Google Maps API key error. Please contact your administrator.",
+  "@mapPickerErrorApiKey": {
+    "description": "Error message for API key related issues."
+  },
+  "mapPickerErrorSearch": "An error occurred while searching: {statusCode}",
+  "@mapPickerErrorSearch": {
+    "description": "Error message for a failed place search, including the HTTP status code.",
+    "placeholders": {
+      "statusCode": {
+        "type": "String",
+        "example": "404"
+      }
+    }
+  },
+  "mapPickerErrorConnection": "Connection error. Please check your internet connection.",
+  "@mapPickerErrorConnection": {
+    "description": "Generic error for network or connection issues."
+  },
+  "mapPickerErrorLocationDetails": "An error occurred while fetching location details.",
+  "@mapPickerErrorLocationDetails": {
+    "description": "Error message when failing to get details for a selected place."
+  },
+  "notificationOrderItemRemoved": "Order #{orderId} updated: '{productName}' was removed.",
+  "@notificationOrderItemRemoved": {
+    "description": "Notification when an item is removed from an order.",
+    "placeholders": {
+      "orderId": {
+        "type": "String",
+        "example": "69"
+      },
+      "productName": {
+        "type": "String",
+        "example": "Ayran"
+      }
+    }
+  },
+  "notificationOrderCancelledAllItemsRemoved": "Order #{orderId} was cancelled because all its items were removed.",
+  "@notificationOrderCancelledAllItemsRemoved": {
+    "description": "Notification when an order is automatically cancelled after its last item is removed.",
+    "placeholders": {
+      "orderId": {
+        "type": "String",
+        "example": "69"
+      }
+    }
+  },
+  "notificationOrderItemUpdated": "Order #{orderId} updated: Item '{productName}' status/quantity was changed.",
+  "@notificationOrderItemUpdated": {
+    "description": "Notification for when an item's details (like quantity) are updated.",
+    "placeholders": {
+      "orderId": {
+        "type": "String",
+        "example": "70"
+      },
+      "productName": {
+        "type": "String",
+        "example": "Adana Kebab"
+      }
+    }
+  },
+  "socketStatusWaitingForConnection": "Waiting for connection...",
+  "socketStatusCooldownMode": "Too many connection errors - cooldown mode",
+  "socketStatusTokenRequired": "Token required for connection.",
+  "socketStatusTokenRefreshFailed": "Could not refresh token.",
+  "socketStatusNetworkOffline": "No network connection",
+  "socketStatusWaitingForServer": "Waiting for server confirmation...",
+  "socketStatusConnected": "Connected",
+  "socketStatusDisconnected": "Disconnected. Retrying...",
+  "socketStatusConnectionError": "Connection error - retrying...",
+  "socketStatusTerminated": "Connection terminated",
+  "socketNotificationConnectionSuccess": "Connection successful.",
+  "socketNotificationDisconnected": "Connection lost.",
+  "socketNotificationConnectionError": "Connection error.",
+  "socketNotificationSystemError": "System error.",
+  "socketNotificationWaitingListUpdated": "Waiting list updated.",
+  "socketNotificationPagerUpdated": "Pager status updated.",
+  "socketNotificationStockUpdated": "Stock status updated.",
+  "socketNotificationGenericUpdate": "Update"
 }

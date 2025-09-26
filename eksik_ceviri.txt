@@ -1,5 +1,42 @@
 {
+  "ar": [
+    "manageStaffErrorLimitExceeded",
+    "errorGeneral"
+  ],
+
+  "de": [
+    "manageStaffErrorLimitExceeded",
+    "errorGeneral"
+  ],
+
   "en": [
+    "manageStaffErrorLimitExceeded",
+    "errorGeneral"
+  ],
+
+  "es": [
+    "manageStaffErrorLimitExceeded",
+    "errorGeneral",
+    "audioGuideTooltipUnmute",
+    "audioGuideTooltipMute"
+  ],
+
+  "fr": [
+    "manageStaffErrorLimitExceeded",
+    "errorGeneral"
+  ],
+
+  "it": [
+    "manageStaffErrorLimitExceeded",
+    "errorGeneral"
+  ],
+
+  "ru": [
+    "manageStaffErrorLimitExceeded",
+    "errorGeneral"
+  ],
+
+  "zh": [
     "manageStaffErrorLimitExceeded",
     "errorGeneral"
   ]

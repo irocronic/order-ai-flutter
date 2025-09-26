@@ -36,7 +36,6 @@ import '../../screens/business_card_designer_screen.dart';
 // +++ YENİ EKLENEN IMPORT +++
 import '../../screens/payment_settings_screen.dart';
 
-
 class BusinessOwnerHomeContent extends StatefulWidget {
   final String token;
   final int businessId;
@@ -62,6 +61,7 @@ class _BusinessOwnerHomeContentState extends State<BusinessOwnerHomeContent> {
   final TextEditingController _searchController = TextEditingController();
   List<HomeMenuSection> _allSections = [];
   List<HomeMenuSection> _filteredSections = [];
+  Locale? _lastLocale; // DİL DEĞİŞİKLİĞİ TAKİBİ
 
   @override
   void initState() {
@@ -73,6 +73,15 @@ class _BusinessOwnerHomeContentState extends State<BusinessOwnerHomeContent> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     final l10n = AppLocalizations.of(context)!;
+    final currentLocale = Localizations.localeOf(context);
+    // Dil değiştiğinde menüleri yeniden oluştur
+    if (_lastLocale != currentLocale) {
+      _lastLocale = currentLocale;
+      _allSections = _getMenuOptions(context, l10n);
+      _filteredSections = _getAccessibleSections(_allSections);
+      setState(() {});
+    }
+    // İlk açılışta da doldur
     if (_allSections.isEmpty) {
       _allSections = _getMenuOptions(context, l10n);
       _filteredSections = _getAccessibleSections(_allSections);
@@ -519,7 +528,6 @@ class _BusinessOwnerHomeContentState extends State<BusinessOwnerHomeContent> {
                       builder: (_) => BusinessSettingsScreen(
                           token: widget.token,
                           businessId: widget.businessId)))),
-                          
           // ++++++++++++++++ İSTEDİĞİNİZ DEĞİŞİKLİK BURADA EKLENDİ ++++++++++++++++
           HomeMenuItem(
             icon: Icons.payment,
@@ -529,7 +537,6 @@ class _BusinessOwnerHomeContentState extends State<BusinessOwnerHomeContent> {
             onTapBuilder: (ctx) => () => Navigator.push(
                 ctx, MaterialPageRoute(builder: (_) => const PaymentSettingsScreen()))),
           // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-                          
           HomeMenuItem(
               icon: Icons.contact_mail_outlined,
               title: l10n.homeMenuBusinessCard, // .arb dosyanıza eklediğiniz anahtar

@@ -1,12 +1,9 @@
-// lib/services/setup_wizard_audio_service.dart
-
 import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:provider/provider.dart';
 import '../providers/language_provider.dart';
-import '../services/user_session.dart';
 
 class SetupWizardAudioService {
   static final SetupWizardAudioService _instance = SetupWizardAudioService._internal();
@@ -18,49 +15,40 @@ class SetupWizardAudioService {
   bool _isPlaying = false;
   Timer? _playbackTimer;
   String? _currentStep;
-  
-  // Ses dosyası cooldown kontrolü
   static const Duration _audioCooldown = Duration(seconds: 2);
   DateTime? _lastPlayTime;
 
-  /// Ses seviyesi kontrolü
   bool get isMuted => _isMuted;
   bool get isPlaying => _isPlaying;
   String? get currentStep => _currentStep;
 
-  /// Dil kodunu al (varsayılan Türkçe)
+  /// Desteklenen diller
+  static const List<String> _supportedLangs = [
+    'tr', 'en', 'de', 'es', 'fr', 'it', 'ar', 'ru', 'zh'
+  ];
+
+  /// Geçerli dil kodunu bağlamdan çek
   String _getCurrentLanguageCode(BuildContext? context) {
     try {
       if (context != null) {
-        // Provider'dan dil kodunu al
         final languageProvider = Provider.of<LanguageProvider>(context, listen: false);
         final locale = languageProvider.currentLocale;
-        if (locale != null) {
-          return locale.languageCode == 'en' ? 'en' : 'tr';
+        if (locale != null && _supportedLangs.contains(locale.languageCode)) {
+          return locale.languageCode;
         }
       }
-      
-      // 🔧 DÜZELTME: UserSession'dan doğru şekilde kontrol et
-      try {
-        // Eğer UserSession'da locale bilgisi varsa (varsa kullan)
-        // Aksi takdirde varsayılan Türkçe döndür
-        return 'tr'; // Geçici olarak varsayılan
-      } catch (e) {
-        debugPrint('[SetupWizardAudioService] UserSession kontrol hatası: $e');
-      }
-      
-      // Varsayılan Türkçe
+      // Fallback, sistem dili veya tr
       return 'tr';
     } catch (e) {
       debugPrint('[SetupWizardAudioService] Dil kodu alınamadı: $e');
-      return 'tr'; // Fallback
+      return 'tr';
     }
   }
 
-  /// Adım sesini çal
+  /// Adım sesi çal
   Future<void> playStepAudio(String stepName, {BuildContext? context, Duration? delay}) async {
     if (kIsWeb || _isMuted) {
-      debugPrint('[SetupWizardAudioService] Web platformu veya sessize alınmış, ses çalınmıyor');
+      debugPrint('[SetupWizardAudioService] Web ya da mute, ses çalınmıyor');
       return;
     }
 
@@ -74,45 +62,50 @@ class SetupWizardAudioService {
     }
 
     try {
-      // Önceki ses varsa durdur
       await stopAudio();
 
-      final languageCode = _getCurrentLanguageCode(context);
-      // 🔧 DÜZELTME: Doğru asset yolu - assets/ prefix'i eklendi
-      final audioPath = 'assets/sounds/setup/$languageCode/$stepName.mp3';
-      
-      debugPrint('[SetupWizardAudioService] 🎵 Adım sesi çalınıyor: $audioPath');
-      
+      String languageCode = _getCurrentLanguageCode(context);
+      String assetPath = 'sounds/setup/$languageCode/$stepName.mp3';
+
+      // Fallback: eğer dosya bulunamazsa İngilizce'ye düş
+      // (AssetSource içinde try-catch ile kontrol)
+      debugPrint('[SetupWizardAudioService] 🎵 Denenen ses dosyası: $assetPath');
+
       _currentStep = stepName;
       _isPlaying = true;
       _lastPlayTime = DateTime.now();
 
-      // Belirtilen süre kadar bekle (varsayılan 1.5 saniye)
       if (delay != null) {
         await Future.delayed(delay);
       } else {
         await Future.delayed(const Duration(milliseconds: 1500));
       }
 
-      // 🔧 DÜZELTME: AssetSource için doğru yol - assets/ olmadan
-      await _audioPlayer.play(AssetSource('sounds/setup/$languageCode/$stepName.mp3'));
-      
-      // Ses bittiğinde durumu güncelle
+      try {
+        await _audioPlayer.play(AssetSource(assetPath));
+      } catch (e) {
+        // İngilizce fallback
+        if (languageCode != 'en') {
+          debugPrint('[SetupWizardAudioService] $assetPath bulunamadı, İngilizce fallback...');
+          await _audioPlayer.play(AssetSource('sounds/setup/en/$stepName.mp3'));
+        } else {
+          rethrow;
+        }
+      }
+
       _audioPlayer.onPlayerComplete.listen((_) {
         _isPlaying = false;
         _currentStep = null;
         debugPrint('[SetupWizardAudioService] ✅ Ses tamamlandı: $stepName');
       });
 
-      // 30 saniye timeout (uzun sesler için)
       _playbackTimer?.cancel();
       _playbackTimer = Timer(const Duration(seconds: 30), () {
         if (_isPlaying) {
-          debugPrint('[SetupWizardAudioService] ⏰ Ses timeout, durduruldu');
+          debugPrint('[SetupWizardAudioService] ⏰ Timeout, ses durduruldu');
           stopAudio();
         }
       });
-
     } catch (e) {
       debugPrint('[SetupWizardAudioService] ❌ Ses çalma hatası: $e');
       _isPlaying = false;
@@ -167,47 +160,30 @@ class SetupWizardAudioService {
 
   // === Setup Wizard Adımları için Özel Metodlar ===
 
-  /// Masa Kurulumu adımı
   Future<void> playTablesStepAudio({BuildContext? context}) async {
     await playStepAudio('step_tables', context: context);
   }
-
-  /// Kategori Kurulumu adımı
   Future<void> playCategoriesStepAudio({BuildContext? context}) async {
     await playStepAudio('step_categories', context: context);
   }
-
-  /// Menü Öğeleri adımı
   Future<void> playMenuItemsStepAudio({BuildContext? context}) async {
     await playStepAudio('step_menu_items', context: context);
   }
-
-  /// Varyantlar adımı
   Future<void> playVariantsStepAudio({BuildContext? context}) async {
     await playStepAudio('step_variants', context: context);
   }
-
-  /// Stok adımı
   Future<void> playStockStepAudio({BuildContext? context}) async {
     await playStepAudio('step_stock', context: context);
   }
-
-  /// Personel adımı
   Future<void> playStaffStepAudio({BuildContext? context}) async {
     await playStepAudio('step_staff', context: context);
   }
-
-  /// KDS adımı
   Future<void> playKdsStepAudio({BuildContext? context}) async {
     await playStepAudio('step_kds', context: context);
   }
-
-  /// Yerelleştirme adımı
   Future<void> playLocalizationStepAudio({BuildContext? context}) async {
     await playStepAudio('step_localization', context: context);
   }
-
-  /// Hoş geldiniz/Başlangıç adımı
   Future<void> playWelcomeStepAudio({BuildContext? context}) async {
     await playStepAudio('step_welcome', context: context);
   }

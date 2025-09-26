@@ -246,17 +246,24 @@ class _AccountSettingsScreenState extends State<AccountSettingsScreen> {
     }
   }
 
-  // === METOT GÜNCELLENDİ ===
+  // === GÜNCELLENMİŞ METOT: Tüm diller eklendi ===
   Widget _buildLanguageSelector(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final languageProvider = Provider.of<LanguageProvider>(context, listen: false);
 
+    // Proje genelinde desteklenen tüm dilleri buraya ekleyin.
     final Map<String, String> supportedLanguages = {
-      'tr': 'Türkçe',
-      'en': 'English',
+      'tr': l10n.languageNameTr,
+      'en': l10n.languageNameEn,
+      'de': l10n.languageNameDe,
+      'es': l10n.languageNameEs,
+      'ar': l10n.languageNameAr,
+      'it': l10n.languageNameIt,
+      'zh': l10n.languageNameZh,
+      'ru': l10n.languageNameRu,
+      'fr': l10n.languageNameFr,
     };
 
-    // HATA DÜZELTME: View.of(context).locale yerine Localizations.localeOf(context) kullanılıyor.
     String? currentLanguageCode = languageProvider.currentLocale?.languageCode ?? 
                                   Localizations.localeOf(context).languageCode;
     
@@ -264,12 +271,12 @@ class _AccountSettingsScreenState extends State<AccountSettingsScreen> {
       currentLanguageCode = 'tr'; 
     }
 
+    
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: DropdownButtonFormField<String>(
         value: currentLanguageCode,
         decoration: InputDecoration(
-          // HATA DÜZELTME: `l10n.language` artık .arb dosyasında mevcut
           labelText: l10n.language,
           border: const OutlineInputBorder(),
           prefixIcon: const Icon(Icons.language),
@@ -296,8 +303,9 @@ class _AccountSettingsScreenState extends State<AccountSettingsScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(l10n.accountSettingsTitle,
-            style:
-                const TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
+            
+                style:
+                    const TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
         centerTitle: true,
         backgroundColor: Colors.transparent,
         elevation: 0,

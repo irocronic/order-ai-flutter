@@ -35,13 +35,10 @@ class _StepLocalizationSettingsWidgetState
   String? _selectedCurrency;
   String? _selectedTimezone;
 
-  // ÇÖZÜM 2: l10n nesnesini state içinde tutmak yerine build metodunda alacağız.
-  // late final AppLocalizations l10n;
   bool _isInitialized = false;
 
   final SetupWizardAudioService _audioService = SetupWizardAudioService.instance;
 
-  // Bu haritalar, didChangeDependencies içinde l10n ile doldurulacak
   late Map<String, String> _supportedLanguages;
   late Map<String, String> _supportedCurrencies;
   late Map<String, String> _supportedTimezones;
@@ -49,17 +46,14 @@ class _StepLocalizationSettingsWidgetState
   @override
   void initState() {
     super.initState();
-    // İlk değer atamaları initState veya didChangeDependencies içinde yapılır
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     if (!_isInitialized) {
-      // ÇÖZÜM 2: l10n nesnesini buradan alıyoruz
       final l10n = AppLocalizations.of(context)!;
-      
-      // Haritaları l10n kullanarak doldur
+
       _supportedLanguages = {
         'tr': l10n.languageNameTr,
         'en': l10n.languageNameEn,
@@ -69,6 +63,7 @@ class _StepLocalizationSettingsWidgetState
         'it': l10n.languageNameIt,
         'zh': l10n.languageNameZh,
         'ru': l10n.languageNameRu,
+        'fr': l10n.languageNameFr,
       };
 
       _supportedCurrencies = {
@@ -94,7 +89,7 @@ class _StepLocalizationSettingsWidgetState
       _selectedCurrency ??= UserSession.currencyCode ?? 'TRY';
       _selectedTimezone ??= 'Europe/Istanbul';
       _isInitialized = true;
-      
+
       _startVoiceGuidance();
     }
   }
@@ -115,21 +110,15 @@ class _StepLocalizationSettingsWidgetState
 
   void _onLanguageChanged(String? newLanguageCode) async {
     if (newLanguageCode != null) {
-      // LanguageProvider dil değişimini yönettiği için setState'e gerek yok.
-      // Provider.of(context, listen: false) bu değişikliği yapacak.
-      
-      // ÇÖZÜM 1: Dil değişimini anında uygulamak için LanguageProvider'ı çağır
       final languageProvider = Provider.of<LanguageProvider>(context, listen: false);
       await languageProvider.setLocale(Locale(newLanguageCode));
 
-      // Sesli rehberi yeni dilde çal
       Future.delayed(const Duration(milliseconds: 500), () {
         if (mounted) {
           _audioService.playLocalizationStepAudio(context: context);
         }
       });
-      
-      // Ayarları kaydet (arka planda devam eder)
+
       _saveSettings();
     }
   }
@@ -137,8 +126,6 @@ class _StepLocalizationSettingsWidgetState
   Future<void> _saveSettings() async {
     if (!mounted) return;
     final l10n = AppLocalizations.of(context)!;
-    
-    // Dil ayarı zaten provider tarafından yapıldı.
 
     try {
       final Map<String, dynamic> payload = {};
@@ -189,31 +176,35 @@ class _StepLocalizationSettingsWidgetState
             mainAxisSize: MainAxisSize.min,
             children: [
               if (_audioService.isPlaying)
-                Container(
-                  margin: const EdgeInsets.only(right: 8),
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                  decoration: BoxDecoration(
-                    color: Colors.green.withOpacity(0.2),
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: Colors.green.withOpacity(0.3)),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(Icons.volume_up, color: Colors.green, size: 16),
-                      const SizedBox(width: 4),
-                      Text(
-                        l10n.voiceGuideActive,
-                        style: TextStyle(
-                          color: Colors.green.shade700,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w500,
+                Flexible(
+                  child: Container(
+                    margin: const EdgeInsets.only(right: 8),
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: Colors.green.withOpacity(0.2),
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(color: Colors.green.withOpacity(0.3)),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(Icons.volume_up, color: Colors.green, size: 16),
+                        const SizedBox(width: 4),
+                        Flexible(
+                          child: Text(
+                            l10n.voiceGuideActive,
+                            style: TextStyle(
+                              color: Colors.green.shade700,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
-              
               IconButton(
                 icon: Icon(
                   isMuted ? Icons.volume_off : Icons.volume_up,
@@ -233,7 +224,6 @@ class _StepLocalizationSettingsWidgetState
                   padding: const EdgeInsets.all(12),
                 ),
               ),
-              
               IconButton(
                 icon: Icon(
                   Icons.replay,
@@ -258,16 +248,10 @@ class _StepLocalizationSettingsWidgetState
 
   @override
   Widget build(BuildContext context) {
-    // ÇÖZÜM 1: Widget ağacının en üstüne bir Consumer ekliyoruz.
-    // Bu, LanguageProvider'daki değişiklikleri dinler ve tüm alt widget'ları
-    // (l10n nesnesi dahil) yeniden oluşturur.
     return Consumer<LanguageProvider>(
       builder: (context, languageProvider, child) {
-        // l10n nesnesini her build'de yeniden alıyoruz, böylece dil değiştiğinde güncellenir.
         final l10n = AppLocalizations.of(context)!;
-        
-        // Dil, para birimi ve zaman dilimi listelerini de burada güncelleyelim.
-        // Bu, didChangeDependencies'e olan ihtiyacı azaltır ve her zaman güncel kalmasını sağlar.
+
         _supportedLanguages = {
           'tr': l10n.languageNameTr,
           'en': l10n.languageNameEn,
@@ -277,6 +261,7 @@ class _StepLocalizationSettingsWidgetState
           'it': l10n.languageNameIt,
           'zh': l10n.languageNameZh,
           'ru': l10n.languageNameRu,
+          'fr': l10n.languageNameFr,
         };
 
         _supportedCurrencies = {
@@ -294,11 +279,10 @@ class _StepLocalizationSettingsWidgetState
           'Asia/Dubai': l10n.timeZoneNameDubai,
           'Asia/Tokyo': l10n.timeZoneNameTokyo,
         };
-        
-        // Seçili dil kodunu provider'dan alarak UI'ı senkronize tutuyoruz
+
         _selectedLanguageCode = languageProvider.currentLocale?.languageCode ??
             WidgetsBinding.instance.platformDispatcher.locale.languageCode;
-        
+
         const welcomeTextStyle = TextStyle(
           fontSize: 40.0,
           fontWeight: FontWeight.bold,
@@ -327,12 +311,22 @@ class _StepLocalizationSettingsWidgetState
                 ],
               ),
               const SizedBox(height: 16),
-
-              Text(
-                l10n.setupLocalizationDescription,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    fontSize: 15, color: Colors.white.withOpacity(0.9), height: 1.4),
+              SizedBox(
+                height: 60,
+                child: AnimatedTextKit(
+                  animatedTexts: [
+                    FadeAnimatedText(l10n.welcomeMessageTr, textStyle: welcomeTextStyle, duration: const Duration(seconds: 3), textAlign: TextAlign.center),
+                    FadeAnimatedText(l10n.welcomeMessageEn, textStyle: welcomeTextStyle, duration: const Duration(seconds: 3), textAlign: TextAlign.center),
+                    FadeAnimatedText(l10n.welcomeMessageEs, textStyle: welcomeTextStyle, duration: const Duration(seconds: 3), textAlign: TextAlign.center),
+                    FadeAnimatedText(l10n.welcomeMessageDe, textStyle: welcomeTextStyle, duration: const Duration(seconds: 3), textAlign: TextAlign.center),
+                    FadeAnimatedText(l10n.welcomeMessageFr, textStyle: welcomeTextStyle, duration: const Duration(seconds: 3), textAlign: TextAlign.center),
+                    FadeAnimatedText(l10n.welcomeMessageIt, textStyle: welcomeTextStyle, duration: const Duration(seconds: 3), textAlign: TextAlign.center),
+                    FadeAnimatedText(l10n.welcomeMessageAr, textStyle: welcomeTextStyle, duration: const Duration(seconds: 3), textAlign: TextAlign.center),
+                    FadeAnimatedText(l10n.welcomeMessageZh, textStyle: welcomeTextStyle, duration: const Duration(seconds: 3), textAlign: TextAlign.center),
+                  ],
+                  pause: const Duration(milliseconds: 1500),
+                  repeatForever: true,
+                ),
               ),
               const SizedBox(height: 24),
               Card(
@@ -430,24 +424,6 @@ class _StepLocalizationSettingsWidgetState
                 ),
               ),
               const SizedBox(height: 48),
-              
-              SizedBox(
-                height: 60,
-                child: AnimatedTextKit(
-                  animatedTexts: [
-                    FadeAnimatedText(l10n.welcomeMessageTr, textStyle: welcomeTextStyle, duration: const Duration(seconds: 3), textAlign: TextAlign.center),
-                    FadeAnimatedText(l10n.welcomeMessageEn, textStyle: welcomeTextStyle, duration: const Duration(seconds: 3), textAlign: TextAlign.center),
-                    FadeAnimatedText(l10n.welcomeMessageEs, textStyle: welcomeTextStyle, duration: const Duration(seconds: 3), textAlign: TextAlign.center),
-                    FadeAnimatedText(l10n.welcomeMessageDe, textStyle: welcomeTextStyle, duration: const Duration(seconds: 3), textAlign: TextAlign.center),
-                    FadeAnimatedText(l10n.welcomeMessageFr, textStyle: welcomeTextStyle, duration: const Duration(seconds: 3), textAlign: TextAlign.center),
-                    FadeAnimatedText(l10n.welcomeMessageIt, textStyle: welcomeTextStyle, duration: const Duration(seconds: 3), textAlign: TextAlign.center),
-                    FadeAnimatedText(l10n.welcomeMessageAr, textStyle: welcomeTextStyle, duration: const Duration(seconds: 3), textAlign: TextAlign.center),
-                    FadeAnimatedText(l10n.welcomeMessageZh, textStyle: welcomeTextStyle, duration: const Duration(seconds: 3), textAlign: TextAlign.center),
-                  ],
-                  pause: const Duration(milliseconds: 1500),
-                  repeatForever: true,
-                ),
-              ),
             ],
           ),
         );

@@ -17,6 +17,8 @@ import '../widgets/notifications/notification_ui_helper.dart';
 // Dialog widget'larını import ediyoruz
 import '../widgets/dialogs/order_approved_for_kitchen_dialog.dart';
 import '../widgets/dialogs/order_ready_for_pickup_dialog.dart';
+// YENİ: Dil bilgisine erişim için LanguageProvider import edildi
+import '../providers/language_provider.dart';
 
 class GlobalNotificationHandler {
   static GlobalNotificationHandler? _instance;
@@ -253,7 +255,7 @@ class GlobalNotificationHandler {
       debugPrint('[GlobalNotificationHandler] ❌ BİLDİRİM İŞLEME HATASI YAKALANDI: $e');
       debugPrint('[GlobalNotificationHandler] Stack Trace: $s');
       if (_isBannerShowing) {
-         _cleanupBanner();
+          _cleanupBanner();
       }
     }
   }
@@ -457,48 +459,65 @@ class GlobalNotificationHandler {
     }
   }
 
-  void _playNotificationSound(String eventType) {
+  // ==================== GÜNCELLENMİŞ METOT BAŞLANGICI ====================
+  void _playNotificationSound(String eventType) async {
     if (_isDisposed) return;
     if (_isSoundPlaying || kIsWeb) return;
     if (!_shouldPlaySound(eventType)) return;
+    
     _isSoundPlaying = true;
-    debugPrint('🔔 [GlobalNotificationHandler] Özel ses çalınıyor: $eventType');
+    debugPrint('🔔 [GlobalNotificationHandler] Bildirim sesi çalınıyor: $eventType');
 
-    String? soundPath;
+    // 1. Olay tipine göre çalınacak ses dosyasının temel adını belirle
+    String? soundFilename;
     switch (eventType) {
       case NotificationEventTypes.guestOrderPendingApproval:
       case NotificationEventTypes.existingOrderNeedsReapproval:
       case 'new_order_notification':
-        soundPath = 'sounds/notifications/tr/new_order.mp3';
+        soundFilename = 'new_order.mp3';
         break;
 
       case NotificationEventTypes.orderApprovedForKitchen:
-        soundPath = 'sounds/notifications/tr/order_confirmed.mp3';
+        soundFilename = 'order_confirmed.mp3';
         break;
       case NotificationEventTypes.orderPreparingUpdate:
-        soundPath = 'sounds/notifications/tr/order_preparing.mp3';
+        soundFilename = 'order_preparing.mp3';
         break;
 
       case NotificationEventTypes.orderReadyForPickupUpdate:
-        soundPath = 'sounds/notifications/tr/order_ready.mp3';
+        soundFilename = 'order_ready.mp3';
         break;
     }
 
-    if (soundPath != null) {
+    if (soundFilename != null) {
+      // 2. LanguageProvider'dan mevcut dil kodunu al
+      final langCode = LanguageProvider.currentLanguageCode;
+      final soundPath = 'sounds/notifications/$langCode/$soundFilename';
+      final fallbackPath = 'sounds/notifications/tr/$soundFilename';
+
       try {
-        debugPrint('🔔 [GlobalNotificationHandler] [AssetSource] Playing sound with path: $soundPath');
-        _audioPlayer.play(AssetSource(soundPath));
+        debugPrint('🔔 [GlobalNotificationHandler] Denenen ses yolu: $soundPath');
+        await _audioPlayer.play(AssetSource(soundPath));
       } catch (e) {
-        debugPrint("Özel bildirim sesi çalınırken hata: $e");
+        debugPrint("❌ [GlobalNotificationHandler] Özel dil sesi ($soundPath) çalınırken hata: $e. Varsayılan dil deneniyor.");
+        // Hata durumunda varsayılan Türkçe sesi çalmayı dene
+        try {
+          debugPrint('🔔 [GlobalNotificationHandler] Varsayılan ses yolu deneniyor: $fallbackPath');
+          await _audioPlayer.play(AssetSource(fallbackPath));
+        } catch (fallbackError) {
+          debugPrint("❌ [GlobalNotificationHandler] Varsayılan bildirim sesi de çalınamadı: $fallbackError");
+        }
       }
     }
 
+    // Cooldown'ı başlat
     _soundCooldownTimer?.cancel();
     _soundCooldownTimer = Timer(_soundCooldown, () {
       _isSoundPlaying = false;
       debugPrint('[GlobalNotificationHandler] Ses cooldown sona erdi');
     });
   }
+  // ==================== GÜNCELLENMİŞ METOT SONU ====================
 
   bool _shouldPlaySound(String eventType) {
     final soundEvents = <String>{

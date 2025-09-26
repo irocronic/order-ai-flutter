@@ -75,16 +75,29 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   generate: true
-
-  # YENİ EKLENDİ: Ses dosyalarının bulunduğu klasörü tanıtmak için.
   assets:
     - .env
-    - assets/sounds/
-    - assets/sounds/notifications/
+    # 🔊 BİLDİRİM SESLERİ (NOTIFICATION SOUNDS)
     - assets/sounds/notifications/tr/
-    - assets/sounds/setup/
+    - assets/sounds/notifications/en/
+    - assets/sounds/notifications/ar/
+    - assets/sounds/notifications/de/
+    - assets/sounds/notifications/es/
+    - assets/sounds/notifications/fr/
+    - assets/sounds/notifications/it/
+    - assets/sounds/notifications/ru/
+    - assets/sounds/notifications/zh/
+    
+    # 🎙️ KURULUM SESLERİ (SETUP WIZARD SOUNDS)
     - assets/sounds/setup/tr/
     - assets/sounds/setup/en/
+    - assets/sounds/setup/ar/
+    - assets/sounds/setup/de/
+    - assets/sounds/setup/es/
+    - assets/sounds/setup/fr/
+    - assets/sounds/setup/it/
+    - assets/sounds/setup/ru/
+    - assets/sounds/setup/zh/
     - assets/templates/
     - assets/previews/
     - assets/fonts/

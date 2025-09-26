@@ -1,4 +1,6 @@
 // lib/screens/notification_screen.dart
+// GÜNCELLENMİŞ SÜRÜM
+
 import '../services/notification_center.dart';
 import '../services/refresh_manager.dart';
 import 'package:flutter/material.dart';
@@ -63,16 +65,6 @@ class _NotificationScreenState extends State<NotificationScreen> {
     super.dispose();
   }
 
-  // GÜNCELLEME: Bu metotlar artık burada gerekli değil, silindi.
-  // @override
-  // void initState() { ... }
-  // @override
-  // void dispose() { ... }
-  // void _registerSocketListeners() { ... }
-  // void _removeSocketListeners() { ... }
-  // void _addNotification(...) { ... }
-  // ve tüm _handle... metotları silindi.
-  
   // GÖRSEL YARDIMCI METOTLAR (DEĞİŞİKLİK YOK)
   IconData _getIconForNotificationType(String? eventType) {
     switch (eventType) {
@@ -176,6 +168,9 @@ class _NotificationScreenState extends State<NotificationScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+
+    // !!! BU SATIR ARTIK GEREKLİ OLMADIĞI İÇİN KALDIRILDI !!!
+    // _socketService.setLocalizations(l10n);
 
     return Scaffold(
       appBar: AppBar(

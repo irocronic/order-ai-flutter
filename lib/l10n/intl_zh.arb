@@ -1,0 +1,4791 @@
+{
+  "@@locale": "zh",
+  "loginPageTitle": "登录",
+  "usernameLabel": "用户名",
+  "passwordLabel": "密码",
+  "usernameHint": "请输入您的用户名。",
+  "passwordHint": "请输入您的密码。",
+  "loginButtonText": "登录",
+  "forgotPasswordButtonText": "忘记密码？",
+  "registerPromptText": "还没有帐户？注册",
+  "loginErrorInvalidCredentials": "用户名或密码无效。",
+  "loginErrorAccountInactive": "您的帐户已禁用。请联系管理员。",
+  "loginErrorAccountNotApproved": "您的帐户尚未获得管理员批准。",
+  "registerPageTitle": "商家注册",
+  "emailLabel": "电子邮件地址",
+  "usernameHintRequired": "请输入用户名",
+  "usernameHintMinLength": "用户名长度必须至少为4个字符。",
+  "emailHintRequired": "请输入电子邮件地址",
+  "emailHintInvalid": "请输入有效的电子邮件地址",
+  "passwordHintRequired": "请输入密码",
+  "passwordHintMinLength": "密码长度必须至少为6个字符。",
+  "registerTypeLabel": "注册类型",
+  "registerTypeBusinessOwner": "商家",
+  "registerButtonText": "注册",
+  "registerSuccessMessage": "注册成功！🎉 试用期间您可以免费使用本应用。",
+  "registerErrorUsernameExists": "此用户名已存在。",
+  "registerErrorEmailExists": "此电子邮件地址已被注册。",
+  "registerErrorPasswordCommon": "密码过于简单，请选择一个更强的密码。",
+  "addStaffTitle": "添加新员工",
+  "editStaffTitle": "编辑员工",
+  "addKitchenStaffTitle": "添加新的厨房员工",
+  "editKitchenStaffTitle": "编辑厨房员工",
+  "positionLabel": "职位",
+  "positionSalonStaff": "前厅服务员",
+  "positionKitchenStaff": "厨房员工",
+  "firstNameLabel": "名字*",
+  "lastNameLabel": "姓氏*",
+  "firstNameRequired": "员工名字为必填项",
+  "lastNameRequired": "员工姓氏为必填项",
+  "passwordNewLabel": "新密码 (如不更改请留空)",
+  "passwordRequiredLabel": "密码*",
+  "passwordRequiredHintForNewStaff": "新员工需要设置密码",
+  "activeUserLabel": "活跃用户",
+  "permissionPresetLabel": "选择权限预设 (可选)",
+  "screenPermissionsLabel": "屏幕权限:",
+  "notificationPermissionsLabel": "通知权限:",
+  "accessibleKdsScreensLabel": "可访问的KDS屏幕:",
+  "noKdsAvailable": "此商家未定义KDS屏幕。",
+  "kdsLoadingError": "加载KDS屏幕失败: {error}",
+  "updateButton": "更新",
+  "createButton": "创建",
+  "staffUpdateSuccess": "员工更新成功。",
+  "staffCreateSuccess": "员工创建成功。",
+  "setupWizardTitle": "商家设置 ({currentPage}/{totalPages})",
+  "setupWizardStep1Title": "1. 创建桌位信息",
+  "setupWizardStep2Title": "2. 定义厨房屏幕",
+  "setupWizardStep3Title": "3. 创建您的产品类别",
+  "setupWizardStep4Title": "4. 创建主要产品信息",
+  "setupWizardStep5Title": "5. 创建产品变体和价格",
+  "setupWizardStep6Title": "6. 输入库存数量 (可选)",
+  "setupWizardSuccessMessage": "商家设置成功完成！🎉",
+  "setupWizardErrorMessage": "完成设置时出错: {error}",
+  "setupWizardBackButton": "返回",
+  "setupWizardSkipButton": "跳过此步骤",
+  "setupWizardFinishButton": "完成并保存",
+  "setupWizardNextButton": "下一步",
+  "takeawayOrderTitle": "外卖订单 - {customerName}",
+  "guestCustomerName": "客人",
+  "orderStatusPaid": " (已支付)",
+  "orderStatusCancelled": "已取消",
+  "orderStatusRejected": "已拒绝",
+  "tooltipPrintReceipt": "打印收据",
+  "tooltipShowQr": "显示顾客二维码",
+  "tooltipCancelOrder": "取消订单",
+  "errorNoQrLink": "此订单未找到二维码链接。",
+  "infoLinkCopied": "链接已复制到剪贴板。",
+  "errorNoPrinters": "未找到已注册的打印机。请从打印机设置中添加。",
+  "infoPrintingCustomerReceipt": "正在打印顾客收据...",
+  "errorPrintingReceipt": "收据打印错误: {error}",
+  "infoPrintingKitchenTicket": "正在打印厨房小票...",
+  "errorPrintingKitchenTicket": "厨房小票打印错误: {error}",
+  "dialogCancelOrderTitle": "取消订单",
+  "dialogCancelOrderContent": "您确定要取消此订单吗？此操作无法撤销。",
+  "dialogButtonNo": "否",
+  "dialogButtonYesCancel": "是，取消",
+  "buttonDeliver": "送达",
+  "buttonAddExtra": "添加附加项",
+  "buttonRemove": "移除",
+  "buttonPaymentScreen": "支付屏幕",
+  "statusDelivered": "已送达",
+  "statusPaidFull": "此订单已支付",
+  "statusCancelledFull": "订单已取消",
+  "statusRejectedFull": "订单已拒绝",
+  "errorNoOrderItems": "未找到订单项。",
+  "infoProductAdded": "产品添加成功。",
+  "errorAddingProduct": "添加产品时出错: {statusCode} - {details}",
+  "errorAddingProductGeneral": "添加产品时发生意外错误: {error}",
+  "infoProductDeleted": "产品删除成功。",
+  "errorDeletingProduct": "删除产品时出错: {statusCode} - {details}",
+  "errorDeletingProductGeneral": "错误: {error}",
+  "infoItemDelivered": "产品已送达。",
+  "errorDeliveringItem": "送达过程中发生错误: {statusCode}",
+  "errorDeliveringItemGeneral": "送达错误: {error}",
+  "infoPagerAssigned": "传呼机已分配给订单。",
+  "errorAssigningPager": "传呼机分配错误: {statusCode}",
+  "errorAssigningPagerGeneral": "分配传呼机时出错: {error}",
+  "infoOrderCancelled": "订单取消成功。",
+  "errorCancellingOrder": "取消订单时出错: {statusCode} - {details}",
+  "errorCancellingOrderGeneral": "取消错误: {error}",
+  "dialogDeleteItemTitle": "删除产品",
+  "dialogDeleteItemContent": "您确定要从订单中移除此产品吗？",
+  "dialogButtonDelete": "删除",
+  "dialogQrTitle": "顾客订单链接 (单号: #{orderId})",
+  "dialogButtonClose": "关闭",
+  "errorOrderDetailsNotFound": "无法检索订单详情，或订单可能已被删除。",
+  "errorOrderDetailsUpdate": "订单详情更新错误: {error}",
+  "infoAddingProduct": "正在添加产品...",
+  "takeawayOrderDetailsTitle": "外卖订单详情 #{orderId}",
+  "categoryListPageTitle": "类别",
+  "tooltipAddCategory": "添加类别",
+  "tooltipEdit": "编辑",
+  "tooltipDelete": "删除",
+  "dialogDeleteCategoryTitle": "删除类别",
+  "dialogButtonCancel": "取消",
+  "dialogButtonDeleteConfirm": "是，删除",
+  "infoCategoryDeleted": "类别删除成功。",
+  "errorCategoryDelete": "删除类别时出错: {statusCode} - {details}",
+  "noCategoriesAdded": "尚未添加任何类别。",
+  "buttonAddFirstCategory": "添加第一个类别",
+  "errorFetchingCategories": "获取类别列表时发生错误: {statusCode}",
+  "unknownCategory": "未知类别",
+  "manageMenuPageTitle": "菜单管理",
+  "tooltipAddMenuItem": "添加新的菜单项",
+  "noMenuItemsAdded": "尚未添加任何菜单项。",
+  "buttonAddFirstMenuItem": "添加第一个菜单项",
+  "dialogDeleteMenuItemTitle": "删除菜单项",
+  "dialogDeleteMenuItemContent": "您确定要删除菜单项“{itemName}”吗？此操作无法撤销。",
+  "infoMenuItemDeleted": "菜单项删除成功。",
+  "errorDeletingMenuItem": "删除菜单项时出错: {statusCode} - {details}",
+  "errorDeletingMenuItemGeneral": "菜单项删除错误: {error}",
+  "errorFetchingMenuItems": "获取菜单项时发生错误: {statusCode}",
+  "addMenuItemTitle": "新菜单项",
+  "editMenuItemTitle": "编辑菜单项",
+  "menuItemPhotoNotSelected": "未选择照片。",
+  "buttonSelectOrChangePhoto": "选择/更改照片",
+  "menuItemNameLabel": "产品名称",
+  "menuItemNameValidator": "请输入产品名称",
+  "menuItemDescriptionLabel": "描述",
+  "menuItemDescriptionValidator": "请输入描述",
+  "menuCategoryLabel": "类别 (可选)",
+  "menuCategoryNotSelected": "未选择类别",
+  "infoMenuItemCreated": "菜单项创建成功！",
+  "infoMenuItemUpdated": "菜单项更新成功！",
+  "errorUploadingPhoto": "将照片上传到Firebase时发生错误。",
+  "errorUploadingPhotoGeneral": "Firebase上传错误: {error}",
+  "errorLoadingCategories": "加载类别失败: {statusCode}",
+  "errorLoadingCategoriesGeneral": "加载类别时出错: {error}",
+  "errorMenuItemGeneral": "操作期间出错: {statusCode} - {details}",
+  "errorMenuItemApi": "API请求错误: {error}",
+  "manageVariantPageTitle": "产品变体管理",
+  "errorFetchingVariants": "获取变体时发生错误: {statusCode}",
+  "errorFetchingVariantsGeneral": "获取变体错误: {error}",
+  "variantPhotoNotSelected": "未选择照片。",
+  "infoVariantAddedSuccess": "变体添加成功！",
+  "errorAddingVariant": "添加变体时出错: {statusCode} - {details}",
+  "errorAddingVariantGeneral": "API请求期间出错: {error}",
+  "dialogDeleteVariantTitle": "删除变体",
+  "infoVariantDeletedSuccess": "变体删除成功。",
+  "errorDeletingVariant": "删除变体时出错: {statusCode} - {details}",
+  "errorDeletingVariantGeneral": "变体删除错误: {error}",
+  "variantNameLabel": "变体名称 (例如: 大份)",
+  "variantNameValidator": "请输入变体名称",
+  "variantPriceLabel": "价格*",
+  "variantPriceValidator": "价格为必填项。",
+  "variantPriceValidatorInvalid": "请输入有效的价格。",
+  "variantIsExtraLabel": "这是附加选项吗？",
+  "buttonSelectPhoto": "选择照片",
+  "buttonAddVariant": "添加变体",
+  "currentVariantsTitle": "当前变体",
+  "noVariantsAdded": "此产品尚未添加任何变体。",
+  "variantExtraSuffix": " (附加项)",
+  "editVariantPageTitle": "编辑变体",
+  "variantPhotoNotUploaded": "照片未上传。",
+  "buttonChangePhoto": "更改照片",
+  "infoVariantUpdatedSuccess": "变体更新成功！",
+  "errorUpdatingVariant": "更新变体时出错: {statusCode} - {details}",
+  "errorUpdatingVariantGeneral": "API请求期间出错: {error}",
+  "homePageTitleBusinessOwner": "商家仪表板",
+  "homePageTitleStaff": "员工仪表板",
+  "homePageTitleKitchenStaff": "厨房仪表板",
+  "homeTabLabel": "首页",
+  "tableTabLabel": "桌位",
+  "takeawayTabLabel": "外卖",
+  "kitchenTabLabel": "厨房",
+  "kdsSetupTabLabel": "KDS设置",
+  "notificationsTabLabel": "通知",
+  "tooltipGoToHome": "前往首页",
+  "infoKdsScreensLoading": "正在加载KDS屏幕，请稍候...",
+  "infoCreateKdsScreenFirst": "请先创建一个KDS屏幕。您将被重定向到管理页面。",
+  "infoNoActiveKdsAvailable": "您无法访问任何活跃的KDS屏幕。",
+  "dialogSelectKdsScreenTitle": "选择KDS屏幕",
+  "infoKdsSelectionPending": "正在等待厨房标签页的KDS选择...",
+  "buttonCreateKdsScreen": "创建KDS屏幕",
+  "infoContentLoading": "内容正在加载，或者您没有访问权限。",
+  "pendingOrdersPageTitle": "未支付订单",
+  "errorFetchingPendingOrders": "获取订单时发生错误。",
+  "noPendingOrdersFound": "未找到未支付订单。",
+  "pendingOrderCardTitleTable": "桌位 {tableNumber}",
+  "pendingOrderCardTitleTakeaway": "外卖订单",
+  "editOrderTitleDetails": "订单详情",
+  "editOrderTitleTakeaway": "外卖订单 - {customerName}",
+  "editOrderTitleTable": "桌位 {tableNumber}",
+  "editOrderStatusCreditUnpaid": " (赊账 - 未支付)",
+  "editOrderStatusCreditPaid": " (赊账 - 已支付)",
+  "editOrderPagerAssigned": "已分配传呼机: {pagerInfo}",
+  "editOrderPagerNotAssigned": "未分配传呼机",
+  "buttonChange": "更改",
+  "buttonAssign": "分配",
+  "editOrderCreditNote": "赊账备注: {note}",
+  "editOrderTooltipAddProduct": "添加新产品",
+  "editOrderButtonCloseCreditPayment": "关闭赊账支付",
+  "editOrderStatusCreditPaymentReceived": "赊账支付已接收",
+  "scheduleTitle": "排班计划",
+  "scheduleErrorLoadingData": "加载数据错误: {error}",
+  "scheduleErrorFetchingShifts": "获取班次错误: {error}",
+  "scheduleErrorCreateShiftTemplateFirst": "请先创建一个班次模板。",
+  "scheduleTitleAssignShiftForDate": "为 {date} 分配班次",
+  "scheduleErrorNoStaffToAssign": "未找到可分配的员工。",
+  "scheduleStatusNoShiftAssigned": "未分配班次",
+  "scheduleTooltipRemoveShift": "移除班次",
+  "scheduleHintSelect": "选择...",
+  "scheduleErrorSelectAtLeastOneDay": "请从日历中至少选择一天。",
+  "scheduleSuccessMultiDayAssignment": "已为 {count} 天分配。",
+  "scheduleErrorMultiDayAssignment": "批量分配时出错: {error}",
+  "scheduleButtonMultiSelect": "多选",
+  "scheduleTooltipManageShiftTemplates": "管理班次模板",
+  "scheduleFabManageSelectedDays": "管理选定日期",
+  "scheduleFabManageDay": "管理日",
+  "scheduleTooltipAssignToSelectedDays": "分配给选定日期",
+  "scheduleTooltipAssignRemoveForDay": "为选定日期分配/移除班次",
+  "scheduleNoShiftsForDate": "{date} 无班次。",
+  "stockScreenTitle": "库存管理",
+  "stockScreenTooltipAddNew": "创建新库存记录",
+  "stockScreenNoStockItems": "未找到用于库存跟踪的产品。\n使用“+”按钮添加新记录。",
+  "stockMovementAddition": "库存增加 (采购)",
+  "stockMovementWastage": "损耗/损失",
+  "stockMovementAdjustmentIn": "数量调整 (盈余)",
+  "stockMovementAdjustmentOut": "数量调整 (亏损)",
+  "stockDialogMovementTitle": "库存变动",
+  "stockDialogQuantityLabel": "数量",
+  "stockDialogQuantityEntryLabel": "入库数量",
+  "stockDialogQuantityWastageLabel": "损耗数量",
+  "stockDialogQuantitySurplusLabel": "盈余数量",
+  "stockDialogQuantityDeficitLabel": "亏损数量",
+  "stockDialogErrorEnterQuantity": "请输入数量。",
+  "stockDialogErrorPositiveQuantity": "请输入有效的正数量。",
+  "stockDialogErrorQuantityExceeds": "提取数量不能超过当前库存 ({quantity})。",
+  "@stockDialogErrorQuantityExceeds": {
+    "placeholders": {
+      "quantity": {
+        "type": "String"
+      }
+    }
+  },
+  "stockDialogDescriptionLabel": "描述 (可选)",
+  "stockDialogSuccessMessage": "{movementName} 操作成功。",
+  "@stockDialogSuccessMessage": {
+    "placeholders": {
+      "movementName": {
+        "type": "String"
+      }
+    }
+  },
+  "stockDialogErrorMessage": "库存变动错误: {error}",
+  "@stockDialogErrorMessage": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "stockDialogErrorNoNewVariant": "未找到没有库存记录的新产品变体。",
+  "stockDialogCreateTitle": "创建新库存记录",
+  "stockDialogSelectVariantLabel": "选择产品变体",
+  "unknownVariant": "未知变体",
+  "unknownProduct": "产品",
+  "stockDialogErrorSelectVariant": "请选择一个变体。",
+  "stockDialogInitialQuantityLabel": "初始库存数量",
+  "stockDialogErrorValidQuantity": "请输入一个有效数量。",
+  "stockDialogCreateSuccess": "新库存记录创建成功。",
+  "stockDialogCreateError": "新库存记录错误: {error}",
+  "@stockDialogCreateError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "stockCardSettingsSaved": "设置已保存。",
+  "stockCardCurrentStock": "库存: {quantity}",
+  "@stockCardCurrentStock": {
+    "placeholders": {
+      "quantity": {
+        "type": "String"
+      }
+    }
+  },
+  "stockCardEnableTracking": "启用库存跟踪",
+  "stockCardAlertThresholdLabel": "警报阈值 (数量)",
+  "stockCardAlertThresholdHint": "例如: 50 (留空以禁用警报)",
+  "stockCardSaveSettingsButton": "保存设置",
+  "stockCardOtherActionsTooltip": "其他操作",
+  "stockCardHistoryButton": "库存历史记录",
+  "accountSettingsTitle": "帐户设置",
+  "unknownUser": "未知",
+  "accountSettingsErrorFetching": "获取帐户信息错误: {error}",
+  "@accountSettingsErrorFetching": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "photoUploadErrorFirebase": "无法将照片上传到Firebase。",
+  "accountSettingsSuccessPhotoUpdate": "个人资料照片更新成功。",
+  "accountSettingsErrorUploadingPhotoGeneric": "照片上传错误: {error}",
+  "@accountSettingsErrorUploadingPhotoGeneric": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "accountSettingsErrorNewPasswordsMismatch": "新密码不匹配。",
+  "accountSettingsSuccessUpdate": "帐户信息更新成功。",
+  "accountSettingsSuccessPasswordUpdate": "您的密码已成功更改。请重新登录。",
+  "accountSettingsSuccessEmailUpdate": "您的电子邮件地址已成功更新。",
+  "accountSettingsErrorUpdate": "更新错误: {error}",
+  "@accountSettingsErrorUpdate": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "accountSettingsEmailLabel": "电子邮件",
+  "accountSettingsPasswordChangeSectionTitle": "更改密码 (可选)",
+  "accountSettingsCurrentPasswordLabel": "当前密码",
+  "accountSettingsValidatorEnterCurrentPassword": "输入您当前的密码以更改它。",
+  "accountSettingsNewPasswordLabel": "新密码",
+  "accountSettingsValidatorEnterNewPassword": "输入您的新密码以更改它。",
+  "accountSettingsConfirmNewPasswordLabel": "确认新密码",
+  "accountSettingsValidatorConfirmNewPassword": "请重新输入您的新密码。",
+  "accountSettingsErrorPasswordsMismatch": "密码不匹配。",
+  "accountSettingsSaveChangesButton": "保存更改",
+  "reportsScreenTitle": "高级报告 - {filterName}",
+  "@reportsScreenTitle": {
+    "placeholders": {
+      "filterName": {
+        "type": "String"
+      }
+    }
+  },
+  "reportsFilterToday": "今天",
+  "reportsFilterThisWeek": "本周",
+  "reportsFilterThisMonth": "本月",
+  "reportsFilterThisYear": "今年",
+  "reportsFilterCustom": "自定义日期范围",
+  "reportsErrorSelectDateRange": "请选择一个自定义日期范围。",
+  "reportsErrorFetching": "获取报告时发生错误: {statusCode}",
+  "@reportsErrorFetching": {
+    "placeholders": {
+      "statusCode": {
+        "type": "String"
+      }
+    }
+  },
+  "reportsChartTitleHourly": "每小时营业额分布 ({date})",
+  "@reportsChartTitleHourly": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "reportsChartTitleDailyRange": "每日营业额 ({startDate} - {endDate})",
+  "@reportsChartTitleDailyRange": {
+    "placeholders": {
+      "startDate": {
+        "type": "String"
+      },
+      "endDate": {
+        "type": "String"
+      }
+    }
+  },
+  "reportsChartTitleDailyThisWeek": "每日营业额分布 (本周)",
+  "reportsChartTitleMonthlyRange": "每月营业额 ({startDate} - {endDate})",
+  "@reportsChartTitleMonthlyRange": {
+    "placeholders": {
+      "startDate": {
+        "type": "String"
+      },
+      "endDate": {
+        "type": "String"
+      }
+    }
+  },
+  "reportsChartTitleMonthlyThisMonth": "每月营业额 ({month} {year})",
+  "@reportsChartTitleMonthlyThisMonth": {
+    "placeholders": {
+      "month": {
+        "type": "String"
+      },
+      "year": {
+        "type": "String"
+      }
+    }
+  },
+  "reportsChartTitleMonthlyThisYear": "每月营业额 ({year})",
+  "@reportsChartTitleMonthlyThisYear": {
+    "placeholders": {
+      "year": {
+        "type": "String"
+      }
+    }
+  },
+  "reportsChartTitleMonthlyDefault": "每月营业额分布",
+  "reportsChartTitleNoData": "营业额图表 (无数据)",
+  "reportsSummaryHeaderProperty": "属性",
+  "reportsSummaryHeaderValue": "值",
+  "reportsSummaryTotalTurnover": "总营业额",
+  "reportsSummaryTotalOrders": "总订单数",
+  "reportsSummaryBestSelling": "最畅销",
+  "reportsSummaryLeastSelling": "最不畅销",
+  "reportsSummaryItemCount": "{count} 件",
+  "@reportsSummaryItemCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "reportsSummaryNoData": "-",
+  "reportsPickDateTooltip": "选择日期范围",
+  "reportsSelectedDateRange": "选定日期: {startDate} - {endDate}",
+  "@reportsSelectedDateRange": {
+    "placeholders": {
+      "startDate": {
+        "type": "String"
+      },
+      "endDate": {
+        "type": "String"
+      }
+    }
+  },
+  "pagerManagementTitle": "传呼机管理",
+  "pagerTooltipAdd": "添加/保存新传呼机",
+  "pagerTooltipScanBle": "扫描蓝牙设备",
+  "pagerTooltipRefreshList": "刷新列表",
+  "pagerStatusBle": "BT 状态: {status}",
+  "@pagerStatusBle": {
+    "placeholders": {
+      "status": {
+        "type": "String"
+      }
+    }
+  },
+  "pagerStatusBleWaiting": "正在等待蓝牙状态...",
+  "pagerNoDevicesFound": "系统中未注册传呼机。\n您可以使用“+”按钮或通过扫描添加。",
+  "pagerHeaderInUse": "使用中传呼机",
+  "pagerHeaderAvailable": "可用传呼机",
+  "pagerHeaderOtherStatus": "其他状态的传呼机",
+  "pagerCardDeviceId": "设备 ID: {id}",
+  "@pagerCardDeviceId": {
+    "placeholders": {
+      "id": {
+        "type": "String"
+      }
+    }
+  },
+  "pagerCardStatus": "状态: {status}",
+  "@pagerCardStatus": {
+    "placeholders": {
+      "status": {
+        "type": "String"
+      }
+    }
+  },
+  "pagerCardOrderId": "订单 ID: #{id}",
+  "@pagerCardOrderId": {
+    "placeholders": {
+      "id": {
+        "type": "String"
+      }
+    }
+  },
+  "pagerCardNotes": "备注: {notes}",
+  "@pagerCardNotes": {
+    "placeholders": {
+      "notes": {
+        "type": "String"
+      }
+    }
+  },
+  "pagerMenuSendTestNotification": "发送测试通知",
+  "pagerMenuMarkAsAvailable": "标记为可用",
+  "pagerMenuMarkAsCharging": "标记为充电中",
+  "pagerMenuMarkAsOutOfService": "标记为停止服务",
+  "pagerMenuDeleteFromSystem": "从系统中删除",
+  "pagerDialogDeleteTitle": "删除传呼机",
+  "pagerInfoDeviceDeleted": "传呼机已删除。",
+  "pagerErrorDeleting": "删除错误: {error}",
+  "@pagerErrorDeleting": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "pagerTestNotificationSuccess": "测试通知 ({pagerName}) 已发送。",
+  "@pagerTestNotificationSuccess": {
+    "placeholders": {
+      "pagerName": {
+        "type": "String"
+      }
+    }
+  },
+  "pagerTestNotificationFailure": "发送通知失败。",
+  "pagerDefaultDeviceName": "设备",
+  "pagerDialogUpdateStatusTitle": "更新状态",
+  "pagerDialogUpdateStatusContent": "您确定要将“{pagerName}”的状态更改为“{status}”吗？",
+  "@pagerDialogUpdateStatusContent": {
+    "placeholders": {
+      "pagerName": {
+        "type": "String"
+      },
+      "status": {
+        "type": "String"
+      }
+    }
+  },
+  "pagerButtonConfirmChange": "是，更改",
+  "pagerInfoStatusUpdated": "传呼机状态已更新。",
+  "pagerErrorStatusUpdate": "更新状态时出错: {error}",
+  "@pagerErrorStatusUpdate": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "pagerDialogAddTitle": "添加/保存新传呼机",
+  "pagerButtonScanning": "正在扫描...",
+  "pagerButtonScanAndSelect": "扫描并选择蓝牙设备",
+  "pagerDiscoveredDevicesTitle": "发现的蓝牙设备",
+  "pagerUnknownDevice": "未知设备",
+  "pagerInfoNoBleDevicesFound": "附近未找到蓝牙设备。",
+  "pagerLabelDeviceIdRequired": "设备 ID (MAC 地址)*",
+  "pagerValidatorDeviceIdRequired": "设备 ID 为必填项。",
+  "pagerLabelDeviceNameOptional": "设备名称 (可选)",
+  "pagerLabelNotesOptional": "备注 (可选)",
+  "pagerButtonAdd": "添加",
+  "pagerStatusAvailable": "可用",
+  "pagerStatusInUse": "使用中",
+  "pagerStatusCharging": "充电中",
+  "pagerStatusLowBattery": "低电量",
+  "pagerStatusOutOfService": "停止服务",
+  "createOrderErrorCannotTransfer": "此订单无法转移: {status}",
+  "@createOrderErrorCannotTransfer": {
+    "placeholders": {
+      "status": {
+        "type": "String"
+      }
+    }
+  },
+  "createOrderErrorAlreadyProcessed": "此订单已被处理、取消或完成。",
+  "createOrderTooltipGoHome": "首页",
+  "createOrderButtonRetry": "重试",
+  "manageTablesTitle": "桌位管理",
+  "manageTablesErrorLoading": "获取桌位信息时发生错误: {statusCode}",
+  "@manageTablesErrorLoading": {
+    "placeholders": {
+      "statusCode": {
+        "type": "String"
+      }
+    }
+  },
+  "manageTablesDialogAddTitle": "创建新桌位",
+  "manageTablesDialogEditTitle": "编辑桌位",
+  "manageTablesLabelTableNumber": "桌位号",
+  "manageTablesValidatorEnterNumber": "请输入桌位号",
+  "manageTablesValidatorInvalidNumber": "请输入有效的号码",
+  "manageTablesInfoCreated": "桌位创建成功！",
+  "manageTablesInfoUpdated": "桌位更新成功！",
+  "manageTablesErrorGeneric": "操作期间发生错误: {error}",
+  "@manageTablesErrorGeneric": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "manageTablesButtonCreate": "创建",
+  "manageTablesDialogDeleteTitle": "删除桌位",
+  "manageTablesDialogDeleteContent": "您确定要删除此桌位吗？此操作无法撤销。",
+  "manageTablesInfoDeleted": "桌位删除成功。",
+  "manageTablesErrorDeleting": "删除桌位时出错: {error}",
+  "@manageTablesErrorDeleting": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "manageTablesInfoGuestLinkCopied": "客人二维码链接已复制到剪贴板。",
+  "manageTablesErrorNoGuestLink": "此桌位未找到有效的客人链接。",
+  "manageTablesDialogQrTitle": "桌位 {tableNumber} 二维码",
+  "@manageTablesDialogQrTitle": {
+    "placeholders": {
+      "tableNumber": {
+        "type": "String"
+      }
+    }
+  },
+  "manageTablesErrorCreatingQr": "生成二维码时发生错误。",
+  "manageTablesTooltipAdd": "添加新桌位",
+  "manageTablesNoTablesFound": "尚未添加任何桌位。\n使用“+”按钮添加新桌位。",
+  "manageTablesCardTitle": "桌位 {tableNumber}",
+  "@manageTablesCardTitle": {
+    "placeholders": {
+      "tableNumber": {
+        "type": "String"
+      }
+    }
+  },
+  "manageTablesCardGuestLink": "客人链接:",
+  "manageTablesTooltipCopyLink": "复制链接",
+  "manageTablesTooltipShowQr": "显示二维码",
+  "notificationsPageTitle": "通知",
+  "connectionStatusWaiting": "正在等待连接状态...",
+  "connectionStatusConnected": "已连接到通知服务器。",
+  "connectionStatusConnectingOrDisconnected": "正在连接到通知服务器或已断开连接。",
+  "connectionStatusSocketError": "无法提供 Socket.IO 实例。",
+  "notificationTimestamp": "[{timestamp}] {message}",
+  "@notificationTimestamp": {
+    "placeholders": {
+      "timestamp": {
+        "type": "String"
+      },
+      "message": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationConnected": "成功连接到通知服务器。",
+  "notificationDisconnected": "与通知服务器断开连接。",
+  "notificationConnectionError": "连接到通知服务器时发生错误。",
+  "notificationSystemError": "通知系统中发生系统错误。",
+  "notificationDefaultOrderStatusUpdate": "订单状态已更新。",
+  "notificationDefaultWaitingListUpdate": "等待列表已更新。",
+  "notificationsNoNotifications": "暂无通知。",
+  "addCampaignTitle": "创建新促销活动",
+  "editCampaignTitle": "编辑促销活动",
+  "campaignNameLabel": "促销活动名称*",
+  "validatorRequiredField": "此字段为必填项。",
+  "campaignDescriptionLabel": "描述",
+  "campaignPriceLabel": "促销价格*",
+  "validatorInvalidPositivePrice": "请输入有效的正价格",
+  "campaignActiveLabel": "活跃促销活动",
+  "campaignNoStartDate": "无开始日期",
+  "campaignStartDateLabel": "开始: {date}",
+  "@campaignStartDateLabel": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "campaignNoEndDate": "无结束日期",
+  "campaignEndDateLabel": "结束: {date}",
+  "@campaignEndDateLabel": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "campaignSelectImageButton": "选择促销活动图片",
+  "campaignImageNotSelected": "未选择图片",
+  "campaignErrorAddItem": "您必须至少为促销活动添加一个产品。",
+  "campaignErrorSubmit": "保存促销活动时发生错误: {error}",
+  "@campaignErrorSubmit": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "campaignSuccessCreated": "促销活动创建成功。",
+  "campaignSuccessUpdated": "促销活动更新成功。",
+  "campaignCreateButton": "创建促销活动",
+  "campaignUpdateButton": "更新促销活动",
+  "newOrderTitle": "新订单 - 桌位 {tableNumber}",
+  "@newOrderTitle": {
+    "placeholders": {
+      "tableNumber": {
+        "type": "String"
+      }
+    }
+  },
+  "newOrderLoadingInitialData": "无法加载初始数据。",
+  "newOrderLoadingData": "正在加载数据...",
+  "newOrderWaitingForTableType": "正在等待桌位类型...",
+  "newOrderTableTypeSingle": "单个",
+  "newOrderTableTypeSplit": "拆分",
+  "newOrderNoOwnersEntered": "未输入桌位所有者。",
+  "newOrderOwnersList": "所有者: {owners}",
+  "@newOrderOwnersList": {
+    "placeholders": {
+      "owners": {
+        "type": "String"
+      }
+    }
+  },
+  "newOrderEditOwnersTooltip": "编辑桌位所有者",
+  "newOrderCreateOrderButton": "创建订单",
+  "newOrderErrorAddAtLeastOneProduct": "请至少添加一个产品。",
+  "newOrderErrorMinOwnersForSplit": "对于拆分桌位，必须至少输入2个桌位所有者名称。",
+  "newOrderSuccess": "订单创建成功。",
+  "newOrderSuccessOffline": "订单离线保存成功。连接建立后将发送。",
+  "newOrderErrorGeneric": "创建订单时发生错误 ({statusCode}): {details}",
+  "@newOrderErrorGeneric": {
+    "placeholders": {
+      "statusCode": {
+        "type": "String"
+      },
+      "details": {
+        "type": "String"
+      }
+    }
+  },
+  "newOrderErrorCatch": "订单创建错误: {error}",
+  "@newOrderErrorCatch": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "dialogTableTypeTitle": "桌位类型选择",
+  "dialogTableTypeContent": "此桌位将由单人使用还是多人拆分使用？",
+  "dialogTableTypeButtonSingle": "单人桌",
+  "dialogTableTypeButtonSplit": "拆分桌",
+  "dialogTableOwnersTitle": "桌位所有者",
+  "dialogTableOwnersHint": "所有者名称 {number}",
+  "@dialogTableOwnersHint": {
+    "placeholders": {
+      "number": {
+        "type": "String"
+      }
+    }
+  },
+  "dialogTableOwnersAddButton": "添加桌位所有者",
+  "dialogButtonConfirmAction": "确认",
+  "completedOrdersTitle": "已完成订单",
+  "completedOrdersUnknown": "未知",
+  "completedOrdersInvalidDate": "无效日期",
+  "completedOrdersErrorLoadMore": "加载更多订单失败。",
+  "completedOrdersNoOrdersFound": "未找到已完成订单。",
+  "paymentTypeCreditCard": "信用卡",
+  "paymentTypeCash": "现金",
+  "paymentTypeFoodCard": "餐卡",
+  "paymentTypeUnknown": "未知",
+  "orderCardTitleTable": "桌位 {tableNumber} - 订单 #{orderId}",
+  "@orderCardTitleTable": {
+    "placeholders": {
+      "tableNumber": {
+        "type": "String"
+      },
+      "orderId": {
+        "type": "String"
+      }
+    }
+  },
+  "orderCardTitleTakeaway": "外卖 - 订单 #{orderId}",
+  "@orderCardTitleTakeaway": {
+    "placeholders": {
+      "orderId": {
+        "type": "String"
+      }
+    }
+  },
+  "orderCardDetailsButton": "详情",
+  "manageStaffTitle": "员工管理",
+  "manageStaffErrorFetching": "获取员工列表时发生错误: {error}",
+  "@manageStaffErrorFetching": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "manageStaffTooltipAdd": "添加新员工",
+  "manageStaffNoStaff": "尚未添加任何员工。",
+  "manageStaffUnknownStaff": "未知员工",
+  "manageStaffNoEmail": "无电子邮件",
+  "manageStaffDialogDeleteTitle": "删除员工",
+  "manageStaffDialogDeleteContent": "您确定要删除此员工吗？此操作无法撤销。",
+  "manageStaffSuccessDelete": "员工删除成功。",
+  "manageStaffErrorDelete": "删除员工时出错: {error}",
+  "@manageStaffErrorDelete": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "orderDetailTitle": "订单 #{orderId} 详情",
+  "@orderDetailTitle": {
+    "placeholders": {
+      "orderId": {
+        "type": "String"
+      }
+    }
+  },
+  "durationNotCalculated": "未计算",
+  "durationZeroSeconds": "0 秒",
+  "timelineUnitHour": "小时",
+  "timelineUnitMinute": "分钟",
+  "timelineUnitSecond": "秒",
+  "orderDetailCardGeneralInfo": "一般信息",
+  "orderDetailLabelId": "订单 ID:",
+  "orderDetailLabelCustomer": "顾客:",
+  "orderDetailLabelType": "订单类型:",
+  "orderDetailTypeTable": "桌位",
+  "orderDetailTypeTakeaway": "外卖",
+  "orderDetailLabelTableNumber": "桌位号:",
+  "orderDetailLabelDate": "日期:",
+  "dataNotAvailable": "-",
+  "orderDetailCardTimeline": "订单时间轴",
+  "timelineApprovalDuration": "批准时间",
+  "timelineKitchenDuration": "厨房准备时间",
+  "timelineWaiterPickupDuration": "服务员取餐时间",
+  "timelineCustomerDeliveryDuration": "顾客送达时间",
+  "timelineTotalDuration": "总时长",
+  "takeawayOrderApproved": "订单已批准。",
+  "takeawayErrorApproving": "批准错误: {error}",
+  "@takeawayErrorApproving": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "takeawayDialogRejectTitle": "拒绝订单",
+  "takeawayDialogRejectContent": "您确定要拒绝顾客添加的产品吗？",
+  "takeawayDialogButtonReject": "是，拒绝",
+  "takeawayOrderRejected": "订单已拒绝。",
+  "takeawayErrorRejecting": "拒绝错误: {error}",
+  "@takeawayErrorRejecting": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "takeawayDialogCancelContent": "您确定要取消此订单吗？",
+  "takeawayErrorCancellingWithCode": "取消订单时出错: {statusCode}",
+  "@takeawayErrorCancellingWithCode": {
+    "placeholders": {
+      "statusCode": {
+        "type": "String"
+      }
+    }
+  },
+  "businessSettingsSectionLocalization": "区域设置",
+  "@businessSettingsSectionLocalization": {
+    "description": "The title of the currency and timezone section in business settings."
+  },
+  "setupWizardSettingsSaved": "设置已保存",
+  "manageShiftsNoShiftsFound": "尚未创建任何班次。",
+  "defaultCampaignCategoryName": "促销活动",
+  "@defaultCampaignCategoryName": {
+    "description": "The default category name where campaign products are automatically added."
+  },
+  "campaignKdsAssignmentTitle": "需要厨房显示器",
+  "@campaignKdsAssignmentTitle": {
+    "description": "Dialog title indicating that a KDS needs to be assigned to the campaign category."
+  },
+  "campaignKdsAssignmentPrompt": "类别“{campaignCategoryName}”尚未分配厨房显示器。您想现在进行分配以使此促销活动出现在厨房中吗？",
+  "@campaignKdsAssignmentPrompt": {
+    "description": "Text to inform and guide the user to assign a KDS to the campaign category.",
+    "placeholders": {
+      "campaignCategoryName": {
+        "type": "String",
+        "example": "Campaigns"
+      }
+    }
+  },
+  "dialogButtonAssignNow": "立即分配",
+  "@dialogButtonAssignNow": {
+    "description": "Button text to redirect the user to the KDS assignment screen."
+  },
+  "dialogDeleteCategoryContent": "您确定要删除此类别及其下的所有产品吗？此操作无法撤销。",
+  "@dialogDeleteCategoryContent": {
+    "description": "Dialog content for category deletion confirmation.",
+    "placeholders": {
+      "categoryName": {
+        "type": "String",
+        "example": "Hot Drinks"
+      }
+    }
+  },
+  "subscriptionErrorWeb": "应用内订阅目前仅通过移动应用程序提供。",
+  "subscriptionPurchasing": "正在处理购买...",
+  "planBasic": "基础套餐",
+  "planSilver": "白银套餐",
+  "planGold": "黄金套餐",
+  "maxTables": "最大桌位数",
+  "maxStaff": "最大员工数",
+  "maxKdsScreens": "最大 KDS 屏幕数",
+  "maxCategories": "最大类别数",
+  "maxMenuItems": "最大菜单项数",
+  "maxVariants": "最大产品变体数",
+  "planMonthly": "月",
+  "planYearly": "年",
+  "subscriptionRestoring": "正在恢复购买...",
+  "subscriptionRestoreButton": "恢复",
+  "@manageStaffErrorLimitExceeded": {
+    "description": "Subscription staff limit reached error message",
+    "placeholders": {
+      "limit": {
+        "type": "String",
+        "example": "5"
+      }
+    }
+  },
+  "@takeawayOrderDetailsTitle": {
+    "description": "Takeaway order details modal title",
+    "placeholders": {
+      "orderId": {
+        "type": "String"
+      }
+    }
+  },
+  "shiftEndedDialogTitle": "班次结束",
+  "@shiftEndedDialogTitle": {
+    "description": "Title for the dialog shown when a staff member's shift ends."
+  },
+  "shiftEndedDialogContent": "您的活跃工作班次已结束。请退出登录。您不能再执行新操作。",
+  "@shiftEndedDialogContent": {
+    "description": "Content for the shift end dialog."
+  },
+  "logoutButtonText": "退出登录",
+  "@logoutButtonText": {
+    "description": "Text for the logout button."
+  },
+  "shiftEndedLabel": "班次已结束",
+  "shiftCountdownLabel": "剩余 {minutes} 分 {seconds} 秒",
+  "@shiftCountdownLabel": {
+    "placeholders": {
+      "minutes": {},
+      "seconds": {}
+    }
+  },
+  "shiftLabel": "班次",
+  "setupCategoriesAddFromTemplateButton": "从模板添加",
+  "setupCategoriesTemplateDialogTitle": "类别模板",
+  "setupCategoriesTemplateAddButton": "已选择 {count} 个模板 - 创建",
+  "setupCategoriesSelectFromTemplate": "从模板选择类别",
+  "setupCategoriesNoTemplatesFound": "未找到模板",
+  "kdsScreenLabelRequired": "KDS 屏幕 (必填)",
+  "passwordResetConfirmSuccessMessage": "您的密码已成功重置。请使用新密码登录。",
+  "passwordResetConfirmInstruction": "输入发送到您邮箱的6位代码和您的新密码。",
+  "passwordResetConfirmCodeLabel": "重置代码",
+  "passwordResetConfirmCodeValidator": "请输入重置代码。",
+  "passwordResetConfirmCodeLengthValidator": "代码必须是6位数字。",
+  "passwordResetConfirmResetButton": "重置密码",
+  "createCategoryScreenTitle": "创建产品类别",
+  "createCategoryErrorLoadingParents": "加载父类别时出错: {error}",
+  "@createCategoryErrorLoadingParents": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "createCategoryPhotoNotSelected": "未选择照片。",
+  "createCategorySuccess": "类别创建成功！",
+  "createCategoryError": "创建类别时出错: {statusCode} - {details}",
+  "@createCategoryError": {
+    "placeholders": {
+      "statusCode": {
+        "type": "String"
+      },
+      "details": {
+        "type": "String"
+      }
+    }
+  },
+  "createCategoryButton": "创建类别",
+  "stockHistoryScreenTitle": "{variantName} - 库存历史记录",
+  "@stockHistoryScreenTitle": {
+    "placeholders": {
+      "variantName": {
+        "type": "String"
+      }
+    }
+  },
+  "stockHistoryFiltersTitle": "筛选器:",
+  "stockHistorySelectDateRange": "选择日期范围",
+  "stockHistoryDateRangeDisplay": "{startDate} - {endDate}",
+  "@stockHistoryDateRangeDisplay": {
+    "placeholders": {
+      "startDate": {
+        "type": "String"
+      },
+      "endDate": {
+        "type": "String"
+      }
+    }
+  },
+  "stockHistoryMovementTypeLabel": "变动类型",
+  "stockHistoryMovementTypeAll": "全部",
+  "stockHistoryMovementTypeInitial": "初始库存",
+  "stockHistoryMovementTypeSale": "销售",
+  "stockHistoryMovementTypeReturn": "顾客退货",
+  "stockHistoryMovementTypeAdjIn": "数量调整 (盈余)",
+  "stockHistoryMovementTypeAdjOut": "数量调整 (亏损)",
+  "stockHistoryMovementTypeWastage": "损耗/损失",
+  "stockHistoryMovementTypeManual": "手动调整",
+  "stockHistoryNoMovements": "未找到库存变动记录。",
+  "stockHistoryMovementTitle": "{movementType}: {change}",
+  "@stockHistoryMovementTitle": {
+    "placeholders": {
+      "movementType": {
+        "type": "String"
+      },
+      "change": {
+        "type": "String"
+      }
+    }
+  },
+  "stockHistoryQuantityChange": "之前: {before} → 之后: {after}",
+  "@stockHistoryQuantityChange": {
+    "placeholders": {
+      "before": {
+        "type": "String"
+      },
+      "after": {
+        "type": "String"
+      }
+    }
+  },
+  "stockHistoryDateLabel": "日期: {date}",
+  "@stockHistoryDateLabel": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "stockHistoryUserLabel": "用户: {username}",
+  "@stockHistoryUserLabel": {
+    "placeholders": {
+      "username": {
+        "type": "String"
+      }
+    }
+  },
+  "stockHistoryDescriptionLabel": "描述: {description}",
+  "@stockHistoryDescriptionLabel": {
+    "placeholders": {
+      "description": {
+        "type": "String"
+      }
+    }
+  },
+  "stockHistoryRelatedOrderLabel": "相关订单: #{orderId}",
+  "@stockHistoryRelatedOrderLabel": {
+    "placeholders": {
+      "orderId": {
+        "type": "String"
+      }
+    }
+  },
+  "manageVariantListScreenTitle": "菜单项变体",
+  "manageVariantListItemId": "ID: {id}",
+  "manageVariantListErrorLoading": "加载菜单项时发生错误。",
+  "@manageVariantListItemId": {
+    "placeholders": {
+      "id": {
+        "type": "String"
+      }
+    }
+  },
+  "pagerAssignmentScreenTitle": "选择空闲传呼机",
+  "pagerAssignmentTooltipRefresh": "刷新列表",
+  "pagerAssignmentErrorNoAvailable": "当前没有可用的合适空闲传呼机。",
+  "pagerAssignmentErrorNoRegistered": "系统中未注册传呼机。",
+  "pagerAssignmentErrorFetch": "获取空闲传呼机错误: {error}",
+  "@pagerAssignmentErrorFetch": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "pagerAssignmentDefaultError": "没有可分配的空闲传呼机。",
+  "pagerAssignmentStatusLabel": "状态: {status}",
+  "@pagerAssignmentStatusLabel": {
+    "placeholders": {
+      "status": {
+        "type": "String"
+      }
+    }
+  },
+  "paymentProcessingScreenTitle": "支付流程",
+  "paymentProcessingTableLabel": "桌位: {tableNumber}",
+  "@paymentProcessingTableLabel": {
+    "placeholders": {
+      "tableNumber": {
+        "type": "String"
+      }
+    }
+  },
+  "paymentProcessingSelectTypeLabel": "选择支付类型:",
+  "paymentProcessingSuccess": "支付成功完成！",
+  "paymentProcessingError": "完成支付时发生错误。",
+  "setupCategoriesErrorSelectKds": "请选择类别将显示的KDS屏幕。",
+  "setupCategoriesSuccessAdded": "“{categoryName}”类别已成功添加。",
+  "setupCategoriesDeleteDialogContent": "您确定要删除“{categoryName}”类别及其（如果存在）所有子类别吗？此操作将移除类别中的产品链接。",
+  "setupCategoriesInfoDeleted": "“{categoryName}”类别已删除。",
+  "setupCategoriesErrorDeleting": "删除类别错误: {error}",
+  "setupCategoriesDescription": "通过对订单和产品进行分类来组织您的菜单。",
+  "setupCategoriesMainCategory": "主类别",
+  "setupCategoriesKdsLoading": "正在加载KDS屏幕...",
+  "setupCategoriesErrorDefineKdsFirst": "请先定义一个KDS屏幕。",
+  "setupCategoriesLabelDisplayKds": "显示 KDS 屏幕*",
+  "setupCategoriesHintSelectKds": "选择一个 KDS 屏幕",
+  "setupCategoriesValidatorSelectKds": "请选择一个 KDS 屏幕。",
+  "setupCategoriesSelectImageLabel": "选择类别图片\n(可选)",
+  "setupCategoriesAddButton": "添加类别",
+  "setupCategoriesAddedTitle": "已添加类别",
+  "setupCategoriesSubtitleParent": " (父类别: {parentName})",
+  "setupCategoriesSubtitleKdsName": " (KDS: {kdsName})",
+  "setupCategoriesSubtitleKdsId": " (KDS ID: {kdsId})",
+  "setupCategoriesKdsNotAssigned": "未分配 KDS",
+  "setupCategoriesDeleteTooltip": "删除类别",
+  "setupCategoriesDeleteFallbackName": "此类别",
+  "setupStockErrorEnterQuantity": "{itemName} - {variantName} 未输入数量。",
+  "setupStockErrorInvalidQuantity": "请为 {itemName} - {variantName} 输入有效数量。",
+  "setupStockSuccessUpdated": "{itemName} - {variantName} 的库存已更新: {quantity}",
+  "setupStockErrorUpdating": "更新 {itemName} - {variantName} 库存时出错: {error}",
+  "setupStockUnknownProduct": "未知产品",
+  "setupStockErrorNoVariants": "请在之前的步骤中创建产品和变体以进行库存跟踪。",
+  "setupStockDescription": "输入产品的初始库存数量。您可以稍后完成此步骤。",
+  "setupStockNoStockEntered": "尚未输入库存。",
+  "setupStockLastUpdate": "上次更新: {date}",
+  "dateTimeFormat": "dd.MM.yy HH:mm",
+  "setupStockQuantityHint": "数量",
+  "setupKdsErrorLoadingExisting": "无法加载现有屏幕: {error}",
+  "setupKdsDefaultKitchen": "厨房",
+  "setupKdsDefaultBar": "吧台",
+  "setupKdsErrorEnterOneName": "请至少输入一个有效的屏幕名称。",
+  "setupKdsSuccessCreated": "已创建 {count} 个新 KDS 屏幕。",
+  "setupKdsDeleteDialogTitle": "删除屏幕",
+  "setupKdsDeleteDialogContent": "您确定要删除名为“{screenName}”的屏幕吗？",
+  "setupKdsInfoDeleted": "“{screenName}”已删除。",
+  "setupKdsErrorDeleting": "删除错误: {error}",
+  "setupKdsEditDialogTitle": "编辑屏幕",
+  "setupKdsEditDialogNameLabel": "屏幕名称",
+  "setupKdsEditDialogActiveLabel": "活跃",
+  "setupKdsErrorUpdating": "更新错误: {error}",
+  "setupKdsDescription": "您想将订单流程划分成多少个屏幕？ (例如: 厨房、吧台、糕点房)",
+  "setupKdsNewLabel": "新屏幕数量*",
+  "setupKdsScreenNameLabel": "屏幕 {number} 名称*",
+  "setupKdsScreenNameValidator": "屏幕名称不能为空。",
+  "setupKdsAddButton": "添加新屏幕",
+  "setupKdsExistingTitle": "现有 KDS 屏幕",
+  "setupKdsNoScreensYet": "尚未创建 KDS 屏幕。",
+  "setupKdsStatusLabel": "状态: {status}",
+  "setupKdsStatusActive": "活跃",
+  "setupKdsStatusInactive": "非活跃",
+  "setupTablesErrorLoadingExisting": "加载现有桌位时发生错误。",
+  "setupTablesSuccessCreated": "已成功创建 {count} 个新桌位。\n总桌位数: {total}",
+  "setupTablesDescription": "输入您场所的总桌位数，立即创建所有桌位。您可以在完成设置屏幕后查看每个桌位自动生成的二维码菜单。",
+  "setupTablesLabelQuantity": "要创建的桌位数",
+  "setupTablesButtonCreate": "创建桌位",
+  "setupTablesLoadingExisting": "正在加载现有桌位...",
+  "setupTablesTotalCreated": "已创建总桌位数: {count}",
+  "setupMenuItemsErrorSelectCategory": "请为产品选择一个类别。",
+  "setupMenuItemsSuccessAdded": "“{productName}”产品已成功添加。",
+  "setupMenuItemsInfoDeleted": "“{productName}”产品已删除。",
+  "setupMenuItemsDescription": "添加您的菜单项。您可以在下一步中添加价格和变体。",
+  "setupMenuItemsNameLabel": "产品名称*",
+  "setupMenuItemsNameValidator": "产品名称为必填项。",
+  "setupMenuItemsDescriptionLabel": "描述 (可选)",
+  "setupMenuItemsLoadingCategories": "正在加载类别...",
+  "setupMenuItemsErrorCreateCategoryFirst": "请先创建一个类别，或返回上一步。",
+  "setupMenuItemsSelectCategoryLabel": "选择类别*",
+  "setupMenuItemsSelectCategoryValidator": "请选择一个类别。",
+  "setupMenuItemsSelectImageLabel": "选择产品图片\n(可选)",
+  "setupMenuItemsAddButton": "添加产品",
+  "setupMenuItemsAddedTitle": "已添加产品",
+  "setupMenuItemsNoCategory": "未分类",
+  "setupMenuItemsDeleteTooltip": "删除产品",
+  "setupVariantsErrorLoadingMenuItems": "加载菜单项错误: {error}",
+  "setupVariantsErrorLoadingVariants": "加载变体错误: {error}",
+  "setupVariantsErrorSelectMainProductFirst": "请先选择一个主要产品。",
+  "setupVariantsSuccessAdded": "“{variantName}”变体已成功添加。",
+  "setupVariantsLoadingMainProducts": "正在加载主要产品...",
+  "setupVariantsErrorCreateMainProductFirst": "请先创建一个主要产品 (上一步)。",
+  "setupVariantsLabelSelectMainProduct": "要添加变体的主要产品*",
+  "setupVariantsValidatorSelectMainProduct": "请选择一个主要产品。",
+  "setupVariantsTitleAddNew": "添加新变体: {productName}",
+  "setupVariantsLabelVariantName": "变体名称* (例如: 大份、辣味)",
+  "setupVariantsLabelSelectImage": "选择变体图片\n(可选)",
+  "setupVariantsTitleAddedFor": "已为 {productName} 添加的变体",
+  "setupVariantsLoading": "正在加载变体...",
+  "setupVariantsHintSelectProductToView": "选择一个主要产品以查看其变体。",
+  "setupVariantsNoVariantsForProduct": "尚未为 {productName} 添加变体。",
+  "homeMenuStaffSchedule": "员工排班",
+  "homeMenuKds": "厨房显示系统",
+  "homeMenuKdsSettings": "KDS 设置",
+  "homeMenuGeneralReport": "一般报告",
+  "homeMenuStaffPerformance": "员工绩效",
+  "homeMenuCreditSales": "赊账销售",
+  "homeMenuStaffManagement": "员工管理",
+  "homeMenuMenuItems": "菜单项",
+  "homeMenuProductVariants": "产品变体",
+  "homeMenuStockManagement": "库存管理",
+  "homeMenuTableManagement": "桌位管理",
+  "homeMenuCategoryManagement": "类别管理",
+  "homeMenuCampaignManagement": "促销活动管理",
+  "homeMenuPaidOrders": "已支付订单",
+  "homeMenuActiveTableOrders": "活跃桌位订单",
+  "homeMenuActiveTakeawayOrders": "活跃外卖订单",
+  "homeMenuWaitingCustomers": "等待中的顾客",
+  "homeMenuPagerManagement": "传呼机管理",
+  "homeMenuPrinterSettings": "打印机设置",
+  "homeMenuAccountSettings": "帐户设置",
+  "dialogTransferErrorNoEmptyTables": "未找到适合转移的空闲桌位！",
+  "dialogTransferTitle": "桌位转移",
+  "dialogTransferContent": "转移桌位 {tableNumber} 的订单吗？",
+  "@dialogTransferContent": {
+    "placeholders": {
+      "tableNumber": {
+        "type": "String"
+      }
+    }
+  },
+  "dialogTransferDropdownLabel": "选择新桌位",
+  "dialogTransferButtonTransfer": "转移",
+  "takeawayCardErrorItemPickup": "无法将产品标记为已取走 (代码: {statusCode})",
+  "@takeawayCardErrorItemPickup": {
+    "placeholders": {
+      "statusCode": {
+        "type": "String"
+      }
+    }
+  },
+  "takeawayCardErrorItemPickupGeneric": "取走产品时发生错误: {error}",
+  "@takeawayCardErrorItemPickupGeneric": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "takeawayCardTooltipDelivered": "已送达顾客",
+  "takeawayCardTooltipMarkAsPickedUp": "标记为已取走",
+  "takeawayCardTooltipDeliverToCustomer": "送达顾客",
+  "kdsStatusWaitingForApproval": "等待批准",
+  "takeawayCardStatusSyncPending": "等待同步...",
+  "buttonApprove": "批准",
+  "buttonReject": "拒绝",
+  "takeawayCardTooltipPagerInfo": "已分配传呼机: {pagerInfo}",
+  "@takeawayCardTooltipPagerInfo": {
+    "placeholders": {
+      "pagerInfo": {
+        "type": "String"
+      }
+    }
+  },
+  "takeawayCardTooltipAssignPager": "分配传呼机",
+  "paymentTypeCredit": "赊账",
+  "waitingCustomerDialogEditTitle": "编辑顾客",
+  "waitingCustomerDialogNameLabel": "姓名 姓氏*",
+  "waitingCustomerDialogNameValidator": "姓名不能为空",
+  "waitingCustomerDialogPhoneLabel": "电话",
+  "waitingCustomerDialogPartySizeLabel": "人数*",
+  "waitingCustomerDialogPartySizeValidatorRequired": "人数不能为空",
+  "waitingCustomerDialogPartySizeValidatorPositive": "请输入有效的正数",
+  "waitingCustomerDialogNotesLabel": "备注 (可选)",
+  "waitingCustomerDialogWaitingLabel": "等待中",
+  "waitingCustomerDialogDeleteTitle": "删除顾客",
+  "waitingCustomerDialogDeleteContent": "您确定要删除 ID 为 {customerId} 的顾客吗？",
+  "@waitingCustomerDialogDeleteContent": {
+    "placeholders": {
+      "customerId": {
+        "type": "String"
+      }
+    }
+  },
+  "addCustomerFormNameLabel": "姓名 姓氏*",
+  "addCustomerFormAddButton": "添加顾客",
+  "waitingCustomerTableWaitingTime": "{minutes} 分钟",
+  "@waitingCustomerTableWaitingTime": {
+    "placeholders": {
+      "minutes": {
+        "type": "String"
+      }
+    }
+  },
+  "waitingCustomerTableNoCustomers": "没有等待中的顾客。",
+  "waitingCustomerTableColOrder": "序号",
+  "waitingCustomerTableColName": "姓名",
+  "waitingCustomerTableColPhone": "电话",
+  "waitingCustomerTableColWaitingTime": "等待\n时间",
+  "waitingCustomerTableColActions": "操作",
+  "multiDayShiftDialogTitle": "为 {count} 天分配",
+  "@multiDayShiftDialogTitle": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "multiDayShiftDialogSelectedDatesLabel": "选定日期: ",
+  "multiDayShiftDialogStep1": "1. 选择员工:",
+  "multiDayShiftDialogStep2": "2. 选择班次:",
+  "multiDayShiftDialogHint": "选择一个班次模板...",
+  "multiDayShiftDialogValidator": "请选择一个班次。",
+  "waitingCustomerButtonLabel": "等待中 ({count} 人)",
+  "@waitingCustomerButtonLabel": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationEventGuestOrderPendingApproval": "客人订单等待批准",
+  "notificationEventOrderPendingApproval": "注册用户订单等待批准",
+  "notificationEventExistingOrderNeedsReapproval": "现有订单需要重新批准",
+  "notificationEventNewApprovedOrder": "新的已批准订单",
+  "notificationEventOrderApprovedForKitchen": "订单已发送至厨房",
+  "notificationEventOrderPreparingUpdate": "订单正在准备中",
+  "notificationEventOrderReadyForPickupUpdate": "订单在厨房准备就绪",
+  "notificationEventOrderPickedUpByWaiter": "服务员已取走订单",
+  "notificationEventOrderOutForDeliveryUpdate": "订单准备交付",
+  "notificationEventOrderItemDelivered": "产品已交付",
+  "notificationEventOrderFullyDelivered": "订单完全交付",
+  "notificationEventOrderCompletedUpdate": "订单完成",
+  "notificationEventOrderCancelledUpdate": "订单取消",
+  "notificationEventOrderRejectedUpdate": "订单拒绝",
+  "notificationEventOrderUpdated": "订单更新",
+  "notificationEventOrderItemAdded": "订单中添加了产品",
+  "notificationEventOrderItemRemoved": "订单中移除了产品",
+  "notificationEventOrderItemUpdated": "订单产品更新",
+  "notificationEventOrderTransferred": "订单转移到另一个桌位",
+  "notificationEventWaitingCustomerAdded": "新的等待中顾客",
+  "notificationEventWaitingCustomerUpdated": "等待中顾客更新",
+  "notificationEventWaitingCustomerRemoved": "等待中顾客已移除",
+  "notificationEventStockAdjusted": "库存已调整",
+  "notificationEventPagerStatusUpdated": "传呼机状态已更新",
+  "orderStatusPendingApproval": "等待批准",
+  "orderStatusApproved": "已批准",
+  "orderStatusPreparing": "准备中",
+  "orderStatusReadyForPickup": "准备取走",
+  "orderStatusReadyForDelivery": "准备交付",
+  "orderStatusCompleted": "已完成",
+  "orderStatusPendingSync": "等待同步",
+  "unknown": "未知",
+  "creditPaymentTitle": "赊账记录",
+  "creditPaymentValidationError": "姓名和电话字段不能为空。",
+  "creditPaymentSuccess": "赊账记录创建成功！",
+  "creditPaymentErrorWithDetails": "创建赊账记录时发生错误: {statusCode} - {details}",
+  "creditPaymentCustomerNameLabel": "顾客姓名 姓氏*",
+  "creditPaymentPhoneLabel": "电话*",
+  "creditPaymentNotesLabel": "备注 (可选)",
+  "creditPaymentSaveButton": "保存为赊账",
+  "orderItemQuantity": "数量: {count}",
+  "@orderItemQuantity": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "orderItemExtrasLabel": "附加项:",
+  "orderItemUnknownExtra": "未知附加项",
+  "orderItemTableOwner": "桌位所有者: {owner}",
+  "@orderItemTableOwner": {
+    "placeholders": {
+      "owner": {
+        "type": "String"
+      }
+    }
+  },
+  "orderItemStatusDelivered": "已交付",
+  "orderItemTooltipAddExtra": "添加附加项",
+  "orderItemTooltipRemove": "移除",
+  "kdsStatusDisplayNoActionNeeded": "{kdsName}: 无需操作",
+  "@kdsStatusDisplayNoActionNeeded": {
+    "description": "Title indicating that no action is required for this order on the KDS screen.",
+    "placeholders": {
+      "kdsName": {
+        "type": "String",
+        "example": "Kitchen"
+      }
+    }
+  },
+  "kdsStatusDisplaySentToKitchen": "{kdsName}: 已发送至厨房",
+  "@kdsStatusDisplaySentToKitchen": {
+    "description": "Title indicating that the order has been newly sent to the relevant KDS screen.",
+    "placeholders": {
+      "kdsName": {
+        "type": "String",
+        "example": "Kitchen"
+      }
+    }
+  },
+  "kdsStatusDisplayPreparing": "{kdsName}: {readyCount}/{totalCount} 个产品正在准备中",
+  "@kdsStatusDisplayPreparing": {
+    "description": "Title showing the number of items in the preparation phase on the KDS screen.",
+    "placeholders": {
+      "kdsName": {
+        "type": "String",
+        "example": "Bar"
+      },
+      "readyCount": {
+        "type": "String",
+        "example": "1"
+      },
+      "totalCount": {
+        "type": "String",
+        "example": "3"
+      }
+    }
+  },
+  "kdsStatusDisplayReadyForPickup": "{kdsName}: 所有产品已准备就绪，等待服务员",
+  "@kdsStatusDisplayReadyForPickup": {
+    "description": "Title indicating that all items on the KDS screen are ready and waiting to be picked up by the waiter.",
+    "placeholders": {
+      "kdsName": {
+        "type": "String",
+        "example": "Kitchen"
+      }
+    }
+  },
+  "kdsStatusDisplayAllPickedUp": "{kdsName}: 所有产品已取走",
+  "@kdsStatusDisplayAllPickedUp": {
+    "description": "Title indicating that all items on the KDS screen have been picked up by the waiter.",
+    "placeholders": {
+      "kdsName": {
+        "type": "String",
+        "example": "Kitchen"
+      }
+    }
+  },
+  "kdsStatusDisplayDefault": "{kdsName}: 状态未知",
+  "@kdsStatusDisplayDefault": {
+    "description": "Default status text for the KDS title.",
+    "placeholders": {
+      "kdsName": {
+        "type": "String",
+        "example": "Kitchen"
+      }
+    }
+  },
+  "waitingCustomerErrorFetchList": "无法获取顾客列表 ({statusCode}) - {details}",
+  "@waitingCustomerErrorFetchList": {
+    "placeholders": {
+      "statusCode": {
+        "type": "String"
+      },
+      "details": {
+        "type": "String"
+      }
+    }
+  },
+  "waitingCustomerErrorFetchListGeneric": "获取顾客列表错误: {error}",
+  "@waitingCustomerErrorFetchListGeneric": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "waitingCustomerErrorNameEmpty": "姓名不能为空。",
+  "waitingCustomerErrorPartySizePositive": "人数必须是正值。",
+  "waitingCustomerSuccessAdd": "顾客添加成功。",
+  "waitingCustomerErrorAdd": "添加顾客错误: {statusCode} - {details}",
+  "@waitingCustomerErrorAdd": {
+    "placeholders": {
+      "statusCode": {
+        "type": "String"
+      },
+      "details": {
+        "type": "String"
+      }
+    }
+  },
+  "waitingCustomerErrorAddGeneric": "添加顾客错误: {error}",
+  "@waitingCustomerErrorAddGeneric": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "waitingCustomerSuccessUpdate": "顾客更新成功。",
+  "waitingCustomerErrorUpdate": "更新顾客错误: {statusCode} - {details}",
+  "@waitingCustomerErrorUpdate": {
+    "placeholders": {
+      "statusCode": {
+        "type": "String"
+      },
+      "details": {
+        "type": "String"
+      }
+    }
+  },
+  "waitingCustomerErrorUpdateGeneric": "更新顾客错误: {error}",
+  "@waitingCustomerErrorUpdateGeneric": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "waitingCustomerInfoDeleting": "正在删除顾客...",
+  "waitingCustomerSuccessDelete": "顾客删除成功。",
+  "waitingCustomerErrorDelete": "删除顾客错误: {statusCode} - {details}",
+  "@waitingCustomerErrorDelete": {
+    "placeholders": {
+      "statusCode": {
+        "type": "String"
+      },
+      "details": {
+        "type": "String"
+      }
+    }
+  },
+  "waitingCustomerErrorDeleteGeneric": "删除顾客错误: {error}",
+  "@waitingCustomerErrorDeleteGeneric": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "pagerServiceErrorFetch": "无法获取传呼机: {statusCode}",
+  "@pagerServiceErrorFetch": {
+    "placeholders": {
+      "statusCode": {
+        "type": "String"
+      }
+    }
+  },
+  "pagerServiceErrorFetchGeneric": "获取传呼机错误: {error}",
+  "@pagerServiceErrorFetchGeneric": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "pagerServiceErrorCreate": "无法创建传呼机: {statusCode} - {details}",
+  "@pagerServiceErrorCreate": {
+    "placeholders": {
+      "statusCode": {
+        "type": "String"
+      },
+      "details": {
+        "type": "String"
+      }
+    }
+  },
+  "pagerServiceErrorCreateGeneric": "创建传呼机错误: {error}",
+  "@pagerServiceErrorCreateGeneric": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "pagerServiceErrorUpdateNoData": "未找到要更新的数据。",
+  "pagerServiceErrorUpdate": "无法更新传呼机: {statusCode} - {details}",
+  "@pagerServiceErrorUpdate": {
+    "placeholders": {
+      "statusCode": {
+        "type": "String"
+      },
+      "details": {
+        "type": "String"
+      }
+    }
+  },
+  "pagerServiceErrorUpdateGeneric": "更新传呼机错误: {error}",
+  "@pagerServiceErrorUpdateGeneric": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "pagerServiceErrorDelete": "无法删除传呼机: {statusCode}",
+  "@pagerServiceErrorDelete": {
+    "placeholders": {
+      "statusCode": {
+        "type": "String"
+      }
+    }
+  },
+  "pagerServiceErrorDeleteGeneric": "删除传呼机错误: {error}",
+  "@pagerServiceErrorDeleteGeneric": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "bleStatusNotConnected": "未连接",
+  "bleStatusUnsupportedWeb": "Web 平台上不支持低功耗蓝牙 (BLE)。",
+  "bleStatusUnsupportedDevice": "此设备不支持低功耗蓝牙 (BLE)。",
+  "bleStatusOn": "蓝牙已开启，设备可被发现。",
+  "bleStatusOff": "蓝牙已关闭。",
+  "bleStatusPermissionsRequired": "需要蓝牙权限。",
+  "bleStatusScanning": "正在扫描传呼机...",
+  "bleStatusScanError": "扫描错误: {error}",
+  "@bleStatusScanError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "bleStatusScanStopped": "扫描已停止。",
+  "bleStatusDeviceFound": "已找到 {count} 个设备。",
+  "@bleStatusDeviceFound": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "bleStatusDeviceNotFound": "未找到设备。",
+  "bleStatusConnectingTo": "正在连接到 {deviceName}...",
+  "@bleStatusConnectingTo": {
+    "placeholders": {
+      "deviceName": {
+        "type": "String"
+      }
+    }
+  },
+  "bleStatusConnectedTo": "已连接到 {deviceName}。",
+  "@bleStatusConnectedTo": {
+    "placeholders": {
+      "deviceName": {
+        "type": "String"
+      }
+    }
+  },
+  "bleStatusCouldNotConnectTo": "无法连接到 {deviceName}。",
+  "@bleStatusCouldNotConnectTo": {
+    "placeholders": {
+      "deviceName": {
+        "type": "String"
+      }
+    }
+  },
+  "bleStatusDisconnectedFrom": "已从 {deviceName} 断开连接。",
+  "@bleStatusDisconnectedFrom": {
+    "placeholders": {
+      "deviceName": {
+        "type": "String"
+      }
+    }
+  },
+  "bleStatusDisconnectError": "断开连接时出错。",
+  "bleStatusDiscoveringServices": "正在发现服务和特征...",
+  "bleStatusDiscoveringServicesError": "服务发现错误。",
+  "bleStatusCharacteristicFound": "已找到命令特征。设备已就绪。",
+  "bleStatusCharacteristicNotFound": "未找到合适的服或特征。",
+  "bleStatusCommandSent": "命令已发送。",
+  "bleStatusCommandError": "命令发送错误。",
+  "bleStatusCommandFailed": "命令发送失败: 无连接。",
+  "bleStatusPreparingNotificationFor": "正在为传呼机 ID “{pagerId}”准备通知...",
+  "@bleStatusPreparingNotificationFor": {
+    "placeholders": {
+      "pagerId": {
+        "type": "String"
+      }
+    }
+  },
+  "bleStatusCouldNotConnectForNotification": "无法连接到传呼机 ID “{pagerId}”或设备未就绪。",
+  "@bleStatusCouldNotConnectForNotification": {
+    "placeholders": {
+      "pagerId": {
+        "type": "String"
+      }
+    }
+  },
+  "bleStatusNotificationSent": "通知已发送到设备 ID “{pagerId}”。",
+  "@bleStatusNotificationSent": {
+    "placeholders": {
+      "pagerId": {
+        "type": "String"
+      }
+    }
+  },
+  "bleStatusNotificationError": "向设备 ID “{pagerId}”发送通知时出错。",
+  "@bleStatusNotificationError": {
+    "placeholders": {
+      "pagerId": {
+        "type": "String"
+      }
+    }
+  },
+  "bleStatusDeviceNotFoundAfterScan": "扫描后未找到传呼机 ID “{pagerId}”。",
+  "@bleStatusDeviceNotFoundAfterScan": {
+    "placeholders": {
+      "pagerId": {
+        "type": "String"
+      }
+    }
+  },
+  "bleDeviceNameUnknown": "未知设备",
+  "bleDeviceNameSearchedById": "按 ID 搜索",
+  "bleDeviceNameNotFound": "未找到",
+  "language": "应用语言",
+  "unknownErrorOccurred": "发生未知错误。",
+  "addOrderItemDialogSelectionError": "请进行必要的选择。",
+  "variantSelectionDialogTitle": "变体选择: {itemName}",
+  "@variantSelectionDialogTitle": {
+    "placeholders": {
+      "itemName": {
+        "type": "String"
+      }
+    }
+  },
+  "variantSelectionDialogTableOwnerLabel": "桌位所有者",
+  "variantSelectionDialogTableOwnerValidator": "请选择一个桌位所有者。",
+  "variantSelectionDialogVariantLabel": "变体",
+  "variantSelectionDialogVariantValidator": "请选择一个变体。",
+  "variantSelectionDialogExtrasLabel": "附加选项:",
+  "tooltipDecrement": "减少",
+  "variantSelectionDialogQuantity": "{quantity} 件",
+  "@variantSelectionDialogQuantity": {
+    "placeholders": {
+      "quantity": {
+        "type": "String"
+      }
+    }
+  },
+  "tooltipIncrement": "增加",
+  "variantSelectionDialogAddToCartButton": "添加到购物车",
+  "tableOrderDetailsModalUpdateError": "无法更新订单状态。",
+  "newOrderNotificationTitleNew": "新订单！",
+  "newOrderNotificationTitleUpdate": "订单更新",
+  "newOrderNotificationDefaultMessage": "进行了一项新的交易。",
+  "newOrderNotificationUpdateTable": "“{itemName}”已添加到桌位 {tableNumber} 的订单中。",
+  "@newOrderNotificationUpdateTable": {
+    "placeholders": {
+      "itemName": {
+        "type": "String"
+      },
+      "tableNumber": {
+        "type": "String"
+      }
+    }
+  },
+  "newOrderNotificationUpdateTakeaway": "“{itemName}”已添加到外卖订单中。",
+  "@newOrderNotificationUpdateTakeaway": {
+    "placeholders": {
+      "itemName": {
+        "type": "String"
+      }
+    }
+  },
+  "newOrderNotificationUpdateTakeawayWithCustomer": "“{itemName}”已添加到外卖订单中 ({customerName})。",
+  "@newOrderNotificationUpdateTakeawayWithCustomer": {
+    "placeholders": {
+      "itemName": {
+        "type": "String"
+      },
+      "customerName": {
+        "type": "String"
+      }
+    }
+  },
+  "newOrderNotificationUpdateGeneric": "“{itemName}”已添加到订单中。",
+  "@newOrderNotificationUpdateGeneric": {
+    "placeholders": {
+      "itemName": {
+        "type": "String"
+      }
+    }
+  },
+  "newOrderNotificationNewOrderTable": "收到桌位 {tableNumber} 的新订单。第一个产品: “{itemName}”。",
+  "@newOrderNotificationNewOrderTable": {
+    "placeholders": {
+      "tableNumber": {
+        "type": "String"
+      },
+      "itemName": {
+        "type": "String"
+      }
+    }
+  },
+  "newOrderNotificationNewOrderTakeaway": "收到新的外卖订单。第一个产品: “{itemName}”。",
+  "@newOrderNotificationNewOrderTakeaway": {
+    "placeholders": {
+      "itemName": {
+        "type": "String"
+      }
+    }
+  },
+  "newOrderNotificationNewOrderTakeawayWithCustomer": "收到新的外卖订单 ({customerName})。第一个产品: “{itemName}”。",
+  "@newOrderNotificationNewOrderTakeawayWithCustomer": {
+    "placeholders": {
+      "customerName": {
+        "type": "String"
+      },
+      "itemName": {
+        "type": "String"
+      }
+    }
+  },
+  "newOrderNotificationNewOrderGeneric": "收到新订单。第一个产品: “{itemName}”。",
+  "@newOrderNotificationNewOrderGeneric": {
+    "placeholders": {
+      "itemName": {
+        "type": "String"
+      }
+    }
+  },
+  "newOrderNotificationOrderId": "订单 ID: {orderId}",
+  "@newOrderNotificationOrderId": {
+    "placeholders": {
+      "orderId": {
+        "type": "String"
+      }
+    }
+  },
+  "newOrderNotificationTableNumber": "桌位号: {tableNumber}",
+  "@newOrderNotificationTableNumber": {
+    "placeholders": {
+      "tableNumber": {
+        "type": "String"
+      }
+    }
+  },
+  "newOrderNotificationCustomerName": "顾客: {customerName}",
+  "@newOrderNotificationCustomerName": {
+    "placeholders": {
+      "customerName": {
+        "type": "String"
+      }
+    }
+  },
+  "okButtonText": "确定",
+  "categoryAll": "全部",
+  "menuNoProductsInCategory": "所选类别中没有找到产品。",
+  "menuVariantsAvailable": "有变体可用",
+  "basketTitle": "购物车",
+  "removeFromBasketTooltip": "从购物车中移除",
+  "tableTypeModalOwnersTitle": "输入桌位所有者 (最少 2 个)",
+  "continueButtonText": "继续",
+  "kitchenDialogTitleDefault": "厨房收到新订单！",
+  "kitchenDialogTitleWithKds": "新订单已发送至 {kdsName}！",
+  "@kitchenDialogTitleWithKds": {
+    "placeholders": {
+      "kdsName": {
+        "type": "String"
+      }
+    }
+  },
+  "kitchenDialogMessageDefault": "新订单已确认并发送至厨房！",
+  "kitchenDialogMessageTable": "桌位 {tableNumber} 的新订单已确认并发送至厨房。",
+  "@kitchenDialogMessageTable": {
+    "placeholders": {
+      "tableNumber": {
+        "type": "String"
+      }
+    }
+  },
+  "kitchenDialogMessageTakeawayCustomer": "{customerName} 的外卖订单已确认并发送至厨房。",
+  "@kitchenDialogMessageTakeawayCustomer": {
+    "placeholders": {
+      "customerName": {
+        "type": "String"
+      }
+    }
+  },
+  "kitchenDialogMessageTakeawayId": "外卖订单 (ID: {orderId}) 已确认并发送至厨房。",
+  "@kitchenDialogMessageTakeawayId": {
+    "placeholders": {
+      "orderId": {
+        "type": "String"
+      }
+    }
+  },
+  "tableCellItemPickupErrorWithDetails": "无法取走产品: {statusCode} - {details}",
+  "@tableCellItemPickupErrorWithDetails": {
+    "placeholders": {
+      "statusCode": {
+        "type": "String"
+      },
+      "details": {
+        "type": "String"
+      }
+    }
+  },
+  "tableCellItemPickupErrorGeneric": "产品取走错误: {error}",
+  "@tableCellItemPickupErrorGeneric": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "tableCellDeliverErrorWithStatus": "交付过程中出错: {statusCode}",
+  "@tableCellDeliverErrorWithStatus": {
+    "placeholders": {
+      "statusCode": {
+        "type": "String"
+      }
+    }
+  },
+  "tableCellDeliverErrorGeneric": "交付错误: {error}",
+  "@tableCellDeliverErrorGeneric": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "tableCellDefaultTitle": "桌位 {tableNumber}",
+  "@tableCellDefaultTitle": {
+    "placeholders": {
+      "tableNumber": {
+        "type": "String"
+      }
+    }
+  },
+  "tableCellTooltipDeliveredToCustomer": "已送达顾客",
+  "tableCellTooltipMarkAsPickedUpByWaiter": "标记为服务员已取走",
+  "tableCellTooltipDeliverToCustomer": "送达顾客",
+  "kdsStatusPreparing": "正在厨房准备中",
+  "tableCellTooltipWaitingForKitchen": "等待厨房确认",
+  "newItemSuffix": " (新)",
+  "tableCellNoOrderItems": "无订单项",
+  "addOrEditButton": "添加/编辑",
+  "addProductOrEditTooltip": "添加/编辑产品",
+  "otherActionsTooltip": "其他操作",
+  "transferTableMenuItem": "转移桌位",
+  "cancelOrderMenuItem": "取消订单",
+  "readyForPickupTitle": "厨房准备就绪！",
+  "readyForPickupMessageDefault": "订单在厨房准备就绪，等待服务员！",
+  "readyForPickupMessageTable": "桌位 {tableNumber} 的订单在厨房准备就绪，等待服务员取走。",
+  "@readyForPickupMessageTable": {
+    "placeholders": {
+      "tableNumber": {
+        "type": "String"
+      }
+    }
+  },
+  "readyForPickupMessageTakeawayCustomer": "{customerName} 的外卖订单在厨房准备就绪，等待服务员取走。",
+  "@readyForPickupMessageTakeawayCustomer": {
+    "placeholders": {
+      "customerName": {
+        "type": "String"
+      }
+    }
+  },
+  "readyForPickupMessageTakeawayId": "外卖订单 (ID: {orderId}) 在厨房准备就绪，等待服务员取走。",
+  "@readyForPickupMessageTakeawayId": {
+    "placeholders": {
+      "orderId": {
+        "type": "String"
+      }
+    }
+  },
+  "kdsCouldNotMarkPreparing": "无法将产品标记为准备中: {statusCode}",
+  "@kdsCouldNotMarkPreparing": {
+    "placeholders": {
+      "statusCode": {
+        "type": "String"
+      }
+    }
+  },
+  "kdsCouldNotMarkReady": "无法将产品标记为准备就绪: {statusCode}",
+  "@kdsCouldNotMarkReady": {
+    "placeholders": {
+      "statusCode": {
+        "type": "String"
+      }
+    }
+  },
+  "kdsNoItemsForKds": "此 KDS 没有产品。",
+  "kdsTooltipStartPreparing": "开始准备",
+  "kdsTooltipMarkAsReady": "标记为准备就绪",
+  "infoTransferringTable": "正在转移桌位...",
+  "infoTransferSuccess": "桌位转移成功。",
+  "errorTransferringTable": "桌位转移错误: {statusCode} - {details}",
+  "@errorTransferringTable": {
+    "placeholders": {
+      "statusCode": {
+        "type": "String"
+      },
+      "details": {
+        "type": "String"
+      }
+    }
+  },
+  "errorTransferGeneric": "转移错误: {error}",
+  "@errorTransferGeneric": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "infoCancellingOrder": "正在取消订单...",
+  "errorUnknownServer": "未知服务器错误。",
+  "errorDuringCancellation": "取消过程中出错。",
+  "errorCancellingOrderWithDetails": "订单取消错误: {statusCode} - {details}",
+  "@errorCancellingOrderWithDetails": {
+    "placeholders": {
+      "statusCode": {
+        "type": "String"
+      },
+      "details": {
+        "type": "String"
+      }
+    }
+  },
+  "errorCancellationGeneric": "取消错误: {error}",
+  "@errorCancellationGeneric": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "infoApprovingOrder": "正在批准订单...",
+  "infoGuestOrderApproved": "客人订单已批准。",
+  "errorApprovingOrder": "订单批准错误: {statusCode} - {details}",
+  "@errorApprovingOrder": {
+    "placeholders": {
+      "statusCode": {
+        "type": "String"
+      },
+      "details": {
+        "type": "String"
+      }
+    }
+  },
+  "errorApprovalGeneric": "订单批准错误: {error}",
+  "@errorApprovalGeneric": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "infoRejectingOrder": "正在拒绝订单...",
+  "infoGuestOrderRejected": "客人订单已拒绝。",
+  "errorRejectingOrder": "订单拒绝错误: {statusCode} - {details}",
+  "@errorRejectingOrder": {
+    "placeholders": {
+      "statusCode": {
+        "type": "String"
+      },
+      "details": {
+        "type": "String"
+      }
+    }
+  },
+  "errorRejectionGeneric": "订单拒绝错误: {error}",
+  "@errorRejectionGeneric": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "orderItemLineTotal": "行总计: {amount} {currency}",
+  "@orderItemLineTotal": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "currency": {
+        "type": "String"
+      }
+    }
+  },
+  "pendingOrderCardSubtitle": "总金额: {formattedAmount}",
+  "@pendingOrderCardSubtitle": {
+    "description": "Subtitle showing the total amount on the pending order card.",
+    "placeholders": {
+      "formattedAmount": {
+        "type": "String",
+        "example": "₺45.50"
+      }
+    }
+  },
+  "paymentProcessingAmountLabel": "应付金额: {formattedAmount}",
+  "@paymentProcessingAmountLabel": {
+    "description": "Total amount to be paid on the payment screen.",
+    "placeholders": {
+      "formattedAmount": {
+        "type": "String",
+        "example": "₺120,00"
+      }
+    }
+  },
+  "staffPerformanceTurnoverLabel": "销售额: {amount} {currency}",
+  "@staffPerformanceTurnoverLabel": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "currency": {
+        "type": "String"
+      }
+    }
+  },
+  "creditSalesCardTotalAmount": "总金额: {amount} {currency}",
+  "@creditSalesCardTotalAmount": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "currency": {
+        "type": "String"
+      }
+    }
+  },
+  "campaignItemDetails": "数量: {quantity} - 正常价格: {price} {currency}",
+  "@campaignItemDetails": {
+    "placeholders": {
+      "quantity": {
+        "type": "String"
+      },
+      "price": {
+        "type": "String"
+      },
+      "currency": {
+        "type": "String"
+      }
+    }
+  },
+  "campaignContentTitle": "促销活动内容 (正常总计: {total} {currency})",
+  "@campaignContentTitle": {
+    "placeholders": {
+      "total": {
+        "type": "String"
+      },
+      "currency": {
+        "type": "String"
+      }
+    }
+  },
+  "variantPriceDisplay": "{name} - {price} {currency}",
+  "@variantPriceDisplay": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "price": {
+        "type": "String"
+      },
+      "currency": {
+        "type": "String"
+      }
+    }
+  },
+  "orderCardSubtitleDetails": "金额: {totalAmount}\n支付方式: {paymentType}\n日期: {displayDate}\n时间: {displayTime}",
+  "@orderCardSubtitleDetails": {
+    "placeholders": {
+      "totalAmount": {
+        "type": "String"
+      },
+      "paymentType": {
+        "type": "String"
+      },
+      "displayDate": {
+        "type": "String"
+      },
+      "displayTime": {
+        "type": "String"
+      }
+    }
+  },
+  "paymentModalTotalAmount": "总计: {amount} {currency} ({paymentType})",
+  "@paymentModalTotalAmount": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "currency": {
+        "type": "String"
+      },
+      "paymentType": {
+        "type": "String"
+      }
+    }
+  },
+  "newOrderBasketTotal": "购物车总计: {totalAmount} ({currency})",
+  "@newOrderBasketTotal": {
+    "placeholders": {
+      "totalAmount": {
+        "type": "String"
+      },
+      "currency": {
+        "type": "String"
+      }
+    }
+  },
+  "newOrderBasketTotalLabel": "总计: {formattedAmount}",
+  "@newOrderBasketTotalLabel": {
+    "description": "Label showing the total of the new order cart.",
+    "placeholders": {
+      "formattedAmount": {
+        "type": "String",
+        "example": "₺110,00"
+      }
+    }
+  },
+  "businessSettingsTitle": "商家设置",
+  "homeMenuBusinessSettings": "商家设置",
+  "businessSettingsCurrencyLabel": "商家货币",
+  "businessSettingsSuccess": "设置保存成功。",
+  "businessSettingsError": "保存设置错误: {error}",
+  "@businessSettingsError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "permissionViewReports": "查看报告",
+  "permissionManageCreditSales": "管理赊账销售",
+  "permissionManageMenu": "管理菜单",
+  "permissionManageStock": "管理库存",
+  "permissionManageTables": "管理桌位",
+  "permissionViewCompletedOrders": "查看已完成订单",
+  "permissionViewPendingOrders": "查看待处理订单",
+  "permissionTakeOrders": "接受订单",
+  "permissionManageStaff": "管理员工",
+  "permissionManageWaitingCustomers": "管理等待中的顾客",
+  "permissionViewAccountSettings": "查看帐户设置",
+  "permissionManageKds": "管理厨房显示系统",
+  "permissionManageKdsScreens": "管理 KDS 屏幕定义",
+  "permissionManagePagers": "管理传呼机",
+  "permissionManageCampaigns": "管理促销活动",
+  "buttonSave": "保存",
+  "logout": "退出登录",
+  "errorLoadingInitialData": "加载初始数据错误: {details}",
+  "@errorLoadingInitialData": {
+    "placeholders": {
+      "details": {
+        "type": "String"
+      }
+    }
+  },
+  "errorFirebaseUploadFailed": "Firebase 文件上传失败。",
+  "categoryNameLabelRequired": "类别名称*",
+  "categoryNameValidator": "请输入类别名称。",
+  "parentCategoryLabel": "父类别",
+  "dialogDeleteVariantContent": "您确定要删除变体“{variantName}”吗？",
+  "@dialogDeleteVariantContent": {
+    "placeholders": {
+      "variantName": {
+        "type": "String"
+      }
+    }
+  },
+  "currencyTL": "₺",
+  "currencySymbol": "₺",
+  "editOrderErrorFetchingBusinessName": "获取商家名称错误: {error}",
+  "@editOrderErrorFetchingBusinessName": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "editOrderErrorLoadingCategories": "加载类别时发生错误。",
+  "editOrderErrorAddingProductWithStatus": "添加产品时发生错误 (代码: {statusCode}): {details}",
+  "@editOrderErrorAddingProductWithStatus": {
+    "placeholders": {
+      "statusCode": {
+        "type": "String"
+      },
+      "details": {
+        "type": "String"
+      }
+    }
+  },
+  "editOrderErrorUpdatingPagerStatus": "更新传呼机状态错误: {error}",
+  "@editOrderErrorUpdatingPagerStatus": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "editOrderErrorUpdatingPagerOnCancel": "取消订单时更新传呼机错误: {error}",
+  "@editOrderErrorUpdatingPagerOnCancel": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "editOrderPrintCustomerReceipt": "打印顾客收据",
+  "editOrderPrintKitchenTicket": "打印厨房小票",
+  "editOrderTotal": "总计: {totalAmount}",
+  "@editOrderTotal": {
+    "placeholders": {
+      "totalAmount": {
+        "type": "String"
+      }
+    }
+  },
+  "yourBusiness": "您的商家",
+  "orderTypeTable": "桌位",
+  "orderTypeTakeaway": "外卖",
+  "waitingCustomersTitle": "等待中的顾客",
+  "addNewCustomerButtonLabel": "添加新顾客",
+  "pagerDialogDeleteContent": "您确定要删除传呼机“{pagerName}”吗？",
+  "@pagerDialogDeleteContent": {
+    "placeholders": {
+      "pagerName": {
+        "type": "String"
+      }
+    }
+  },
+  "manageCampaignsCardSubtitle": "价格: {price} {currency} | 活跃: {isActive}",
+  "@manageCampaignsCardSubtitle": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      },
+      "currency": {
+        "type": "String"
+      },
+      "isActive": {
+        "type": "String"
+      }
+    }
+  },
+  "printerSettingsErrorLoadingSavedPrinters": "加载已保存的打印机时出错: {error}",
+  "@printerSettingsErrorLoadingSavedPrinters": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "printerSettingsErrorIpExists": "此 IP 地址的打印机已存在。",
+  "printerSettingsDeleteTitle": "删除打印机",
+  "printerSettingsDeleteConfirmation": "您确定要删除打印机“{printerName}”吗？",
+  "@printerSettingsDeleteConfirmation": {
+    "placeholders": {
+      "printerName": {
+        "type": "String"
+      }
+    }
+  },
+  "printerSettingsSuccessDeleted": "打印机“{printerName}”已成功删除。",
+  "@printerSettingsSuccessDeleted": {
+    "placeholders": {
+      "printerName": {
+        "type": "String"
+      }
+    }
+  },
+  "printerSettingsErrorDiscoveryNotSupportedOnWeb": "Web 平台上不支持打印机发现。",
+  "printerSettingsErrorDuringDiscovery": "打印机发现过程中出错: {error}",
+  "@printerSettingsErrorDuringDiscovery": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "printerSettingsInfoTesting": "正在测试打印机“{printerName}”...",
+  "@printerSettingsInfoTesting": {
+    "placeholders": {
+      "printerName": {
+        "type": "String"
+      }
+    }
+  },
+  "printerSettingsSuccessTestPrint": "测试打印成功！",
+  "printerSettingsErrorTestPrintFailed": "测试打印失败。",
+  "printerSettingsErrorDuringTest": "测试过程中出错: {error}",
+  "@printerSettingsErrorDuringTest": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "printerSettingsTitleAddManual": "手动添加打印机",
+  "printerSettingsTitleSaveDiscovered": "保存发现的打印机",
+  "printerSettingsLabelNameHint": "打印机名称 (例如: 厨房打印机)",
+  "printerSettingsValidatorNameEmpty": "打印机名称不能为空。",
+  "printerSettingsLabelIpHint": "IP 地址 (例如: 192.168.1.100)",
+  "printerSettingsValidatorIpEmpty": "IP 地址不能为空。",
+  "printerSettingsValidatorIpInvalid": "请输入有效的 IP 地址。",
+  "printerSettingsLabelType": "打印机类型",
+  "printerSettingsTypeKitchen": "厨房",
+  "printerSettingsTypeReceipt": "收据",
+  "printerSettingsValidatorTypeEmpty": "请选择打印机类型。",
+  "printerSettingsTitle": "打印机设置",
+  "printerSettingsStateDiscovering": "正在搜索打印机...",
+  "printerSettingsButtonDiscover": "发现网络上的打印机",
+  "printerSettingsNoPrintersFound": "未找到已保存的打印机。",
+  "printerSettingsHeaderDiscovered": "发现的打印机",
+  "printerSettingsTooltipSaveDiscovered": "保存此打印机",
+  "printerSettingsHeaderSaved": "已保存的打印机",
+  "printerSettingsPrinterTypeLabel": "类型: {type}",
+  "@printerSettingsPrinterTypeLabel": {
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "printerSettingsTooltipTestPrint": "发送测试打印",
+  "printerSettingsButtonAddManual": "手动添加打印机",
+  "printerSettingsTooltipAddManual": "手动添加 IP 地址打印机",
+  "newOrderBasketQuantity": "数量: {quantity}",
+  "@newOrderBasketQuantity": {
+    "placeholders": {
+      "quantity": {
+        "type": "String"
+      }
+    }
+  },
+  "extrasLabel": "附加项:",
+  "lineItemTotal": "{amount} {currency}",
+  "@lineItemTotal": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "currency": {
+        "type": "String"
+      }
+    }
+  },
+  "tableOwnerLabel": "所有者: {name}",
+  "@tableOwnerLabel": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "paymentModalErrorWithDetails": "支付错误 (代码: {statusCode}): {details}",
+  "@paymentModalErrorWithDetails": {
+    "placeholders": {
+      "statusCode": {
+        "type": "String"
+      },
+      "details": {
+        "type": "String"
+      }
+    }
+  },
+  "menuCampaignPrice": "促销价格: {price} {currency}",
+  "@menuCampaignPrice": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      },
+      "currency": {
+        "type": "String"
+      }
+    }
+  },
+  "newOrderBasketEmpty": "您的购物车是空的。",
+  "newOrderBasketExtras": "附加项: {extrasList}",
+  "@newOrderBasketExtras": {
+    "placeholders": {
+      "extrasList": {
+        "type": "String"
+      }
+    }
+  },
+  "orderItemButtonDeliver": "送达",
+  "errorUsernameExists": "此用户名已被使用。",
+  "errorEmailExists": "此电子邮件地址已被使用。",
+  "parentCategoryHint": "未选择父类别",
+  "infoCategoryUpdatedSuccess": "类别更新成功。",
+  "errorUpdatingCategory": "更新类别错误 (代码: {statusCode}): {details}",
+  "@errorUpdatingCategory": {
+    "placeholders": {
+      "statusCode": {
+        "type": "String"
+      },
+      "details": {
+        "type": "String"
+      }
+    }
+  },
+  "errorUpdatingCategoryGeneral": "更新类别的一般错误: {error}",
+  "@errorUpdatingCategoryGeneral": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "editCategoryPageTitle": "编辑类别",
+  "infoKdsLoading": "正在加载 KDS 屏幕...",
+  "kdsScreenLabel": "KDS 屏幕",
+  "noKdsForBusiness": "商家未找到 KDS。",
+  "buttonUpdateCategory": "更新类别",
+  "errorLoadingDataWithDetails": "加载数据错误: {details}",
+  "@errorLoadingDataWithDetails": {
+    "placeholders": {
+      "details": {
+        "type": "String"
+      }
+    }
+  },
+  "errorUploadingPhotoWithDetails": "上传照片错误: {details}",
+  "@errorUploadingPhotoWithDetails": {
+    "placeholders": {
+      "details": {
+        "type": "String"
+      }
+    }
+  },
+  "campaignNoProductsAdded": "尚未添加任何产品。",
+  "campaignAddProductButton": "添加产品",
+  "productSelectorNoProducts": "未找到产品。",
+  "variantDisplayPrice": "{name} ({price} {currency})",
+  "@variantDisplayPrice": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "price": {
+        "type": "String"
+      },
+      "currency": {
+        "type": "String"
+      }
+    }
+  },
+  "setupWizardStepLocalizationTitle": "步骤 1: 语言和货币",
+  "setupWizardSaveAndContinueButton": "保存并继续",
+  "setupWizardErrorSavingSettings": "保存设置错误: {errorDetails}",
+  "@setupWizardErrorSavingSettings": {
+    "description": "Message shown when an error occurs while saving settings.",
+    "placeholders": {
+      "errorDetails": {
+        "type": "String",
+        "example": "Network error"
+      }
+    }
+  },
+  "subscriptionScreenTitle": "订阅管理",
+  "@subscriptionScreenTitle": {
+    "description": "Title of the subscription and purchase screen"
+  },
+  "subscriptionErrorLoadingProducts": "无法加载订阅选项。请重试。",
+  "@subscriptionErrorLoadingProducts": {
+    "description": "Error shown when in-app purchase products fail to fetch."
+  },
+  "subscriptionScreenHeader": "订阅以继续使用应用程序",
+  "@subscriptionScreenHeader": {
+    "description": "Main header informing the user on the subscription screen."
+  },
+  "subscriptionStatusTrial": "您的试用期还剩 {days} 天。点击订阅。",
+  "@subscriptionStatusTrial": {
+    "description": "Shows the number of days remaining in the trial.",
+    "placeholders": {
+      "days": {
+        "type": "String",
+        "example": "5"
+      }
+    }
+  },
+  "subscriptionStatusTrialLastDay": "您的试用期不足 1 天！",
+  "@subscriptionStatusTrialLastDay": {
+    "description": "Message shown on the last day of the trial."
+  },
+  "subscriptionStatusTrialEnded": "您的试用期已结束！",
+  "@subscriptionStatusTrialEnded": {
+    "description": "Message shown when the trial period ends."
+  },
+  "subscriptionStatusInactive": "您的订阅处于非活跃状态。请订阅以继续。",
+  "@subscriptionStatusInactive": {
+    "description": "Message shown for inactive or canceled subscriptions."
+  },
+  "subscriptionStatusButtonSubscribe": "订阅",
+  "@subscriptionStatusButtonSubscribe": {
+    "description": "Button text that redirects to the subscription screen."
+  },
+  "loginErrorSubscriptionExpired": "您的订阅已过期，无法登录。请续订。",
+  "@loginErrorSubscriptionExpired": {
+    "description": "Login error message shown when the business owner's subscription has expired."
+  },
+  "setupTablesErrorNoTablesCreated": "您必须至少创建一个桌位才能继续。",
+  "@setupTablesErrorNoTablesCreated": {
+    "description": "Warning shown when trying to continue without creating any tables in the setup wizard."
+  },
+  "setupKdsErrorNoScreensCreated": "您必须至少创建一个 KDS 屏幕才能继续。",
+  "@setupKdsErrorNoScreensCreated": {
+    "description": "Warning shown when trying to continue without creating any KDS screens in the setup wizard."
+  },
+  "setupCategoriesErrorNoCategoriesCreated": "您必须至少创建一个类别才能继续。",
+  "@setupCategoriesErrorNoCategoriesCreated": {
+    "description": "Warning shown when trying to continue without creating any categories in the setup wizard."
+  },
+  "setupMenuItemsErrorNoItemsCreated": "您必须至少创建一个产品才能继续。",
+  "@setupMenuItemsErrorNoItemsCreated": {
+    "description": "Warning shown when trying to continue without creating any menu items in the setup wizard."
+  },
+  "setupVariantsErrorNoVariantsCreated": "您必须为每个产品创建至少一个变体 (例如: 标准价格) 才能继续。",
+  "@setupVariantsErrorNoVariantsCreated": {
+    "description": "Warning shown when trying to continue without creating any variants in the setup wizard."
+  },
+  "setupTablesTotalCreatedWithLimit": "当前桌位数: {currentCount} / {limit}",
+  "@setupTablesTotalCreatedWithLimit": {
+    "description": "Text showing the current number of tables and the limit in the setup wizard.",
+    "placeholders": {
+      "currentCount": {
+        "type": "String",
+        "example": "7"
+      },
+      "limit": {
+        "type": "String",
+        "example": "10"
+      }
+    }
+  },
+  "setupKdsTotalCreatedWithLimit": "当前 KDS 屏幕数: {currentCount} / {limit}",
+  "@setupKdsTotalCreatedWithLimit": {
+    "description": "Text showing the current number of KDS screens and the total limit in the setup wizard.",
+    "placeholders": {
+      "currentCount": {
+        "type": "String",
+        "example": "1"
+      },
+      "limit": {
+        "type": "String",
+        "example": "2"
+      }
+    }
+  },
+  "setupCategoriesTotalCreatedWithLimit": "已创建 {count} / {limit} 个类别",
+  "@setupCategoriesTotalCreatedWithLimit": {
+    "description": "Text showing the current number of categories and the limit in the setup wizard.",
+    "placeholders": {
+      "currentCount": {
+        "type": "String",
+        "example": "3"
+      },
+      "limit": {
+        "type": "String",
+        "example": "4"
+      }
+    }
+  },
+  "setupMenuItemsTotalCreatedWithLimit": "当前产品数: {currentCount} / {limit}",
+  "@setupMenuItemsTotalCreatedWithLimit": {
+    "description": "Text showing the current number of menu items and the limit in the setup wizard.",
+    "placeholders": {
+      "currentCount": {
+        "type": "String",
+        "example": "15"
+      },
+      "limit": {
+        "type": "String",
+        "example": "20"
+      }
+    }
+  },
+  "setupVariantsTotalCreatedWithLimit": "总变体数: {currentCount} / {limit}",
+  "@setupVariantsTotalCreatedWithLimit": {
+    "description": "Text showing the current number of variants and the limit in the setup wizard.",
+    "placeholders": {
+      "currentCount": {
+        "type": "String",
+        "example": "35"
+      },
+      "limit": {
+        "type": "String",
+        "example": "50"
+      }
+    }
+  },
+  "manageStaffTotalWithLimit": "员工数: {currentCount} / {limit}",
+  "@manageStaffTotalWithLimit": {
+    "description": "Text showing the current number of staff and the limit on the staff management screen.",
+    "placeholders": {
+      "currentCount": {
+        "type": "String",
+        "example": "1"
+      },
+      "limit": {
+        "type": "String",
+        "example": "2"
+      }
+    }
+  },
+  "dialogLimitReachedTitle": "达到限制",
+  "@dialogLimitReachedTitle": {
+    "description": "Dialog title shown when a subscription limit is reached."
+  },
+  "dialogButtonLater": "稍后",
+  "@dialogButtonLater": {
+    "description": "The 'cancel' or 'later' button in the limit reached dialog."
+  },
+  "dialogButtonUpgradePlan": "升级套餐",
+  "@dialogButtonUpgradePlan": {
+    "description": "The action button in the limit reached dialog."
+  },
+  "setupTablesErrorLimitReached": "您已达到桌位创建限制。请升级您的订阅套餐以添加新桌位。",
+  "@setupTablesErrorLimitReached": {
+    "description": "Error message shown when the table creation limit is exceeded."
+  },
+  "setupKdsErrorLimitReached": "您已达到 KDS 屏幕创建限制。请升级您的订阅套餐以添加新屏幕。",
+  "@setupKdsErrorLimitReached": {
+    "description": "Error message shown when the KDS screen creation limit is exceeded."
+  },
+  "setupMenuItemsErrorLimitReached": "您已达到产品创建限制。请升级您的订阅套餐以添加新产品。",
+  "@setupMenuItemsErrorLimitReached": {
+    "description": "Error message shown when the new menu item creation limit is exceeded."
+  },
+  "setupTablesErrorLimitExceeded": "您已超出桌位限制 ({maxTables})。您不能在当前 {currentTables} 个桌位基础上再添加 {newTables} 个桌位。",
+  "setupKdsErrorLimitExceeded": "您已超出 KDS 屏幕限制 ({maxKds})。您不能在当前 {currentKds} 个屏幕基础上再添加 {newKds} 个屏幕。",
+  "createCategoryErrorLimitExceeded": "您已达到类别创建限制 ({maxCategories})。请升级您的套餐以添加新类别。",
+  "createMenuItemErrorLimitExceeded": "您已达到产品创建限制 ({maxMenuItems})。请升级您的套餐以添加新产品。",
+  "manageKdsErrorLimitExceeded": "您已达到 KDS 屏幕创建限制 ({maxKds})。请升级您的套餐以添加新屏幕。",
+  "manageTablesErrorLimitExceeded": "您已达到桌位创建限制 ({maxTables})。请升级您的套餐以添加新桌位。",
+  "createVariantErrorLimitExceeded": "您已达到变体/选项创建限制 ({maxVariants})。请升级您的套餐以添加新变体。",
+  "menuItemKdvRateLabel": "增值税率",
+  "kdvRateValidatorRequired": "请输入增值税率。",
+  "kdvRateValidatorInvalid": "请输入 0 到 100 之间的有效税率。",
+  "categoryKdvRateLabel": "默认增值税率 (%)",
+  "categoryDefaultKdvRateLabel": "默认增值税率 (%)",
+  "reportsExportToExcelTooltip": "导出报告到 Excel",
+  "reportsErrorNoDataToExport": "没有数据可导出。",
+  "reportsErrorExportFailed": "导出报告错误: {errorDetails}",
+  "@reportsErrorExportFailed": {
+    "description": "Error message that occurs during export to Excel.",
+    "placeholders": {
+      "errorDetails": {
+        "type": "String",
+        "example": "File could not be written."
+      }
+    }
+  },
+  "setupWizardStepStaffTitle": "添加员工",
+  "errorLoadingData": "加载数据错误: {error}",
+  "@errorLoadingData": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "setupStaffDialogTitle": "添加新员工",
+  "roleLabel": "角色",
+  "roleStaff": "服务员 (订单授权)",
+  "roleKitchenStaff": "厨房员工 (KDS 授权)",
+  "buttonAdd": "添加",
+  "setupStaffDescription": "您现在可以添加负责接单和在厨房工作的员工。您分配的班次将确保员工只能在指定的日期和时间登录。",
+  "addStaffButtonLabel": "添加员工",
+  "setupStaffAddedTitle": "已添加员工",
+  "noStaffAdded": "尚未添加任何员工。",
+  "setupStaffTotalCreatedWithLimit": "已创建 {count} / {limit} 个员工",
+  "@setupStaffTotalCreatedWithLimit": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      },
+      "limit": {
+        "type": "String"
+      }
+    }
+  },
+  "kdsAccessSelectionTitle": "可访问的厨房屏幕",
+  "kdsAccessNoKdsAvailable": "没有可供分配的活跃 KDS 屏幕。请在上一步中创建一个 KDS 屏幕。",
+  "setupStaffShowOtherPermissions": "显示其他屏幕权限",
+  "setupStaffShowOtherNotifications": "显示其他通知权限",
+  "setupStaffAssignShiftButton": "分配班次",
+  "setupStaffErrorAssignShift": "请在继续之前为所有已添加的员工分配至少一个班次。",
+  "setupStaffRedirectingToSchedule": "正在重定向到 {staffName} 的班次分配屏幕...",
+  "@setupStaffRedirectingToSchedule": {
+    "placeholders": {
+      "staffName": {
+        "type": "String"
+      }
+    }
+  },
+  "setupStaffShiftAssigned": "班次已分配。",
+  "setupStaffShiftNotAssigned": "班次未分配！您必须分配一个班次才能继续。",
+  "scheduleSetupWizardPrompt": "请为新员工分配至少一个班次以继续。",
+  "homeSectionOrderKitchen": "订单和厨房管理",
+  "@homeSectionOrderKitchen": {
+    "description": "Title of the Order and Kitchen management section on the main screen."
+  },
+  "homeSectionMenuStock": "菜单和库存管理",
+  "@homeSectionMenuStock": {
+    "description": "Title of the Menu and Stock management section on the main screen."
+  },
+  "homeSectionBusinessManagement": "商家管理",
+  "@homeSectionBusinessManagement": {
+    "description": "Title of the business management section, such as Staff, Tables, and Credit, on the main screen."
+  },
+  "homeSectionReports": "报告和分析",
+  "@homeSectionReports": {
+    "description": "Title of the Reports and Analytics section on the main screen."
+  },
+  "homeSectionSettings": "设置",
+  "@homeSectionSettings": {
+    "description": "Title of the General Settings section on the main screen."
+  },
+  "searchPlaceholder": "搜索菜单...",
+  "@searchPlaceholder": {
+    "description": "Hint text that appears inside the menu search bar on the main screen."
+  },
+  "searchNoResults": "未找到搜索结果。",
+  "@searchNoResults": {
+    "description": "Text shown when no results are found in the menu search on the main screen."
+  },
+  "loginErrorNoShiftScheduled": "您没有安排今天的班次，无法登录。",
+  "@loginErrorNoShiftScheduled": {
+    "description": "Login error message shown when the user does not have a shift assigned for that day."
+  },
+  "loginErrorNoActiveShift": "您目前没有活跃班次。请在您的班次时间重试。",
+  "@loginErrorNoActiveShift": {
+    "description": "Login error message shown when the user does not have a shift at the current time."
+  },
+  "loginErrorNetwork": "无法建立互联网连接。请检查您的网络设置。",
+  "@loginErrorNetwork": {
+    "description": "Message shown when there is a network error."
+  },
+  "loginErrorGeneric": "登录时发生意外错误。请重试。",
+  "@loginErrorGeneric": {
+    "description": "General message shown for all other unexpected errors."
+  },
+  "businessSettingsTimezoneLabel": "商家时区",
+  "@businessSettingsTimezoneLabel": {
+    "description": "Label for timezone selection in business settings."
+  },
+  "businessSettingsTimezoneValidator": "请选择一个时区。",
+  "@businessSettingsTimezoneValidator": {
+    "description": "Error message shown when a timezone is not selected."
+  },
+  "businessSettingsErrorLoading": "加载商家信息错误: {error}",
+  "@businessSettingsErrorLoading": {
+    "description": "Error shown if data cannot be retrieved when opening the business settings screen.",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Network error"
+      }
+    }
+  },
+  "voiceGuideActive": "语音指南已激活",
+  "tooltipUnmute": "取消静音",
+  "tooltipMute": "静音",
+  "tooltipReplayGuide": "重播指南",
+  "languageNameTr": "土耳其语",
+  "languageNameEn": "英语",
+  "languageNameDe": "德语",
+  "languageNameEs": "西班牙语",
+  "languageNameAr": "阿拉伯语",
+  "languageNameIt": "意大利语",
+  "languageNameZh": "中文",
+  "languageNameRu": "俄语",
+  "languageNameFr": "法语",
+  "currencyNameTRY": "土耳其里拉 (₺)",
+  "currencyNameUSD": "美元 ($)",
+  "currencyNameEUR": "欧元 (€)",
+  "currencyNameGBP": "英镑 (£)",
+  "timeZoneNameIstanbul": "(GMT+3) 伊斯坦布尔",
+  "timeZoneNameLondon": "(GMT+0) 伦敦",
+  "timeZoneNameBerlin": "(GMT+1) 柏林",
+  "timeZoneNameNewYork": "(GMT-5) 纽约",
+  "timeZoneNameDubai": "(GMT+4) 迪拜",
+  "timeZoneNameTokyo": "(GMT+9) 东京",
+  "welcomeMessageTr": "Hoş geldiniz",
+  "welcomeMessageEn": "Welcome",
+  "welcomeMessageDe": "Willkommen",
+  "welcomeMessageEs": "Bienvenido",
+  "welcomeMessageAr": "أهلاً وسهلاً",
+  "welcomeMessageIt": "Benvenuto",
+  "welcomeMessageZh": "欢迎",
+  "welcomeMessageRu": "добро пожаловать",
+  "welcomeMessageFr": "Bienvenue",
+  "setupCategoriesQuickStartTitle": "快速开始",
+  "setupCategoriesQuickStartDescription": "通过创建现成的模板类别快速入门！",
+  "setupCategoriesAddFromTemplateButton": "从模板添加",
+  "setupCategoriesSuccessFromTemplate": "类别已成功从模板创建！",
+  "setupCategoriesErrorFromTemplate": "从模板创建类别错误: {errorDetails}",
+  "@setupCategoriesErrorFromTemplate": {
+    "placeholders": {
+      "errorDetails": {
+        "type": "String"
+      }
+    }
+  },
+  "setupCategoriesErrorLoadingTemplates": "加载模板时发生错误: {errorDetails}",
+  "@setupCategoriesErrorLoadingTemplates": {
+    "placeholders": {
+      "errorDetails": {
+        "type": "String"
+      }
+    }
+  },
+  "setupCategoriesManualAddTitle": "手动输入类别",
+  "categoryDefaultKdvRateLabel": "默认增值税率 (%)",
+  "setupCategoriesMainCategory": "主类别",
+  "setupCategoriesKdsLoading": "正在加载 KDS 屏幕...",
+  "setupCategoriesErrorDefineKdsFirst": "首先，您必须在 设置 > KDS 屏幕 中定义一个屏幕。",
+  "setupCategoriesLabelDisplayKds": "要在其上显示的厨房显示屏幕",
+  "setupCategoriesHintSelectKds": "选择一个厨房屏幕",
+  "setupCategoriesValidatorSelectKds": "请选择一个厨房屏幕。",
+  "setupCategoriesAddButton": "添加类别",
+  "setupCategoriesErrorSelectKds": "请为类别选择一个要在其上显示的厨房屏幕。",
+  "setupCategoriesSuccessAdded": "类别“{categoryName}”添加成功。",
+  "@setupCategoriesSuccessAdded": {
+    "placeholders": {
+      "categoryName": {
+        "type": "String"
+      }
+    }
+  },
+  "setupCategoriesErrorCreating": "创建类别错误: {errorDetails}",
+    "@setupCategoriesErrorCreating": {
+    "placeholders": {
+      "errorDetails": {
+        "type": "String"
+      }
+    }
+  },
+  "errorLoadingData": "加载数据错误: {error}",
+  "@errorLoadingData": {
+    "description": "Error message shown when initial data fails to load.",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Network error"
+      }
+    }
+  },
+  "categoryLimitInfo": "当前: {current}, 已选择: {selected}, 限制: {limit}",
+  "@categoryLimitInfo": {
+    "description": "Informational text showing category counts and the subscription limit.",
+    "placeholders": {
+      "current": {
+        "type": "int",
+        "example": "5"
+      },
+      "selected": {
+        "type": "int",
+        "example": "3"
+      },
+      "limit": {
+        "type": "int",
+        "example": "10"
+      }
+    }
+  },
+  "searchCategoryTemplateLabel": "搜索类别模板",
+  "@searchCategoryTemplateLabel": {
+    "description": "Label for the search input field for category templates."
+  },
+  "searchCategoryTemplateHint": "按类别名称搜索...",
+  "@searchCategoryTemplateHint": {
+    "description": "Hint text for the category template search field."
+  },
+  "selectAll": "全选",
+  "@selectAll": {
+    "description": "Button text to select all visible items."
+  },
+  "deselectAll": "取消全选",
+  "@deselectAll": {
+    "description": "Button text to deselect all visible items."
+  },
+  "templatesDisplayed": "正在显示: {count} 个模板",
+  "@templatesDisplayed": {
+    "description": "Subtitle indicating how many templates are currently visible in the list.",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "15"
+      }
+    }
+  },
+  "noTemplatesFound": "未找到模板",
+  "@noTemplatesFound": {
+    "description": "Message shown when no category templates are available at all."
+  },
+  "noTemplatesMatchSearch": "未找到匹配您搜索条件的\n类别模板。",
+  "@noTemplatesMatchSearch": {
+    "description": "Message shown when a search yields no results."
+  },
+  "iconInfo": "图标: {iconName}",
+  "@iconInfo": {
+    "description": "Subtitle for a template list item, indicating its icon.",
+    "placeholders": {
+      "iconName": {
+        "type": "String",
+        "example": "coffee_cup"
+      }
+    }
+  },
+  "limitWillBeExceeded": "将超出限制",
+  "@limitWillBeExceeded": {
+    "description": "Warning message on a list item indicating that selecting it would exceed the user's plan limit."
+  },
+  "createTemplateButtonWithCount": "创建 {count} 个模板",
+  "@createTemplateButtonWithCount": {
+    "description": "Text for the main action button to create selected templates, including the count.",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "5"
+      }
+    }
+  },
+  "setupCategoriesErrorCreating": "创建类别错误: {errorDetails}",
+  "@setupCategoriesErrorCreating": {
+    "description": "Error message shown when creating categories fails.",
+    "placeholders": {
+      "errorDetails": {
+        "type": "String",
+        "example": "API returned 500"
+      }
+    }
+  },
+  "quickStartTitle": "快速开始",
+  "@quickStartTitle": {
+    "description": "Title for the 'Quick Start' section on the menu items page."
+  },
+  "quickStartDescription": "快速添加流行类别的现成产品",
+  "@quickStartDescription": {
+    "description": "Description for the 'Quick Start' section, encouraging users to add items from templates."
+  },
+  "addFromTemplateButton": "从模板添加",
+  "@addFromTemplateButton": {
+    "description": "Label for the button that opens the template selection dialog for menu items."
+  },
+  "menuItemsAddedSuccess": "{count,plural, =1{1 个产品成功添加！} other{# 个产品成功添加！}}",
+  "@menuItemsAddedSuccess": {
+    "description": "Success message shown after adding one or more menu items from templates.",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "5"
+      }
+    }
+  },
+  "menuItemsAddedError": "未能添加任何产品。请重试。",
+  "@menuItemsAddedError": {
+    "description": "Error message shown when no menu items could be added from templates."
+  },
+  "errorCreatingCustomProduct": "创建自定义产品错误: {error}",
+  "@errorCreatingCustomProduct": {
+    "description": "Error message thrown when creating a custom menu item fails.",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Invalid price"
+      }
+    }
+  },
+  "menuItemService_errorBusinessInfoMissing": "商家信息缺失。请重新启动应用程序。",
+  "menuItemService_errorInvalidCategory": "类别无效。请选择一个不同的类别。",
+  "menuItemService_errorProductAlreadyExists": "已存在同名产品。请尝试不同的名称。",
+  "menuItemService_errorPriceRequiredForManualProduct": "手动产品必须指定价格。",
+  "menuItemService_errorAuthorization": "授权错误。请重新登录。",
+  "menuItemService_errorForbidden": "您没有权限执行此操作。",
+  "menuItemService_errorProductLimitReached": "您已达到产品添加限制。",
+  "menuItemService_errorCreatingCustomProduct": "创建自定义产品错误: {error}",
+  "@menuItemService_errorCreatingCustomProduct": {
+      "description": "A generic error message when creating a custom product.",
+      "placeholders": {
+          "error": {
+              "type": "String",
+              "example": "Network error"
+          }
+      }
+  },
+  "menuItemService_unnamedProduct": "未命名产品",
+  "menuItemService_errorCouldNotCreateUniqueName": "无法创建唯一的产品名称。请手动尝试不同的名称。",
+  "menuItemService_errorCreatingProduct": "创建产品时发生错误: {error}",
+  "@menuItemService_errorCreatingProduct": {
+      "description": "Generic product creation error.",
+      "placeholders": {
+          "error": {
+              "type": "String",
+              "example": "API error"
+          }
+      }
+  },
+  "menuItemService_errorVariantImageUploadFailed": "变体图片上传失败。",
+  "menuItemService_errorFetchingTemplateData": "获取模板数据时发生错误。",
+  "menuItemService_errorNetworkFetchingTemplate": "获取模板数据时的网络错误: {error}",
+  "@menuItemService_errorNetworkFetchingTemplate": {
+      "description": "Network error message when fetching template data.",
+      "placeholders": {
+          "error": {
+              "type": "String",
+              "example": "Connection timed out"
+          }
+      }
+  },
+  "menuItemService_errorFirebaseUploadFailed": "文件上传失败。",
+  "manualMenuItemAddTitle": "手动添加产品",
+  "currencySymbol": "¥ ",
+  "menuItemPriceHint": "例如: 25.50",
+  "selectCategoryFirst": "请先选择一个类别",
+  "loadingTemplates": "正在加载模板...",
+  "noTemplatesFoundForCategory": "此类别未找到模板",
+  "addCustomProduct": "添加自定义产品",
+  "noProductsFoundForSearchCriteria": "未找到匹配您搜索条件的\n产品。",
+  "deselectAll": "取消全选",
+  "selectAll": "全选",
+  "addNewProduct": "添加新产品",
+  "unnamedProduct": "未命名产品",
+  "limitWillBeExceeded": "将超出限制",
+  "productTypeRecipe": "来自配方",
+  "productTypeManual": "手动",
+  "priceLabel": "价格",
+  "variants": "变体",
+  "variantsAddedCount": "已添加 {count} 个变体",
+  "@variantsAddedCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "add": "添加",
+  "edit": "编辑",
+  "menuItemVariantsDialogErrorLoadingVariants": "加载变体错误: {error}",
+  "@menuItemVariantsDialogErrorLoadingVariants": {
+      "placeholders": {
+          "error": {
+              "type": "String"
+          }
+      }
+  },
+  "menuItemVariantsDialogQuickAddVariant": "快速添加变体:",
+  "menuItemVariantsDialogLoadingTemplates": "正在加载模板...",
+  "menuItemVariantsDialogLimitReachedContent": "您已达到变体添加限制 ({limit})。请升级您的套餐以添加更多变体。",
+  "@menuItemVariantsDialogLimitReachedContent": {
+      "placeholders": {
+          "limit": {
+              "type": "int"
+          }
+      }
+  },
+  "menuItemVariantsDialogFirebaseUploadFailed": "Firebase 上传失败",
+  "menuItemVariantsDialogErrorUploadingPhoto": "上传照片错误: {error}",
+  "@menuItemVariantsDialogErrorUploadingPhoto": {
+      "placeholders": {
+          "error": {
+              "type": "String"
+          }
+      }
+  },
+  "menuItemVariantsDialogVariantAddedSuccess": "变体“{variantName}”添加成功！",
+  "@menuItemVariantsDialogVariantAddedSuccess": {
+      "placeholders": {
+          "variantName": {
+              "type": "String"
+          }
+      }
+  },
+  "menuItemVariantsDialogDeleteVariantTitle": "删除变体",
+  "menuItemVariantsDialogDeleteVariantContent": "您确定要删除变体“{variantName}”吗？",
+  "@menuItemVariantsDialogDeleteVariantContent": {
+      "placeholders": {
+          "variantName": {
+              "type": "String"
+          }
+      }
+  },
+  "menuItemVariantsDialogVariantDeletedSuccess": "变体“{variantName}”已删除",
+  "@menuItemVariantsDialogVariantDeletedSuccess": {
+      "placeholders": {
+          "variantName": {
+              "type": "String"
+          }
+      }
+  },
+  "menuItemVariantsDialogErrorDeletingVariant": "删除变体错误: {error}",
+  "@menuItemVariantsDialogErrorDeletingVariant": {
+      "placeholders": {
+          "error": {
+              "type": "String"
+          }
+      }
+  },
+  "menuItemVariantsDialogUnnamedProduct": "未命名产品",
+  "menuItemVariantsDialogTitle": "变体管理 - {menuItemName}",
+  "@menuItemVariantsDialogTitle": {
+      "placeholders": {
+          "menuItemName": {
+              "type": "String"
+          }
+      }
+  },
+  "menuItemVariantsDialogCurrentVariants": "当前变体 ({count}):",
+  "@menuItemVariantsDialogCurrentVariants": {
+      "placeholders": {
+          "count": {
+              "type": "int"
+          }
+      }
+  },
+  "menuItemVariantsDialogExtraTag": "附加",
+  "menuItemVariantsDialogDeleteVariantTooltip": "删除变体",
+  "menuItemVariantsDialogNoVariantsAdded": "尚未添加变体",
+  "menuItemVariantsDialogNoVariantsDescription": "您可以为该产品添加尺寸或附加选项等变体",
+  "menuItemVariantsDialogAddNewVariant": "添加新变体:",
+  "menuItemVariantsDialogVariantNameLabel": "变体名称",
+  "menuItemVariantsDialogVariantNameHint": "大份, 小份, 附加...",
+  "menuItemVariantsDialogVariantNameRequired": "变体名称为必填项",
+  "menuItemVariantsDialogPriceLabel": "价格",
+  "menuItemVariantsDialogPriceRequired": "价格为必填项",
+  "menuItemVariantsDialogInvalidPrice": "价格无效",
+  "menuItemVariantsDialogExtraOptionTitle": "附加选项",
+  "menuItemVariantsDialogExtraOptionSubtitle": "是否为额外收费的特色？",
+  "menuItemVariantsDialogVariantPhotoOptional": "变体照片 (可选)",
+  "menuItemVariantsDialogSelectImage": "选择图片",
+  "menuItemVariantsDialogAddingButton": "正在添加...",
+  "menuItemVariantsDialogAddVariantButton": "添加变体",
+  "menuItemVariantsDialogCloseButton": "关闭",
+  "templateCategoryDropdownLabel": "选择类别",
+  "templateCategoryDropdownUnknownCategory": "未知类别",
+  "templateCategoryDropdownHint": "选择一个类别...",
+  "dialogDeleteMenuItemContent": "您确定要删除产品 {menuItemName} 吗？",
+  "@dialogDeleteMenuItemContent": {
+    "placeholders": {
+      "menuItemName": {
+        "type": "String",
+        "example": "Cheeseburger"
+      }
+    }
+  },
+  "snackbarMenuItemDeleted": "产品 {menuItemName} 已删除",
+  "@snackbarMenuItemDeleted": {
+    "placeholders": {
+      "menuItemName": {
+        "type": "String",
+        "example": "Cheeseburger"
+      }
+    }
+  },
+  "snackbarMenuItemDeleteError": "删除产品错误: {error}",
+  "@snackbarMenuItemDeleteError": {
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Network error"
+      }
+    }
+  },
+  "snackbarUploadingPhotoFor": "正在为 {menuItemName} 上传照片...",
+  "@snackbarUploadingPhotoFor": {
+    "placeholders": {
+      "menuItemName": {
+        "type": "String",
+        "example": "Cheeseburger"
+      }
+    }
+  },
+  "snackbarPhotoUpdateSuccess": "{menuItemName} 的照片更新成功！",
+  "@snackbarPhotoUpdateSuccess": {
+    "placeholders": {
+      "menuItemName": {
+        "type": "String",
+        "example": "Cheeseburger"
+      }
+    }
+  },
+  "snackbarPhotoUploadFailed": "照片上传失败",
+  "snackbarPhotoUploadError": "上传照片时出错: {error}",
+  "@snackbarPhotoUploadError": {
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Upload failed"
+      }
+    }
+  },
+  "firebaseUploadError": "Firebase 上传错误: {error}",
+  "@firebaseUploadError": {
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Permission denied"
+      }
+    }
+  },
+  "apiUpdateError": "API 更新错误: {error}",
+  "@apiUpdateError": {
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Not found"
+      }
+    }
+  },
+  "dialogPhotoSourceTitle": "照片来源",
+  "dialogPhotoSourceContent": "您想从哪里选择照片？",
+  "photoSourceGallery": "图库",
+  "photoSourceCamera": "相机",
+  "uncategorized": "未分类",
+  "unnamedProduct": "未命名产品",
+  "vatRate": "增值税 {kdvRate}%",
+  "@vatRate": {
+    "placeholders": {
+      "kdvRate": {
+        "type": "String",
+        "example": "10"
+      }
+    }
+  },
+  "addPhoto": "添加\n照片",
+  "tooltipEdit": "编辑",
+  "tooltipDelete": "删除",
+  "badgeNew": "新",
+  "productNameRequired": "产品名称为必填项",
+  "genericError": "错误: {error}",
+  "@genericError": {
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "No network connection"
+      }
+    }
+  },
+  "addNewProductTitle": "添加新产品",
+  "quickAddProductTitle": "快速添加产品",
+  "quickAddProductInfo": "• 产品默认基于配方创建。\n• 您可以稍后编辑价格、手动/配方设置和变体。\n• 添加后，它将出现在产品列表中。",
+  "productNameLabel": "产品名称",
+  "productNameHint": "例如: 特制披萨、果汁、家常饭菜...",
+  "dialogButtonCancel": "取消",
+  "addingButtonLabel": "正在添加...",
+  "addProductButtonLabel": "添加产品",
+  "audioGuideActive": "语音指南已激活",
+  "tooltipUnmute": "取消静音",
+  "tooltipMute": "静音",
+  "tooltipReplayGuide": "重播指南",
+  "categoryLimitIndicator": "已创建 {count} / {limit} 个类别",
+  "@categoryLimitIndicator": {
+    "description": "Shows the user's current category count and their limit.",
+    "placeholders": {
+      "count": {
+        "type": "String",
+        "example": "5"
+      },
+      "limit": {
+        "type": "String",
+        "example": "20"
+      }
+    }
+  },
+  "selectImageButton": "选择图片",
+  "addProductFromTemplateTitle": "从模板添加产品",
+  "itemSelectionInfo": "当前: {currentCount}, 已选择: {selectedCount}",
+  "@itemSelectionInfo": {
+    "description": "Shows the current and selected item count on the template selection screen.",
+    "placeholders": {
+      "currentCount": {
+        "type": "String",
+        "example": "50"
+      },
+      "selectedCount": {
+        "type": "String",
+        "example": "12"
+      }
+    }
+  },
+  "totalVariantsInfo": "总变体数: {count}",
+  "@totalVariantsInfo": {
+    "description": "Shows the total number of variants for the selected items.",
+    "placeholders": {
+      "count": {
+        "type": "String",
+        "example": "25"
+      }
+    }
+  },
+  "searchProductLabel": "搜索产品",
+  "searchProductHint": "按产品名称搜索...",
+  "setupCategoriesUnnamedCategory": "未命名类别",
+  "setupCategoriesKdsInfoWithId": "KDS ID: {id}",
+  "setupCategoriesSubCategoryLabel": "子类别: {parentName}",
+  "setupCategoriesVatRateLabel": "增值税 {rate}%",
+  "buttonDelete": "删除",
+  "imagePickerSelectButton": "选择图片",
+  "audioGuideTooltipUnmute": "取消静音",
+  "audioGuideTooltipMute": "静音",
+  "audioGuideTooltipReplay": "重播指南",
+  "variantManagementDialogTitle": "变体管理 - {templateName}",
+  "quickAddVariantTitle": "快速添加变体:",
+  "loadingVariantTemplates": "正在加载变体模板...",
+  "addedVariantsTitle": "已添加变体 ({count}):",
+  "variantExtraTag": "附加",
+  "variantWithPhotoTag": "有照片",
+  "manualAddVariantTitle": "手动添加变体:",
+  "variantNameHint": "大份, 小份...",
+  "checkboxExtraOptionTitle": "附加选项",
+  "checkboxExtraOptionSubtitle": "是否为额外收费的特色？",
+  "checkboxAddPhotoTitle": "添加照片",
+  "checkboxAddPhotoSubtitle": "变体图片",
+  "variantPhotoTitle": "变体照片",
+  "statusSelected": "✓ 已选择",
+  "statusUploading": "正在上传...",
+  "buttonAddVariant": "添加变体",
+  "buttonClose": "关闭",
+  "buttonComplete": "完成 ({count})",
+  "snackbarVariantNameAndPriceRequired": "变体名称和价格为必填项",
+  "snackbarInvalidPrice": "请输入有效的价格",
+  "snackbarVariantPhotoRequiredWhenActive": "照片选项处于激活状态时，变体照片为必填项",
+  "snackbarUploadingVariantPhoto": "正在上传变体照片...",
+  "snackbarPhotoUploadFailed": "照片上传失败: {error}",
+  "snackbarVariantAdded": "变体“{variantName}”已添加",
+  "snackbarPendingVariantDataCleared": "待处理的变体数据已清除",
+  "firebaseUploadFailed": "Firebase 上传失败",
+  "dialogPendingVariantTitle": "待处理变体",
+  "dialogPendingVariantContent1": "手动变体输入表单中有已填写的字段。",
+  "dialogPendingVariantContentName": "• 变体名称: “{name}”",
+  "dialogPendingVariantContentPrice": "• 价格: “₺{price}”",
+  "dialogPendingVariantContent2": "您想在不添加此变体的情况下退出吗？",
+  "dialogButtonDeleteAndExit": "删除并退出",
+  "validatorVariantNameRequired": "变体名称为必填项",
+  "validatorPriceRequired": "价格为必填项",
+  "validatorInvalidPrice": "价格无效",
+  "kdsPrepare": "准备",
+  "kdsPreparing": "正在准备...",
+  "kdsPreparationStarted": "准备已开始",
+  "kdsReady": "就绪",
+  "kdsMarkingReady": "正在标记为就绪...",
+  "kdsProductReady": "产品已就绪！",
+  "kdsCompleted": "已完成",
+  "kdsWaiting": "等待中",
+  "kdsStartPreparation": "开始准备",
+  "kdsStartingPreparation": "正在开始准备...",
+  "kdsOrderNumber": "订单 #{orderId}",
+  "@kdsOrderNumber": {
+      "description": "Header showing the order number on the KDS screen",
+      "placeholders": {
+          "orderId": {
+              "type": "String",
+              "example": "A5B1C"
+          }
+      }
+  },
+  "kdsPackage": "外卖",
+  "kdsUnknownProduct": "未知产品",
+  "kdsNote": "备注: {noteText}",
+  "@kdsNote": {
+      "description": "Note entered for the order item",
+      "placeholders": {
+          "noteText": {
+              "type": "String"
+          }
+      }
+  },
+  "kdsNoItemsInOrder": "此订单中没有产品。",
+  "kdsCardError": "加载卡片时发生错误。",
+  "kdsScreenTitle": "{screenName} KDS",
+  "@kdsScreenTitle": {
+      "description": "The title of the KDS screen",
+      "placeholders": {
+          "screenName": {
+              "type": "String",
+              "example": "Kitchen"
+          }
+      }
+  },
+  "kdsScreenTooltipGoHome": "前往首页",
+  "kdsScreenTooltipBack": "返回",
+  "kdsScreenTooltipRefresh": "刷新",
+  "kdsScreenErrorFetching": "获取订单错误: {error}",
+  "@kdsScreenErrorFetching": {
+      "description": "Error message when KDS orders fail to load",
+      "placeholders": {
+          "error": {
+              "type": "String"
+          }
+      }
+  },
+  "kdsScreenButtonRetry": "重试",
+  "kdsScreenNoOrders": "没有活跃订单可显示。",
+  "kdsScreenWaitForRefresh": "请等待上次刷新完成。",
+  "kdsScreenRefreshingOrders": "正在刷新 KDS 订单...",
+  "kdsScreenOrdersUpdated": "订单已更新！",
+  "kdsScreenClosing": "正在关闭 KDS...",
+  "kdsScreenRefreshing": "正在刷新...",
+  "orderStatusUpdate": "订单 #{orderId} 状态已更新: {statusDisplay}",
+  "orderItemAdded": "{itemName} 已添加到订单 #{orderId}。",
+  "statusApproved": "已批准 (已发送至厨房)",
+  "statusPreparing": "在厨房准备中",
+  "statusReadyForPickup": "准备取走",
+  "newOrderNotificationTitle": "新订单通知",
+  "orderStatusUpdateTitle": "订单状态已更新",
+  "orderItemAddedTitle": "订单状态已更新",
+  "tableCellPickingUp": "👐 正在取走...",
+  "tableCellPickedUp": "✅ 已取走",
+  "tableCellPickupFailed": "取走操作失败",
+  "tableCellUnexpectedError": "意外错误: {error}",
+  "@tableCellUnexpectedError": {
+    "description": "A generic error message",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Network error"
+      }
+    }
+  },
+  "tableCellDelivering": "🎉 正在交付...",
+  "tableCellDelivered": "🎉 已交付",
+  "tableCellDeliveryFailed": "交付操作失败",
+  "tableCellKdsPreparing": "正在准备",
+  "tableCellKdsReady": "就绪",
+  "tableCellKdsPickedUp": "已取走",
+  "tableCellKdsCompleted": "已完成",
+  "tableCellTooltipDeliveredToCustomer": "已送达顾客",
+  "tableCellTooltipWaiterPickup": "服务员取走",
+  "tableCellTooltipDeliverToCustomer": "送达顾客",
+  "tableCellTooltipWaitingForKitchen": "等待厨房",
+  "tableCellUnknownProduct": "未知产品",
+  "tableCellNewLabel": " [新]",
+  "tableCellNoOrderItems": "无订单项",
+  "tableCellTooltipAddOrEditProduct": "添加或编辑产品",
+  "tableCellTooltipMoreActions": "更多操作",
+  "tableCellMenuTransferTable": "转移桌位",
+  "tableCellMenuCancelOrder": "取消订单",
+  "orderStatusUpdateMessage": "订单 #{orderId} 状态已更新: {statusDisplay}",
+  "@orderStatusUpdateMessage": {
+    "description": "Notification message when an order status changes.",
+    "placeholders": {
+      "orderId": {},
+      "statusDisplay": {}
+    }
+  },
+  "orderItemAddedMessage": "“{itemName}”已添加到订单 #{orderId}。",
+  "@orderItemAddedMessage": {
+    "description": "Notification message when a new item is added to an order.",
+    "placeholders": {
+      "itemName": {},
+      "orderId": {}
+    }
+  },
+  "websiteSettingsErrorQrCreation": "无法创建二维码。",
+  "@websiteSettingsErrorQrCreation": {
+    "description": "Error message shown when the QR code generation fails."
+  },
+  "websiteSettingsErrorStoragePermission": "未授予存储权限。",
+  "@websiteSettingsErrorStoragePermission": {
+    "description": "Error message for when file storage permission is denied."
+  },
+  "websiteSettingsErrorDownloadsFolder": "未找到下载文件夹。",
+  "@websiteSettingsErrorDownloadsFolder": {
+    "description": "Error message when the device's downloads directory cannot be located."
+  },
+  "websiteSettingsErrorOpenFile": "无法打开文件: {message}",
+  "@websiteSettingsErrorOpenFile": {
+    "description": "Error message when a downloaded file cannot be opened by the system.",
+    "placeholders": {
+      "message": {
+        "type": "String",
+        "example": "No app found to open this file type."
+      }
+    }
+  },
+  "websiteSettingsQrDialogTitle": "网站二维码",
+  "@websiteSettingsQrDialogTitle": {
+    "description": "Title for the dialog and tooltip related to the website QR code."
+  },
+  "websiteSettingsErrorBusinessNameNotFound": "未找到商家名称，无法创建二维码。",
+  "@websiteSettingsErrorBusinessNameNotFound": {
+    "description": "Snackbar error message when the business name is missing for QR code generation."
+  },
+  "websiteSettingsSectionMap": "地图设置",
+  "@websiteSettingsSectionMap": {
+    "description": "Section header for map configuration."
+  },
+  "websiteSettingsLabelLatitude": "纬度",
+  "@websiteSettingsLabelLatitude": {
+    "description": "Label for the map latitude input field."
+  },
+  "websiteSettingsValidatorLatitude": "输入有效纬度 (-90 到 90)",
+  "@websiteSettingsValidatorLatitude": {
+    "description": "Validation error for the latitude input field."
+  },
+  "websiteSettingsLabelLongitude": "经度",
+  "@websiteSettingsLabelLongitude": {
+    "description": "Label for the map longitude input field."
+  },
+  "websiteSettingsValidatorLongitude": "输入有效经度 (-180 到 180)",
+  "@websiteSettingsValidatorLongitude": {
+    "description": "Validation error for the longitude input field."
+  },
+  "websiteSettingsButtonSelectLocation": "从地图选择位置",
+  "@websiteSettingsButtonSelectLocation": {
+    "description": "Button text to open the map picker screen."
+  },
+  "websiteSettingsLabelMapZoom": "地图缩放级别 (1-20)",
+  "@websiteSettingsLabelMapZoom": {
+    "description": "Label for the map zoom level input field."
+  },
+  "websiteSettingsValidatorZoomRequired": "缩放级别为必填项",
+  "@websiteSettingsValidatorZoomRequired": {
+    "description": "Validation error when the zoom level is empty."
+  },
+  "websiteSettingsValidatorZoomRange": "输入有效缩放级别 (1-20)",
+  "@websiteSettingsValidatorZoomRange": {
+    "description": "Validation error for an out-of-range zoom level."
+  },
+  "websiteSettingsLabelFacebookUrl": "Facebook URL",
+  "@websiteSettingsLabelFacebookUrl": {
+    "description": "Label for the Facebook URL input field."
+  },
+  "websiteSettingsLabelInstagramUrl": "Instagram URL",
+  "@websiteSettingsLabelInstagramUrl": {
+    "description": "Label for the Instagram URL input field."
+  },
+  "websiteSettingsLabelTwitterUrl": "Twitter/X URL",
+  "@websiteSettingsLabelTwitterUrl": {
+    "description": "Label for the Twitter/X URL input field."
+  },
+  "websiteSettingsSectionOnlineActions": "在线操作",
+  "@websiteSettingsSectionOnlineActions": {
+    "description": "Section header for online reservations and ordering."
+  },
+  "websiteSettingsToggleAllowReservations": "允许在线预订",
+  "@websiteSettingsToggleAllowReservations": {
+    "description": "Label for the switch to enable/disable online reservations."
+  },
+  "websiteSettingsToggleAllowOnlineOrdering": "允许在线订购",
+  "@websiteSettingsToggleAllowOnlineOrdering": {
+    "description": "Label for the switch to enable/disable online ordering."
+  },
+  "websiteSettingsThemeSystem": "系统默认",
+  "@websiteSettingsThemeSystem": {
+    "description": "Theme option for system default."
+  },
+  "websiteSettingsThemeLight": "浅色模式",
+  "@websiteSettingsThemeLight": {
+    "description": "Theme option for light mode."
+  },
+  "websiteSettingsThemeDark": "深色模式",
+  "@websiteSettingsThemeDark": {
+    "description": "Theme option for dark mode."
+  },
+  "websiteSettingsLabelTheme": "网站主题",
+  "@websiteSettingsLabelTheme": {
+    "description": "Label for the website theme selection dropdown."
+  },
+  "websiteSettingsButtonUploadImage": "上传图片",
+  "@websiteSettingsButtonUploadImage": {
+    "description": "Placeholder text inside the image picker widget."
+  },
+  "mapPickerAppBarTitle": "从地图选择位置",
+  "@mapPickerAppBarTitle": {
+    "description": "Title of the map picker screen."
+  },
+  "mapPickerMarkerTitle": "所选位置",
+  "@mapPickerMarkerTitle": {
+    "description": "Title for the info window of the map marker."
+  },
+  "mapPickerMarkerSnippet": "这是您的商家位置吗？",
+  "@mapPickerMarkerSnippet": {
+    "description": "Snippet text for the info window of the map marker."
+  },
+  "mapPickerSearchHint": "搜索餐厅或地址...",
+  "@mapPickerSearchHint": {
+    "description": "Hint text for the location search bar."
+  },
+  "mapPickerConfirmButton": "确认此位置",
+  "@mapPickerConfirmButton": {
+    "description": "Label for the button to confirm the selected location."
+  },
+  "mapPickerUnknownPlace": "未知地点",
+  "@mapPickerUnknownPlace": {
+    "description": "Fallback text for a search result without a description."
+  },
+  "mapPickerErrorApiKey": "Google 地图 API 密钥错误。请联系您的管理员。",
+  "@mapPickerErrorApiKey": {
+    "description": "Error message for API key related issues."
+  },
+  "mapPickerErrorSearch": "搜索时发生错误: {statusCode}",
+  "@mapPickerErrorSearch": {
+    "description": "Error message for a failed place search, including the HTTP status code.",
+    "placeholders": {
+      "statusCode": {
+        "type": "String",
+        "example": "404"
+      }
+    }
+  },
+  "mapPickerErrorConnection": "连接错误。请检查您的互联网连接。",
+  "@mapPickerErrorConnection": {
+    "description": "Generic error for network or connection issues."
+  },
+  "mapPickerErrorLocationDetails": "获取位置详情时发生错误。",
+  "@mapPickerErrorLocationDetails": {
+    "description": "Error message when failing to get details for a selected place."
+  },
+  "notificationOrderItemRemoved": "订单 #{orderId} 已更新: “{productName}”已被移除。",
+  "@notificationOrderItemRemoved": {
+    "description": "Notification when an item is removed from an order.",
+    "placeholders": {
+      "orderId": {
+        "type": "String",
+        "example": "69"
+      },
+      "productName": {
+        "type": "String",
+        "example": "Ayran"
+      }
+    }
+  },
+  "notificationOrderCancelledAllItemsRemoved": "订单 #{orderId} 已被取消，因为其所有产品均已被移除。",
+  "@notificationOrderCancelledAllItemsRemoved": {
+    "description": "Notification when an order is automatically cancelled after its last item is removed.",
+    "placeholders": {
+      "orderId": {
+        "type": "String",
+        "example": "69"
+      }
+    }
+  },
+  "notificationOrderItemUpdated": "订单 #{orderId} 已更新: 产品“{productName}”的状态/数量已更改。",
+  "@notificationOrderItemUpdated": {
+    "description": "Notification for when an item's details (like quantity) are updated.",
+    "placeholders": {
+      "orderId": {
+        "type": "String",
+        "example": "70"
+      },
+      "productName": {
+        "type": "String",
+        "example": "Adana Kebab"
+      }
+    }
+  },
+  "socketStatusWaitingForConnection": "正在等待连接...",
+  "socketStatusCooldownMode": "连接错误过多 - 冷却模式",
+  "socketStatusTokenRequired": "连接需要令牌。",
+  "socketStatusTokenRefreshFailed": "无法刷新令牌。",
+  "socketStatusNetworkOffline": "无网络连接",
+  "socketStatusWaitingForServer": "正在等待服务器确认...",
+  "socketStatusConnected": "已连接",
+  "socketStatusDisconnected": "已断开连接。正在重试...",
+  "socketStatusConnectionError": "连接错误 - 正在重试...",
+  "socketStatusTerminated": "连接已终止",
+  "socketNotificationConnectionSuccess": "连接成功。",
+  "socketNotificationDisconnected": "连接丢失。",
+  "socketNotificationConnectionError": "连接错误。",
+  "socketNotificationSystemError": "系统错误。",
+  "socketNotificationWaitingListUpdated": "等待列表已更新。",
+  "socketNotificationPagerUpdated": "传呼机状态已更新。",
+  "socketNotificationStockUpdated": "库存状态已更新。",
+  "socketNotificationGenericUpdate": "更新",
+  "kdsScreenValidator": "请选择一个 KDS 屏幕",
+  "kdsScreenNotSelected": "未选择 KDS 屏幕",
+  "setupMenuItemsAddFromTemplateButton": "从模板添加",
+  "@setupMenuItemsAddFromTemplateButton": {
+    "description": "Button text for adding menu items from templates"
+  },
+  "setupMenuItemsErrorCategoryNotFound": "未找到类别名称。",
+  "@setupMenuItemsErrorCategoryNotFound": {
+    "description": "Error message when category name cannot be found"
+  },
+  "setupMenuItemsErrorNoTemplatesForCategory": "未找到此类别合适的品模板。",
+  "@setupMenuItemsErrorNoTemplatesForCategory": {
+    "description": "Error message when no templates are found for the selected category"
+  },
+  "setupMenuItemsSuccessAddedFromTemplate": "已成功从模板添加 {count} 个产品！",
+  "@setupMenuItemsSuccessAddedFromTemplate": {
+    "description": "Success message when products are added from templates",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "5"
+      }
+    }
+  },
+  "setupMenuItemsErrorLoadingTemplates": "加载模板错误: {error}",
+  "@setupMenuItemsErrorLoadingTemplates": {
+    "description": "Error message when loading templates fails",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Network error"
+      }
+    }
+  },
+  "setupMenuItemsTemplateDialogTitle": "选择产品模板",
+  "@setupMenuItemsTemplateDialogTitle": {
+    "description": "Title for the template selection dialog"
+  },
+  "setupMenuItemsTemplateSearchLabel": "搜索产品...",
+  "@setupMenuItemsTemplateSearchLabel": {
+    "description": "Label for the template search field"
+  },
+  "setupMenuItemsTemplateSearchHint": "输入产品名称",
+  "@setupMenuItemsTemplateSearchHint": {
+    "description": "Hint text for the template search field"
+  },
+  "setupMenuItemsTemplateSelectAll": "全选",
+  "@setupMenuItemsTemplateSelectAll": {
+    "description": "Text for select all checkbox when not all visible items are selected"
+  },
+  "setupMenuItemsTemplateDeselectAll": "取消全选",
+  "@setupMenuItemsTemplateDeselectAll": {
+    "description": "Text for select all checkbox when all visible items are selected"
+  },
+  "setupMenuItemsTemplateItemsShowing": "正在显示 {count} 个产品",
+  "@setupMenuItemsTemplateItemsShowing": {
+    "description": "Subtitle showing how many items are displayed",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "15"
+      }
+    }
+  },
+  "setupMenuItemsTemplateNoTemplatesFound": "未找到合适的模板。",
+  "@setupMenuItemsTemplateNoTemplatesFound": {
+    "description": "Message when no templates are available"
+  },
+  "setupMenuItemsTemplateNoSearchResults": "未找到匹配您搜索条件的产品。",
+  "@setupMenuItemsTemplateNoSearchResults": {
+    "description": "Message when search returns no results"
+  },
+  "setupMenuItemsTemplateUnnamedTemplate": "未命名模板",
+  "@setupMenuItemsTemplateUnnamedTemplate": {
+    "description": "Default name for templates without a name"
+  },
+  "setupMenuItemsTemplateAddSelectedButton": "添加已选 ({count})",
+  "@setupMenuItemsTemplateAddSelectedButton": {
+    "description": "Button text showing how many templates are selected for adding",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "3"
+      }
+    }
+  },
+  "setupMenuItemsTemplateLimitInfo": "当前: {current}, 已选择: {selected}, 限制: {limit}",
+  "@setupMenuItemsTemplateLimitInfo": {
+    "description": "Limit information text - current number of products, number of selected templates, and total limit",
+    "placeholders": {
+      "current": {
+        "type": "int",
+        "example": "5"
+      },
+      "selected": {
+        "type": "int",
+        "example": "3"
+      },
+      "limit": {
+        "type": "int",
+        "example": "20"
+      }
+    }
+  },
+  "setupMenuItemsTemplateLimitExceeded": "将超出限制",
+  "@setupMenuItemsTemplateLimitExceeded": {
+    "description": "Warning message indicating that the limit will be exceeded when a template is selected"
+  },
+  "notificationDefault": "您有新的通知！",
+  "@notificationDefault": {
+    "description": "Default message to be shown for notifications without specific text defined."
+  },
+  "notificationTableInfo": " (桌位 {tableNumber})",
+  "@notificationTableInfo": {
+    "description": "Additional text used to show the table number in notification texts.",
+    "placeholders": {
+      "tableNumber": {
+        "type": "String",
+        "example": "12"
+      }
+    }
+  },
+  "notificationOrderApprovedForKitchen": "🍳 新订单 #{orderId}{tableInfo} 已发送至厨房！",
+  "@notificationOrderApprovedForKitchen": {
+    "description": "Message notifying that an approved order has been sent to the kitchen.",
+    "placeholders": {
+      "orderId": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationOrderPreparing": "⏳ 订单 #{orderId} 正在准备中...",
+  "@notificationOrderPreparing": {
+    "description": "Message notifying that an order has started being prepared in the kitchen.",
+    "placeholders": {
+      "orderId": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationOrderReadyForPickup": "🔔 订单 #{orderId} 已准备就绪 - 等待服务员！",
+  "@notificationOrderReadyForPickup": {
+    "description": "Message notifying that an order is ready in the kitchen and is waiting to be picked up by a waiter.",
+    "placeholders": {
+      "orderId": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationOrderItemAdded": "➕ 订单 #{orderId} 中添加了新产品！",
+  "@notificationOrderItemAdded": {
+    "description": "Message notifying that a new item has been added to an existing order.",
+    "placeholders": {
+      "orderId": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationGuestOrderPending": "⏰ 客人订单等待批准: #{orderId}",
+  "@notificationGuestOrderPending": {
+    "description": "Message notifying that an order placed by a guest (via QR code) is waiting for staff approval.",
+    "placeholders": {
+      "orderId": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationOrderNeedsReapproval": "🔄 订单 #{orderId} 需要重新批准！",
+  "@notificationOrderNeedsReapproval": {
+    "description": "Message notifying that an existing order needs re-approval because new items have been added.",
+    "placeholders": {
+      "orderId": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationNewOrder": "🆕 收到新订单: #{orderId}{tableInfo}",
+  "@notificationNewOrder": {
+    "description": "Fallback text for a general new order notification.",
+    "placeholders": {
+      "orderId": {
+        "type": "String"
+      }
+    }
+  },
+  "ingredientManagementTitle": "原料库存管理",
+  "ingredientAddTitle": "添加新原料",
+  "ingredientNameLabel": "原料名称",
+  "ingredientInitialStockLabel": "初始库存数量",
+  "validatorInvalidNumber": "请输入有效的数字。",
+  "addButton": "添加",
+  "ingredientSuccessAdd": "原料添加成功。",
+  "ingredientNoItems": "尚未添加任何原料。\n点击“+”按钮开始添加。",
+  "ingredientStockLabel": "库存: {quantity} {unit}",
+  "@ingredientStockLabel": {
+    "placeholders": {
+      "quantity": {},
+      "unit": {}
+    }
+  },
+  "errorTitle": "错误",
+  "ingredientErrorFetchUnits": "无法获取计量单位: {error}",
+  "@ingredientErrorFetchUnits": {
+    "placeholders": {
+      "error": {}
+    }
+  },
+  "ingredientUnitLabel": "计量单位",
+  "ingredientErrorSelectUnit": "请选择一个单位。",
+  "recipeFor": "{variantName} 的配方",
+  "@recipeFor": {
+    "description": "Title of the recipe management screen",
+    "placeholders": {
+      "variantName": {
+        "type": "String",
+        "example": "Large Size"
+      }
+    }
+  },
+  "recipeTitle": "配方",
+  "ingredientAddToRecipe": "将原料添加到配方",
+  "ingredientSelect": "选择原料...",
+  "quantity": "数量",
+  "recipeNoIngredients": "此变体尚未添加任何原料。",
+  "@ingredientManagementTitle": {},
+  "@ingredientNoItems": {},
+  "@ingredientAddTitle": {},
+  "@ingredientNameLabel": {},
+  "@ingredientInitialStockLabel": {},
+  "@ingredientUnitLabel": {},
+  "@ingredientErrorSelectUnit": {},
+  "@ingredientSuccessAdd": {},
+  "ingredientAdjustStockTitle": "调整 {ingredientName} 库存",
+  "@ingredientAdjustStockTitle": {
+    "placeholders": {
+      "ingredientName": {}
+    }
+  },
+  "stockMovementTypeLabel": "变动类型",
+  "@stockMovementTypeLabel": {},
+  "@quantity": {},
+  "descriptionLabel": "描述",
+  "@descriptionLabel": {},
+  "descriptionHintOptional": "描述 (可选)",
+  "@descriptionHintOptional": {},
+  "validatorInvalidPositiveNumber": "请输入大于 0 的有效数字。",
+  "@validatorInvalidPositiveNumber": {},
+  "ingredientSuccessStockUpdate": "库存更新成功。",
+  "@ingredientSuccessStockUpdate": {},
+  "ingredientMenuTooltip": "操作",
+  "@ingredientMenuTooltip": {},
+  "ingredientMenuAdjustStock": "调整库存",
+  "@ingredientMenuAdjustStock": {},
+  "ingredientMenuHistory": "查看历史记录",
+  "@ingredientMenuHistory": {},
+  "ingredientHistoryTitle": "{ingredientName} - 库存历史记录",
+  "@ingredientHistoryTitle": {
+    "placeholders": {
+      "ingredientName": {}
+    }
+  },
+  "ingredientHistoryNoMovements": "未找到此原料的库存变动记录。",
+  "@ingredientHistoryNoMovements": {},
+  "ingredientHistoryStockBefore": "先前数量",
+  "@ingredientHistoryStockBefore": {},
+  "ingredientHistoryStockAfter": "新数量",
+  "@ingredientHistoryStockAfter": {},
+  "@stockMovementAddition": {},
+  "@stockMovementWastage": {},
+  "@stockMovementAdjustmentIn": {},
+  "@stockMovementAdjustmentOut": {},
+  "systemUser": "系统",
+  "@systemUser": {},
+  "homeMenuManageIngredientsAndRecipes": "原料和配方管理",
+  "@homeMenuManageIngredientsAndRecipes": {
+    "description": "Title of the ingredient and recipe management menu item on the home screen"
+  },
+  "homeMenuSupplierManagement": "供应商管理",
+  "@homeMenuSupplierManagement": {
+    "description": "Title of the supplier management menu item on the home screen"
+  },
+  "homeMenuPurchaseOrders": "采购订单",
+  "@homeMenuPurchaseOrders": {
+    "description": "Title of the purchase orders menu item on the home screen"
+  },
+  "supplierDeleteTitle": "删除供应商",
+  "@supplierDeleteTitle": {
+    "description": "Dialog title for supplier deletion confirmation"
+  },
+  "supplierDeleteConfirmation": "您确定要删除供应商“{supplierName}”吗？此操作不可逆。",
+  "@supplierDeleteConfirmation": {
+    "description": "Content for supplier deletion confirmation",
+    "placeholders": {
+      "supplierName": {
+        "type": "String",
+        "example": "Main Food Inc."
+      }
+    }
+  },
+  "supplierDeleteSuccess": "供应商“{supplierName}”已成功删除。",
+  "@supplierDeleteSuccess": {
+    "description": "Success message for supplier deletion",
+    "placeholders": {
+      "supplierName": {
+        "type": "String"
+      }
+    }
+  },
+  "supplierManagementTitle": "供应商管理",
+  "@supplierManagementTitle": {
+    "description": "Title of the supplier management screen"
+  },
+  "supplierNoItems": "尚未添加任何供应商。",
+  "@supplierNoItems": {
+    "description": "Message to display when the supplier list is empty"
+  },
+  "supplierNoContactPerson": "未指定联系人",
+  "@supplierNoContactPerson": {
+    "description": "Text to display when a supplier card has no contact person"
+  },
+  "purchaseOrderListTitle": "采购订单",
+  "@purchaseOrderListTitle": {
+    "description": "Title of the purchase orders list screen"
+  },
+  "purchaseOrderNoItems": "尚未创建任何采购订单。",
+  "@purchaseOrderNoItems": {
+    "description": "Message to display when the purchase order list is empty"
+  },
+  "purchaseOrderLabel": "订单号",
+  "@purchaseOrderLabel": {
+    "description": "Label on the purchase order card"
+  },
+  "purchaseOrderStatusLabel": "状态",
+  "@purchaseOrderStatusLabel": {
+    "description": "Status label on the purchase order card"
+  },
+  "purchaseOrderDateLabel": "日期",
+  "@purchaseOrderDateLabel": {
+    "description": "Date label on the purchase order card"
+  },
+  "purchaseOrderAddButton": "新采购订单",
+  "@purchaseOrderAddButton": {
+    "description": "Button text to create a new purchase order"
+  },
+  "ingredientAddToOrder": "将原料添加到订单",
+  "@ingredientAddToOrder": {
+    "description": "Dialog title for adding an ingredient to a purchase order"
+  },
+  "purchaseOrderUnitPrice": "单位采购价格",
+  "@purchaseOrderUnitPrice": {
+    "description": "Label for the unit price field in a purchase order"
+  },
+  "purchaseOrderValidationError": "请选择一个供应商并至少添加一个产品。",
+  "@purchaseOrderValidationError": {
+    "description": "Validation error message on the purchase order submission form"
+  },
+  "purchaseOrderCreateTitle": "创建新采购订单",
+  "@purchaseOrderCreateTitle": {
+    "description": "Title of the new purchase order creation screen"
+  },
+  "purchaseOrderSelectSupplier": "选择供应商",
+  "@purchaseOrderSelectSupplier": {
+    "description": "Hint text for the supplier selection dropdown menu"
+  },
+  "purchaseOrderTotalCost": "总成本",
+  "@purchaseOrderTotalCost": {
+    "description": "Total cost label for a purchase order"
+  },
+  "purchaseOrderAddItemButton": "添加原料",
+  "@purchaseOrderAddItemButton": {
+    "description": "Button text to add a new ingredient to a purchase order"
+  },
+  "purchaseOrderSaveButton": "保存采购订单",
+  "@purchaseOrderSaveButton": {
+    "description": "Button text to save the purchase order"
+  },
+  "supplierAddButton": "添加供应商",
+  "@supplierAddButton": {
+    "description": "Button for adding a new supplier"
+  },
+  "supplierAddDialogTitle": "添加新供应商",
+  "@supplierAddDialogTitle": {
+    "description": "Dialog title for adding a new supplier"
+  },
+  "supplierEditDialogTitle": "编辑 {supplierName}",
+  "@supplierEditDialogTitle": {
+    "description": "Dialog title for editing a supplier",
+    "placeholders": {
+      "supplierName": {
+        "type": "String"
+      }
+    }
+  },
+  "supplierNameLabel": "供应商名称",
+  "@supplierNameLabel": {
+    "description": "Label for the supplier name input field"
+  },
+  "supplierContactPersonLabel": "联系人",
+  "@supplierContactPersonLabel": {
+    "description": "Label for the supplier contact person input field"
+  },
+  "phoneLabel": "电话",
+  "@phoneLabel": {
+    "description": "Label for the phone number input field"
+  },
+  "addressLabel": "地址",
+  "@addressLabel": {
+    "description": "Label for the address input field"
+  },
+  "dialogButtonCancelOrder": "取消订单",
+  "@dialogButtonCancelOrder": {
+    "description": "Menu button to cancel an order"
+  },
+  "purchaseOrderCancelDialogTitle": "取消订单",
+  "@purchaseOrderCancelDialogTitle": {
+    "description": "Confirmation dialog title for canceling a purchase order"
+  },
+  "purchaseOrderCancelDialogContent": "您确定要取消采购订单 #{orderId} 吗？",
+  "@purchaseOrderCancelDialogContent": {
+    "description": "Confirmation dialog content for canceling a purchase order",
+    "placeholders": {
+      "orderId": {
+        "type": "String"
+      }
+    }
+  },
+  "@dialogButtonYesCancel": {
+    "description": "Button to confirm the cancellation action"
+  },
+  "purchaseOrderSuccessCancel": "采购订单 #{orderId} 已成功取消。",
+  "@purchaseOrderSuccessCancel": {
+    "description": "Success message shown when a purchase order is canceled",
+    "placeholders": {
+      "orderId": {
+        "type": "String"
+      }
+    }
+  },
+  "ingredientNotificationSent": "已通知供应商",
+  "sendButton": "发送",
+  "ingredientSelectItems": "选择原料",
+  "ingredientSendEmailToSupplier": "通知供应商",
+  "ingredientSelectSupplierTitle": "选择供应商",
+  "ingredientSelectSupplierContent": "选择将发送所选原料通知的供应商。",
+  "ingredientSelectSupplierHint": "选择一个供应商...",
+  "ingredientErrorNoSuppliers": "系统中未找到已注册的供应商。",
+  "ingredientSuccessEmailSent": "原料请求已成功发送给供应商。",
+  "ingredientErrorEmailSending": "发送电子邮件时发生错误: {error}",
+  "ingredientErrorNoItemsSelected": "请至少选择一个原料。",
+  "inventoryManagementTitle": "库存管理",
+  "@inventoryManagementTitle": {
+    "description": "Title for the inventory management screen"
+  },
+  "menuItemIsFromRecipeLabel": "此产品是否根据配方制作？",
+  "@menuItemIsFromRecipeLabel": {
+    "description": "Label for the switch to determine if a menu item is made from ingredients"
+  },
+  "menuItemIsFromRecipeSubtitleYes": "是，它将由库存中的原料生产。",
+  "@menuItemIsFromRecipeSubtitleYes": {
+    "description": "Subtitle when the recipe switch is on"
+  },
+  "menuItemIsFromRecipeSubtitleNo": "否，它是直接销售的产品 (例如: 罐装可乐)。",
+  "@menuItemIsFromRecipeSubtitleNo": {
+    "description": "Subtitle when the recipe switch is off"
+  },
+  "menuItemPriceLabel": "销售价格",
+  "@menuItemPriceLabel": {
+    "description": "Label for the price of a non-recipe menu item"
+  },
+  "homeMenuManageWebsite": "管理我的网站",
+  "@homeMenuManageWebsite": {
+    "description": "Button title for website management in the main menu"
+  },
+  "homeMenuCompletedOrders": "已完成订单",
+  "@homeMenuCompletedOrders": {},
+  "homeMenuReports": "报告",
+  "@homeMenuReports": {},
+  "homeMenuShiftSchedule": "班次安排",
+  "@homeMenuShiftSchedule": {},
+  "homeMenuShiftTemplates": "班次模板",
+  "@homeMenuShiftTemplates": {},
+  "homeMenuManageTables": "桌位管理",
+  "@homeMenuManageTables": {},
+  "websiteSettingsSuccessSave": "网站设置保存成功。",
+  "@websiteSettingsSuccessSave": {},
+  "websiteSettingsErrorSave": "保存网站设置时发生错误: {details}",
+  "@websiteSettingsErrorSave": {
+    "placeholders": {
+      "details": {
+        "type": "String"
+      }
+    }
+  },
+  "websiteSettingsPickColor": "选择颜色",
+  "@websiteSettingsPickColor": {},
+  "dialogButtonDone": "完成",
+  "@dialogButtonDone": {},
+  "homeMenuWebsiteSettings": "网站设置",
+  "@homeMenuWebsiteSettings": {},
+  "websiteSettingsSectionAbout": "关于部分",
+  "@websiteSettingsSectionAbout": {},
+  "websiteSettingsLabelAboutTitle": "关于标题",
+  "@websiteSettingsLabelAboutTitle": {},
+  "websiteSettingsLabelAboutDesc": "关于描述",
+  "@websiteSettingsLabelAboutDesc": {},
+  "websiteSettingsLabelAboutImage": "关于图片",
+  "@websiteSettingsLabelAboutImage": {},
+  "websiteSettingsSectionContact": "联系信息",
+  "@websiteSettingsSectionContact": {},
+  "websiteSettingsLabelPhone": "联系电话",
+  "@websiteSettingsLabelPhone": {},
+  "websiteSettingsLabelEmail": "联系邮箱",
+  "@websiteSettingsLabelEmail": {},
+  "websiteSettingsLabelAddress": "联系地址",
+  "@websiteSettingsLabelAddress": {},
+  "websiteSettingsLabelWorkingHours": "工作时间",
+  "@websiteSettingsLabelWorkingHours": {},
+  "websiteSettingsSectionAppearance": "外观和主题",
+  "@websiteSettingsSectionAppearance": {},
+  "websiteSettingsLabelPrimaryColor": "主色",
+  "@websiteSettingsLabelPrimaryColor": {},
+  "websiteSettingsLabelSecondaryColor": "辅色",
+  "@websiteSettingsLabelSecondaryColor": {},
+  "websiteSettingsSectionSocial": "社交媒体",
+  "@websiteSettingsSectionSocial": {},
+  "websiteSettingsSectionVisibility": "可见性设置",
+  "@websiteSettingsSectionVisibility": {},
+  "websiteSettingsToggleShowMenu": "显示菜单",
+  "@websiteSettingsToggleShowMenu": {},
+  "websiteSettingsToggleShowContact": "显示联系信息",
+  "@websiteSettingsToggleShowContact": {},
+  "websiteSettingsToggleShowMap": "显示地图",
+  "@websiteSettingsToggleShowMap": {},
+  "buttonSaveChanges": "保存更改",
+  "@buttonSaveChanges": {},
+  "homeMenuShiftAssignment": "班次分配",
+  "homeMenuReservations": "预订",
+  "reservationsTitle": "预订管理",
+  "reservationsTabPending": "待处理",
+  "reservationsTabConfirmed": "已确认",
+  "reservationsTabPast": "历史",
+  "reservationsNoReservations": "没有可显示的预订。",
+  "reservationsNoReservationsInThisCategory": "此类别中没有预订。",
+  "manageTablesInfoCreatingQrPdf": "正在创建包含二维码的 PDF 文件...",
+  "@manageTablesInfoCreatingQrPdf": {
+    "description": "Message to inform the user that a PDF file containing QR codes for all tables is being created."
+  },
+  "manageTablesSuccessQrPdfSaved": "PDF 文件已成功保存到“{filePath}”。",
+  "@manageTablesSuccessQrPdfSaved": {
+    "description": "Message informing that the PDF file has been successfully saved, including the file path.",
+    "placeholders": {
+      "filePath": {
+        "type": "String",
+        "example": "/storage/emulated/0/Download/file.pdf"
+      }
+    }
+  },
+  "dialogButtonOpen": "打开",
+  "@dialogButtonOpen": {
+    "description": "Button text used to open a file or application."
+  },
+  "manageTablesErrorCreatingQrPdf": "导出二维码到 PDF 时发生错误: {error}",
+  "@manageTablesErrorCreatingQrPdf": {
+    "description": "Message informing about an error during PDF creation.",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Could not write to file."
+      }
+    }
+  },
+  "manageTablesTooltipExportQr": "下载所有桌位的二维码",
+  "@manageTablesTooltipExportQr": {
+    "description": "Tooltip text that appears when hovering over the button to download QR codes for all tables as a PDF."
+  },
+  "manageTablesButtonDownloadQr": "下载二维码",
+  "manageTablesSuccessQrDownloaded": "二维码下载成功。",
+  "manageTablesErrorQrDownload": "无法下载二维码: {error}",
+  "reservationsTabOthers": "其他",
+  "@reservationsTabOthers": {
+    "description": "Tab title for 'Other' reservation statuses on the reservations screen (e.g., canceled, seated, etc.)"
+  },
+  "reservationsErrorLoading": "加载预订时发生错误: {error}",
+  "@reservationsErrorLoading": {
+    "description": "Error message shown when the reservation list cannot be loaded",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Could not connect to server"
+      }
+    }
+  },
+  "reservationsNoReservationsFound": "未找到预订。",
+  "@reservationsNoReservationsFound": {
+    "description": "Message shown when no reservations are found"
+  },
+  "@reservationsNoReservationsInThisCategory": {
+    "description": "Message shown when there are no reservations in a specific tab (e.g., confirmed)"
+  },
+  "reservationsPartySizeTooltip": "{count} 人",
+  "@reservationsPartySizeTooltip": {
+    "description": "Tooltip text showing the number of people on the reservation card",
+    "placeholders": {
+      "count": {
+        "type": "Object"
+      }
+    }
+  },
+  "tableLabel": "桌位",
+  "@tableLabel": {
+    "description": "General word 'Table'"
+  },
+  "reservationsConfirmTooltip": "确认",
+  "@reservationsConfirmTooltip": {
+    "description": "Tooltip text that appears when hovering over the button to confirm a reservation"
+  },
+  "reservationsCancelTooltip": "取消",
+  "@reservationsCancelTooltip": {
+    "description": "Tooltip text that appears when hovering over the button to cancel a reservation"
+  },
+  "reservationsMarkSeatedTooltip": "标记为已入座",
+  "@reservationsMarkSeatedTooltip": {
+    "description": "Tooltip text that appears when hovering over the button to mark a customer as seated"
+  },
+  "reservationsMarkSeatedButton": "已入座",
+  "@reservationsMarkSeatedButton": {
+    "description": "Button text to mark a customer as seated"
+  },
+  "homeMenuBusinessCard": "名片设计",
+  "@homeMenuBusinessCard": {
+    "description": "Title of the button in the main menu that redirects to the business card design screen."
+  },
+  "tableLayoutScreenTitle": "桌位布局规划器",
+  "@tableLayoutScreenTitle": {
+    "description": "Title for the table layout editor screen"
+  },
+  "tableLayoutSuccessSave": "桌位布局保存成功。",
+  "@tableLayoutSuccessSave": {
+    "description": "Success message when table layout is saved"
+  },
+  "tableLayoutErrorSave": "保存桌位布局时发生错误。",
+  "@tableLayoutErrorSave": {
+    "description": "Error message when table layout fails to save"
+  },
+  "manageTablesTooltipLayoutPlanner": "规划桌位布局",
+  "@manageTablesTooltipLayoutPlanner": {
+    "description": "Tooltip for the layout planner button on the manage tables screen"
+  },
+  "tableLayoutPaletteAddElements": "添加元素",
+  "tableLayoutPaletteAddText": "添加文本",
+  "tableLayoutPaletteDefaultText": "新文本",
+  "tableLayoutPaletteAddRectangle": "添加矩形",
+  "tableLayoutPaletteAddEllipse": "添加椭圆",
+  "tableLayoutPaletteAddLine": "添加线条",
+  "tableLayoutPaletteUnplacedTables": "未放置的桌位 ({count})",
+  "@tableLayoutPaletteUnplacedTables": {
+    "description": "Number of unplaced tables",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "tableLayoutPaletteAllTablesPlaced": "所有桌位均已放置。",
+  "tableLayoutPaletteTableLabel": "桌位 {tableNumber}",
+  "@tableLayoutPaletteTableLabel": {
+    "description": "Label for a table with its number",
+    "placeholders": {
+      "tableNumber": {
+        "type": "String"
+      }
+    }
+  },
+  "tableLayoutToggleGrid": "切换网格和对齐",
+  "unplacedTablesTitle": "未放置的桌位",
+  "templateAddSelectedButton": "添加已选",
+  "templateVariantRequiredError": "您必须为每个选定的产品添加至少一个变体。",
+  "homeMenuPaymentSettings": "支付设置",
+  "@homeMenuPaymentSettings": {
+    "description": "Title of the payment settings menu card on the home screen"
+  },
+  "paymentTypeQrCode": "二维码支付",
+  "qrPaymentScreenTitle": "二维码支付",
+  "qrPaymentInstruction": "使用您银行的手机应用扫描二维码",
+  "qrPaymentErrorInitiate": "发起二维码支付错误: {error}",
+  "qrPaymentErrorTimeout": "二维码支付超时",
+  "qrPaymentErrorFailedOrExpired": "二维码支付失败或已过期",
+  "paymentSuccessMessage": "支付成功完成！",
+  "dialogButtonBack": "返回",
+  "orderTotalLabel": "总金额:",
+  "qrPaymentSecondsLeft": "秒剩余",
+  "takeawayErrorAssigningPagerWithCode": "分配设备错误: {statusCode}",
+  "@takeawayErrorAssigningPagerWithCode": {
+    "placeholders": {
+      "statusCode": {
+        "type": "String"
+      }
+    }
+  },
+  "takeawayTooltipNewOrder": "新外卖订单",
+  "takeawayNoActiveOrders": "没有活跃的外卖订单。",
+  "takeawayOrderFormTitle": "新外卖订单",
+  "takeawayOrderFormErrorLoadingData": "加载数据错误: {error}",
+  "@takeawayOrderFormErrorLoadingData": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "takeawayOrderFormErrorCustomerInfo": "请完整输入顾客信息。",
+  "takeawayOrderFormErrorAddProduct": "请至少添加一个产品。",
+  "takeawayOrderFormSuccess": "外卖订单创建成功。",
+  "takeawayOrderFormSuccessOffline": "订单已离线保存。连接建立后将发送。",
+  "takeawayOrderFormErrorCreating": "创建订单时发生错误。",
+  "takeawayOrderFormErrorCreatingWithCode": "创建订单错误: {statusCode}",
+  "@takeawayOrderFormErrorCreatingWithCode": {
+    "placeholders": {
+      "statusCode": {
+        "type": "String"
+      }
+    }
+  },
+  "takeawayOrderFormErrorCreatingGeneric": "错误: {error}",
+  "@takeawayOrderFormErrorCreatingGeneric": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "takeawayOrderFormCustomerNameLabel": "顾客姓名 姓氏*",
+  "takeawayOrderFormCustomerNameValidator": "顾客姓名为必填项。",
+  "takeawayOrderFormCustomerPhoneLabel": "电话号码*",
+  "takeawayOrderFormCustomerPhoneValidator": "电话号码为必填项。",
+  "takeawayOrderFormCreateButton": "创建订单",
+  "staffPerformanceScreenTitle": "员工绩效报告",
+  "staffPerformanceErrorFetching": "获取绩效数据时发生错误: {error}",
+  "@staffPerformanceErrorFetching": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "staffPerformanceTimeRangeToday": "今天",
+  "staffPerformanceTimeRangeThisWeek": "本周",
+  "staffPerformanceTimeRangeThisMonth": "本月",
+  "staffPerformanceTimeRangeLast7Days": "过去 7 天",
+  "staffPerformanceTimeRangeLast30Days": "过去 30 天",
+  "staffPerformanceTimeRangeCustom": "自定义日期范围",
+  "staffPerformancePickDateTooltip": "选择日期范围",
+  "staffPerformanceNoData": "未找到具有报告权限的员工。",
+  "staffPerformanceOrderCountLabel": "销售订单数: {count}",
+  "@staffPerformanceOrderCountLabel": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "staffPerformancePreparedItemsLabel": "已准备产品数: {count}",
+  "@staffPerformancePreparedItemsLabel": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "staffPerformanceChipSalesPermission": "销售权限",
+  "staffPerformanceChipKdsPermission": "KDS: {names}",
+  "@staffPerformanceChipKdsPermission": {
+    "placeholders": {
+      "names": {
+        "type": "String"
+      }
+    }
+  },
+  "manageCampaignsScreenTitle": "促销活动管理",
+  "manageCampaignsTooltipAdd": "添加新促销活动",
+  "manageCampaignsErrorFetching": "加载促销活动错误: {error}",
+  "@manageCampaignsErrorFetching": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "manageCampaignsNoCampaigns": "尚未创建任何促销活动。",
+  "manageCampaignsDeleteDialogTitle": "删除促销活动",
+  "manageCampaignsDeleteDialogContent": "您确定要删除促销活动“{campaignName}”吗？此操作不可撤销。",
+  "@manageCampaignsDeleteDialogContent": {
+    "placeholders": {
+      "campaignName": {
+        "type": "String"
+      }
+    }
+  },
+  "manageCampaignsDeleteDialogConfirmButton": "是，删除",
+  "manageCampaignsSuccessDelete": "促销活动“{campaignName}”已删除。",
+  "@manageCampaignsSuccessDelete": {
+    "placeholders": {
+      "campaignName": {
+        "type": "String"
+      }
+    }
+  },
+  "manageCampaignsErrorDelete": "删除促销活动错误: {error}",
+  "@manageCampaignsErrorDelete": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "manageCampaignsStatusActive": "活跃",
+  "manageCampaignsStatusInactive": "非活跃",
+  "manageCampaignsStartDate": "开始: {date}",
+  "@manageCampaignsStartDate": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "manageCampaignsEndDate": " - 结束: {date}",
+  "@manageCampaignsEndDate": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "creditSalesScreenTitle": "赊账销售管理",
+  "creditSalesUnknown": "未知",
+  "creditSalesInvalidDate": "无效日期",
+  "creditSalesErrorFetching": "获取赊账销售错误: {error}",
+  "@creditSalesErrorFetching": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "creditSalesErrorLoadMore": "无法加载更多数据。",
+  "creditSalesNoActiveOrders": "没有活跃的赊账销售订单。",
+  "creditSalesCardOrderId": "订单 ID: #{orderId}",
+  "@creditSalesCardOrderId": {
+    "placeholders": {
+      "orderId": {
+        "type": "String"
+      }
+    }
+  },
+  "creditSalesCardCustomer": "顾客: {name}",
+  "@creditSalesCardCustomer": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "creditSalesCardPhone": "电话: {phone}",
+  "@creditSalesCardPhone": {
+    "placeholders": {
+      "phone": {
+        "type": "String"
+      }
+    }
+  },
+  "creditSalesCardNotes": "备注: {notes}",
+  "@creditSalesCardNotes": {
+    "placeholders": {
+      "notes": {
+        "type": "String"
+      }
+    }
+  },
+  "creditSalesCardCreditDate": "赊账日期: {date}",
+  "@creditSalesCardCreditDate": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "creditSalesCardPayButton": "进行支付",
+  "kdsScreenTitle": "KDS: {screenName}",
+  "@kdsScreenTitle": {
+    "placeholders": {
+      "screenName": {
+        "type": "String"
+      }
+    }
+  },
+  "kdsScreenTooltipGoHome": "首页",
+  "kdsScreenTooltipBack": "返回",
+  "kdsScreenTooltipRefresh": "刷新",
+  "kdsScreenSnackbarOrderUpdated": "订单状态已更新。",
+  "kdsScreenErrorFetching": "获取 KDS 订单错误: {error}",
+  "@kdsScreenErrorFetching": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "kdsScreenButtonRetry": "重试",
+  "kdsScreenNoOrders": "此 KDS 屏幕没有要准备的订单。",
+  "manageShiftsScreenTitle": "班次模板",
+  "manageShiftsTooltipAdd": "添加新班次模板",
+  "manageShiftsDeleteDialogTitle": "删除班次",
+  "manageShiftsDeleteDialogContent": "班次模板“{shiftName}”将被删除。所有使用此模板的分配也将被删除。您确定吗？",
+  "@manageShiftsDeleteDialogContent": {
+    "placeholders": {
+      "shiftName": {
+        "type": "String"
+      }
+    }
+  },
+  "manageShiftsSuccessDelete": "“{shiftName}”已删除。",
+  "@manageShiftsSuccessDelete": {
+    "placeholders": {
+      "shiftName": {
+        "type": "String"
+      }
+    }
+  },
+  "manageShiftsAddDialogTitle": "新班次模板",
+  "manageShiftsEditDialogTitle": "编辑班次",
+  "manageShiftsShiftNameLabel": "班次名称",
+  "manageShiftsStartTimeLabel": "开始: {time}",
+  "@manageShiftsStartTimeLabel": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "manageShiftsEndTimeLabel": "结束: {time}",
+  "@manageShiftsEndTimeLabel": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "manageShiftsSelectButton": "选择",
+  "manageShiftsColorLabel": "班次颜色",
+  "generalYes": "是",
+  "generalNo": "否",
+  "manageKdsScreenTitle": "KDS 屏幕管理",
+  "manageKdsTooltipAdd": "添加新 KDS 屏幕",
+  "manageKdsErrorLoading": "加载 KDS 屏幕错误: {error}",
+  "@manageKdsErrorLoading": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "manageKdsAddDialogTitle": "新 KDS 屏幕",
+  "manageKdsEditDialogTitle": "编辑 KDS 屏幕",
+  "manageKdsNameLabel": "屏幕名称*",
+  "manageKdsNameValidator": "屏幕名称为必填项。",
+  "manageKdsDescriptionLabel": "描述 (可选)",
+  "manageKdsIsActiveLabel": "是否活跃？",
+  "manageKdsDeleteDialogTitle": "删除 KDS 屏幕",
+  "manageKdsDeleteDialogContent": "您确定要删除 KDS 屏幕“{screenName}”吗？分配给此屏幕的类别重定向将被移除。",
+  "@manageKdsDeleteDialogContent": {
+    "placeholders": {
+      "screenName": {
+        "type": "String"
+      }
+    }
+  },
+  "manageKdsSuccessDelete": "KDS 屏幕“{screenName}”已成功删除。",
+  "@manageKdsSuccessDelete": {
+    "placeholders": {
+      "screenName": {
+        "type": "String"
+      }
+    }
+  },
+  "manageKdsErrorDelete": "删除 KDS 屏幕错误: {error}",
+  "@manageKdsErrorDelete": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "manageKdsNoScreensFound": "尚未创建 KDS 屏幕。",
+  "manageKdsCreateFirstButton": "创建第一个 KDS 屏幕",
+  "manageKdsNoDescription": "无描述",
+  "manageKdsListItemSubtitle": "{description}\nSlug: {slug} - 活跃: {isActive}",
+  "@manageKdsListItemSubtitle": {
+    "placeholders": {
+      "description": {
+        "type": "String"
+      }
+    }
+  },
+  "passwordResetTitle": "忘记密码",
+  "passwordResetSuccessMessage": "密码重置代码已发送到您的电子邮件地址。请检查您的电子邮件。",
+  "passwordResetInstruction": "输入您注册的电子邮件地址。我们将向您发送一个密码重置代码。",
+  "passwordResetSendCodeButton": "发送重置代码",
+  "passwordResetConfirmTitle": "创建新密码"
+}

@@ -8,6 +8,11 @@ class LanguageProvider extends ChangeNotifier {
 
   Locale? get currentLocale => _currentLocale;
 
+  // YENİ: Statik bir getter ekleyerek mevcut dil koduna anında erişim sağlayalım.
+  // Bu, uygulamanın herhangi bir yerinden o anki dil kodunu kolayca almanızı sağlar.
+  static String get currentLanguageCode =>
+      CacheService.instance.settingsBox.get('selected_language_code') ?? 'tr';
+
   // Başlangıçta kaydedilmiş dili yükler.
   Future<void> loadLocale() async {
     // Hive/shared_preferences'ten kaydedilmiş dil kodunu oku

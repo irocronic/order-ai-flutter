@@ -387,4 +387,5 @@ class BusinessOwnerHomeEventHandler {
       await _onStockAlertsCheck();
     });
   }
+
 }

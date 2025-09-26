@@ -2791,7 +2791,6 @@
     }
   },
   "setupWizardStepLocalizationTitle": "Adım 1: Dil ve Para Birimi",
-  "setupLocalizationDescription": "Uygulamanın genelinde kullanılacak dili ve menülerde gösterilecek para birimini seçin. Bu ayarları daha sonra hesap ayarlarından değiştirebilirsiniz.",
   "setupWizardSaveAndContinueButton": "Kaydet ve Devam Et",
   "setupWizardErrorSavingSettings": "Ayarlar kaydedilirken hata oluştu: {errorDetails}",
   "@setupWizardErrorSavingSettings": {
@@ -4021,6 +4020,7 @@
   "languageNameIt": "Italiano",
   "languageNameZh": "中文",
   "languageNameRu": "Русский",
+  "languageNameFr": "Fransızca",
   "currencyNameTRY": "Türk Lirası (₺)",
   "currencyNameUSD": "ABD Doları ($)",
   "currencyNameEUR": "Euro (€)",
@@ -4577,7 +4577,6 @@
     "description": "Kategori kartındaki silme butonu metni."
   },
   "imagePickerSelectButton": "Fotoğraf Seçimi Yap",
-  "audioGuideActive": "Sesli Rehber Aktif",
   "audioGuideTooltipUnmute": "Sesi Aç",
   "audioGuideTooltipMute": "Sesi Kapat",
   "audioGuideTooltipReplay": "Rehberi Tekrar Çal",
@@ -4615,5 +4614,179 @@
   "dialogButtonDeleteAndExit": "Sil ve Çık",
   "validatorVariantNameRequired": "Varyant adı gerekli",
   "validatorPriceRequired": "Fiyat gerekli",
-  "validatorInvalidPrice": "Geçersiz fiyat"
+  "validatorInvalidPrice": "Geçersiz fiyat",
+  "kdsPrepare": "Hazırla",
+  "kdsPreparing": "Hazırlanıyor...",
+  "kdsPreparationStarted": "Hazırlama başladı",
+  "kdsReady": "Hazır",
+  "kdsMarkingReady": "Hazır hale getiriliyor...",
+  "kdsProductReady": "Ürün hazır!",
+  "kdsCompleted": "Tamamlandı",
+  "kdsWaiting": "Bekliyor",
+  "kdsStartPreparation": "Hazırlamaya Başla",
+  "kdsStartingPreparation": "Hazırlama başlatılıyor...",
+  "kdsOrderNumber": "Sipariş #{orderId}",
+  "@kdsOrderNumber": {
+      "description": "KDS ekranında sipariş numarasını gösteren başlık",
+      "placeholders": {
+          "orderId": {
+              "type": "String",
+              "example": "A5B1C"
+          }
+      }
+  },
+  "kdsPackage": "Paket",
+  "kdsUnknownProduct": "Bilinmeyen Ürün",
+  "kdsNote": "Not: {noteText}",
+  "@kdsNote": {
+      "description": "Sipariş kalemi için girilen not",
+      "placeholders": {
+          "noteText": {
+              "type": "String"
+          }
+      }
+  },
+  "kdsNoItemsInOrder": "Bu siparişte ürün bulunmuyor.",
+  "kdsCardError": "Kart yüklenirken bir hata oluştu.",
+  "kdsScreenTitle": "{screenName} KDS Ekranı",
+  "@kdsScreenTitle": {
+      "description": "KDS ekranının başlığı",
+      "placeholders": {
+          "screenName": {
+              "type": "String",
+              "example": "Mutfak"
+          }
+      }
+  },
+  "kdsScreenTooltipGoHome": "Ana Sayfaya Git",
+  "kdsScreenTooltipBack": "Geri",
+  "kdsScreenTooltipRefresh": "Yenile",
+  "kdsScreenErrorFetching": "Siparişler alınırken hata oluştu: {error}",
+  "@kdsScreenErrorFetching": {
+      "description": "KDS siparişleri çekilirken oluşan hata mesajı",
+      "placeholders": {
+          "error": {
+              "type": "String"
+          }
+      }
+  },
+  "kdsScreenButtonRetry": "Tekrar Dene",
+  "kdsScreenNoOrders": "Görüntülenecek aktif sipariş yok.",
+  "kdsScreenWaitForRefresh": "Lütfen bir önceki yenileme işleminin bitmesini bekleyin.",
+  "kdsScreenRefreshingOrders": "KDS siparişleri yenileniyor...",
+  "kdsScreenOrdersUpdated": "Siparişler güncellendi!",
+  "kdsScreenClosing": "KDS kapatılıyor...",
+  "kdsScreenRefreshing": "Yenileniyor...",
+  "orderStatusUpdate": "Sipariş #{orderId} durumu güncellendi: {statusDisplay}",
+  "orderItemAdded": "{itemName} ürünü Sipariş #{orderId}'e eklendi.",
+  "statusApproved": "Onaylandı (Mutfağa İletildi)",
+  "statusPreparing": "Mutfakta Hazırlanıyor",
+  "statusReadyForPickup": "Mutfakta Hazır (Garson Bekliyor)",
+  "newOrderNotificationTitle": "Sipariş Bildirimi",
+  "orderStatusUpdateTitle": "Sipariş Durumu Güncellendi",
+  "orderItemAddedTitle": "Siparişe Ürün Eklendi",
+  "tableCellPickingUp": "👐 Teslim alınıyor...",
+  "tableCellPickedUp": "✅ Teslim alındı",
+  "tableCellPickupFailed": "Teslim alma işlemi başarısız oldu",
+  "tableCellUnexpectedError": "Beklenmeyen hata: {error}",
+  "@tableCellUnexpectedError": {
+    "description": "Genel bir hata mesajı",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Network error"
+      }
+    }
+  },
+  "tableCellDelivering": "🎉 Teslim ediliyor...",
+  "tableCellDelivered": "🎉 Teslim edildi",
+  "tableCellDeliveryFailed": "Teslimat işlemi başarısız oldu",
+  "tableCellKdsPreparing": "Hazırlanıyor",
+  "tableCellKdsReady": "Hazır",
+  "tableCellKdsPickedUp": "Alındı",
+  "tableCellKdsCompleted": "Tamamlandı",
+  "tableCellTooltipDeliveredToCustomer": "Müşteriye teslim edildi",
+  "tableCellTooltipWaiterPickup": "Garson Teslim Al",
+  "tableCellTooltipDeliverToCustomer": "Müşteriye Teslim Et",
+  "tableCellTooltipWaitingForKitchen": "Mutfak için bekliyor",
+  "tableCellUnknownProduct": "Bilinmeyen Ürün",
+  "tableCellNewLabel": " [YENİ]",
+  "tableCellNoOrderItems": "Sipariş öğesi yok",
+  "tableCellTooltipAddOrEditProduct": "Ürün ekle veya düzenle",
+  "tableCellTooltipMoreActions": "Diğer işlemler",
+  "tableCellMenuTransferTable": "Masa Transferi",
+  "tableCellMenuCancelOrder": "Siparişi İptal Et",
+  "orderStatusUpdateMessage": "Sipariş #{orderId} durumu güncellendi: {statusDisplay}",
+  "@orderStatusUpdateMessage": {
+    "description": "Bir siparişin durumu değiştiğinde gösterilen bildirim mesajı.",
+    "placeholders": {
+      "orderId": {},
+      "statusDisplay": {}
+    }
+  },
+  "orderItemAddedMessage": "'{itemName}' ürünü #{orderId} numaralı siparişe eklendi.",
+  "@orderItemAddedMessage": {
+    "description": "Bir siparişe yeni ürün eklendiğinde gösterilen bildirim mesajı.",
+    "placeholders": {
+      "itemName": {},
+      "orderId": {}
+    }
+  },
+  "websiteSettingsErrorQrCreation": "QR kodu oluşturulamadı.",
+  "websiteSettingsErrorStoragePermission": "Depolama izni verilmedi.",
+  "websiteSettingsErrorDownloadsFolder": "İndirilenler klasörü bulunamadı.",
+  "websiteSettingsErrorOpenFile": "Dosya açılamadı: {message}",
+  "websiteSettingsQrDialogTitle": "Web Sitesi QR Kodu",
+  "websiteSettingsErrorBusinessNameNotFound": "İşletme adı bulunamadı, QR kod oluşturulamıyor.",
+  "websiteSettingsSectionMap": "Harita Ayarları",
+  "websiteSettingsLabelLatitude": "Enlem (Latitude)",
+  "websiteSettingsValidatorLatitude": "Geçerli bir enlem girin (-90 ile 90)",
+  "websiteSettingsLabelLongitude": "Boylam (Longitude)",
+  "websiteSettingsValidatorLongitude": "Geçerli bir boylam girin (-180 ile 180)",
+  "websiteSettingsButtonSelectLocation": "Haritadan Konum Seç",
+  "websiteSettingsLabelMapZoom": "Harita Zoom Seviyesi (1-20)",
+  "websiteSettingsValidatorZoomRequired": "Zoom seviyesi gereklidir",
+  "websiteSettingsValidatorZoomRange": "Geçerli bir zoom seviyesi girin (1-20)",
+  "websiteSettingsLabelFacebookUrl": "Facebook URL",
+  "websiteSettingsLabelInstagramUrl": "Instagram URL",
+  "websiteSettingsLabelTwitterUrl": "Twitter/X URL",
+  "websiteSettingsSectionOnlineActions": "Online İşlemler",
+  "websiteSettingsToggleAllowReservations": "Online Rezervasyona İzin Ver",
+  "websiteSettingsToggleAllowOnlineOrdering": "Online Siparişe İzin Ver",
+  "websiteSettingsThemeSystem": "Sistem Varsayılanı",
+  "websiteSettingsThemeLight": "Aydınlık Mod",
+  "websiteSettingsThemeDark": "Karanlık Mod",
+  "websiteSettingsLabelTheme": "Web Sitesi Teması",
+  "websiteSettingsButtonUploadImage": "Görsel Yükle",
+  "mapPickerAppBarTitle": "Haritadan Konum Seç",
+  "mapPickerMarkerTitle": "Seçilen Konum",
+  "mapPickerMarkerSnippet": "İşletmenizin konumu burası mı?",
+  "mapPickerSearchHint": "Restoran veya adres arayın...",
+  "mapPickerConfirmButton": "Bu Konumu Onayla",
+  "mapPickerUnknownPlace": "Bilinmeyen Yer",
+  "mapPickerErrorApiKey": "Google Maps API anahtarı hatası. Lütfen yöneticinize başvurun.",
+  "mapPickerErrorSearch": "Arama yapılırken hata oluştu: {statusCode}",
+  "mapPickerErrorConnection": "Bağlantı hatası. İnternet bağlantınızı kontrol edin.",
+  "mapPickerErrorLocationDetails": "Konum detayları alınırken hata oluştu.",
+  "notificationOrderItemRemoved": "Sipariş #{orderId} güncellendi: '{productName}' silindi.",
+  "notificationOrderCancelledAllItemsRemoved": "Sipariş #{orderId} (tüm kalemleri silindiği için) iptal edildi.",
+  "notificationOrderItemUpdated": "Sipariş #{orderId} güncellendi: '{productName}' kalemi durumu/miktarı değiştirildi.",
+  "socketStatusWaitingForConnection": "Bağlantı bekleniyor...",
+  "socketStatusCooldownMode": "Çok fazla bağlantı hatası - dinlenme modu",
+  "socketStatusTokenRequired": "Bağlantı için token gerekli.",
+  "socketStatusTokenRefreshFailed": "Token yenilenemedi.",
+  "socketStatusNetworkOffline": "Network bağlantısı yok",
+  "socketStatusWaitingForServer": "Sunucu onayı bekleniyor...",
+  "socketStatusConnected": "Bağlandı",
+  "socketStatusDisconnected": "Bağlantı koptu. Tekrar deneniyor...",
+  "socketStatusConnectionError": "Bağlantı hatası - yeniden deneniyor...",
+  "socketStatusTerminated": "Bağlantı kesildi",
+  "socketNotificationConnectionSuccess": "Bağlantı başarılı.",
+  "socketNotificationDisconnected": "Bağlantı koptu.",
+  "socketNotificationConnectionError": "Bağlantı hatası.",
+  "socketNotificationSystemError": "Sistem hatası.",
+  "socketNotificationWaitingListUpdated": "Bekleme listesi güncellendi.",
+  "socketNotificationPagerUpdated": "Pager durumu güncellendi.",
+  "socketNotificationStockUpdated": "Stok durumu güncellendi.",
+  "socketNotificationGenericUpdate": "Güncelleme İstemiyorum"
 }

@@ -21,8 +21,8 @@ import 'dart:io' as io;
 // 2. Koşullu import kullanarak:
 //    - Eğer platform web ise (dart.library.html true ise), gerçek 'dart:html' kütüphanesini 'html' takma adıyla import ediyoruz.
 //    - Eğer platform web değilse, mobil derleyicinin hata vermemesi için oluşturduğumuz sahte (stub) sınıfları içeren dosyayı import ediyoruz.
-import 'package:makarna_app/helpers/html_stub.dart' if (dart.library.html) 'dart:html' as html;
-
+import 'package:makarna_app/helpers/html_stub.dart'
+    if (dart.library.html) 'dart:html' as html;
 
 import '../models/business_website.dart';
 import '../services/api_service.dart';
@@ -375,7 +375,9 @@ class _ManageWebsiteScreenState extends State<ManageWebsiteScreen> {
           gapless: false,
         );
         final picData = await painter.toImageData(800);
-        if (picData == null) throw Exception("QR kodu oluşturulamadı.");
+        if (picData == null) {
+          throw Exception(l10n.websiteSettingsErrorQrCreation);
+        }
         final bytes = picData.buffer.asUint8List();
         final fileName =
             '${name}_qr_${DateFormat('yyyyMMdd_HHmmss').format(DateTime.now())}.png';
@@ -392,18 +394,20 @@ class _ManageWebsiteScreenState extends State<ManageWebsiteScreen> {
           if (!status.isGranted) {
             status = await Permission.storage.request();
             if (!status.isGranted) {
-              throw Exception("Depolama izni verilmedi.");
+              throw Exception(l10n.websiteSettingsErrorStoragePermission);
             }
           }
           final io.Directory? dir = await getDownloadsDirectory();
-          if (dir == null) throw Exception("İndirilenler klasörü bulunamadı.");
+          if (dir == null) {
+            throw Exception(l10n.websiteSettingsErrorDownloadsFolder);
+          }
           final filePath = '${dir.path}/$fileName';
           final file = io.File(filePath);
           await file.writeAsBytes(bytes);
 
           final result = await OpenFile.open(filePath);
           if (result.type != ResultType.done) {
-            throw Exception("Dosya açılamadı: ${result.message}");
+            throw Exception(l10n.websiteSettingsErrorOpenFile(result.message));
           }
         }
         if (mounted) {
@@ -435,7 +439,7 @@ class _ManageWebsiteScreenState extends State<ManageWebsiteScreen> {
         return AlertDialog(
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-          title: Text("Web Sitesi QR Kodu",
+          title: Text(dialogL10n.websiteSettingsQrDialogTitle,
               textAlign: TextAlign.center,
               style: const TextStyle(fontWeight: FontWeight.bold)),
           content: SizedBox(
@@ -502,7 +506,6 @@ class _ManageWebsiteScreenState extends State<ManageWebsiteScreen> {
         title: Text(l10n.homeMenuWebsiteSettings,
             style: const TextStyle(
                 fontWeight: FontWeight.bold, color: Colors.white)),
-
         iconTheme: const IconThemeData(
           color: Colors.white,
         ),
@@ -521,22 +524,23 @@ class _ManageWebsiteScreenState extends State<ManageWebsiteScreen> {
         actions: [
           IconButton(
             icon: const Icon(Icons.qr_code_2_outlined, color: Colors.white),
-            tooltip: "Web Sitesi QR Kodu",
+            tooltip: l10n.websiteSettingsQrDialogTitle,
             onPressed: _isLoading
                 ? null
                 : () {
                     final businessName = UserSession.username;
                     if (businessName != null && businessName.isNotEmpty) {
                       final businessSlug = _slugify(businessName);
-                      final uri = Uri.parse(ApiService.baseUrl.replaceAll('/api', ''));
+                      final uri =
+                          Uri.parse(ApiService.baseUrl.replaceAll('/api', ''));
                       final websiteLink =
                           '${uri.scheme}://${uri.host}${uri.hasPort ? ':${uri.port}' : ''}/website/$businessSlug/';
                       _showQrDialog(context, websiteLink);
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
+                        SnackBar(
                             content: Text(
-                                "İşletme adı bulunamadı, QR kod oluşturulamıyor."),
+                                l10n.websiteSettingsErrorBusinessNameNotFound),
                             backgroundColor: Colors.orange),
                       );
                     }
@@ -612,22 +616,26 @@ class _ManageWebsiteScreenState extends State<ManageWebsiteScreen> {
                                   l10n.websiteSettingsLabelWorkingHours,
                                   icon: Icons.access_time),
                               _buildSectionHeader(
-                                  "Harita Ayarları", Icons.map_outlined),
+                                  l10n.websiteSettingsSectionMap,
+                                  Icons.map_outlined),
                               Row(
                                 children: [
                                   Expanded(
                                     child: _buildTextField(
-                                        'map_latitude', "Enlem (Latitude)",
-                                        keyboardType: const TextInputType
-                                            .numberWithOptions(
+                                        'map_latitude',
+                                        l10n.websiteSettingsLabelLatitude,
+                                        keyboardType:
+                                            const TextInputType.numberWithOptions(
                                                 decimal: true, signed: true),
                                         validator: (value) {
                                       if (value != null && value.isNotEmpty) {
-                                        final latitude = double.tryParse(value);
+                                        final latitude =
+                                            double.tryParse(value);
                                         if (latitude == null ||
                                             latitude < -90 ||
                                             latitude > 90) {
-                                          return "Geçerli bir enlem girin (-90 ile 90)";
+                                          return l10n
+                                              .websiteSettingsValidatorLatitude;
                                         }
                                       }
                                       return null;
@@ -635,10 +643,11 @@ class _ManageWebsiteScreenState extends State<ManageWebsiteScreen> {
                                   ),
                                   const SizedBox(width: 8),
                                   Expanded(
-                                    child: _buildTextField('map_longitude',
-                                        "Boylam (Longitude)",
-                                        keyboardType: const TextInputType
-                                            .numberWithOptions(
+                                    child: _buildTextField(
+                                        'map_longitude',
+                                        l10n.websiteSettingsLabelLongitude,
+                                        keyboardType:
+                                            const TextInputType.numberWithOptions(
                                                 decimal: true, signed: true),
                                         validator: (value) {
                                       if (value != null && value.isNotEmpty) {
@@ -647,7 +656,8 @@ class _ManageWebsiteScreenState extends State<ManageWebsiteScreen> {
                                         if (longitude == null ||
                                             longitude < -180 ||
                                             longitude > 180) {
-                                          return "Geçerli bir boylam girin (-180 ile 180)";
+                                          return l10n
+                                              .websiteSettingsValidatorLongitude;
                                         }
                                       }
                                       return null;
@@ -660,7 +670,8 @@ class _ManageWebsiteScreenState extends State<ManageWebsiteScreen> {
                                 child: ElevatedButton.icon(
                                   onPressed: _openMapPicker,
                                   icon: const Icon(Icons.map),
-                                  label: const Text("Haritadan Konum Seç"),
+                                  label: Text(
+                                      l10n.websiteSettingsButtonSelectLocation),
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor:
                                         Colors.deepPurple.shade100,
@@ -671,15 +682,17 @@ class _ManageWebsiteScreenState extends State<ManageWebsiteScreen> {
                               ),
                               const SizedBox(height: 16),
                               _buildTextField(
-                                  'map_zoom_level', "Harita Zoom Seviyesi (1-20)",
+                                  'map_zoom_level',
+                                  l10n.websiteSettingsLabelMapZoom,
                                   keyboardType: TextInputType.number,
                                   validator: (value) {
                                 if (value == null || value.isEmpty) {
-                                  return "Zoom seviyesi gereklidir";
+                                  return l10n
+                                      .websiteSettingsValidatorZoomRequired;
                                 }
                                 final zoom = int.tryParse(value);
                                 if (zoom == null || zoom < 1 || zoom > 20) {
-                                  return "Geçerli bir zoom seviyesi girin (1-20)";
+                                  return l10n.websiteSettingsValidatorZoomRange;
                                 }
                                 return null;
                               }),
@@ -697,14 +710,17 @@ class _ManageWebsiteScreenState extends State<ManageWebsiteScreen> {
                                   _secondaryColor,
                                   (color) =>
                                       setState(() => _secondaryColor = color)),
-                              _buildSectionHeader(l10n.websiteSettingsSectionSocial,
+                              _buildSectionHeader(
+                                  l10n.websiteSettingsSectionSocial,
                                   Icons.share_outlined),
-                              _buildTextField('facebook_url', 'Facebook URL',
+                              _buildTextField('facebook_url',
+                                  l10n.websiteSettingsLabelFacebookUrl,
                                   icon: Icons.facebook),
-                              _buildTextField(
-                                  'instagram_url', 'Instagram URL',
+                              _buildTextField('instagram_url',
+                                  l10n.websiteSettingsLabelInstagramUrl,
                                   icon: Icons.camera_alt_outlined),
-                              _buildTextField('twitter_url', 'Twitter/X URL',
+                              _buildTextField('twitter_url',
+                                  l10n.websiteSettingsLabelTwitterUrl,
                                   icon: Icons.read_more),
                               _buildSectionHeader(
                                   l10n.websiteSettingsSectionVisibility,
@@ -717,17 +733,20 @@ class _ManageWebsiteScreenState extends State<ManageWebsiteScreen> {
                                   l10n.websiteSettingsToggleShowContact,
                                   _showContact,
                                   (val) => setState(() => _showContact = val)),
-                              _buildSwitchTile(l10n.websiteSettingsToggleShowMap,
-                                  _showMap, (val) => setState(() => _showMap = val)),
-                              _buildSectionHeader(
-                                  "Online İşlemler", Icons.public),
                               _buildSwitchTile(
-                                  "Online Rezervasyona İzin Ver",
+                                  l10n.websiteSettingsToggleShowMap,
+                                  _showMap,
+                                  (val) => setState(() => _showMap = val)),
+                              _buildSectionHeader(
+                                  l10n.websiteSettingsSectionOnlineActions,
+                                  Icons.public),
+                              _buildSwitchTile(
+                                  l10n.websiteSettingsToggleAllowReservations,
                                   _allowReservations,
                                   (val) =>
                                       setState(() => _allowReservations = val)),
                               _buildSwitchTile(
-                                  "Online Siparişe İzin Ver",
+                                  l10n.websiteSettingsToggleAllowOnlineOrdering,
                                   _allowOnlineOrdering,
                                   (val) => setState(
                                       () => _allowOnlineOrdering = val)),
@@ -755,10 +774,11 @@ class _ManageWebsiteScreenState extends State<ManageWebsiteScreen> {
   }
 
   Widget _buildThemeSelector() {
+    final l10n = AppLocalizations.of(context)!;
     final Map<String, String> themeOptions = {
-      'system': "Sistem Varsayılanı",
-      'light': "Aydınlık Mod",
-      'dark': "Karanlık Mod",
+      'system': l10n.websiteSettingsThemeSystem,
+      'light': l10n.websiteSettingsThemeLight,
+      'dark': l10n.websiteSettingsThemeDark,
     };
 
     return Padding(
@@ -766,7 +786,7 @@ class _ManageWebsiteScreenState extends State<ManageWebsiteScreen> {
       child: DropdownButtonFormField<String>(
         value: _themeMode,
         decoration: InputDecoration(
-          labelText: "Web Sitesi Teması",
+          labelText: l10n.websiteSettingsLabelTheme,
           labelStyle: TextStyle(color: Colors.grey.shade700),
           prefixIcon:
               Icon(Icons.brightness_6_outlined, color: Colors.grey.shade600),
@@ -862,6 +882,7 @@ class _ManageWebsiteScreenState extends State<ManageWebsiteScreen> {
     required Future<void> Function() onUpload,
     required bool isUploading,
   }) {
+    final l10n = AppLocalizations.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -897,7 +918,7 @@ class _ManageWebsiteScreenState extends State<ManageWebsiteScreen> {
                               color: Colors.grey.shade600, size: 40),
                           const SizedBox(height: 8),
                           Text(
-                            "Görsel Yükle",
+                            l10n.websiteSettingsButtonUploadImage,
                             style: TextStyle(color: Colors.grey.shade700),
                           )
                         ],

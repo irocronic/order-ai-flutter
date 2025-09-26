@@ -44,12 +44,12 @@ class KdsScreen extends StatefulWidget {
 }
 
 class _KdsScreenState extends State<KdsScreen>
-    with RouteAware, 
-         WidgetsBindingObserver, 
-         AutomaticKeepAliveClientMixin,
-         KdsRecoveryMixin,
-         KdsDialogMixin,
-         KdsButtonActionMixin {
+    with RouteAware,
+        WidgetsBindingObserver,
+        AutomaticKeepAliveClientMixin,
+        KdsRecoveryMixin,
+        KdsDialogMixin,
+        KdsButtonActionMixin {
   
   List<dynamic> _kdsOrders = [];
   bool _isLoading = true;
@@ -155,7 +155,7 @@ class _KdsScreenState extends State<KdsScreen>
     // NotificationCenter listeners
     _refreshAllScreensCallback = (data) {
       if (!_isDisposed && mounted && shouldProcessUpdate()) {
-         final eventType = data['eventType'] as String?;
+        final eventType = data['eventType'] as String?;
         debugPrint("[KdsScreen-${widget.kdsScreenSlug}] 📡 Global refresh received: $eventType");
         _safeRefreshDataWithThrottling();
       }
@@ -398,7 +398,7 @@ class _KdsScreenState extends State<KdsScreen>
   }
 
   void _safeNavigate(VoidCallback navigationAction) {
-    if (_isNavigationInProgress || _isDisposed || !mounted || 
+    if (_isNavigationInProgress || _isDisposed || !mounted ||
         !NavigatorSafeZone.canNavigate() || BuildLockManager.isLocked) {
       debugPrint('[KDS] Navigation blocked - system busy');
       return;
@@ -478,13 +478,14 @@ class _KdsScreenState extends State<KdsScreen>
 
   // 🔥 Enhanced refresh button with action management
   void _handleRefreshButton() {
+    final l10n = AppLocalizations.of(context)!;
     final refreshActionKey = 'manual_refresh_${widget.kdsScreenSlug}';
     
     if (!canPerformAction(refreshActionKey)) {
       _showOverlayFeedback(
         Colors.orange, 
         Icons.warning, 
-        'Lütfen bir önceki yenileme işleminin bitmesini bekleyin'
+        l10n.kdsScreenWaitForRefresh
       );
       return;
     }
@@ -493,14 +494,21 @@ class _KdsScreenState extends State<KdsScreen>
       actionKey: refreshActionKey,
       actionType: 'refresh_orders',
       parameters: {},
-      loadingMessage: 'KDS siparişleri yenileniyor...',
-      successMessage: 'Siparişler güncellendi!',
+      loadingMessage: l10n.kdsScreenRefreshingOrders,
+      successMessage: l10n.kdsScreenOrdersUpdated,
     );
   }
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
+    
+    // Added early exit for context safety
+    if (!mounted) {
+      return Container(color: Colors.blueGrey.shade900);
+    }
+    
+    final l10n = AppLocalizations.of(context)!;
     
     if (_isDisposed) {
       return Scaffold(
@@ -512,7 +520,7 @@ class _KdsScreenState extends State<KdsScreen>
               const CircularProgressIndicator(color: Colors.white),
               const SizedBox(height: 16),
               Text(
-                'KDS kapatılıyor...',
+                l10n.kdsScreenClosing,
                 style: const TextStyle(color: Colors.white),
               ),
             ],
@@ -521,7 +529,6 @@ class _KdsScreenState extends State<KdsScreen>
       );
     }
     
-    final l10n = AppLocalizations.of(context)!;
     double screenWidth = MediaQuery.of(context).size.width;
     int crossAxisCount;
     if (screenWidth > 1400) {
@@ -695,7 +702,7 @@ class _KdsScreenState extends State<KdsScreen>
                   padding: const EdgeInsets.only(right: 8.0),
                   child: buildEnhancedLoadingIndicator(
                     color: Colors.white,
-                    message: 'Yenileniyor...',
+                    message: l10n.kdsScreenRefreshing,
                     size: 24,
                   ),
                 );

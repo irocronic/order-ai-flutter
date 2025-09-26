@@ -171,7 +171,7 @@ class _TableCellWidgetState extends State<TableCellWidget> {
         debugPrint('[TableCellWidget] 🔥 KDS update for order #$orderId: $eventType');
         
         _smartRefresh(source: 'kds_notification');
-        _showKdsUpdateFeedback(eventType);
+        _showKdsUpdateFeedback(eventType, AppLocalizations.of(context)!);
       }
     };
 
@@ -325,7 +325,7 @@ class _TableCellWidgetState extends State<TableCellWidget> {
       });
     }
     
-    _showOverlayFeedback(Colors.purple, Icons.pan_tool_alt, '👐 Teslim alınıyor...');
+    _showOverlayFeedback(Colors.purple, Icons.pan_tool_alt, l10n.tableCellPickingUp);
     
     // Debounced execution
     _debounceTimers[orderItemId] = Timer(Duration(milliseconds: DEBOUNCE_DELAY_MS), () {
@@ -349,11 +349,11 @@ class _TableCellWidgetState extends State<TableCellWidget> {
       if (mounted && !(_completedRequests[orderItemId] ?? false)) {
         if (success) {
           _smartRefresh(source: 'pickup_success');
-          _showOverlayFeedback(Colors.green, Icons.check_circle, '✅ Teslim alındı');
+          _showOverlayFeedback(Colors.green, Icons.check_circle, l10n.tableCellPickedUp);
           _optimisticStates.remove(orderItemId);
         } else {
           _rollbackOptimisticUpdate(orderItemId);
-          _showErrorSnackbar("Teslim alma işlemi başarısız oldu");
+          _showErrorSnackbar(l10n.tableCellPickupFailed);
         }
       }
       
@@ -363,7 +363,7 @@ class _TableCellWidgetState extends State<TableCellWidget> {
       debugPrint("🔄 [PICKUP] Critical error: $e");
       if (mounted && !(_completedRequests[orderItemId] ?? false)) {
         _rollbackOptimisticUpdate(orderItemId);
-        _showErrorSnackbar("Beklenmeyen hata: ${e.toString()}");
+        _showErrorSnackbar(l10n.tableCellUnexpectedError(e.toString()));
       }
       _safeCompleteRequest(orderItemId, false);
       
@@ -400,7 +400,7 @@ class _TableCellWidgetState extends State<TableCellWidget> {
       });
     }
     
-    _showOverlayFeedback(Colors.green, Icons.check_circle, '🎉 Teslim ediliyor...');
+    _showOverlayFeedback(Colors.green, Icons.check_circle, l10n.tableCellDelivering);
     
     // Debounced execution
     _debounceTimers[orderItemId] = Timer(Duration(milliseconds: DEBOUNCE_DELAY_MS), () {
@@ -423,11 +423,11 @@ class _TableCellWidgetState extends State<TableCellWidget> {
       if (mounted && !(_completedRequests[orderItemId] ?? false)) {
         if (success) {
           _smartRefresh(source: 'delivery_success');
-          _showOverlayFeedback(Colors.green, Icons.check_circle, '🎉 Teslim edildi');
+          _showOverlayFeedback(Colors.green, Icons.check_circle, l10n.tableCellDelivered);
           _optimisticStates.remove(orderItemId);
         } else {
           _rollbackOptimisticUpdate(orderItemId);
-          _showErrorSnackbar("Teslimat işlemi başarısız oldu");
+          _showErrorSnackbar(l10n.tableCellDeliveryFailed);
         }
       }
       
@@ -437,7 +437,7 @@ class _TableCellWidgetState extends State<TableCellWidget> {
       debugPrint("🔄 [DELIVER] Critical error: $e");
       if (mounted && !(_completedRequests[orderItemId] ?? false)) {
         _rollbackOptimisticUpdate(orderItemId);
-        _showErrorSnackbar("Beklenmeyen hata: ${e.toString()}");
+        _showErrorSnackbar(l10n.tableCellUnexpectedError(e.toString()));
       }
       _safeCompleteRequest(orderItemId, false);
       
@@ -537,7 +537,7 @@ class _TableCellWidgetState extends State<TableCellWidget> {
     return false;
   }
 
-  void _showKdsUpdateFeedback(String? eventType) {
+  void _showKdsUpdateFeedback(String? eventType, AppLocalizations l10n) {
     if (!mounted || eventType == null) return;
     
     Color feedbackColor;
@@ -548,22 +548,22 @@ class _TableCellWidgetState extends State<TableCellWidget> {
       case 'order_preparing_update':
         feedbackColor = Colors.orange;
         feedbackIcon = Icons.whatshot;
-        feedbackMessage = '🔥 Hazırlanıyor';
+        feedbackMessage = '🔥 ${l10n.tableCellKdsPreparing}';
         break;
       case 'order_ready_for_pickup_update':
         feedbackColor = Colors.teal;
         feedbackIcon = Icons.restaurant_menu;
-        feedbackMessage = '✅ Hazır';
+        feedbackMessage = '✅ ${l10n.tableCellKdsReady}';
         break;
       case 'order_item_picked_up':
         feedbackColor = Colors.purple;
         feedbackIcon = Icons.pan_tool_alt;
-        feedbackMessage = '👐 Alındı';
+        feedbackMessage = '👐 ${l10n.tableCellKdsPickedUp}';
         break;
       case 'order_fully_delivered':
         feedbackColor = Colors.green;
         feedbackIcon = Icons.check_circle;
-        feedbackMessage = '🎉 Tamamlandı';
+        feedbackMessage = '🎉 ${l10n.tableCellKdsCompleted}';
         break;
       default:
         return;
@@ -840,29 +840,29 @@ class _TableCellWidgetState extends State<TableCellWidget> {
 
     if (isDelivered) {
       actionWidget = Tooltip(
-        message: "Müşteriye teslim edildi",
+        message: l10n.tableCellTooltipDeliveredToCustomer,
         child: Icon(Icons.check_circle, size: 28, color: Colors.green.shade600),
       );
     } else if (kdsStatus == KDS_ITEM_STATUS_READY || optimisticState == 'picking_up') {
       actionWidget = !canPerformAction
-        ? _buildEnhancedLoadingIndicator(Colors.purple.shade600, "Teslim alınıyor...")
+        ? _buildEnhancedLoadingIndicator(Colors.purple.shade600, l10n.tableCellPickingUp)
         : IconButton(
             icon: const Icon(Icons.pan_tool_alt_outlined, size: 28),
             color: Colors.purple.shade600,
             padding: EdgeInsets.zero,
             constraints: const BoxConstraints(),
-            tooltip: "Garson Teslim Al",
+            tooltip: l10n.tableCellTooltipWaiterPickup,
             onPressed: () => _handleItemPickup(itemId, l10n),
           );
     } else if (kdsStatus == KDS_ITEM_STATUS_PICKED_UP || optimisticState == 'delivering') {
       actionWidget = !canPerformAction
-        ? _buildEnhancedLoadingIndicator(Colors.blue.shade600, "Teslim ediliyor...")
+        ? _buildEnhancedLoadingIndicator(Colors.blue.shade600, l10n.tableCellDelivering)
         : IconButton(
             icon: const Icon(Icons.room_service_outlined, size: 28),
             color: Colors.blue.shade600,
             padding: EdgeInsets.zero,
             constraints: const BoxConstraints(),
-            tooltip: "Müşteriye Teslim Et",
+            tooltip: l10n.tableCellTooltipDeliverToCustomer,
             onPressed: () => _handleDeliverOrderItem(itemId, l10n),
           );
     } else if (kdsStatus == KDS_ITEM_STATUS_PREPARING) {
@@ -872,12 +872,12 @@ class _TableCellWidgetState extends State<TableCellWidget> {
       );
     } else {
       actionWidget = Tooltip(
-        message: "Mutfak için bekliyor",
+        message: l10n.tableCellTooltipWaitingForKitchen,
         child: Icon(Icons.hourglass_empty, size: 22, color: Colors.grey.shade600)
       );
     }
 
-    final String productName = item['menu_item']?['name'] ?? "Bilinmeyen Ürün";
+    final String productName = item['menu_item']?['name'] ?? l10n.tableCellUnknownProduct;
     final String? variantName = item['variant']?['name'];
     final String variantNameDisplay = (variantName != null && variantName.isNotEmpty) ? ' ($variantName)' : '';
 
@@ -902,7 +902,7 @@ class _TableCellWidgetState extends State<TableCellWidget> {
                     ),
                     if (isAwaitingApproval)
                       TextSpan(
-                        text: " [YENİ]",
+                        text: l10n.tableCellNewLabel,
                         style: TextStyle(
                           color: Colors.orange.shade800,
                           fontWeight: FontWeight.bold,
@@ -989,7 +989,7 @@ class _TableCellWidgetState extends State<TableCellWidget> {
                   const Divider(),
                   Expanded(
                     child: widget.pendingOrder['order_items'] == null || (widget.pendingOrder['order_items'] as List).isEmpty
-                        ? Center(child: Text("Sipariş öğesi yok"))
+                        ? Center(child: Text(l10n.tableCellNoOrderItems))
                         : ListView.builder(
                             padding: EdgeInsets.zero,
                             itemCount: widget.pendingOrder['order_items'].length,
@@ -1050,12 +1050,12 @@ class _TableCellWidgetState extends State<TableCellWidget> {
                                 icon: const Icon(Icons.add_circle_outline),
                                 iconSize: 24,
                                 color: Colors.green.shade800,
-                                tooltip: "Ürün ekle veya düzenle",
+                                tooltip: l10n.tableCellTooltipAddOrEditProduct,
                                 onPressed: widget.onAddItem,
                               ),
                               PopupMenuButton<String>(
                                 icon: Icon(Icons.more_vert, color: Colors.blueGrey.shade800),
-                                tooltip: "Diğer işlemler",
+                                tooltip: l10n.tableCellTooltipMoreActions,
                                 onSelected: (value) {
                                   if (value == 'transfer') {
                                     widget.onTransfer();
@@ -1070,7 +1070,7 @@ class _TableCellWidgetState extends State<TableCellWidget> {
                                       children: [
                                         const Icon(Icons.swap_horiz_rounded, color: Colors.blue),
                                         const SizedBox(width: 8),
-                                        Text("Masa Transferi"),
+                                        Text(l10n.tableCellMenuTransferTable),
                                       ],
                                     ),
                                   ),
@@ -1080,7 +1080,7 @@ class _TableCellWidgetState extends State<TableCellWidget> {
                                       children: [
                                         const Icon(Icons.cancel_outlined, color: Colors.red),
                                         const SizedBox(width: 8),
-                                        Text("Siparişi İptal Et"),
+                                        Text(l10n.tableCellMenuCancelOrder),
                                       ],
                                     ),
                                   ),

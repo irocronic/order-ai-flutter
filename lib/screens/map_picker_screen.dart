@@ -2,6 +2,7 @@
 
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:uuid/uuid.dart';
@@ -34,7 +35,7 @@ class _MapPickerScreenState extends State<MapPickerScreen> {
   void initState() {
     super.initState();
     _pickedLocation = widget.initialLocation;
-    _addMarker(_pickedLocation!);
+    // Marker ekleme işlemi onMapCreated içinde yapılacak.
   }
 
   @override
@@ -43,16 +44,16 @@ class _MapPickerScreenState extends State<MapPickerScreen> {
     super.dispose();
   }
 
-  void _addMarker(LatLng position) {
+  void _addMarker(LatLng position, String title, String snippet) {
     setState(() {
       _markers.clear();
       _markers.add(
         Marker(
           markerId: const MarkerId('picked-location'),
           position: position,
-          infoWindow: const InfoWindow(
-            title: 'Seçilen Konum',
-            snippet: 'İşletmenizin konumu burası mı?',
+          infoWindow: InfoWindow(
+            title: title,
+            snippet: snippet,
           ),
           icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueAzure),
         ),
@@ -61,14 +62,23 @@ class _MapPickerScreenState extends State<MapPickerScreen> {
   }
 
   void _onMapTapped(LatLng position) {
+    final l10n = AppLocalizations.of(context)!;
     setState(() {
       _pickedLocation = position;
-      _addMarker(position);
+      _addMarker(
+        position,
+        l10n.mapPickerMarkerTitle,
+        l10n.mapPickerMarkerSnippet,
+      );
       _placePredictions = [];
     });
   }
 
   Future<void> _searchPlaces(String input) async {
+    if (!mounted) return;
+    final l10n = AppLocalizations.of(context)!;
+    final currentLanguageCode = l10n.localeName.split('_').first;
+
     if (input.isEmpty) {
       setState(() {
         _placePredictions = [];
@@ -86,7 +96,7 @@ class _MapPickerScreenState extends State<MapPickerScreen> {
         queryParameters: {
           'input': input,
           'sessiontoken': _sessionToken,
-          'language': 'tr',
+          'language': currentLanguageCode,
           'components': 'country:tr',
         },
       );
@@ -99,14 +109,16 @@ class _MapPickerScreenState extends State<MapPickerScreen> {
         },
       );
 
+      if (!mounted) return;
+
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
-        
+
         // Google API error status kontrolü
         if (data.containsKey('status') && data['status'] == 'REQUEST_DENIED') {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Google Maps API anahtarı hatası. Lütfen yöneticinize başvurun.'),
+            SnackBar(
+              content: Text(l10n.mapPickerErrorApiKey),
               backgroundColor: Colors.red,
             ),
           );
@@ -116,7 +128,7 @@ class _MapPickerScreenState extends State<MapPickerScreen> {
           });
           return;
         }
-        
+
         if (data.containsKey('predictions')) {
           final predictions = data['predictions'] ?? [];
           setState(() {
@@ -131,8 +143,8 @@ class _MapPickerScreenState extends State<MapPickerScreen> {
         }
       } else if (response.statusCode == 403) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('API anahtarı hatası. Lütfen yöneticinize başvurun.'),
+          SnackBar(
+            content: Text(l10n.mapPickerErrorApiKey),
             backgroundColor: Colors.red,
           ),
         );
@@ -143,7 +155,8 @@ class _MapPickerScreenState extends State<MapPickerScreen> {
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Arama yapılırken hata oluştu: ${response.statusCode}'),
+            content:
+                Text(l10n.mapPickerErrorSearch(response.statusCode.toString())),
             backgroundColor: Colors.orange,
           ),
         );
@@ -153,9 +166,10 @@ class _MapPickerScreenState extends State<MapPickerScreen> {
         });
       }
     } catch (e) {
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Bağlantı hatası. İnternet bağlantınızı kontrol edin.'),
+        SnackBar(
+          content: Text(l10n.mapPickerErrorConnection),
           backgroundColor: Colors.red,
         ),
       );
@@ -167,6 +181,9 @@ class _MapPickerScreenState extends State<MapPickerScreen> {
   }
 
   Future<void> _getPlaceDetails(String placeId) async {
+    if (!mounted) return;
+    final l10n = AppLocalizations.of(context)!;
+
     try {
       final url = ApiService.getUrl('/google-places/details/').replace(
         queryParameters: {
@@ -183,11 +200,13 @@ class _MapPickerScreenState extends State<MapPickerScreen> {
           "Content-Type": "application/json",
         },
       );
-      
+
+      if (!mounted) return;
+
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
         final details = data['result'];
-        
+
         if (details != null && details['geometry'] != null) {
           final location = details['geometry']['location'];
           final lat = location['lat'];
@@ -196,26 +215,32 @@ class _MapPickerScreenState extends State<MapPickerScreen> {
 
           setState(() {
             _pickedLocation = newPosition;
-            _addMarker(newPosition);
+            _addMarker(
+              newPosition,
+              l10n.mapPickerMarkerTitle,
+              l10n.mapPickerMarkerSnippet,
+            );
             _placePredictions = [];
             _searchController.clear();
           });
 
-          _mapController.animateCamera(CameraUpdate.newLatLngZoom(newPosition, 17.0));
+          _mapController
+              .animateCamera(CameraUpdate.newLatLngZoom(newPosition, 17.0));
           _sessionToken = const Uuid().v4();
         }
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Konum detayları alınırken hata oluştu.'),
+          SnackBar(
+            content: Text(l10n.mapPickerErrorLocationDetails),
             backgroundColor: Colors.orange,
           ),
         );
       }
     } catch (e) {
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Bağlantı hatası oluştu.'),
+        SnackBar(
+          content: Text(l10n.mapPickerErrorConnection),
           backgroundColor: Colors.red,
         ),
       );
@@ -224,12 +249,15 @@ class _MapPickerScreenState extends State<MapPickerScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Haritadan Konum Seç'),
+        title: Text(l10n.mapPickerAppBarTitle),
         actions: [
           IconButton(
             icon: const Icon(Icons.check),
+            tooltip: l10n.mapPickerConfirmButton,
             onPressed: _pickedLocation == null
                 ? null
                 : () {
@@ -247,6 +275,14 @@ class _MapPickerScreenState extends State<MapPickerScreen> {
             ),
             onMapCreated: (controller) {
               _mapController = controller;
+              // Harita oluşturulduğunda başlangıç ​​marker'ını ekliyoruz.
+              if (_pickedLocation != null) {
+                _addMarker(
+                  _pickedLocation!,
+                  l10n.mapPickerMarkerTitle,
+                  l10n.mapPickerMarkerSnippet,
+                );
+              }
             },
             onTap: _onMapTapped,
             markers: _markers,
@@ -276,8 +312,8 @@ class _MapPickerScreenState extends State<MapPickerScreen> {
                   _searchPlaces(value);
                 },
                 decoration: InputDecoration(
-                  hintText: 'Restoran veya adres arayın...',
-                  prefixIcon: _isSearching 
+                  hintText: l10n.mapPickerSearchHint,
+                  prefixIcon: _isSearching
                       ? const SizedBox(
                           width: 20,
                           height: 20,
@@ -288,7 +324,8 @@ class _MapPickerScreenState extends State<MapPickerScreen> {
                         )
                       : const Icon(Icons.search),
                   border: InputBorder.none,
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+                  contentPadding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
                   suffixIcon: _searchController.text.isNotEmpty
                       ? IconButton(
                           icon: const Icon(Icons.clear),
@@ -304,7 +341,7 @@ class _MapPickerScreenState extends State<MapPickerScreen> {
               ),
             ),
           ),
-          
+
           // ARAMA SONUÇLARI LİSTESİ
           if (_placePredictions.isNotEmpty)
             Positioned(
@@ -329,9 +366,10 @@ class _MapPickerScreenState extends State<MapPickerScreen> {
                   itemCount: _placePredictions.length,
                   itemBuilder: (context, index) {
                     final prediction = _placePredictions[index];
-                    final description = prediction['description'] ?? 'Bilinmeyen Yer';
+                    final description =
+                        prediction['description'] ?? l10n.mapPickerUnknownPlace;
                     final placeId = prediction['place_id'] ?? '';
-                    
+
                     return ListTile(
                       title: Text(description),
                       leading: const Icon(Icons.location_on, color: Colors.grey),
@@ -351,7 +389,7 @@ class _MapPickerScreenState extends State<MapPickerScreen> {
             Navigator.of(context).pop(_pickedLocation);
           }
         },
-        label: const Text("Bu Konumu Onayla"),
+        label: Text(l10n.mapPickerConfirmButton),
         icon: const Icon(Icons.pin_drop),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,

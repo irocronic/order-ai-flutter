@@ -33,8 +33,10 @@ class BusinessOwnerHomeStateManager {
   List<BottomNavigationBarItem> activeNavBarItems = [];
   Timer? orderCountRefreshTimer;
   DateTime? lastRefreshTime;
+  bool _isDisposed = false;
 
   void dispose() {
+    if (_isDisposed) return;
     activeTableOrderCountNotifier.dispose();
     activeTakeawayOrderCountNotifier.dispose();
     activeKdsOrderCountNotifier.dispose();
@@ -42,12 +44,14 @@ class BusinessOwnerHomeStateManager {
     availableKdsScreensNotifier.dispose();
     isLoadingKdsScreensNotifier.dispose();
     orderCountRefreshTimer?.cancel();
+    _isDisposed = true;
   }
 
   Future<void> fetchActiveOrderCounts(String token, int businessId) async {
+    if (_isDisposed) return;
     try {
       int kdsCount = 0;
-      if (!isLoadingKdsScreensNotifier.value && availableKdsScreensNotifier.value.isNotEmpty) {
+      if (!_isDisposed && !isLoadingKdsScreensNotifier.value && availableKdsScreensNotifier.value.isNotEmpty) {
         kdsCount = await KdsService.fetchActiveKdsOrderCount(token, availableKdsScreensNotifier.value.first.slug);
       }
 
@@ -57,6 +61,7 @@ class BusinessOwnerHomeStateManager {
         Future.value(kdsCount)
       ]);
 
+      if (_isDisposed) return;
       activeTableOrderCountNotifier.value = results[0] as int;
       activeTakeawayOrderCountNotifier.value = results[1] as int;
       activeKdsOrderCountNotifier.value = results[2] as int;
@@ -68,8 +73,9 @@ class BusinessOwnerHomeStateManager {
   }
 
   Future<void> checkStockAlerts(String token) async {
+    if (_isDisposed) return;
     if (!UserSession.hasPagePermission(PermissionKeys.manageStock)) {
-      hasStockAlertsNotifier.value = false;
+      if (!_isDisposed) hasStockAlertsNotifier.value = false;
       return;
     }
     
@@ -86,29 +92,33 @@ class BusinessOwnerHomeStateManager {
         }
       }
       
-      hasStockAlertsNotifier.value = alertFound;
+      if (!_isDisposed) hasStockAlertsNotifier.value = alertFound;
     } catch (e) {
       debugPrint("Stok uyarıları kontrol edilirken hata: $e");
-      hasStockAlertsNotifier.value = false;
+      if (!_isDisposed) hasStockAlertsNotifier.value = false;
     }
   }
 
   Future<void> fetchUserAccessibleKdsScreens(String token) async {
+    if (_isDisposed) return;
     if (UserSession.businessId == null) {
-      isLoadingKdsScreensNotifier.value = false;
+      if (!_isDisposed) isLoadingKdsScreensNotifier.value = false;
       return;
     }
     
     if (UserSession.userType == 'customer' || UserSession.userType == 'admin') {
-      availableKdsScreensNotifier.value = [];
-      isLoadingKdsScreensNotifier.value = false;
+      if (!_isDisposed) {
+        availableKdsScreensNotifier.value = [];
+        isLoadingKdsScreensNotifier.value = false;
+      }
       return;
     }
     
-    isLoadingKdsScreensNotifier.value = true;
+    if (!_isDisposed) isLoadingKdsScreensNotifier.value = true;
     List<KdsScreenModel> kdsToDisplay = [];
     
     try {
+      if (_isDisposed) return;
       if (UserSession.userType == 'business_owner') {
         final allKdsScreensForBusiness = await KdsManagementService.fetchKdsScreens(token, UserSession.businessId!);
         kdsToDisplay = allKdsScreensForBusiness.where((kds) => kds.isActive).toList();
@@ -116,17 +126,20 @@ class BusinessOwnerHomeStateManager {
         kdsToDisplay = UserSession.userAccessibleKdsScreens.where((kds) => kds.isActive).toList();
       }
       
-      availableKdsScreensNotifier.value = kdsToDisplay;
-      debugPrint("StateManager: Kullanıcı için gösterilecek KDS ekranları (${kdsToDisplay.length} adet) belirlendi.");
+      if (!_isDisposed) {
+        availableKdsScreensNotifier.value = kdsToDisplay;
+        debugPrint("StateManager: Kullanıcı için gösterilecek KDS ekranları (${kdsToDisplay.length} adet) belirlendi.");
+      }
     } catch (e) {
       debugPrint("StateManager: Kullanıcının erişebileceği KDS ekranları işlenirken hata: $e");
-      availableKdsScreensNotifier.value = [];
+      if (!_isDisposed) availableKdsScreensNotifier.value = [];
     } finally {
-      isLoadingKdsScreensNotifier.value = false;
+      if (!_isDisposed) isLoadingKdsScreensNotifier.value = false;
     }
   }
 
   bool canAccessTab(String permissionKey) {
+    if (_isDisposed) return false;
     if (UserSession.userType == 'business_owner') return true;
     if (permissionKey == PermissionKeys.manageKds ||
         permissionKey == PermissionKeys.managePagers ||
@@ -139,6 +152,7 @@ class BusinessOwnerHomeStateManager {
   }
 
   void buildActiveTabs(BuildContext context, String token, int businessId, VoidCallback onNavigateToKds, Function(int) onTabChange) {
+    if (_isDisposed) return;
     final l10n = AppLocalizations.of(context)!;
     final List<Widget> pages = [];
     final List<BottomNavigationBarItem> navBarItems = [];
@@ -151,6 +165,7 @@ class BusinessOwnerHomeStateManager {
   }
 
   Widget buildIconWithBadge(IconData defaultIcon, IconData activeIcon, ValueNotifier<int> countNotifier, int currentIndex, List<BottomNavigationBarItem> navBarItems, BuildContext context) {
+    if (_isDisposed) return const SizedBox.shrink();
     return ValueListenableBuilder<int>(
       valueListenable: countNotifier,
       builder: (context, count, child) {
@@ -170,8 +185,10 @@ class BusinessOwnerHomeStateManager {
   }
 
   void startOrderCountRefreshTimer(VoidCallback refreshCallback) {
+    if (_isDisposed) return;
     orderCountRefreshTimer?.cancel();
     orderCountRefreshTimer = Timer.periodic(const Duration(seconds: 45), (timer) {
+      if (_isDisposed) return;
       refreshCallback();
     });
   }

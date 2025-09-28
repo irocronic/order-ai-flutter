@@ -13,6 +13,8 @@ import '../../../../services/firebase_storage_service.dart';
 import '../../../../models/menu_item_variant.dart';
 import '../../../../services/user_session.dart';
 import '../../../../screens/subscription_screen.dart';
+import '../../../../services/localized_template_service.dart';
+import '../../../../providers/language_provider.dart';
 
 class MenuItemVariantsDialog extends StatefulWidget {
   final String token;
@@ -50,6 +52,10 @@ class _MenuItemVariantsDialogState extends State<MenuItemVariantsDialog> {
   // Varyant şablonları
   List<dynamic> _variantTemplates = [];
   bool _isLoadingTemplates = false;
+  
+  // ✅ YENİ: Hata durumu tracking
+  bool _hasTemplateLoadError = false;
+  String _templateErrorMessage = '';
 
   @override
   void initState() {
@@ -92,9 +98,14 @@ class _MenuItemVariantsDialogState extends State<MenuItemVariantsDialog> {
     }
   }
 
+  // ✅ GÜNCELLEME: Daha güvenli template yükleme
   Future<void> _loadVariantTemplates() async {
     if (!mounted) return;
-    setState(() => _isLoadingTemplates = true);
+    setState(() {
+      _isLoadingTemplates = true;
+      _hasTemplateLoadError = false;
+      _templateErrorMessage = '';
+    });
 
     try {
       final category = widget.menuItem['category'];
@@ -107,30 +118,121 @@ class _MenuItemVariantsDialogState extends State<MenuItemVariantsDialog> {
       }
 
       List<dynamic> templates = [];
-      if (categoryName != null) {
-        templates = await ApiService.fetchVariantTemplates(
-          widget.token,
-          categoryTemplateName: categoryName,
-        );
+      
+      // ✅ DÜZELTME: Öncelikle JSON dosyasından varyant şablonlarını yükle
+      try {
+        final languageCode = LanguageProvider.currentLanguageCode;
+        final jsonTemplates = await LocalizedTemplateService.loadVariants(languageCode);
+        
+        if (jsonTemplates.isNotEmpty) {
+          // Kategori bazlı filtreleme yapabiliriz (opsiyonel)
+          if (categoryName != null) {
+            // Basit kategori eşleştirmesi - gerekirse daha gelişmiş bir algoritma yapılabilir
+            templates = jsonTemplates.take(8).toList();
+          } else {
+            templates = jsonTemplates.take(8).toList();
+          }
+          
+          debugPrint('✅ JSON\'dan ${templates.length} varyant şablonu yüklendi');
+        }
+      } catch (jsonError) {
+        debugPrint('⚠️ JSON varyant şablonları yüklenemedi: $jsonError');
+        
+        // ✅ YENİ: JSON yüklenemezse daha güvenli fallback
+        templates = _getDefaultVariantTemplates();
+        debugPrint('✅ Varsayılan şablonlar kullanılıyor: ${templates.length} adet');
       }
-
-      // Eğer kategori için şablon yoksa, varsayılan şablonları getir
+      
+      // ✅ YENİ: Eğer JSON'dan hiç template yüklenmediyse API'den dene (isteğe bağlı)
       if (templates.isEmpty) {
-        final defaultTemplates = await ApiService.fetchVariantTemplates(widget.token);
-        templates = defaultTemplates.take(6).toList();
+        try {
+          if (categoryName != null) {
+            templates = await ApiService.fetchVariantTemplates(
+              widget.token,
+              categoryTemplateName: categoryName,
+            );
+            debugPrint('✅ API\'den kategori bazlı ${templates.length} varyant şablonu yüklendi');
+          }
+
+          if (templates.isEmpty) {
+            final defaultTemplates = await ApiService.fetchVariantTemplates(widget.token);
+            templates = defaultTemplates.take(6).toList();
+            debugPrint('✅ API\'den varsayılan ${templates.length} varyant şablonu yüklendi');
+          }
+        } catch (apiError) {
+          debugPrint('❌ API varyant şablonları da yüklenemedi: $apiError');
+          // ✅ YENİ: API de başarısızsa tamamen varsayılan şablonları kullan
+          templates = _getDefaultVariantTemplates();
+          setState(() {
+            _hasTemplateLoadError = true;
+            _templateErrorMessage = 'Şablonlar yüklenemedi, varsayılan seçenekler kullanılıyor.';
+          });
+        }
       }
 
       if (mounted) {
         setState(() => _variantTemplates = templates);
       }
     } catch (e) {
-      // Hata durumunda boş liste
+      debugPrint('❌ Varyant şablonları yükleme hatası: $e');
       if (mounted) {
-        setState(() => _variantTemplates = []);
+        setState(() {
+          _variantTemplates = _getDefaultVariantTemplates();
+          _hasTemplateLoadError = true;
+          _templateErrorMessage = 'Şablon yükleme hatası: ${e.toString()}';
+        });
       }
     } finally {
       if (mounted) setState(() => _isLoadingTemplates = false);
     }
+  }
+
+  // ✅ YENİ: Varsayılan varyant şablonları
+  List<dynamic> _getDefaultVariantTemplates() {
+    return [
+      {
+        'id': -1,
+        'name': 'Büyük',
+        'price_multiplier': 1.3,
+        'is_extra': false,
+        'icon_name': 'restaurant'
+      },
+      {
+        'id': -2,
+        'name': 'Orta',
+        'price_multiplier': 1.0,
+        'is_extra': false,
+        'icon_name': 'restaurant_outlined'
+      },
+      {
+        'id': -3,
+        'name': 'Küçük',
+        'price_multiplier': 0.8,
+        'is_extra': false,
+        'icon_name': 'restaurant_outlined'
+      },
+      {
+        'id': -4,
+        'name': 'Ekstra Malzemeli',
+        'price_multiplier': 1.2,
+        'is_extra': true,
+        'icon_name': 'add_circle'
+      },
+      {
+        'id': -5,
+        'name': 'Az Baharatlı',
+        'price_multiplier': 1.0,
+        'is_extra': false,
+        'icon_name': 'whatshot'
+      },
+      {
+        'id': -6,
+        'name': 'Çok Baharatlı',
+        'price_multiplier': 1.1,
+        'is_extra': false,
+        'icon_name': 'whatshot'
+      },
+    ];
   }
 
   IconData _getIconFromName(String iconName) {
@@ -155,41 +257,62 @@ class _MenuItemVariantsDialogState extends State<MenuItemVariantsDialog> {
     }
   }
 
+  // ✅ GÜNCELLEME: Daha güvenli template seçimi
   void _selectVariantTemplate(Map<String, dynamic> template) {
-    setState(() {
-      _variantNameController.text = template['name'];
-      
-      // Base fiyat hesaplama
-      final menuItemPrice = widget.menuItem['price'];
-      double basePrice = 10.0; // Varsayılan
-      
-      if (menuItemPrice != null) {
-        if (menuItemPrice is num) {
-          basePrice = menuItemPrice.toDouble();
+    try {
+      setState(() {
+        _variantNameController.text = template['name']?.toString() ?? '';
+        
+        // Base fiyat hesaplama - daha güvenli
+        final menuItemPrice = widget.menuItem['price'];
+        double basePrice = 25.0; // Varsayılan fiyat artırıldı
+        
+        if (menuItemPrice != null) {
+          if (menuItemPrice is num) {
+            basePrice = menuItemPrice.toDouble();
+          } else if (menuItemPrice is String) {
+            basePrice = double.tryParse(menuItemPrice) ?? 25.0;
+          }
         }
-      }
-      
-      final multiplier = (template['price_multiplier'] as num).toDouble();
-      final calculatedPrice = basePrice * multiplier;
-      _variantPriceController.text = calculatedPrice.toStringAsFixed(2);
-      
-      // is_extra alanını güvenli şekilde parse et
-      bool isExtra = false;
-      final isExtraValue = template['is_extra'];
-      if (isExtraValue != null) {
-        if (isExtraValue is bool) {
-          isExtra = isExtraValue;
-        } else if (isExtraValue is String) {
-          isExtra = isExtraValue.toLowerCase() == 'true';
-        } else if (isExtraValue is num) {
-          isExtra = isExtraValue != 0;
+        
+        // ✅ DÜZELTME: price_multiplier kontrolü - daha güvenli
+        double multiplier = 1.0;
+        final multiplierValue = template['price_multiplier'];
+        if (multiplierValue != null) {
+          if (multiplierValue is num) {
+            multiplier = multiplierValue.toDouble();
+          } else if (multiplierValue is String) {
+            multiplier = double.tryParse(multiplierValue) ?? 1.0;
+          }
         }
-      }
+        
+        // ✅ YENİ: Multiplier sınırlandır
+        multiplier = multiplier.clamp(0.5, 3.0); // 0.5x ile 3x arasında sınırla
+        
+        final calculatedPrice = basePrice * multiplier;
+        _variantPriceController.text = calculatedPrice.toStringAsFixed(2);
+        
+        // ✅ GÜNCELLEME: is_extra alanını daha güvenli parse et
+        bool isExtra = false;
+        final isExtraValue = template['is_extra'];
+        if (isExtraValue != null) {
+          if (isExtraValue is bool) {
+            isExtra = isExtraValue;
+          } else if (isExtraValue is String) {
+            isExtra = isExtraValue.toLowerCase() == 'true' || isExtraValue == '1';
+          } else if (isExtraValue is num) {
+            isExtra = isExtraValue != 0;
+          }
+        }
+        
+        _isExtraFlag = isExtra;
+      });
       
-      _isExtraFlag = isExtra;
-    });
-    
-    HapticFeedback.lightImpact();
+      HapticFeedback.lightImpact();
+    } catch (e) {
+      debugPrint('❌ Template seçim hatası: $e');
+      // Hata durumunda hiçbir şey yapma, mevcut değerleri koru
+    }
   }
 
   Widget _buildQuickVariantChips() {
@@ -223,6 +346,18 @@ class _MenuItemVariantsDialogState extends State<MenuItemVariantsDialog> {
                 ),
               ),
             ],
+            // ✅ YENİ: Hata durumu gösterici
+            if (_hasTemplateLoadError) ...[
+              const SizedBox(width: 8),
+              Tooltip(
+                message: _templateErrorMessage,
+                child: Icon(
+                  Icons.warning_amber,
+                  color: Colors.orange,
+                  size: 16,
+                ),
+              ),
+            ],
           ],
         ),
         const SizedBox(height: 8),
@@ -247,18 +382,19 @@ class _MenuItemVariantsDialogState extends State<MenuItemVariantsDialog> {
                   spacing: 8.0,
                   runSpacing: 8.0,
                   children: _variantTemplates.map<Widget>((template) {
+                    final templateName = template['name']?.toString() ?? 'İsimsiz';
                     final isUsed = _variants.any((variant) => 
-                      variant.name.toLowerCase() == template['name'].toString().toLowerCase()
+                      variant.name.toLowerCase() == templateName.toLowerCase()
                     );
                     
                     return ActionChip(
                       avatar: Icon(
-                        _getIconFromName(template['icon_name'] ?? 'label_outline'),
+                        _getIconFromName(template['icon_name']?.toString() ?? 'label_outline'),
                         size: 16,
                         color: isUsed ? Colors.grey : Colors.orange.shade700,
                       ),
                       label: Text(
-                        template['name'],
+                        templateName,
                         style: TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.w500,
@@ -279,6 +415,34 @@ class _MenuItemVariantsDialogState extends State<MenuItemVariantsDialog> {
                   }).toList(),
                 ),
         ),
+        // ✅ YENİ: Hata mesajı göster
+        if (_hasTemplateLoadError)
+          Padding(
+            padding: const EdgeInsets.only(top: 8.0),
+            child: Container(
+              padding: const EdgeInsets.all(8.0),
+              decoration: BoxDecoration(
+                color: Colors.orange.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(6),
+                border: Border.all(color: Colors.orange.withOpacity(0.3)),
+              ),
+              child: Row(
+                children: [
+                  Icon(Icons.info_outline, color: Colors.orange, size: 14),
+                  const SizedBox(width: 6),
+                  Expanded(
+                    child: Text(
+                      _templateErrorMessage,
+                      style: TextStyle(
+                        fontSize: 11,
+                        color: Colors.orange.shade700,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
       ],
     );
   }

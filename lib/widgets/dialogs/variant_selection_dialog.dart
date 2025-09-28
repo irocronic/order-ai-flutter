@@ -212,9 +212,7 @@ class _VariantSelectionDialogState extends State<VariantSelectionDialog> {
                     children: extraVariants.map((variant) {
                       final isSelected = selectedExtras.contains(variant);
                       return ChoiceChip(
-                        // --- DÜZELTME BAŞLANGICI: Okunurluk için arka plan rengi koyulaştırıldı. ---
                         backgroundColor: Colors.black.withOpacity(0.2),
-                        // --- DÜZELTME SONU ---
                         selectedColor: Colors.white,
                         label: Text(
                           '${variant.name} (+${CurrencyFormatter.format(variant.price)})',
@@ -265,29 +263,38 @@ class _VariantSelectionDialogState extends State<VariantSelectionDialog> {
                 ),
                 const SizedBox(height: 20),
 
+                // *** BURADA DEĞİŞİKLİK: Row yerine Flexible ile düzenlenmiş düzen ***
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    TextButton(
-                      style: TextButton.styleFrom(foregroundColor: Colors.white),
-                      onPressed: () => Navigator.of(context).pop(),
-                      child: Text(l10n.dialogButtonCancel),
+                    Expanded(
+                      child: TextButton(
+                        style: TextButton.styleFrom(foregroundColor: Colors.white),
+                        onPressed: () => Navigator.of(context).pop(),
+                        child: Text(l10n.dialogButtonCancel),
+                      ),
                     ),
                     const SizedBox(width: 8),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white.withOpacity(0.9),
-                        foregroundColor: Colors.blue.shade900,
-                        elevation: 4,
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                    Expanded(
+                      flex: 2,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.white.withOpacity(0.9),
+                          foregroundColor: Colors.blue.shade900,
+                          elevation: 4,
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                        ),
+                        onPressed: () {
+                          if (_formKey.currentState!.validate()) {
+                            widget.onItemSelected(widget.item, selectedNormalVariant, selectedExtras, selectedTableUser, _currentQuantity);
+                            Navigator.of(context).pop();
+                          }
+                        },
+                        child: Text(
+                          l10n.variantSelectionDialogAddToCartButton, 
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                          textAlign: TextAlign.center,
+                        ),
                       ),
-                      onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          widget.onItemSelected(widget.item, selectedNormalVariant, selectedExtras, selectedTableUser, _currentQuantity);
-                          Navigator.of(context).pop();
-                        }
-                      },
-                      child: Text(l10n.variantSelectionDialogAddToCartButton, style: const TextStyle(fontWeight: FontWeight.bold)),
                     ),
                   ],
                 ),

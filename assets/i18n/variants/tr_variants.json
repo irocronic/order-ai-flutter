@@ -1,0 +1,82 @@
+[
+  { "id": 1, "menu_item_id": 1, "name": "Normal Porsiyon", "price_multiplier": 1.0, "is_extra": false, "icon_name": "restaurant" },
+  { "id": 2, "menu_item_id": 1, "name": "1,5 Porsiyon", "price_multiplier": 1.4, "is_extra": false, "icon_name": "restaurant" },
+  { "id": 3, "menu_item_id": 1, "name": "Duble (İki Şiş)", "price_multiplier": 1.8, "is_extra": false, "icon_name": "restaurant" },
+  { "id": 4, "menu_item_id": 1, "name": "Ekstra Acı", "price_multiplier": 1.0, "is_extra": true, "icon_name": "whatshot" },
+  { "id": 5, "menu_item_id": 1, "name": "Ekstra Soslu", "price_multiplier": 1.1, "is_extra": true, "icon_name": "local_drink" },
+
+  { "id": 6, "menu_item_id": 3, "name": "Normal Porsiyon", "price_multiplier": 1.0, "is_extra": false, "icon_name": "restaurant" },
+  { "id": 7, "menu_item_id": 3, "name": "Büyük Porsiyon", "price_multiplier": 1.3, "is_extra": false, "icon_name": "restaurant" },
+  { "id": 8, "menu_item_id": 3, "name": "Ekstra Soslu", "price_multiplier": 1.1, "is_extra": true, "icon_name": "local_drink" },
+
+  { "id": 9, "menu_item_id": 25, "name": "Küçük Tabak", "price_multiplier": 0.8, "is_extra": false, "icon_name": "circle_outlined" },
+  { "id": 10, "menu_item_id": 25, "name": "Büyük Tabak", "price_multiplier": 1.4, "is_extra": false, "icon_name": "circle" },
+
+  { "id": 11, "menu_item_id": 54, "name": "Tek Kişilik", "price_multiplier": 1.0, "is_extra": false, "icon_name": "cake" },
+  { "id": 12, "menu_item_id": 54, "name": "Çift Kişilik", "price_multiplier": 1.8, "is_extra": false, "icon_name": "cake" },
+  { "id": 38, "menu_item_id": 54, "name": "Kaymaklı", "price_multiplier": 1.15, "is_extra": true, "icon_name": "icecream" },
+  { "id": 39, "menu_item_id": 54, "name": "Dondurmalı", "price_multiplier": 1.25, "is_extra": true, "icon_name": "icecream" },
+
+  { "id": 13, "menu_item_id": 68, "name": "Şişe 33cl", "price_multiplier": 1.0, "is_extra": false, "icon_name": "local_bar" },
+  { "id": 14, "menu_item_id": 68, "name": "Şişe 50cl", "price_multiplier": 1.4, "is_extra": false, "icon_name": "local_bar" },
+  { "id": 15, "menu_item_id": 68, "name": "Fıçı Küçük", "price_multiplier": 1.2, "is_extra": false, "icon_name": "sports_bar" },
+  { "id": 16, "menu_item_id": 68, "name": "Fıçı Büyük", "price_multiplier": 1.6, "is_extra": false, "icon_name": "sports_bar" },
+
+  { "id": 17, "menu_item_id": 84, "name": "Küçük Bardak", "price_multiplier": 1.0, "is_extra": false, "icon_name": "local_cafe" },
+  { "id": 18, "menu_item_id": 84, "name": "Büyük Bardak", "price_multiplier": 1.2, "is_extra": false, "icon_name": "local_cafe" },
+  { "id": 19, "menu_item_id": 84, "name": "Demlik", "price_multiplier": 2.5, "is_extra": false, "icon_name": "local_cafe" },
+
+  { "id": 20, "menu_item_id": 64, "name": "Tek", "price_multiplier": 1.0, "is_extra": false, "icon_name": "wine_bar" },
+  { "id": 21, "menu_item_id": 64, "name": "Duble", "price_multiplier": 1.8, "is_extra": false, "icon_name": "wine_bar" },
+  { "id": 22, "menu_item_id": 64, "name": "35cl Şişe", "price_multiplier": 6.0, "is_extra": false, "icon_name": "liquor" },
+  { "id": 40, "menu_item_id": 64, "name": "70cl Şişe", "price_multiplier": 11.0, "is_extra": false, "icon_name": "liquor" },
+
+  { "id": 23, "menu_item_id": 70, "name": "Single", "price_multiplier": 1.0, "is_extra": false, "icon_name": "wine_bar" },
+  { "id": 24, "menu_item_id": 70, "name": "Double", "price_multiplier": 1.8, "is_extra": false, "icon_name": "wine_bar" },
+
+  { "id": 25, "menu_item_id": 72, "name": "Margarita", "price_multiplier": 1.0, "is_extra": false, "icon_name": "local_bar" },
+  { "id": 26, "menu_item_id": 72, "name": "Mojito", "price_multiplier": 1.1, "is_extra": false, "icon_name": "local_bar" },
+  { "id": 27, "menu_item_id": 72, "name": "Aperol Spritz", "price_multiplier": 1.2, "is_extra": false, "icon_name": "local_bar" },
+
+  { "id": 28, "menu_item_id": 81, "name": "Şeftali", "price_multiplier": 1.0, "is_extra": false, "icon_name": "local_drink" },
+  { "id": 29, "menu_item_id": 81, "name": "Limon", "price_multiplier": 1.0, "is_extra": false, "icon_name": "local_drink" },
+
+  { "id": 30, "menu_item_id": 82, "name": "Çilek", "price_multiplier": 1.0, "is_extra": false, "icon_name": "local_drink" },
+  { "id": 31, "menu_item_id": 82, "name": "Çikolata", "price_multiplier": 1.1, "is_extra": false, "icon_name": "local_drink" },
+  { "id": 32, "menu_item_id": 82, "name": "Vanilya", "price_multiplier": 1.0, "is_extra": false, "icon_name": "local_drink" },
+
+  { "id": 33, "menu_item_id": 83, "name": "Frappe", "price_multiplier": 1.0, "is_extra": false, "icon_name": "local_cafe" },
+  { "id": 34, "menu_item_id": 83, "name": "Ice Latte", "price_multiplier": 1.2, "is_extra": false, "icon_name": "local_cafe" },
+
+  { "id": 35, "menu_item_id": 90, "name": "Ihlamur", "price_multiplier": 1.0, "is_extra": false, "icon_name": "local_florist" },
+  { "id": 36, "menu_item_id": 90, "name": "Adaçayı", "price_multiplier": 1.0, "is_extra": false, "icon_name": "eco" },
+  { "id": 37, "menu_item_id": 90, "name": "Papatya", "price_multiplier": 1.0, "is_extra": false, "icon_name": "local_florist" },
+  
+  { "id": 41, "menu_item_id": 9, "name": "Et Döner", "price_multiplier": 1.2, "is_extra": false, "icon_name": "kebab_dining" },
+  { "id": 42, "menu_item_id": 9, "name": "Tavuk Döner", "price_multiplier": 1.0, "is_extra": false, "icon_name": "kebab_dining" },
+  { "id": 43, "menu_item_id": 9, "name": "Pilav Üstü Porsiyon", "price_multiplier": 1.5, "is_extra": false, "icon_name": "rice_bowl" },
+
+  { "id": 44, "menu_item_id": 97, "name": "Kıymalı Pide", "price_multiplier": 1.0, "is_extra": false, "icon_name": "restaurant" },
+  { "id": 45, "menu_item_id": 97, "name": "Kaşarlı Pide", "price_multiplier": 1.0, "is_extra": false, "icon_name": "restaurant" },
+  { "id": 46, "menu_item_id": 97, "name": "Kuşbaşılı Pide", "price_multiplier": 1.2, "is_extra": false, "icon_name": "restaurant" },
+  { "id": 47, "menu_item_id": 97, "name": "Sucuklu Pide", "price_multiplier": 1.1, "is_extra": false, "icon_name": "restaurant" },
+  
+  { "id": 48, "menu_item_id": 103, "name": "Kızartma", "price_multiplier": 1.0, "is_extra": false, "icon_name": "local_fire_department" },
+  { "id": 49, "menu_item_id": 103, "name": "Haşlama", "price_multiplier": 1.0, "is_extra": false, "icon_name": "water_drop" },
+
+  { "id": 50, "menu_item_id": 105, "name": "Soğansız", "price_multiplier": 1.0, "is_extra": false, "icon_name": "radio_button_checked" },
+  { "id": 51, "menu_item_id": 105, "name": "Soğanlı", "price_multiplier": 1.0, "is_extra": false, "icon_name": "radio_button_checked" },
+  { "id": 52, "menu_item_id": 105, "name": "Sucuklu", "price_multiplier": 1.25, "is_extra": true, "icon_name": "add_circle" },
+  { "id": 53, "menu_item_id": 105, "name": "Kaşarlı", "price_multiplier": 1.15, "is_extra": true, "icon_name": "add_circle" },
+
+  { "id": 54, "menu_item_id": 53, "name": "2 Dilim", "price_multiplier": 1.0, "is_extra": false, "icon_name": "pie_chart" },
+  { "id": 55, "menu_item_id": 53, "name": "4 Dilim", "price_multiplier": 1.8, "is_extra": false, "icon_name": "pie_chart" },
+  { "id": 56, "menu_item_id": 53, "name": "Soğuk Baklava (2 Dilim)", "price_multiplier": 1.1, "is_extra": false, "icon_name": "ac_unit" },
+  
+  { "id": 57, "menu_item_id": 111, "name": "Acısız", "price_multiplier": 1.0, "is_extra": false, "icon_name": "radio_button_checked" },
+  { "id": 58, "menu_item_id": 111, "name": "Acılı", "price_multiplier": 1.0, "is_extra": false, "icon_name": "whatshot" },
+
+  { "id": 59, "menu_item_id": 85, "name": "Sade", "price_multiplier": 1.0, "is_extra": false, "icon_name": "coffee" },
+  { "id": 60, "menu_item_id": 85, "name": "Orta Şekerli", "price_multiplier": 1.0, "is_extra": false, "icon_name": "coffee" },
+  { "id": 61, "menu_item_id": 85, "name": "Şekerli", "price_multiplier": 1.0, "is_extra": false, "icon_name": "coffee" }
+]

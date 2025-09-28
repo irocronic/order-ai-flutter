@@ -1,0 +1,47 @@
+[
+  { "id": 1, "menu_item_id": 8, "name": "Sauce au Poivre", "price_multiplier": 1.1, "is_extra": true, "icon_name": "add_circle_outline" },
+  { "id": 2, "menu_item_id": 8, "name": "Sauce Béarnaise", "price_multiplier": 1.12, "is_extra": true, "icon_name": "add_circle_outline" },
+  { "id": 3, "menu_item_id": 8, "name": "Cuisson: Saignant", "price_multiplier": 1.0, "is_extra": false, "icon_name": "whatshot" },
+  { "id": 4, "menu_item_id": 8, "name": "Cuisson: À point", "price_multiplier": 1.0, "is_extra": false, "icon_name": "whatshot" },
+  { "id": 5, "menu_item_id": 8, "name": "Cuisson: Bien cuit", "price_multiplier": 1.0, "is_extra": false, "icon_name": "whatshot" },
+  
+  { "id": 6, "menu_item_id": 17, "name": "Petit Plateau", "price_multiplier": 1.0, "is_extra": false, "icon_name": "circle_outlined" },
+  { "id": 7, "menu_item_id": 17, "name": "Grand Plateau", "price_multiplier": 1.6, "is_extra": false, "icon_name": "circle" },
+
+  { "id": 8, "menu_item_id": 20, "name": "Avec boule de glace vanille", "price_multiplier": 1.25, "is_extra": true, "icon_name": "icecream" },
+  { "id": 56, "menu_item_id": 56, "name": "Avec boule de glace vanille", "price_multiplier": 1.28, "is_extra": true, "icon_name": "icecream" },
+
+  { "id": 9, "menu_item_id": 23, "name": "Bouteille (75cl)", "price_multiplier": 4.0, "is_extra": false, "icon_name": "liquor" },
+  { "id": 10, "menu_item_id": 23, "name": "Carafe (50cl)", "price_multiplier": 2.8, "is_extra": false, "icon_name": "local_bar" },
+  
+  { "id": 11, "menu_item_id": 27, "name": "Demi (25cl)", "price_multiplier": 1.0, "is_extra": false, "icon_name": "sports_bar" },
+  { "id": 12, "menu_item_id": 27, "name": "Pinte (50cl)", "price_multiplier": 1.8, "is_extra": false, "icon_name": "sports_bar" },
+  
+  { "id": 13, "menu_item_id": 30, "name": "Coca-Cola Zéro", "price_multiplier": 1.0, "is_extra": false, "icon_name": "local_drink" },
+  { "id": 14, "menu_item_id": 30, "name": "Coca-Cola Light", "price_multiplier": 1.0, "is_extra": false, "icon_name": "local_drink" },
+
+  { "id": 15, "menu_item_id": 32, "name": "Petite Bouteille (33cl)", "price_multiplier": 1.0, "is_extra": false, "icon_name": "local_drink" },
+  { "id": 16, "menu_item_id": 32, "name": "Grande Bouteille (1L)", "price_multiplier": 1.9, "is_extra": false, "icon_name": "local_drink" },
+
+  { "id": 17, "menu_item_id": 36, "name": "Double Express", "price_multiplier": 1.6, "is_extra": false, "icon_name": "local_cafe" },
+  { "id": 18, "menu_item_id": 36, "name": "Noisette", "price_multiplier": 1.1, "is_extra": false, "icon_name": "local_cafe" },
+  
+  { "id": 19, "menu_item_id": 39, "name": "Thé Vert à la Menthe", "price_multiplier": 1.0, "is_extra": false, "icon_name": "eco" },
+  { "id": 20, "menu_item_id": 39, "name": "Thé Noir Breakfast", "price_multiplier": 1.0, "is_extra": false, "icon_name": "emoji_food_beverage" },
+  { "id": 21, "menu_item_id": 39, "name": "Infusion Verveine", "price_multiplier": 1.0, "is_extra": false, "icon_name": "grass" },
+
+  { "id": 22, "menu_item_id": 42, "name": "Pour une personne", "price_multiplier": 1.0, "is_extra": false, "icon_name": "person" },
+  { "id": 23, "menu_item_id": 42, "name": "À partager (2 pers.)", "price_multiplier": 1.8, "is_extra": false, "icon_name": "people" },
+
+  { "id": 24, "menu_item_id": 51, "name": "Garniture: Purée Maison", "price_multiplier": 1.0, "is_extra": false, "icon_name": "restaurant_menu" },
+  { "id": 25, "menu_item_id": 51, "name": "Garniture: Riz Basmati", "price_multiplier": 1.0, "is_extra": false, "icon_name": "restaurant_menu" },
+  { "id": 26, "menu_item_id": 51, "name": "Garniture: Légumes Vapeur", "price_multiplier": 1.05, "is_extra": false, "icon_name": "restaurant_menu" },
+
+  { "id": 27, "menu_item_id": 62, "name": "Sirop de Menthe", "price_multiplier": 1.0, "is_extra": false, "icon_name": "local_florist" },
+  { "id": 28, "menu_item_id": 62, "name": "Sirop de Grenadine", "price_multiplier": 1.0, "is_extra": false, "icon_name": "local_bar" },
+  { "id": 29, "menu_item_id": 62, "name": "Sirop de Fraise", "price_multiplier": 1.0, "is_extra": false, "icon_name": "local_bar" },
+  
+  { "id": 30, "menu_item_id": 2, "name": "Douze escargots", "price_multiplier": 1.9, "is_extra": false, "icon_name": "local_dining" },
+  
+  { "id": 31, "menu_item_id": 66, "name": "Avec Chantilly", "price_multiplier": 1.15, "is_extra": true, "icon_name": "add_circle" }
+]

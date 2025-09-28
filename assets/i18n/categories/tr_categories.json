@@ -1,0 +1,11 @@
+[
+  { "id": 1, "name": "Ana Yemekler", "icon_name": "restaurant" },
+  { "id": 2, "name": "Çorbalar", "icon_name": "soup_kitchen" },
+  { "id": 3, "name": "Mezeler", "icon_name": "local_dining" },
+  { "id": 4, "name": "Ara Sıcaklar", "icon_name": "local_fire_department" },
+  { "id": 5, "name": "Salatalar", "icon_name": "eco" },
+  { "id": 6, "name": "Tatlılar", "icon_name": "cake" },
+  { "id": 7, "name": "Alkollü İçecekler", "icon_name": "wine_bar" },
+  { "id": 8, "name": "Alkolsüz İçecekler", "icon_name": "local_drink" },
+  { "id": 9, "name": "Sıcak İçecekler", "icon_name": "local_cafe" }
+]

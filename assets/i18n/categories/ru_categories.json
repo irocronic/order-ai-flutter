@@ -1,0 +1,11 @@
+[
+  { "id": 1, "name": "Закуски", "icon_name": "local_dining" },
+  { "id": 2, "name": "Салаты", "icon_name": "eco" },
+  { "id": 3, "name": "Супы", "icon_name": "soup_kitchen" },
+  { "id": 4, "name": "Горячие блюда", "icon_name": "restaurant" },
+  { "id": 5, "name": "Гарниры", "icon_name": "rice_bowl" },
+  { "id": 6, "name": "Десерты", "icon_name": "cake" },
+  { "id": 7, "name": "Алкогольные напитки", "icon_name": "wine_bar" },
+  { "id": 8, "name": "Безалкогольные напитки", "icon_name": "local_drink" },
+  { "id": 9, "name": "Горячие напитки", "icon_name": "local_cafe" }
+]

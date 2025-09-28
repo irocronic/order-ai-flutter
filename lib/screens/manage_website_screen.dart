@@ -785,6 +785,7 @@ class _ManageWebsiteScreenState extends State<ManageWebsiteScreen> {
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: DropdownButtonFormField<String>(
         value: _themeMode,
+        isExpanded: true, // Dropdown'un tam genişlik kullanmasını sağlar
         decoration: InputDecoration(
           labelText: l10n.websiteSettingsLabelTheme,
           labelStyle: TextStyle(color: Colors.grey.shade700),
@@ -804,7 +805,10 @@ class _ManageWebsiteScreenState extends State<ManageWebsiteScreen> {
         items: themeOptions.entries.map((entry) {
           return DropdownMenuItem<String>(
             value: entry.key,
-            child: Text(entry.value),
+            child: Text(
+              entry.value,
+              overflow: TextOverflow.ellipsis,
+            ),
           );
         }).toList(),
         onChanged: (String? newValue) {
@@ -832,10 +836,13 @@ class _ManageWebsiteScreenState extends State<ManageWebsiteScreen> {
         children: [
           Icon(icon, color: Colors.deepPurple.shade700),
           const SizedBox(width: 8),
-          Text(title,
-              style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  color: Colors.deepPurple.shade900,
-                  fontWeight: FontWeight.bold)),
+          Flexible(
+            child: Text(title,
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                    color: Colors.deepPurple.shade900,
+                    fontWeight: FontWeight.bold),
+                overflow: TextOverflow.ellipsis),
+          ),
         ],
       ),
     );
@@ -959,40 +966,67 @@ class _ManageWebsiteScreenState extends State<ManageWebsiteScreen> {
 
   Widget _buildColorPickerTile(
       String title, Color color, ValueChanged<Color> onColorChanged) {
-    return ListTile(
-      contentPadding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-      title: Text(title),
-      trailing: GestureDetector(
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4.0),
+      child: InkWell(
         onTap: () => _showColorPicker(context, color, onColorChanged),
+        borderRadius: BorderRadius.circular(8),
         child: Container(
-          width: 40,
-          height: 40,
+          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
           decoration: BoxDecoration(
-            color: color,
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: Colors.grey.shade400),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.1),
-                blurRadius: 4,
-                offset: const Offset(0, 2),
+            color: Colors.grey.shade50,
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Row(
+            children: [
+              Expanded(
+                child: Text(
+                  title,
+                  style: const TextStyle(fontSize: 14),
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                ),
+              ),
+              const SizedBox(width: 12),
+              Container(
+                width: 32,
+                height: 32,
+                decoration: BoxDecoration(
+                  color: color,
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: Colors.grey.shade400),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.1),
+                      blurRadius: 4,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
+                ),
               ),
             ],
           ),
         ),
       ),
-      onTap: () => _showColorPicker(context, color, onColorChanged),
     );
   }
 
   Widget _buildSwitchTile(
       String title, bool value, ValueChanged<bool> onChanged) {
-    return SwitchListTile(
-      title: Text(title),
-      value: value,
-      onChanged: onChanged,
-      activeColor: Colors.deepPurple.shade700,
-      contentPadding: const EdgeInsets.symmetric(horizontal: 8),
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 2),
+      child: SwitchListTile(
+        title: Text(
+          title,
+          style: const TextStyle(fontSize: 14),
+          overflow: TextOverflow.ellipsis,
+          maxLines: 2,
+        ),
+        value: value,
+        onChanged: onChanged,
+        activeColor: Colors.deepPurple.shade700,
+        contentPadding: const EdgeInsets.symmetric(horizontal: 8),
+      ),
     );
   }
 }

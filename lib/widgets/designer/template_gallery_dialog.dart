@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../models/template_model.dart';
 import '../../providers/business_card_provider.dart';
 
@@ -29,12 +30,14 @@ class _TemplateGalleryDialogState extends State<TemplateGalleryDialog> {
     ),
     Template(
       name: "Logo V1",
-      assetPath: 'assets/templates/logo.json', // Adım 1'de kopyaladığın dosyanın yolu
-      previewImagePath: 'assets/previews/logo.png', // Önizleme resmi (isteğe bağlı ama önerilir)
+      assetPath: 'assets/templates/logo.json',
+      previewImagePath: 'assets/previews/logo.png',
     ),
   ];
 
   Future<void> _loadTemplate(BuildContext context, String assetPath) async {
+    final l10n = AppLocalizations.of(context)!;
+    
     try {
       final String jsonString = await rootBundle.loadString(assetPath);
       final provider = context.read<BusinessCardProvider>();
@@ -42,13 +45,13 @@ class _TemplateGalleryDialogState extends State<TemplateGalleryDialog> {
       if (mounted) {
         Navigator.of(context).pop();
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Şablon başarıyla yüklendi!")),
+          SnackBar(content: Text(l10n.templateLoadedSuccess)),
         );
       }
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Şablon yüklenirken hata oluştu: $e")),
+          SnackBar(content: Text(l10n.templateLoadError(e.toString()))),
         );
       }
     }
@@ -56,8 +59,10 @@ class _TemplateGalleryDialogState extends State<TemplateGalleryDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    
     return AlertDialog(
-      title: const Text("Şablon Galerisi"),
+      title: Text(l10n.templateGalleryTitle),
       content: SizedBox(
         width: double.maxFinite,
         child: GridView.builder(
@@ -80,7 +85,6 @@ class _TemplateGalleryDialogState extends State<TemplateGalleryDialog> {
                     Expanded(
                       child: Container(
                         color: Colors.grey.shade200,
-                        // Önizleme görsellerini projenize eklediğinizden emin olun.
                         child: Image.asset(
                           template.previewImagePath,
                           fit: BoxFit.contain,
@@ -104,7 +108,7 @@ class _TemplateGalleryDialogState extends State<TemplateGalleryDialog> {
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop(),
-          child: const Text("Kapat"),
+          child: Text(l10n.close),
         ),
       ],
     );

@@ -4,6 +4,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../providers/business_card_provider.dart';
 import '../services/pdf_export_service.dart';
 import '../widgets/designer/canvas_widget.dart';
@@ -73,10 +74,11 @@ class _BusinessCardDesignerScreenState
       if (isControlPressed) {
         if (event.logicalKey == LogicalKeyboardKey.keyC) {
           provider.copySelectedElements();
+          final l10n = AppLocalizations.of(context)!;
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text("Seçili elemanlar kopyalandı!"),
-              duration: Duration(seconds: 1),
+            SnackBar(
+              content: Text(l10n.elementsCopied),
+              duration: const Duration(seconds: 1),
             ),
           );
         } else if (event.logicalKey == LogicalKeyboardKey.keyV) {
@@ -88,11 +90,13 @@ class _BusinessCardDesignerScreenState
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Kartvizit Tasarımcısı",
+        title: Text(l10n.designerTitle,
             style:
-                TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
         centerTitle: true,
         backgroundColor: Colors.blue.shade900,
         actions: [
@@ -103,41 +107,41 @@ class _BusinessCardDesignerScreenState
                   IconButton(
                     color: Colors.white,
                     icon: const Icon(Icons.undo),
-                    tooltip: "Geri Al",
+                    tooltip: l10n.undo,
                     onPressed: provider.canUndo ? provider.undo : null,
                   ),
                   IconButton(
                     color: Colors.white,
                     icon: const Icon(Icons.redo),
-                    tooltip: "Yinele",
+                    tooltip: l10n.redo,
                     onPressed: provider.canRedo ? provider.redo : null,
                   ),
                   IconButton(
                     color: Colors.white,
                     icon: const Icon(Icons.save),
-                    tooltip: "Kaydet",
+                    tooltip: l10n.save,
                     onPressed: () async {
                       await provider.saveCard();
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text("Tasarım kaydedildi!")),
+                        SnackBar(content: Text(l10n.designSaved)),
                       );
                     },
                   ),
                   IconButton(
                     color: Colors.white,
                     icon: const Icon(Icons.folder_open),
-                    tooltip: "Yükle",
+                    tooltip: l10n.load,
                     onPressed: () async {
                       await provider.loadCard();
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text("Tasarım yüklendi!")),
+                        SnackBar(content: Text(l10n.designLoaded)),
                       );
                     },
                   ),
                   IconButton(
                     color: Colors.white,
                     icon: const Icon(Icons.picture_as_pdf),
-                    tooltip: "Dışa Aktar (PDF)",
+                    tooltip: l10n.exportPdf,
                     onPressed: () {
                       PdfExportService.generateAndShareCard(
                           context, provider.cardModel);

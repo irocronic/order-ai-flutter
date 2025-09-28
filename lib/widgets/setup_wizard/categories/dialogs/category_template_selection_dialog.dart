@@ -7,6 +7,8 @@ import '../../../../services/api_service.dart';
 import '../../../../services/kds_management_service.dart';
 import '../../../../services/user_session.dart';
 import '../../../../screens/subscription_screen.dart';
+import '../../../../services/localized_template_service.dart';
+import '../../../../providers/language_provider.dart';
 
 class CategoryTemplateSelectionDialog extends StatefulWidget {
   final Function(List<int> templateIds, int? kdsScreenId) onConfirm;
@@ -25,7 +27,6 @@ class _CategoryTemplateSelectionDialogState
     extends State<CategoryTemplateSelectionDialog> {
   final _formKey = GlobalKey<FormState>();
 
-  // Arama ile ilgili değişkenler
   List<dynamic> _allTemplates = [];
   List<dynamic> _filteredTemplates = [];
   final TextEditingController _searchController = TextEditingController();
@@ -36,7 +37,6 @@ class _CategoryTemplateSelectionDialogState
   bool _isLoading = true;
   bool _isSubmitting = false;
 
-  // Mevcut kategori sayısını takip etmek için
   int _currentCategoryCount = 0;
 
   @override
@@ -56,25 +56,30 @@ class _CategoryTemplateSelectionDialogState
   Future<void> _fetchInitialData() async {
     if (!mounted) return;
     setState(() => _isLoading = true);
-    
+
     try {
+      // 🔥 ÖNEMLİ DEĞİŞİKLİK: Dinamik dil kodu kullanımı
+      final languageCode = LanguageProvider.currentLanguageCode;
+      debugPrint('🌐 Template yükleme - Güncel dil kodu: $languageCode');
+      
+      final templates = await LocalizedTemplateService.loadCategories(languageCode);
+      debugPrint('📁 $languageCode dili için ${templates.length} kategori template\'i yüklendi');
+
       final results = await Future.wait([
-        ApiService.fetchCategoryTemplates(),
         KdsManagementService.fetchKdsScreens(UserSession.token, UserSession.businessId!),
-        ApiService.fetchCategoriesForBusiness(UserSession.token),
       ]);
 
-      if (mounted) {
-        setState(() {
-          _allTemplates = results[0];
-          _filteredTemplates = _allTemplates;
-          _kdsScreens = (results[1] as List<KdsScreenModel>).where((kds) => kds.isActive).toList();
-          _currentCategoryCount = (results[2] as List<dynamic>).length;
-        });
-      }
+      setState(() {
+        _allTemplates = templates;
+        _filteredTemplates = _allTemplates;
+        _kdsScreens = (results[0] as List<KdsScreenModel>).where((kds) => kds.isActive).toList();
+      });
+      
+      debugPrint('✅ Template yükleme başarılı: ${_allTemplates.length} kategori');
+      
     } catch (e) {
+      debugPrint('❌ Template yükleme hatası: $e');
       if (mounted) {
-        // Hata anında çeviriye erişmek için 'l10n' burada tanımlanır.
         final l10n = AppLocalizations.of(context)!;
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(l10n.errorLoadingData(e.toString()))),
@@ -126,22 +131,10 @@ class _CategoryTemplateSelectionDialogState
   }
 
   void _toggleTemplateSelection(int templateId) {
-    final currentLimits = UserSession.limitsNotifier.value;
-    final l10n = AppLocalizations.of(context)!;
-    
     setState(() {
       if (_selectedTemplates.contains(templateId)) {
         _selectedTemplates.remove(templateId);
       } else {
-        int totalAfterSelection = _currentCategoryCount + _selectedTemplates.length + 1;
-        
-        if (totalAfterSelection > currentLimits.maxCategories) {
-          _showLimitReachedDialog(
-            l10n.createCategoryErrorLimitExceeded(currentLimits.maxCategories.toString())
-          );
-          return;
-        }
-        
         _selectedTemplates.add(templateId);
       }
       _formKey.currentState?.validate();
@@ -149,30 +142,57 @@ class _CategoryTemplateSelectionDialogState
   }
 
   void _toggleSelectAll() {
-    final currentLimits = UserSession.limitsNotifier.value;
-    final l10n = AppLocalizations.of(context)!;
-    
     setState(() {
       final allCurrentVisible = _filteredTemplates.map((t) => t['id'] as int).toSet();
       final hasAllSelected = allCurrentVisible.every((id) => _selectedTemplates.contains(id));
-      
       if (hasAllSelected) {
         _selectedTemplates.removeWhere((id) => allCurrentVisible.contains(id));
       } else {
         final newSelections = allCurrentVisible.where((id) => !_selectedTemplates.contains(id)).toList();
-        int totalAfterAllSelection = _currentCategoryCount + _selectedTemplates.length + newSelections.length;
-        
-        if (totalAfterAllSelection > currentLimits.maxCategories) {
-          _showLimitReachedDialog(
-            l10n.createCategoryErrorLimitExceeded(currentLimits.maxCategories.toString())
-          );
-          return;
-        }
-        
         _selectedTemplates.addAll(newSelections);
       }
       _formKey.currentState?.validate();
     });
+  }
+
+  Future<void> _saveSelectedTemplatesManually(
+      BuildContext context, List<int> selectedIds, int? kdsScreenId) async {
+    final l10n = AppLocalizations.of(context)!;
+    final token = UserSession.token;
+    final businessId = UserSession.businessId!;
+    
+    try {
+      for (final template in _allTemplates.where((t) => selectedIds.contains(t['id']))) {
+        await ApiService.createCategoryForBusiness(
+          token,
+          businessId,
+          template['name'] ?? '',
+          null,
+          null,
+          kdsScreenId,
+          template['kdv_rate'] is num
+              ? (template['kdv_rate'] as num).toDouble()
+              : (template['kdv_rate'] != null
+                  ? double.tryParse(template['kdv_rate'].toString()) ?? 10.0
+                  : 10.0),
+        );
+      }
+      
+      if (mounted) {
+        Navigator.of(context).pop({
+          'success': true,
+          'message': l10n.setupCategoriesSuccessFromTemplate,
+          'count': selectedIds.length,
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        Navigator.of(context).pop({
+          'success': false,
+          'message': l10n.setupCategoriesErrorFromTemplate(e.toString()),
+        });
+      }
+    }
   }
 
   void _createCategories() {
@@ -180,37 +200,36 @@ class _CategoryTemplateSelectionDialogState
       return;
     }
     setState(() => _isSubmitting = true);
-    widget.onConfirm(_selectedTemplates, _selectedKdsScreenId);
+
+    _saveSelectedTemplatesManually(context, _selectedTemplates, _selectedKdsScreenId);
   }
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final currentLimits = UserSession.limitsNotifier.value;
     final mediaQuery = MediaQuery.of(context);
     final screenHeight = mediaQuery.size.height;
     final screenWidth = mediaQuery.size.width;
     final keyboardHeight = mediaQuery.viewInsets.bottom;
-    
-    // Klavye açık olduğunda dialog yüksekliğini ayarla - double olarak tanımla
-    final availableHeight = screenHeight - keyboardHeight - 100.0; // 100px güvenlik marjı
-    final double dialogHeight = availableHeight > 400.0 ? availableHeight : 400.0; // Explicit double type
-    
+
+    final availableHeight = screenHeight - keyboardHeight - 100.0;
+    final double dialogHeight = availableHeight > 400.0 ? availableHeight : 400.0;
+
     final bool hasVisibleItems = _filteredTemplates.isNotEmpty;
-    final bool allVisibleSelected = hasVisibleItems && 
+    final bool allVisibleSelected = hasVisibleItems &&
         _filteredTemplates.every((template) => _selectedTemplates.contains(template['id']));
-    
+
     return Dialog(
       insetPadding: EdgeInsets.symmetric(
         horizontal: screenWidth > 600 ? screenWidth * 0.2 : 16.0,
-        vertical: keyboardHeight > 0 ? 8.0 : 24.0, // Klavye açıkken daha az vertical padding
+        vertical: keyboardHeight > 0 ? 8.0 : 24.0,
       ),
       child: Container(
         width: screenWidth > 600 ? 600 : double.infinity,
-        height: dialogHeight, // Artık double tipinde
+        height: dialogHeight,
         child: Column(
           children: [
-            // Header - Sabit yükseklik
+            // Header
             Container(
               height: 60,
               padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
@@ -242,8 +261,8 @@ class _CategoryTemplateSelectionDialogState
                 ],
               ),
             ),
-            
-            // Content - Flexible area
+
+            // Content
             Expanded(
               child: _isLoading
                   ? const Center(child: CircularProgressIndicator())
@@ -256,37 +275,6 @@ class _CategoryTemplateSelectionDialogState
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              // Limit bilgisi
-                              Container(
-                                padding: const EdgeInsets.all(8.0),
-                                margin: const EdgeInsets.only(bottom: 12.0),
-                                decoration: BoxDecoration(
-                                  color: Colors.blue.withOpacity(0.1),
-                                  borderRadius: BorderRadius.circular(6.0),
-                                  border: Border.all(color: Colors.blue.withOpacity(0.3)),
-                                ),
-                                child: Row(
-                                  children: [
-                                    Icon(Icons.info_outline, color: Colors.blue, size: 16),
-                                    const SizedBox(width: 6),
-                                    Expanded(
-                                      child: Text(
-                                        l10n.categoryLimitInfo(
-                                          _currentCategoryCount,
-                                          _selectedTemplates.length,
-                                          currentLimits.maxCategories
-                                        ),
-                                        style: TextStyle(
-                                          fontSize: 11,
-                                          color: Colors.blue.shade700,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              
                               // Arama alanı
                               TextField(
                                 controller: _searchController,
@@ -309,8 +297,8 @@ class _CategoryTemplateSelectionDialogState
                                 style: const TextStyle(fontSize: 13),
                               ),
                               const SizedBox(height: 12),
-                              
-                              // Tümünü seç/bırak butonu
+
+                              // Tümünü seç/bırak
                               if (hasVisibleItems)
                                 CheckboxListTile(
                                   title: Text(
@@ -327,8 +315,8 @@ class _CategoryTemplateSelectionDialogState
                                   dense: true,
                                   contentPadding: EdgeInsets.zero,
                                 ),
-                              
-                              // Sabit: KDS seçimi alanı (Tümünü Seç'in hemen altında)
+
+                              // KDS seçimi
                               Padding(
                                 padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
                                 child: DropdownButtonFormField<int>(
@@ -360,12 +348,12 @@ class _CategoryTemplateSelectionDialogState
                                   },
                                 ),
                               ),
-                              
+
                               if (hasVisibleItems) const Divider(height: 12),
-                              
-                              // Template listesi - Sabit yükseklik container
+
+                              // Template listesi
                               Container(
-                                height: keyboardHeight > 0 ? 200.0 : 300.0, // Explicit double values
+                                height: keyboardHeight > 0 ? 200.0 : 300.0,
                                 decoration: BoxDecoration(
                                   border: Border.all(color: Colors.grey.shade300),
                                   borderRadius: BorderRadius.circular(4.0),
@@ -393,43 +381,25 @@ class _CategoryTemplateSelectionDialogState
                                             itemBuilder: (context, index) {
                                               final template = _filteredTemplates[index];
                                               final bool isSelected = _selectedTemplates.contains(template['id']);
-                                              
-                                              int totalAfterThisSelection = _currentCategoryCount + _selectedTemplates.length + (isSelected ? 0 : 1);
-                                              bool wouldExceedLimit = !isSelected && totalAfterThisSelection > currentLimits.maxCategories;
-                                              
                                               return CheckboxListTile(
                                                 title: Text(
                                                   template['name'] ?? '...',
                                                   style: TextStyle(
-                                                    color: wouldExceedLimit ? Colors.grey : null,
                                                     fontWeight: FontWeight.w500,
                                                     fontSize: 13,
                                                   ),
                                                 ),
-                                                subtitle: Column(
-                                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                                  children: [
-                                                    if (template['icon_name'] != null && template['icon_name'].toString().isNotEmpty)
-                                                      Text(
+                                                subtitle: template['icon_name'] != null && template['icon_name'].toString().isNotEmpty
+                                                    ? Text(
                                                         l10n.iconInfo(template['icon_name']),
                                                         style: TextStyle(
                                                           fontSize: 10,
                                                           color: Colors.grey.shade600,
                                                         ),
-                                                      ),
-                                                    if (wouldExceedLimit)
-                                                      Text(
-                                                        l10n.limitWillBeExceeded, 
-                                                        style: TextStyle(
-                                                          color: Colors.red,
-                                                          fontSize: 10,
-                                                          fontWeight: FontWeight.w500,
-                                                        ),
-                                                      ),
-                                                  ],
-                                                ),
+                                                      )
+                                                    : null,
                                                 value: isSelected,
-                                                onChanged: wouldExceedLimit ? null : (bool? value) {
+                                                onChanged: (bool? value) {
                                                   if (value != null) {
                                                     _toggleTemplateSelection(template['id']);
                                                   }
@@ -441,7 +411,6 @@ class _CategoryTemplateSelectionDialogState
                                             },
                                           ),
                               ),
-                              
                               const SizedBox(height: 12),
                             ],
                           ),
@@ -449,8 +418,8 @@ class _CategoryTemplateSelectionDialogState
                       ),
                     ),
             ),
-            
-            // Footer/Actions - Sabit yükseklik
+
+            // Footer/Actions
             Container(
               height: 60,
               padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),

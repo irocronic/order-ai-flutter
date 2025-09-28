@@ -1,10 +1,11 @@
-// lib/widgets/setup_wizard/categories/step_categories_widget.dart
+// lib/widgets/setup_wizard/categories/category_service.dart
+
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../models/kds_screen_model.dart';
 import '../../../services/user_session.dart';
-import '../../../services/setup_wizard_audio_service.dart'; // 🎵 YENİ EKLENEN
+import '../../../services/setup_wizard_audio_service.dart';
 import 'components/quick_start_section.dart';
 import 'components/manual_form_section.dart';
 import 'components/categories_list_section.dart';
@@ -28,7 +29,7 @@ class StepCategoriesWidget extends StatefulWidget {
 
 class StepCategoriesWidgetState extends State<StepCategoriesWidget> {
   final CategoryService _categoryService = CategoryService();
-  
+
   List<dynamic> categories = [];
   List<KdsScreenModel> _availableKdsScreens = [];
   bool _isLoadingScreenData = true;
@@ -38,7 +39,7 @@ class StepCategoriesWidgetState extends State<StepCategoriesWidget> {
   late final AppLocalizations l10n;
   bool _didFetchData = false;
 
-  // 🎵 YENİ EKLENEN: Audio servis referansı
+  // 🎵 Audio servis referansı
   final SetupWizardAudioService _audioService = SetupWizardAudioService.instance;
 
   @override
@@ -48,15 +49,11 @@ class StepCategoriesWidgetState extends State<StepCategoriesWidget> {
       l10n = AppLocalizations.of(context)!;
       _fetchInitialData();
       _didFetchData = true;
-      
-      // 🎵 YENİ EKLENEN: Sesli rehberliği başlat
       _startVoiceGuidance();
     }
   }
 
-  // 🎵 YENİ EKLENEN: Sesli rehberlik başlatma
   void _startVoiceGuidance() {
-    // Biraz bekle ki kullanıcı ekranı görsün
     Future.delayed(const Duration(milliseconds: 2000), () {
       if (mounted) {
         _audioService.playCategoriesStepAudio(context: context);
@@ -66,7 +63,6 @@ class StepCategoriesWidgetState extends State<StepCategoriesWidget> {
 
   @override
   void dispose() {
-    // Sesli rehberliği durdur
     _audioService.stopAudio();
     super.dispose();
   }
@@ -80,6 +76,7 @@ class StepCategoriesWidgetState extends State<StepCategoriesWidget> {
     });
 
     try {
+      // Sadece mevcut kategoriler ve KDS ekranlarını API'den oku
       final data = await _categoryService.fetchInitialData(widget.token, widget.businessId);
       if (mounted) {
         setState(() {
@@ -116,7 +113,7 @@ class StepCategoriesWidgetState extends State<StepCategoriesWidget> {
         _message = '';
       }
     });
-    
+
     Future.delayed(const Duration(seconds: 4), () {
       if (mounted) {
         setState(() {
@@ -127,7 +124,6 @@ class StepCategoriesWidgetState extends State<StepCategoriesWidget> {
     });
   }
 
-  // 🎵 YENİ EKLENEN: Ses kontrol butonu
   Widget _buildAudioControlButton() {
     return ValueListenableBuilder<bool>(
       valueListenable: ValueNotifier(_audioService.isMuted),
@@ -137,7 +133,6 @@ class StepCategoriesWidgetState extends State<StepCategoriesWidget> {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              // Ses durumu göstergesi
               if (_audioService.isPlaying)
                 Container(
                   margin: const EdgeInsets.only(right: 8),
@@ -163,8 +158,6 @@ class StepCategoriesWidgetState extends State<StepCategoriesWidget> {
                     ],
                   ),
                 ),
-              
-              // Sessizlik/Açma butonu
               IconButton(
                 icon: Icon(
                   isMuted ? Icons.volume_off : Icons.volume_up,
@@ -178,14 +171,12 @@ class StepCategoriesWidgetState extends State<StepCategoriesWidget> {
                 },
                 tooltip: isMuted ? l10n.tooltipUnmute : l10n.tooltipMute,
                 style: IconButton.styleFrom(
-                  backgroundColor: isMuted 
-                      ? Colors.red.withOpacity(0.2) 
+                  backgroundColor: isMuted
+                      ? Colors.red.withOpacity(0.2)
                       : Colors.blue.withOpacity(0.2),
                   padding: const EdgeInsets.all(12),
                 ),
               ),
-              
-              // Tekrar çal butonu
               IconButton(
                 icon: Icon(
                   Icons.replay,
@@ -217,7 +208,6 @@ class StepCategoriesWidgetState extends State<StepCategoriesWidget> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          // 🎵 YENİ EKLENEN: Sesli rehber kontrolleri
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
@@ -225,17 +215,12 @@ class StepCategoriesWidgetState extends State<StepCategoriesWidget> {
             ],
           ),
           const SizedBox(height: 16),
-
           Text(
             l10n.setupCategoriesDescription,
             textAlign: TextAlign.center,
             style: TextStyle(fontSize: 15, color: Colors.white.withOpacity(0.9), height: 1.4),
           ),
           const SizedBox(height: 24),
-          
-          // ✅ KALDIRILAN: _buildCategoryInfoCard() - Artık çağrılmıyor
-          
-          // Hızlı Başlangıç Bölümü
           QuickStartSection(
             token: widget.token,
             businessId: widget.businessId,
@@ -243,8 +228,6 @@ class StepCategoriesWidgetState extends State<StepCategoriesWidget> {
             onCategoriesAdded: _onCategoryAdded,
             onMessageChanged: _showMessage,
           ),
-          
-          // Manuel Form Bölümü
           ManualFormSection(
             token: widget.token,
             businessId: widget.businessId,
@@ -254,10 +237,7 @@ class StepCategoriesWidgetState extends State<StepCategoriesWidget> {
             onCategoryAdded: _onCategoryAdded,
             onMessageChanged: _showMessage,
           ),
-          
           const SizedBox(height: 24),
-          
-          // Mevcut Kategoriler Listesi
           CategoriesListSection(
             token: widget.token,
             categories: categories,
@@ -266,10 +246,7 @@ class StepCategoriesWidgetState extends State<StepCategoriesWidget> {
             onCategoryDeleted: _onCategoryDeleted,
             onMessageChanged: _showMessage,
           ),
-          
           const SizedBox(height: 10),
-          
-          // Başarı/Hata Mesajları
           if (_successMessage.isNotEmpty)
             Container(
               margin: const EdgeInsets.only(top: 12.0),
@@ -288,7 +265,6 @@ class StepCategoriesWidgetState extends State<StepCategoriesWidget> {
                 textAlign: TextAlign.center,
               ),
             ),
-          
           if (_message.isNotEmpty)
             Container(
               margin: const EdgeInsets.only(top: 12.0),
@@ -307,15 +283,13 @@ class StepCategoriesWidgetState extends State<StepCategoriesWidget> {
                 textAlign: TextAlign.center,
               ),
             ),
-          
-          // Limit Göstergesi
           if (!_isLoadingScreenData)
             ValueListenableBuilder<SubscriptionLimits>(
               valueListenable: UserSession.limitsNotifier,
               builder: (context, limits, child) {
                 return Text(
                   l10n.categoryLimitIndicator(
-                    categories.length.toString(), 
+                    categories.length.toString(),
                     limits.maxCategories.toString()
                   ),
                   textAlign: TextAlign.center,

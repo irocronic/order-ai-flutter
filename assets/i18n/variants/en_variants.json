@@ -1,0 +1,53 @@
+[
+  { "id": 1, "menu_item_id": 1, "name": "Sauce: Mild", "price_multiplier": 1.0, "is_extra": false, "icon_name": "radio_button_checked" },
+  { "id": 2, "menu_item_id": 1, "name": "Sauce: Medium", "price_multiplier": 1.0, "is_extra": false, "icon_name": "whatshot" },
+  { "id": 3, "menu_item_id": 1, "name": "Sauce: Hot", "price_multiplier": 1.0, "is_extra": false, "icon_name": "local_fire_department" },
+  { "id": 4, "menu_item_id": 1, "name": "Sauce: BBQ", "price_multiplier": 1.0, "is_extra": false, "icon_name": "outdoor_grill" },
+  { "id": 5, "menu_item_id": 1, "name": "Size: 6 Pieces", "price_multiplier": 1.0, "is_extra": false, "icon_name": "looks_6" },
+  { "id": 6, "menu_item_id": 1, "name": "Size: 12 Pieces", "price_multiplier": 1.8, "is_extra": false, "icon_name": "filter_9_plus" },
+
+  { "id": 7, "menu_item_id": 3, "name": "Add Grilled Chicken", "price_multiplier": 1.3, "is_extra": true, "icon_name": "add_circle" },
+  { "id": 8, "menu_item_id": 3, "name": "Add Ground Beef", "price_multiplier": 1.35, "is_extra": true, "icon_name": "add_circle" },
+
+  { "id": 9, "menu_item_id": 15, "name": "Add Grilled Chicken", "price_multiplier": 1.35, "is_extra": true, "icon_name": "add_circle" },
+  { "id": 10, "menu_item_id": 15, "name": "Dressing: Ranch", "price_multiplier": 1.0, "is_extra": false, "icon_name": "radio_button_checked" },
+  { "id": 11, "menu_item_id": 15, "name": "Dressing: Blue Cheese", "price_multiplier": 1.0, "is_extra": false, "icon_name": "radio_button_checked" },
+  { "id": 12, "menu_item_id": 15, "name": "Dressing: Vinaigrette", "price_multiplier": 1.0, "is_extra": false, "icon_name": "radio_button_checked" },
+
+  { "id": 13, "menu_item_id": 21, "name": "Add Cheese", "price_multiplier": 1.09, "is_extra": true, "icon_name": "add_circle" },
+  { "id": 14, "menu_item_id": 21, "name": "Add Bacon", "price_multiplier": 1.15, "is_extra": true, "icon_name": "add_circle" },
+  { "id": 15, "menu_item_id": 21, "name": "Side: French Fries", "price_multiplier": 1.0, "is_extra": false, "icon_name": "radio_button_checked" },
+  { "id": 16, "menu_item_id": 21, "name": "Side: Side Salad", "price_multiplier": 1.0, "is_extra": false, "icon_name": "radio_button_checked" },
+  { "id": 17, "menu_item_id": 21, "name": "Side: Onion Rings", "price_multiplier": 1.06, "is_extra": true, "icon_name": "radio_button_checked" },
+
+  { "id": 18, "menu_item_id": 32, "name": "Size: 12-inch", "price_multiplier": 1.0, "is_extra": false, "icon_name": "pie_chart" },
+  { "id": 19, "menu_item_id": 32, "name": "Size: 16-inch", "price_multiplier": 1.35, "is_extra": false, "icon_name": "circle" },
+  { "id": 20, "menu_item_id": 32, "name": "Crust: Hand-Tossed", "price_multiplier": 1.0, "is_extra": false, "icon_name": "radio_button_checked" },
+  { "id": 21, "menu_item_id": 32, "name": "Crust: Thin Crust", "price_multiplier": 1.0, "is_extra": false, "icon_name": "radio_button_checked" },
+
+  { "id": 22, "menu_item_id": 38, "name": "Add Grilled Chicken", "price_multiplier": 1.26, "is_extra": true, "icon_name": "add_circle" },
+  { "id": 23, "menu_item_id": 38, "name": "Add Shrimp", "price_multiplier": 1.37, "is_extra": true, "icon_name": "add_circle" },
+
+  { "id": 24, "menu_item_id": 42, "name": "Temp: Rare", "price_multiplier": 1.0, "is_extra": false, "icon_name": "whatshot" },
+  { "id": 25, "menu_item_id": 42, "name": "Temp: Medium-Rare", "price_multiplier": 1.0, "is_extra": false, "icon_name": "whatshot" },
+  { "id": 26, "menu_item_id": 42, "name": "Temp: Medium", "price_multiplier": 1.0, "is_extra": false, "icon_name": "whatshot" },
+  { "id": 27, "menu_item_id": 42, "name": "Temp: Medium-Well", "price_multiplier": 1.0, "is_extra": false, "icon_name": "whatshot" },
+  { "id": 28, "menu_item_id": 42, "name": "Temp: Well-Done", "price_multiplier": 1.0, "is_extra": false, "icon_name": "whatshot" },
+  { "id": 29, "menu_item_id": 42, "name": "Add Mushroom Sauce", "price_multiplier": 1.08, "is_extra": true, "icon_name": "add_circle" },
+
+  { "id": 30, "menu_item_id": 58, "name": "Filling: Grilled Fish", "price_multiplier": 1.0, "is_extra": false, "icon_name": "set_meal" },
+  { "id": 31, "menu_item_id": 58, "name": "Filling: Shredded Beef", "price_multiplier": 1.0, "is_extra": false, "icon_name": "kebab_dining" },
+  { "id": 32, "menu_item_id": 58, "name": "Filling: Spicy Chicken", "price_multiplier": 0.95, "is_extra": false, "icon_name": "egg" },
+
+  { "id": 33, "menu_item_id": 64, "name": "Add Sour Cream", "price_multiplier": 1.0, "is_extra": false, "icon_name": "radio_button_checked" },
+  { "id": 34, "menu_item_id": 64, "name": "Add Cheese", "price_multiplier": 1.12, "is_extra": true, "icon_name": "add_circle" },
+  { "id": 35, "menu_item_id": 64, "name": "Add Bacon", "price_multiplier": 1.25, "is_extra": true, "icon_name": "add_circle" },
+
+  { "id": 36, "menu_item_id": 84, "name": "Flavor: Vanilla", "price_multiplier": 1.0, "is_extra": false, "icon_name": "icecream" },
+  { "id": 37, "menu_item_id": 84, "name": "Flavor: Chocolate", "price_multiplier": 1.0, "is_extra": false, "icon_name": "icecream" },
+  { "id": 38, "menu_item_id": 84, "name": "Flavor: Strawberry", "price_multiplier": 1.0, "is_extra": false, "icon_name": "icecream" },
+
+  { "id": 39, "menu_item_id": 78, "name": "Flavor: Coca-Cola", "price_multiplier": 1.0, "is_extra": false, "icon_name": "local_drink" },
+  { "id": 40, "menu_item_id": 78, "name": "Flavor: Sprite", "price_multiplier": 1.0, "is_extra": false, "icon_name": "local_drink" },
+  { "id": 41, "menu_item_id": 78, "name": "Flavor: Dr. Pepper", "price_multiplier": 1.0, "is_extra": false, "icon_name": "local_drink" }
+]

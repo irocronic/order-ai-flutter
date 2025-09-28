@@ -1,0 +1,11 @@
+[
+  { "id": 1, "name": "Tapas y Pinchos", "icon_name": "tapas" },
+  { "id": 2, "name": "Entrantes", "icon_name": "local_dining" },
+  { "id": 3, "name": "Sopas y Cremas", "icon_name": "soup_kitchen" },
+  { "id": 4, "name": "Arroces y Paellas", "icon_name": "rice_bowl" },
+  { "id": 5, "name": "Pescados y Mariscos", "icon_name": "set_meal" },
+  { "id": 6, "name": "Carnes", "icon_name": "kebab_dining" },
+  { "id": 7, "name": "Postres", "icon_name": "cake" },
+  { "id": 8, "name": "Bebidas sin Alcohol", "icon_name": "local_drink" },
+  { "id": 9, "name": "Vinos y Bebidas con Alcohol", "icon_name": "wine_bar" }
+]

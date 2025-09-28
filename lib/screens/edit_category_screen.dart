@@ -425,6 +425,7 @@ class _EditCategoryScreenState extends State<EditCategoryScreen> {
                           const SizedBox(height: 16),
                           DropdownButtonFormField<dynamic>(
                             value: _selectedParentId,
+                            isExpanded: true, // ÇÖZÜM: Bu satır eklendi - dropdown içeriğinin tam genişlik kullanmasını sağlar
                             decoration: InputDecoration(
                               labelText: l10n.parentCategoryLabel,
                               labelStyle: const TextStyle(color: Colors.black54),
@@ -432,17 +433,26 @@ class _EditCategoryScreenState extends State<EditCategoryScreen> {
                               filled: true,
                               fillColor: Colors.white.withOpacity(0.7),
                               prefixIcon: Icon(Icons.account_tree_outlined, color: Colors.grey.shade700),
+                              contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16), // ÇÖZÜM: Padding ayarlandı
                             ),
                             dropdownColor: Colors.grey[200],
                             items: [
                               DropdownMenuItem(
                                 value: null,
-                                child: Text(l10n.parentCategoryHint, style: const TextStyle(color: Colors.black54)),
+                                child: Text(
+                                  l10n.parentCategoryHint, 
+                                  style: const TextStyle(color: Colors.black54),
+                                  overflow: TextOverflow.ellipsis, // ÇÖZÜM: Taşma durumunda ellipsis göster
+                                ),
                               ),
                               ..._availableParentCategories.map((cat) {
                                 return DropdownMenuItem(
                                   value: cat['id'],
-                                  child: Text(cat['name'] ?? l10n.unknownCategory, style: const TextStyle(color: Colors.black87)),
+                                  child: Text(
+                                    cat['name'] ?? l10n.unknownCategory, 
+                                    style: const TextStyle(color: Colors.black87),
+                                    overflow: TextOverflow.ellipsis, // ÇÖZÜM: Taşma durumunda ellipsis göster
+                                  ),
                                 );
                               }).toList(),
                             ],
@@ -458,6 +468,7 @@ class _EditCategoryScreenState extends State<EditCategoryScreen> {
                           else if (_kdsScreensForBusiness.isNotEmpty)
                             DropdownButtonFormField<int?>(
                               value: _selectedKdsScreenId,
+                              isExpanded: true, // ÇÖZÜM: Bu satır eklendi - dropdown içeriğinin tam genişlik kullanmasını sağlar
                               decoration: InputDecoration(
                                 labelText: l10n.kdsScreenLabel,
                                 labelStyle: const TextStyle(color: Colors.black54),
@@ -465,17 +476,26 @@ class _EditCategoryScreenState extends State<EditCategoryScreen> {
                                 filled: true,
                                 fillColor: Colors.white.withOpacity(0.7),
                                 prefixIcon: Icon(Icons.desktop_windows_outlined, color: Colors.grey.shade700),
+                                contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16), // ÇÖZÜM: Padding ayarlandı
                               ),
                               dropdownColor: Colors.grey[200],
                               items: [
                                 DropdownMenuItem<int?>(
                                   value: null,
-                                  child: Text(l10n.kdsScreenNotSelected, style: const TextStyle(color: Colors.black54)),
+                                  child: Text(
+                                    l10n.kdsScreenNotSelected, 
+                                    style: const TextStyle(color: Colors.black54),
+                                    overflow: TextOverflow.ellipsis, // ÇÖZÜM: Taşma durumunda ellipsis göster
+                                  ),
                                 ),
                                 ..._kdsScreensForBusiness.map((kds) {
                                   return DropdownMenuItem<int?>(
                                     value: kds.id,
-                                    child: Text(kds.name, style: const TextStyle(color: Colors.black87)),
+                                    child: Text(
+                                      kds.name, 
+                                      style: const TextStyle(color: Colors.black87),
+                                      overflow: TextOverflow.ellipsis, // ÇÖZÜM: Taşma durumunda ellipsis göster
+                                    ),
                                   );
                                 }).toList(),
                               ],

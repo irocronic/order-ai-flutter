@@ -3,7 +3,7 @@
 import '../services/notification_center.dart';
 import '../services/refresh_manager.dart';
 import 'dart:convert';
-import 'package:flutter/material.dart'; // HATA DÜZELTİLDİ: 'packagepackage' -> 'package'
+import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../services/api_service.dart';
 import 'add_edit_staff_screen.dart';
@@ -222,6 +222,7 @@ class _ManageStaffScreenState extends State<ManageStaffScreen> {
                       Text(
                         staff['user_type'] == 'kitchen_staff' ? l10n.roleKitchenStaff : l10n.roleStaff,
                         style: TextStyle(color: Colors.grey.shade700, fontSize: 13),
+                        textAlign: TextAlign.center,
                       ),
                     ],
                   ),
@@ -230,40 +231,54 @@ class _ManageStaffScreenState extends State<ManageStaffScreen> {
             ),
             Container(
               color: Colors.black.withOpacity(0.05),
-              padding: const EdgeInsets.symmetric(horizontal: 4.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 6.0),
+              child: Column(
                 children: [
-                  Chip(
-                    label: Text(isActive ? l10n.manageCampaignsStatusActive : l10n.manageCampaignsStatusInactive),
-                    backgroundColor: isActive ? Colors.green.withOpacity(0.2) : Colors.red.withOpacity(0.2),
-                    labelStyle: TextStyle(
-                      fontSize: 10,
-                      fontWeight: FontWeight.bold,
-                      color: isActive ? Colors.green.shade800 : Colors.red.shade800,
-                    ),
-                    padding: EdgeInsets.zero,
-                    visualDensity: VisualDensity.compact,
-                  ),
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      IconButton(
-                        icon: const Icon(Icons.edit, size: 20, color: Colors.blueAccent),
-                        tooltip: l10n.tooltipEdit,
-                        onPressed: () => _navigateToAddEditStaffScreen(staff: staff, limits: UserSession.limitsNotifier.value),
+                  // Status chip'ini ayrı bir satıra aldık
+                  SizedBox(
+                    width: double.infinity,
+                    child: Center(
+                      child: Chip(
+                        label: Text(
+                          isActive ? l10n.manageCampaignsStatusActive : l10n.manageCampaignsStatusInactive,
+                          style: TextStyle(
+                            fontSize: 10,
+                            fontWeight: FontWeight.bold,
+                            color: isActive ? Colors.green.shade800 : Colors.red.shade800,
+                          ),
+                        ),
+                        backgroundColor: isActive ? Colors.green.withOpacity(0.2) : Colors.red.withOpacity(0.2),
+                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                         visualDensity: VisualDensity.compact,
-                        padding: const EdgeInsets.all(4),
                       ),
-                      IconButton(
-                        icon: const Icon(Icons.delete, size: 20, color: Colors.redAccent),
-                        tooltip: l10n.tooltipDelete,
-                        onPressed: () => _deleteStaff(staff['id']),
-                        visualDensity: VisualDensity.compact,
-                        padding: const EdgeInsets.all(4),
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  // Action butonları ayrı bir satırda
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Expanded(
+                        child: IconButton(
+                          icon: const Icon(Icons.edit, size: 20, color: Colors.blueAccent),
+                          tooltip: l10n.tooltipEdit,
+                          onPressed: () => _navigateToAddEditStaffScreen(staff: staff, limits: UserSession.limitsNotifier.value),
+                          visualDensity: VisualDensity.compact,
+                          padding: const EdgeInsets.all(4),
+                        ),
+                      ),
+                      Expanded(
+                        child: IconButton(
+                          icon: const Icon(Icons.delete, size: 20, color: Colors.redAccent),
+                          tooltip: l10n.tooltipDelete,
+                          onPressed: () => _deleteStaff(staff['id']),
+                          visualDensity: VisualDensity.compact,
+                          padding: const EdgeInsets.all(4),
+                        ),
                       ),
                     ],
-                  )
+                  ),
                 ],
               ),
             ),
@@ -349,7 +364,7 @@ class _ManageStaffScreenState extends State<ManageStaffScreen> {
                           padding: const EdgeInsets.all(16),
                           gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
                               maxCrossAxisExtent: 250,
-                              childAspectRatio: 0.9,
+                              childAspectRatio: 0.68, // Daha uzun kartlar için 0.68'e düşürdüm
                               crossAxisSpacing: 16,
                               mainAxisSpacing: 16
                           ),

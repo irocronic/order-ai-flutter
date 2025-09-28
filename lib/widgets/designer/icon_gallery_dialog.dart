@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../providers/business_card_provider.dart';
 
 class IconGalleryDialog extends StatelessWidget {
@@ -24,13 +25,15 @@ class IconGalleryDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    
     return AlertDialog(
-      title: const Text("İkon Galerisi"),
+      title: Text(l10n.iconGallery),
       content: SizedBox(
         width: double.maxFinite,
         child: GridView.builder(
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 5, // Bir satırdaki ikon sayısı
+            crossAxisCount: 5,
             crossAxisSpacing: 16,
             mainAxisSpacing: 16,
           ),
@@ -39,7 +42,6 @@ class IconGalleryDialog extends StatelessWidget {
             final icon = _icons[index];
             return InkWell(
               onTap: () {
-                // Seçilen ikonu provider aracılığıyla tuvale ekle
                 context.read<BusinessCardProvider>().addFontAwesomeIconElement(icon);
                 Navigator.of(context).pop();
               },
@@ -51,7 +53,7 @@ class IconGalleryDialog extends StatelessWidget {
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop(),
-          child: const Text("Kapat"),
+          child: Text(l10n.close),
         ),
       ],
     );

@@ -1,0 +1,322 @@
+[
+  {
+    "id": 1,
+    "menu_item_id": 1,
+    "name": "Klein",
+    "price_multiplier": 0.8,
+    "is_extra": false,
+    "icon_name": "circle_outlined"
+  },
+  {
+    "id": 2,
+    "menu_item_id": 1,
+    "name": "Groß",
+    "price_multiplier": 1.3,
+    "is_extra": false,
+    "icon_name": "circle"
+  },
+  {
+    "id": 3,
+    "menu_item_id": 1,
+    "name": "Extra Zitrone",
+    "price_multiplier": 1.1,
+    "is_extra": true,
+    "icon_name": "local_drink"
+  },
+  {
+    "id": 4,
+    "menu_item_id": 3,
+    "name": "Halbe Portion",
+    "price_multiplier": 0.7,
+    "is_extra": false,
+    "icon_name": "circle_outlined"
+  },
+  {
+    "id": 5,
+    "menu_item_id": 3,
+    "name": "Doppelte Portion",
+    "price_multiplier": 1.6,
+    "is_extra": false,
+    "icon_name": "circle"
+  },
+  {
+    "id": 6,
+    "menu_item_id": 4,
+    "name": "2 Stück",
+    "price_multiplier": 1.0,
+    "is_extra": false,
+    "icon_name": "circle_outlined"
+  },
+  {
+    "id": 7,
+    "menu_item_id": 4,
+    "name": "3 Stück",
+    "price_multiplier": 1.4,
+    "is_extra": false,
+    "icon_name": "circle"
+  },
+  {
+    "id": 8,
+    "menu_item_id": 7,
+    "name": "Extra scharf",
+    "price_multiplier": 1.0,
+    "is_extra": true,
+    "icon_name": "whatshot"
+  },
+  {
+    "id": 9,
+    "menu_item_id": 7,
+    "name": "Doppelte Portion",
+    "price_multiplier": 1.5,
+    "is_extra": false,
+    "icon_name": "circle"
+  },
+  {
+    "id": 10,
+    "menu_item_id": 8,
+    "name": "Kleine Schüssel",
+    "price_multiplier": 0.8,
+    "is_extra": false,
+    "icon_name": "circle_outlined"
+  },
+  {
+    "id": 11,
+    "menu_item_id": 8,
+    "name": "Große Schüssel",
+    "price_multiplier": 1.3,
+    "is_extra": false,
+    "icon_name": "circle"
+  },
+  {
+    "id": 12,
+    "menu_item_id": 8,
+    "name": "Extra Brot",
+    "price_multiplier": 1.2,
+    "is_extra": true,
+    "icon_name": "bakery_dining"
+  },
+  {
+    "id": 13,
+    "menu_item_id": 17,
+    "name": "Kleine Portion",
+    "price_multiplier": 0.8,
+    "is_extra": false,
+    "icon_name": "circle_outlined"
+  },
+  {
+    "id": 14,
+    "menu_item_id": 17,
+    "name": "Große Portion",
+    "price_multiplier": 1.3,
+    "is_extra": false,
+    "icon_name": "circle"
+  },
+  {
+    "id": 15,
+    "menu_item_id": 17,
+    "name": "Extra Käse",
+    "price_multiplier": 1.2,
+    "is_extra": true,
+    "icon_name": "add_circle"
+  },
+  {
+    "id": 16,
+    "menu_item_id": 21,
+    "name": "Klein (26cm)",
+    "price_multiplier": 0.9,
+    "is_extra": false,
+    "icon_name": "circle_outlined"
+  },
+  {
+    "id": 17,
+    "menu_item_id": 21,
+    "name": "Groß (32cm)",
+    "price_multiplier": 1.4,
+    "is_extra": false,
+    "icon_name": "circle"
+  },
+  {
+    "id": 18,
+    "menu_item_id": 21,
+    "name": "Extra Käse",
+    "price_multiplier": 1.2,
+    "is_extra": true,
+    "icon_name": "add_circle"
+  },
+  {
+    "id": 19,
+    "menu_item_id": 22,
+    "name": "Klein (26cm)",
+    "price_multiplier": 0.9,
+    "is_extra": false,
+    "icon_name": "circle_outlined"
+  },
+  {
+    "id": 20,
+    "menu_item_id": 22,
+    "name": "Groß (32cm)",
+    "price_multiplier": 1.4,
+    "is_extra": false,
+    "icon_name": "circle"
+  },
+  {
+    "id": 21,
+    "menu_item_id": 22,
+    "name": "Extra Salami",
+    "price_multiplier": 1.3,
+    "is_extra": true,
+    "icon_name": "add_circle"
+  },
+  {
+    "id": 22,
+    "menu_item_id": 23,
+    "name": "Kleines Stück",
+    "price_multiplier": 1.0,
+    "is_extra": false,
+    "icon_name": "cake"
+  },
+  {
+    "id": 23,
+    "menu_item_id": 23,
+    "name": "Großes Stück",
+    "price_multiplier": 1.5,
+    "is_extra": false,
+    "icon_name": "cake"
+  },
+  {
+    "id": 24,
+    "menu_item_id": 24,
+    "name": "Mit Eis",
+    "price_multiplier": 1.2,
+    "is_extra": true,
+    "icon_name": "icecream"
+  },
+  {
+    "id": 25,
+    "menu_item_id": 25,
+    "name": "Klein",
+    "price_multiplier": 0.8,
+    "is_extra": false,
+    "icon_name": "circle_outlined"
+  },
+  {
+    "id": 26,
+    "menu_item_id": 25,
+    "name": "Groß",
+    "price_multiplier": 1.3,
+    "is_extra": false,
+    "icon_name": "circle"
+  },
+  {
+    "id": 27,
+    "menu_item_id": 26,
+    "name": "Doppelt",
+    "price_multiplier": 1.5,
+    "is_extra": false,
+    "icon_name": "coffee"
+  },
+  {
+    "id": 28,
+    "menu_item_id": 26,
+    "name": "Mit Milch",
+    "price_multiplier": 1.1,
+    "is_extra": true,
+    "icon_name": "local_drink"
+  },
+  {
+    "id": 29,
+    "menu_item_id": 27,
+    "name": "Extra Sahne",
+    "price_multiplier": 1.2,
+    "is_extra": true,
+    "icon_name": "icecream"
+  },
+  {
+    "id": 30,
+    "menu_item_id": 31,
+    "name": "0,3l",
+    "price_multiplier": 1.0,
+    "is_extra": false,
+    "icon_name": "local_bar"
+  },
+  {
+    "id": 31,
+    "menu_item_id": 31,
+    "name": "0,5l",
+    "price_multiplier": 1.4,
+    "is_extra": false,
+    "icon_name": "sports_bar"
+  },
+  {
+    "id": 32,
+    "menu_item_id": 31,
+    "name": "1,0l Maß",
+    "price_multiplier": 2.2,
+    "is_extra": false,
+    "icon_name": "sports_bar"
+  },
+  {
+    "id": 33,
+    "menu_item_id": 32,
+    "name": "Glas (0,2l)",
+    "price_multiplier": 1.0,
+    "is_extra": false,
+    "icon_name": "wine_bar"
+  },
+  {
+    "id": 34,
+    "menu_item_id": 32,
+    "name": "Flasche (0,75l)",
+    "price_multiplier": 3.2,
+    "is_extra": false,
+    "icon_name": "wine_bar"
+  },
+  {
+    "id": 35,
+    "menu_item_id": 33,
+    "name": "Mit extra Speck",
+    "price_multiplier": 1.2,
+    "is_extra": true,
+    "icon_name": "lunch_dining"
+  },
+  {
+    "id": 36,
+    "menu_item_id": 34,
+    "name": "2 Stück",
+    "price_multiplier": 1.0,
+    "is_extra": false,
+    "icon_name": "circle_outlined"
+  },
+  {
+    "id": 37,
+    "menu_item_id": 34,
+    "name": "4 Stück",
+    "price_multiplier": 1.7,
+    "is_extra": false,
+    "icon_name": "circle"
+  },
+  {
+    "id": 38,
+    "menu_item_id": 35,
+    "name": "Klein",
+    "price_multiplier": 0.8,
+    "is_extra": false,
+    "icon_name": "circle_outlined"
+  },
+  {
+    "id": 39,
+    "menu_item_id": 35,
+    "name": "Groß",
+    "price_multiplier": 1.4,
+    "is_extra": false,
+    "icon_name": "circle"
+  },
+  {
+    "id": 40,
+    "menu_item_id": 35,
+    "name": "Mit Mayo",
+    "price_multiplier": 1.1,
+    "is_extra": true,
+    "icon_name": "add_circle"
+  }
+]

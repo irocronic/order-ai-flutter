@@ -1,0 +1,11 @@
+[
+  { "id": 1, "name": "Entrées", "icon_name": "local_dining" },
+  { "id": 2, "name": "Plats Principaux", "icon_name": "restaurant" },
+  { "id": 3, "name": "Soupes", "icon_name": "soup_kitchen" },
+  { "id": 4, "name": "Salades", "icon_name": "eco" },
+  { "id": 5, "name": "Plateaux de Fromages", "icon_name": "cheese" },
+  { "id": 6, "name": "Desserts", "icon_name": "cake" },
+  { "id": 7, "name": "Boissons Alcoolisées", "icon_name": "wine_bar" },
+  { "id": 8, "name": "Boissons non Alcoolisées", "icon_name": "local_drink" },
+  { "id": 9, "name": "Boissons Chaudes", "icon_name": "local_cafe" }
+]

@@ -101,6 +101,9 @@ flutter:
     - assets/templates/
     - assets/previews/
     - assets/fonts/
+    - assets/i18n/categories/
+    - assets/i18n/menu_items/
+    - assets/i18n/variants/
 
 # --- flutter_native_splash İÇİN EKLENEN BÖLÜM ---
 # Bu bölümü kendi projenize göre düzenlemeyi unutmayın.

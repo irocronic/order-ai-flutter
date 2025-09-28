@@ -369,21 +369,25 @@ class _AddEditStaffScreenState extends State<AddEditStaffScreen> {
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 16),
-                    DropdownButtonFormField<String>(
-                      value: _currentUserType,
-                      decoration: InputDecoration(labelText: l10n.roleLabel),
-                      items: [
-                        DropdownMenuItem(value: 'staff', child: Text(l10n.roleStaff)),
-                        DropdownMenuItem(value: 'kitchen_staff', child: Text(l10n.roleKitchenStaff)),
-                      ],
-                      onChanged: (String? newValue) {
-                        if (newValue != null) {
-                          setState(() {
-                            _currentUserType = newValue;
-                            _initializePermissions();
-                          });
-                        }
-                      },
+                    Expanded(
+                      flex: 0,
+                      child: DropdownButtonFormField<String>(
+                        value: _currentUserType,
+                        decoration: InputDecoration(labelText: l10n.roleLabel),
+                        isExpanded: true,
+                        items: [
+                          DropdownMenuItem(value: 'staff', child: Text(l10n.roleStaff)),
+                          DropdownMenuItem(value: 'kitchen_staff', child: Text(l10n.roleKitchenStaff)),
+                        ],
+                        onChanged: (String? newValue) {
+                          if (newValue != null) {
+                            setState(() {
+                              _currentUserType = newValue;
+                              _initializePermissions();
+                            });
+                          }
+                        },
+                      ),
                     ),
                     const SizedBox(height: 16),
                     TextFormField(
@@ -429,15 +433,18 @@ class _AddEditStaffScreenState extends State<AddEditStaffScreen> {
                       contentPadding: EdgeInsets.zero,
                     ),
                     const SizedBox(height: 24),
-                    DropdownButtonFormField<PermissionPreset>(
-                      value: _selectedPreset,
-                      hint: Text(l10n.permissionPresetLabel),
-                      isExpanded: true,
-                      items: StaffPresets.all.map((preset) {
-                        return DropdownMenuItem<PermissionPreset>(value: preset, child: Text(preset.title));
-                      }).toList(),
-                      onChanged: _applyPermissionPreset,
-                      decoration: const InputDecoration(border: OutlineInputBorder(), contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 8)),
+                    Expanded(
+                      flex: 0,
+                      child: DropdownButtonFormField<PermissionPreset>(
+                        value: _selectedPreset,
+                        hint: Text(l10n.permissionPresetLabel),
+                        isExpanded: true,
+                        items: StaffPresets.all.map((preset) {
+                          return DropdownMenuItem<PermissionPreset>(value: preset, child: Text(preset.title));
+                        }).toList(),
+                        onChanged: _applyPermissionPreset,
+                        decoration: const InputDecoration(border: OutlineInputBorder(), contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 8)),
+                      ),
                     ),
                     const SizedBox(height: 20),
 
@@ -477,7 +484,7 @@ class _AddEditStaffScreenState extends State<AddEditStaffScreen> {
                             activeColor: Colors.blueAccent,
                             controlAffinity: ListTileControlAffinity.leading,
                             dense: true,
-                            contentPadding: const EdgeInsets.symmetric(horizontal: 16), // İçeriden başlasın
+                            contentPadding: const EdgeInsets.symmetric(horizontal: 16), // İçerinden başlasın
                           );
                         }).toList(),
                       ),

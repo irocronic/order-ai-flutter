@@ -1,0 +1,11 @@
+[
+  { "id": 1, "name": "Antipasti", "icon_name": "local_dining" },
+  { "id": 2, "name": "Primi Piatti", "icon_name": "ramen_dining" },
+  { "id": 3, "name": "Secondi Piatti", "icon_name": "restaurant" },
+  { "id": 4, "name": "Pizze", "icon_name": "local_pizza" },
+  { "id": 5, "name": "Contorni", "icon_name": "eco" },
+  { "id": 6, "name": "Dolci", "icon_name": "cake" },
+  { "id": 7, "name": "Bevande Alcoliche", "icon_name": "wine_bar" },
+  { "id": 8, "name": "Bevande Analcoliche", "icon_name": "local_drink" },
+  { "id": 9, "name": "Caffetteria", "icon_name": "local_cafe" }
+]

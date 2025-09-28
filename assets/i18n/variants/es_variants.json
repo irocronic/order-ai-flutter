@@ -1,0 +1,23 @@
+[
+  { "id": 1, "menu_item_id": 4, "name": "Ración de Jamón", "price_multiplier": 1.0, "is_extra": false, "icon_name": "restaurant" },
+  { "id": 2, "menu_item_id": 4, "name": "Ración de Pollo", "price_multiplier": 0.9, "is_extra": false, "icon_name": "restaurant" },
+  { "id": 3, "menu_item_id": 4, "name": "Ración de Bacalao", "price_multiplier": 1.1, "is_extra": false, "icon_name": "set_meal" },
+  { "id": 4, "menu_item_id": 5, "name": "Pincho (ración individual)", "price_multiplier": 1.0, "is_extra": false, "icon_name": "pie_chart" },
+  { "id": 5, "menu_item_id": 5, "name": "Entera (para compartir)", "price_multiplier": 2.8, "is_extra": false, "icon_name": "circle" },
+  { "id": 6, "menu_item_id": 6, "name": "Media Ración", "price_multiplier": 0.6, "is_extra": false, "icon_name": "star_half" },
+  { "id": 7, "menu_item_id": 6, "name": "Ración Entera", "price_multiplier": 1.0, "is_extra": false, "icon_name": "star" },
+  { "id": 8, "menu_item_id": 22, "name": "Mínimo 2 personas", "price_multiplier": 2.0, "is_extra": false, "icon_name": "people" },
+  { "id": 9, "menu_item_id": 22, "name": "Para 4 personas", "price_multiplier": 4.0, "is_extra": false, "icon_name": "groups" },
+  { "id": 10, "menu_item_id": 34, "name": "Poco hecho", "price_multiplier": 1.0, "is_extra": false, "icon_name": "whatshot" },
+  { "id": 11, "menu_item_id": 34, "name": "Al punto", "price_multiplier": 1.0, "is_extra": false, "icon_name": "whatshot" },
+  { "id": 12, "menu_item_id": 34, "name": "Muy hecho", "price_multiplier": 1.0, "is_extra": false, "icon_name": "whatshot" },
+  { "id": 13, "menu_item_id": 46, "name": "Sin gas", "price_multiplier": 1.0, "is_extra": false, "icon_name": "water_drop" },
+  { "id": 14, "menu_item_id": 46, "name": "Con gas", "price_multiplier": 1.0, "is_extra": false, "icon_name": "waves" },
+  { "id": 15, "menu_item_id": 52, "name": "Copa", "price_multiplier": 1.0, "is_extra": false, "icon_name": "wine_bar" },
+  { "id": 16, "menu_item_id": 52, "name": "Botella", "price_multiplier": 4.0, "is_extra": false, "icon_name": "liquor" },
+  { "id": 17, "menu_item_id": 53, "name": "Caña (20cl)", "price_multiplier": 1.0, "is_extra": false, "icon_name": "sports_bar" },
+  { "id": 18, "menu_item_id": 53, "name": "Doble (40cl)", "price_multiplier": 1.6, "is_extra": false, "icon_name": "sports_bar" },
+  { "id": 19, "menu_item_id": 53, "name": "Jarra (1L)", "price_multiplier": 4.0, "is_extra": false, "icon_name": "blender" },
+  { "id": 20, "menu_item_id": 54, "name": "Copa", "price_multiplier": 1.0, "is_extra": false, "icon_name": "wine_bar" },
+  { "id": 21, "menu_item_id": 54, "name": "Jarra (1L)", "price_multiplier": 3.0, "is_extra": false, "icon_name": "blender" }
+]

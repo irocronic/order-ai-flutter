@@ -1,0 +1,17 @@
+[
+  { "id": 1, "name": "Hauptgerichte", "icon_name": "restaurant", "kdv_rate": 19.0 },
+  { "id": 2, "name": "Vorspeisen", "icon_name": "appetizer", "kdv_rate": 19.0 },
+  { "id": 3, "name": "Suppen", "icon_name": "soup_kitchen", "kdv_rate": 19.0 },
+  { "id": 4, "name": "Salate", "icon_name": "eco", "kdv_rate": 19.0 },
+  { "id": 5, "name": "Fleischgerichte", "icon_name": "lunch_dining", "kdv_rate": 19.0 },
+  { "id": 6, "name": "Fischgerichte", "icon_name": "set_meal", "kdv_rate": 19.0 },
+  { "id": 7, "name": "Vegetarisch", "icon_name": "grass", "kdv_rate": 19.0 },
+  { "id": 8, "name": "Pasta & Nudeln", "icon_name": "ramen_dining", "kdv_rate": 19.0 },
+  { "id": 9, "name": "Pizza", "icon_name": "local_pizza", "kdv_rate": 19.0 },
+  { "id": 10, "name": "Desserts", "icon_name": "cake", "kdv_rate": 19.0 },
+  { "id": 11, "name": "Heiße Getränke", "icon_name": "local_cafe", "kdv_rate": 7.0 },
+  { "id": 12, "name": "Kalte Getränke", "icon_name": "local_drink", "kdv_rate": 19.0 },
+  { "id": 13, "name": "Alkoholische Getränke", "icon_name": "wine_bar", "kdv_rate": 19.0 },
+  { "id": 14, "name": "Frühstück", "icon_name": "free_breakfast", "kdv_rate": 19.0 },
+  { "id": 15, "name": "Snacks", "icon_name": "fastfood", "kdv_rate": 19.0 }
+]

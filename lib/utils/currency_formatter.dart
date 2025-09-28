@@ -4,37 +4,51 @@ import 'package:intl/intl.dart';
 import '../services/user_session.dart';
 
 class CurrencyFormatter {
-  /// Verilen miktarı, UserSession'dan gelen para birimi koduna göre ve
-  /// istenen "SAYI [SEMBOL]" formatında döndürür.
-  /// Örnek: format(123.45) -> "123,45 TL" veya "123.45 $"
-  static String format(double amount) {
-    final String currencyCode = UserSession.currencyCode ?? 'TRY';
-    
-    // GÜNCELLENDİ: Sayıyı formatlamak için özel bir NumberFormat oluşturuyoruz.
-    // "tr_TR" lokasyonu, ondalık ayırıcının virgül (,) olmasını sağlar.
-    final numberFormat = NumberFormat("#,##0.00", "tr_TR");
-    final formattedAmount = numberFormat.format(amount);
-
-    // GÜNCELLENDİ: Para birimi koduna göre doğru metni/simgesi alıyoruz.
-    final String currencySymbol = _getCurrencySymbol(currencyCode);
-
-    // GÜNCELLENDİ: Biçimlendirilmiş sayı, boşluk ve para birimi simgesini birleştiriyoruz.
-    return '$formattedAmount $currencySymbol';
-  }
-
-  /// Para birimi koduna göre uygun metni/simgesi döndürür.
-  static String _getCurrencySymbol(String currencyCode) {
-    switch (currencyCode.toUpperCase()) {
+  
+  /// Verilen para birimi koduna göre ilgili sembolü döndürür.
+  static String getSymbol(String? currencyCode) {
+    switch (currencyCode) {
+      case 'TRY':
+        return '₺';
       case 'USD':
-        return '\$'; // İsterseniz 'USD' olarak da değiştirebilirsiniz.
+        return '\$';
       case 'EUR':
         return '€';
       case 'GBP':
         return '£';
-      case 'TRY':
       default:
-        // YENİ: Kullanıcının istediği 'TL' formatı.
-        return 'TL';
+        return '₺'; // Varsayılan veya bilinmeyen durumlar için
+    }
+  }
+
+  /// Mevcut oturumdaki para birimi kodunu alarak sembolü döndürür.
+  static String get currentSymbol {
+    return getSymbol(UserSession.currencyCode);
+  }
+
+  /// Bir double değeri, belirtilen para birimine göre formatlar.
+  static String format(double amount, {String? currencyCode}) {
+    final code = currencyCode ?? UserSession.currencyCode;
+    final format = NumberFormat.currency(
+      locale: _getLocale(code),
+      symbol: getSymbol(code),
+    );
+    return format.format(amount);
+  }
+
+  /// Para birimi koduna göre lokalizasyon (locale) bilgisini döndürür.
+  static String _getLocale(String? currencyCode) {
+    switch (currencyCode) {
+      case 'TRY':
+        return 'tr_TR';
+      case 'USD':
+        return 'en_US';
+      case 'EUR':
+        return 'de_DE';
+      case 'GBP':
+        return 'en_GB';
+      default:
+        return 'tr_TR';
     }
   }
 }

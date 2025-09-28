@@ -1,21 +1,28 @@
 // lib/widgets/setup_wizard/menu_items/dialogs/template_variant_form.dart
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../../../models/menu_item_variant.dart';
 import '../models/variant_template_config.dart';
 import '../components/image_picker_widget.dart';
+// GÜNCELLEME: Oluşturduğumuz yardımcı sınıfı import ediyoruz.
+import '../../../../utils/currency_formatter.dart';
 
 class TemplateVariantForm extends StatefulWidget {
   final VariantTemplateConfig config;
   final VoidCallback onVariantAdded;
   final Function(String, {bool isError}) onMessageChanged;
+  // GÜNCELLEME: Para birimi kodunu dışarıdan alacak bir parametre ekliyoruz.
+  final String currencyCode;
 
   const TemplateVariantForm({
     Key? key,
     required this.config,
     required this.onVariantAdded,
     required this.onMessageChanged,
+    // GÜNCELLEME: Constructor'a bu parametreyi ekliyoruz.
+    required this.currencyCode,
   }) : super(key: key);
 
   @override
@@ -30,6 +37,9 @@ class _TemplateVariantFormState extends State<TemplateVariantForm> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     
+    // GÜNCELLEME: Dışarıdan gelen para birimi koduna göre doğru simgeyi alıyoruz.
+    final currencySymbol = CurrencyFormatter.getSymbol(widget.currencyCode);
+
     return Container(
       margin: const EdgeInsets.only(top: 12),
       decoration: BoxDecoration(
@@ -122,6 +132,9 @@ class _TemplateVariantFormState extends State<TemplateVariantForm> {
   }
 
   Widget _buildExistingVariants(AppLocalizations l10n) {
+    // GÜNCELLEME: Para birimi simgesini buradan da alıyoruz.
+    final currencySymbol = CurrencyFormatter.getSymbol(widget.currencyCode);
+
     return Container(
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
@@ -153,7 +166,8 @@ class _TemplateVariantFormState extends State<TemplateVariantForm> {
               children: [
                 Expanded(
                   child: Text(
-                    '${variant.name} - ₺${variant.price.toStringAsFixed(2)}',
+                    // GÜNCELLEME: Sabit "₺" yerine dinamik simge kullanılıyor.
+                    '${variant.name} - $currencySymbol${variant.price.toStringAsFixed(2)}',
                     style: const TextStyle(
                       fontSize: 10,
                       fontWeight: FontWeight.w500,
@@ -198,6 +212,9 @@ class _TemplateVariantFormState extends State<TemplateVariantForm> {
   }
 
   Widget _buildVariantForm(AppLocalizations l10n) {
+    // GÜNCELLEME: Para birimi simgesini form için de alıyoruz.
+    final currencySymbol = CurrencyFormatter.getSymbol(widget.currencyCode);
+    
     return Form(
       key: _formKey,
       child: Column(
@@ -223,7 +240,8 @@ class _TemplateVariantFormState extends State<TemplateVariantForm> {
             decoration: InputDecoration(
               labelText: 'Varyant Fiyatı',
               hintText: 'Örn: 5.50',
-              prefixText: '₺ ',
+              // GÜNCELLEME: Sabit "₺ " yerine dinamik simge kullanılıyor.
+              prefixText: '$currencySymbol ',
               border: const OutlineInputBorder(),
               contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
               isDense: true,

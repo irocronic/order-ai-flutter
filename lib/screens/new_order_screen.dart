@@ -90,6 +90,7 @@ class _NewOrderScreenState extends State<NewOrderScreen> {
               );
             }
         },
+        l10n: _l10n, // ✅ GÜNCELLEME: Eksik olan l10n parametresi eklendi.
       );
       _controller.initializeScreen().then((success) {
           if (mounted && success && _controller.isSplitTable == null) {
@@ -98,7 +99,7 @@ class _NewOrderScreenState extends State<NewOrderScreen> {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(content: Text(_controller.errorMessage.isNotEmpty ? _controller.errorMessage : _l10n.newOrderLoadingInitialData)),
               );
-           }
+            }
       });
       _didChangeDependenciesRun = true;
     }
@@ -180,7 +181,7 @@ class _NewOrderScreenState extends State<NewOrderScreen> {
         ),
         centerTitle: true,
         leading: IconButton(
-           icon: const Icon(Icons.arrow_back, color: Colors.white),
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: _controller.isLoading ? null : () => Navigator.pop(context),
         ),
         actions: [
@@ -235,7 +236,7 @@ class _NewOrderScreenState extends State<NewOrderScreen> {
                       Expanded(
                         child: Text(
                           _controller.tableOwners.where((o) => o.isNotEmpty).isEmpty 
-                           ? _l10n.newOrderNoOwnersEntered 
+                            ? _l10n.newOrderNoOwnersEntered 
                             : _l10n.newOrderOwnersList(_controller.tableOwners.join(', ')),
                           style: TextStyle(fontWeight: FontWeight.bold, color: _controller.tableOwners.where((o) => o.isNotEmpty).isEmpty ? Colors.orangeAccent : Colors.white70),
                           overflow: TextOverflow.ellipsis,
@@ -268,7 +269,7 @@ class _NewOrderScreenState extends State<NewOrderScreen> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
                   child: SizedBox(
-                     width: double.infinity,
+                    width: double.infinity,
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.white.withOpacity(0.8),
@@ -305,8 +306,8 @@ class _NewOrderScreenState extends State<NewOrderScreen> {
             style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
           ),
           centerTitle: true,
-           flexibleSpace: Container(
-           decoration: const BoxDecoration(
+            flexibleSpace: Container(
+            decoration: const BoxDecoration(
               gradient: LinearGradient(
                 colors: [ Color(0xFF283593), Color(0xFF455A64), Color(0xFF455A64)],
                 begin: Alignment.topLeft, end: Alignment.bottomRight,
@@ -321,12 +322,12 @@ class _NewOrderScreenState extends State<NewOrderScreen> {
       body: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
-               colors: [
-                Colors.blue.shade900.withOpacity(0.9),
-                Colors.blue.shade400.withOpacity(0.8),
-              ],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
+                colors: [
+                 Colors.blue.shade900.withOpacity(0.9),
+                 Colors.blue.shade400.withOpacity(0.8),
+               ],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
             ),
           ),
         child: Center(

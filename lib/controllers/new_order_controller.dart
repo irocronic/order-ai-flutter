@@ -3,6 +3,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:collection/collection.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../models/menu_item.dart';
 import '../models/menu_item_variant.dart';
 import '../models/order.dart';
@@ -18,9 +19,7 @@ class NewOrderController {
   final int businessId;
   final Function(VoidCallback fn) onStateUpdate;
   final Function(String message, {bool isError}) showSnackBarCallback;
-  
-  // DEĞİŞİKLİK 1: popScreenCallback kaldırıldı.
-  // final Function(bool success) popScreenCallback; 
+  final AppLocalizations l10n;
 
   List<MenuItem> menuItems = [];
   List<dynamic> categories = [];
@@ -37,8 +36,7 @@ class NewOrderController {
     required this.table,
     required this.onStateUpdate,
     required this.showSnackBarCallback,
-    // DEĞİŞİKLİK 2: popScreenCallback constructor'dan kaldırıldı.
-    // required this.popScreenCallback,
+    required this.l10n,
   });
   final dynamic table;
 
@@ -57,15 +55,15 @@ class NewOrderController {
       ]);
       final menuData = results[0];
       final categoryData = results[1];
-      
+
       menuItems = menuData.map((e) => MenuItem.fromJson(e)).toList();
       categories = categoryData;
-      
+
       errorMessage = '';
-      onStateUpdate(() {}); 
+      onStateUpdate(() {});
       return true;
     } catch (e) {
-      errorMessage = "Veriler alınamadı: ${e.toString().replaceFirst("Exception: ", "")}";
+      errorMessage = l10n.errorFetchingData(e.toString().replaceFirst("Exception: ", ""));
       return false;
     } finally {
       _setLoading(false);
@@ -152,14 +150,13 @@ class NewOrderController {
     return total;
   }
 
-  // DEĞİŞİKLİK 3: Metot artık void yerine Future<bool> döndürüyor.
   Future<bool> handleCreateOrder() async {
     if (basket.isEmpty) {
-      showSnackBarCallback("Lütfen en az bir ürün ekleyin.", isError: true);
+      showSnackBarCallback(l10n.errorAddAtLeastOneProduct, isError: true);
       return false;
     }
     if (isSplitTable == true && tableOwners.where((name) => name.trim().isNotEmpty).length < 2) {
-      showSnackBarCallback("Bölünmüş masa için en az 2 masa sahibi adı girilmelidir.", isError: true);
+      showSnackBarCallback(l10n.errorSplitTableMinTwoOwners, isError: true);
       return false;
     }
 
@@ -186,11 +183,11 @@ class NewOrderController {
         order: newOrder,
       );
       debugPrint("[Controller] 2. OrderService.createOrder yanıt verdi. StatusCode: ${response.statusCode}");
-      
+
       final responseBodyBytes = response.bodyBytes;
       final decodedString = utf8.decode(responseBodyBytes);
       if (response.statusCode == 201) {
-        String successMessage = "Sipariş başarıyla oluşturuldu.";
+        String successMessage = l10n.infoOrderCreatedSuccessfully;
         try {
           final decodedBody = jsonDecode(decodedString);
           if(decodedBody is Map && decodedBody['offline'] == true) {
@@ -199,17 +196,15 @@ class NewOrderController {
         } catch(jsonError) {
           debugPrint("[Controller] UYARI: Offline yanıtı parse edilemedi, ancak devam ediliyor. Hata: $jsonError");
         }
-        
+
         showSnackBarCallback(successMessage, isError: false);
         await Future.delayed(const Duration(milliseconds: 500));
-        
-        // DEĞİŞİKLİK 4: popScreenCallback yerine 'true' döndürerek başarıyı bildir.
+
         debugPrint("[Controller] 9. İşlem başarılı, 'true' döndürülüyor.");
         return true;
       } else {
-        errorMessage = "Sipariş oluşturulurken hata oluştu (${response.statusCode}): ${utf8.decode(response.bodyBytes)}";
+        errorMessage = l10n.errorCreatingOrderWithDetails(response.statusCode.toString(), utf8.decode(response.bodyBytes));
         showSnackBarCallback(errorMessage, isError: true);
-        // Hata durumunda 'false' döndür
         return false;
       }
     } catch (e, s) {
@@ -219,13 +214,10 @@ class NewOrderController {
       debugPrint("Hata Mesajı: $e");
       debugPrint("Stack Trace:\n$s");
       debugPrint("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-      errorMessage = "Sipariş oluşturma hatası (detaylı log): $e";
+      errorMessage = l10n.errorCreatingOrderGeneric(e.toString());
       showSnackBarCallback(errorMessage, isError: true);
-      // Hata durumunda 'false' döndür
       return false;
     } finally {
-      // DEĞİŞİKLİK 5: `finally` bloğu sadece `_setLoading(false)` çağırmak için kullanılıyor.
-      // Başarılı durumda ekran zaten kapanacağı için bu sorun olmaz.
       _setLoading(false);
       debugPrint('[Controller] finally bloğu çalıştı, isLoading false olarak ayarlandı.');
     }

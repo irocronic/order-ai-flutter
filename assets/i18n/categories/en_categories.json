@@ -1,0 +1,11 @@
+[
+  { "id": 1, "name": "Appetizers & Starters", "icon_name": "tapas" },
+  { "id": 2, "name": "Soups & Salads", "icon_name": "eco" },
+  { "id": 3, "name": "Burgers & Sandwiches", "icon_name": "lunch_dining" },
+  { "id": 4, "name": "Pizza & Pasta", "icon_name": "local_pizza" },
+  { "id": 5, "name": "Steaks & Grills", "icon_name": "kebab_dining" },
+  { "id": 6, "name": "Main Courses", "icon_name": "restaurant" },
+  { "id": 7, "name": "Sides", "icon_name": "rice_bowl" },
+  { "id": 8, "name": "Desserts", "icon_name": "cake" },
+  { "id": 9, "name": "Beverages", "icon_name": "local_bar" }
+]

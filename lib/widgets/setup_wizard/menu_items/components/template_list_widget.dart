@@ -1,4 +1,3 @@
-// lib/widgets/setup_wizard/menu_items/components/template_list_widget.dart
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart'; // EKLENDİ
@@ -347,40 +346,37 @@ class TemplateListWidget extends StatelessWidget {
                       visualDensity: VisualDensity.compact,
                       activeColor: Colors.blue,
                       checkColor: Colors.white,
-                      secondary: isSelected ? SizedBox(
-                        width: 80,
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            InkWell(
-                              onTap: () => onToggleRecipeStatus(templateId),
+                      secondary: isSelected ? ConstrainedBox(
+                        constraints: const BoxConstraints(maxWidth: 100), // Genişlik sınırını artırdım
+                        child: InkWell(
+                          onTap: () => onToggleRecipeStatus(templateId),
+                          borderRadius: BorderRadius.circular(16),
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3), // Padding azaltıldı
+                            decoration: BoxDecoration(
+                              color: isFromRecipe 
+                                  ? Colors.green.shade100 
+                                  : Colors.orange.shade100,
                               borderRadius: BorderRadius.circular(16),
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                                decoration: BoxDecoration(
-                                  color: isFromRecipe 
-                                      ? Colors.green.shade100 
-                                      : Colors.orange.shade100,
-                                  borderRadius: BorderRadius.circular(16),
-                                  border: Border.all(
-                                    color: isFromRecipe 
-                                        ? Colors.green.shade300 
-                                        : Colors.orange.shade300,
-                                  ),
-                                ),
-                                child: Text(
-                                  isFromRecipe ? l10n.productTypeRecipe : l10n.productTypeManual, // GÜNCELLENDİ
-                                  style: TextStyle(
-                                    fontSize: 9,
-                                    fontWeight: FontWeight.bold,
-                                    color: isFromRecipe 
-                                        ? Colors.green.shade700 
-                                        : Colors.orange.shade700,
-                                  ),
-                                ),
+                              border: Border.all(
+                                color: isFromRecipe 
+                                    ? Colors.green.shade300 
+                                    : Colors.orange.shade300,
                               ),
                             ),
-                          ],
+                            child: Text(
+                              isFromRecipe ? l10n.productTypeRecipe : l10n.productTypeManual, // GÜNCELLENDİ
+                              style: TextStyle(
+                                fontSize: 8, // Font boyutu azaltıldı
+                                fontWeight: FontWeight.bold,
+                                color: isFromRecipe 
+                                    ? Colors.green.shade700 
+                                    : Colors.orange.shade700,
+                              ),
+                              overflow: TextOverflow.ellipsis, // Taşma kontrolü eklendi
+                              maxLines: 1,
+                            ),
+                          ),
                         ),
                       ) : null,
                     ),

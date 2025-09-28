@@ -1,0 +1,28 @@
+[
+  { "id": 1, "menu_item_id": 18, "name": "不辣", "price_multiplier": 1.0, "is_extra": false, "icon_name": "radio_button_checked" },
+  { "id": 2, "menu_item_id": 18, "name": "微辣", "price_multiplier": 1.0, "is_extra": false, "icon_name": "whatshot" },
+  { "id": 3, "menu_item_id": 18, "name": "中辣", "price_multiplier": 1.0, "is_extra": false, "icon_name": "whatshot" },
+  { "id": 4, "menu_item_id": 18, "name": "特辣", "price_multiplier": 1.0, "is_extra": false, "icon_name": "local_fire_department" },
+  
+  { "id": 5, "menu_item_id": 29, "name": "不麻不辣", "price_multiplier": 1.0, "is_extra": false, "icon_name": "radio_button_checked" },
+  { "id": 6, "menu_item_id": 29, "name": "少麻少辣", "price_multiplier": 1.0, "is_extra": false, "icon_name": "whatshot" },
+  { "id": 7, "menu_item_id": 29, "name": "正常麻辣", "price_multiplier": 1.0, "is_extra": false, "icon_name": "local_fire_department" },
+  
+  { "id": 8, "menu_item_id": 24, "name": "半只", "price_multiplier": 1.0, "is_extra": false, "icon_name": "pie_chart" },
+  { "id": 9, "menu_item_id": 24, "name": "一只", "price_multiplier": 1.9, "is_extra": false, "icon_name": "circle" },
+  
+  { "id": 10, "menu_item_id": 39, "name": "猪肉白菜馅", "price_multiplier": 1.0, "is_extra": false, "icon_name": "restaurant" },
+  { "id": 11, "menu_item_id": 39, "name": "三鲜馅", "price_multiplier": 1.2, "is_extra": false, "icon_name": "restaurant" },
+  { "id": 12, "menu_item_id": 39, "name": "素馅", "price_multiplier": 0.9, "is_extra": false, "icon_name": "eco" },
+  { "id": 13, "menu_item_id": 39, "name": "做法：水饺", "price_multiplier": 1.0, "is_extra": false, "icon_name": "water_drop" },
+  { "id": 14, "menu_item_id": 39, "name": "做法：煎饺", "price_multiplier": 1.1, "is_extra": true, "icon_name": "stove" },
+
+  { "id": 15, "menu_item_id": 34, "name": "小碗", "price_multiplier": 1.0, "is_extra": false, "icon_name": "circle_outlined" },
+  { "id": 16, "menu_item_id": 34, "name": "大碗", "price_multiplier": 1.5, "is_extra": false, "icon_name": "circle" },
+
+  { "id": 17, "menu_item_id": 50, "name": "一杯", "price_multiplier": 1.0, "is_extra": false, "icon_name": "emoji_food_beverage" },
+  { "id": 18, "menu_item_id": 50, "name": "一壶", "price_multiplier": 2.8, "is_extra": false, "icon_name": "local_cafe" },
+  
+  { "id": 19, "menu_item_id": 49, "name": "一杯 (50ml)", "price_multiplier": 1.0, "is_extra": false, "icon_name": "wine_bar" },
+  { "id": 20, "menu_item_id": 49, "name": "一瓶 (500ml)", "price_multiplier": 9.0, "is_extra": false, "icon_name": "liquor" }
+]

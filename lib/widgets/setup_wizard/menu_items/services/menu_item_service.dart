@@ -2,9 +2,11 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/foundation.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart'; // YENİ: Dil dosyası import edildi
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../../../services/api_service.dart';
 import '../../../../services/firebase_storage_service.dart';
+import '../../../../services/localized_template_service.dart';
+import '../../../../providers/language_provider.dart';
 import '../../../../models/menu_item.dart';
 import '../../../../models/menu_item_variant.dart';
 import '../models/menu_item_form_data.dart';
@@ -33,12 +35,12 @@ class MenuItemService {
     required String token,
     required int businessId,
     required MenuItemFormData formData,
-    required AppLocalizations l10n, // YENİ: l10n parametresi eklendi
+    required AppLocalizations l10n,
   }) async {
     String? imageUrl;
     
     if (formData.hasImage) {
-      imageUrl = await _uploadImage(businessId, formData, l10n); // YENİ: l10n doorlandı
+      imageUrl = await _uploadImage(businessId, formData, l10n);
     }
 
     await ApiService.createMenuItemForBusiness(
@@ -58,12 +60,12 @@ class MenuItemService {
     required MenuItemFormData formData,
     required bool isFromRecipe,
     double? price,
-    required AppLocalizations l10n, // YENİ: l10n parametresi eklendi
+    required AppLocalizations l10n,
   }) async {
     String? imageUrl;
     
     if (formData.hasImage) {
-      imageUrl = await _uploadImage(businessId, formData, l10n); // YENİ: l10n doorlandı
+      imageUrl = await _uploadImage(businessId, formData, l10n);
     }
 
     await ApiService.createMenuItemSmart(
@@ -87,7 +89,7 @@ class MenuItemService {
     required double? price,
     required int businessId,
     required List<MenuItemVariant>? variants,
-    required AppLocalizations l10n, // YENİ: l10n parametresi eklendi
+    required AppLocalizations l10n,
   }) async {
     try {
       if (kDebugMode) {
@@ -173,21 +175,21 @@ class MenuItemService {
       
       final errorStr = e.toString().toLowerCase();
       if (errorStr.contains('business') && errorStr.contains('zorunlu')) {
-        throw Exception(l10n.menuItemService_errorBusinessInfoMissing);
+        throw Exception('İşletme bilgileri eksik. Lütfen işletme ayarlarınızı kontrol edin.');
       } else if (errorStr.contains('invalid') && errorStr.contains('category')) {
-        throw Exception(l10n.menuItemService_errorInvalidCategory);
+        throw Exception('Seçilen kategori geçersiz. Lütfen farklı bir kategori seçin.');
       } else if (errorStr.contains('already exists') || errorStr.contains('unique') || errorStr.contains('benzersiz')) {
-        throw Exception(l10n.menuItemService_errorProductAlreadyExists);
+        throw Exception('Bu isimde bir ürün zaten mevcut. Lütfen farklı bir isim deneyin.');
       } else if (errorStr.contains('price') && errorStr.contains('required')) {
-        throw Exception(l10n.menuItemService_errorPriceRequiredForManualProduct);
+        throw Exception('Manuel ürünler için fiyat belirtilmesi zorunludur.');
       } else if (errorStr.contains('401') || errorStr.contains('unauthorized')) {
-        throw Exception(l10n.menuItemService_errorAuthorization);
+        throw Exception('Yetkilendirme hatası. Lütfen yeniden giriş yapın.');
       } else if (errorStr.contains('403') || errorStr.contains('forbidden')) {
-        throw Exception(l10n.menuItemService_errorForbidden);
+        throw Exception('Bu işlem için yetkiniz bulunmuyor.');
       } else if (errorStr.contains('limit')) {
-        throw Exception(l10n.menuItemService_errorProductLimitReached);
+        throw Exception('Ürün ekleme limitinize ulaştınız. Planınızı yükseltin.');
       } else {
-        throw Exception(l10n.menuItemService_errorCreatingCustomProduct(e.toString()));
+        throw Exception('Özel ürün oluşturulamadı: ${e.toString()}');
       }
     }
   }
@@ -222,7 +224,7 @@ class MenuItemService {
     int? businessId,
     List<MenuItemVariant>? variants,
     VariantTemplateConfig? variantConfig,
-    required AppLocalizations l10n, // YENİ: l10n parametresi eklendi
+    required AppLocalizations l10n,
   }) async {
     
     if (kDebugMode) {
@@ -241,7 +243,7 @@ class MenuItemService {
       }
       
       final existingMenuItems = await ApiService.fetchMenuItemsForBusiness(token);
-      final baseName = templateData['name'] ?? l10n.menuItemService_unnamedProduct;
+      final baseName = templateData['name'] ?? 'İsimsiz Ürün';
       final uniqueName = _generateUniqueProductName(baseName, existingMenuItems);
       
       if (kDebugMode && uniqueName != baseName) {
@@ -310,9 +312,9 @@ class MenuItemService {
         
         final errorStr = apiError.toString().toLowerCase();
         if (errorStr.contains('business') && errorStr.contains('zorunlu')) {
-          throw Exception(l10n.menuItemService_errorBusinessInfoMissing);
+          throw Exception('İşletme bilgileri eksik. Lütfen işletme ayarlarınızı kontrol edin.');
         } else if (errorStr.contains('invalid') && errorStr.contains('category')) {
-          throw Exception(l10n.menuItemService_errorInvalidCategory);
+          throw Exception('Seçilen kategori geçersiz. Lütfen farklı bir kategori seçin.');
         } else if (errorStr.contains('already exists') || errorStr.contains('unique') || errorStr.contains('benzersiz')) {
           final timestamp = DateTime.now().millisecondsSinceEpoch;
           final fallbackName = "${baseName}_$timestamp";
@@ -351,18 +353,18 @@ class MenuItemService {
             if (kDebugMode) {
               print("💥 Even fallback name failed: $retryError");
             }
-            throw Exception(l10n.menuItemService_errorCouldNotCreateUniqueName);
+            throw Exception('Benzersiz ürün adı oluşturulamadı. Lütfen farklı bir isim deneyin.');
           }
         } else if (errorStr.contains('price') && errorStr.contains('required')) {
-          throw Exception(l10n.menuItemService_errorPriceRequiredForManualProduct);
+          throw Exception('Manuel ürünler için fiyat belirtilmesi zorunludur.');
         } else if (errorStr.contains('401') || errorStr.contains('unauthorized')) {
-          throw Exception(l10n.menuItemService_errorAuthorization);
+          throw Exception('Yetkilendirme hatası. Lütfen yeniden giriş yapın.');
         } else if (errorStr.contains('403') || errorStr.contains('forbidden')) {
-          throw Exception(l10n.menuItemService_errorForbidden);
+          throw Exception('Bu işlem için yetkiniz bulunmuyor.');
         } else if (errorStr.contains('limit')) {
-          throw Exception(l10n.menuItemService_errorProductLimitReached);
+          throw Exception('Ürün ekleme limitinize ulaştınız. Planınızı yükseltin.');
         } else {
-          throw Exception(l10n.menuItemService_errorCreatingProduct(apiError.toString()));
+          throw Exception('Ürün oluşturulamadı: ${apiError.toString()}');
         }
       }
       
@@ -431,7 +433,7 @@ class MenuItemService {
   Future<String?> _uploadVariantImage({
     required int businessId,
     required VariantTemplateConfig variantConfig,
-    required AppLocalizations l10n, // YENİ: l10n parametresi eklendi
+    required AppLocalizations l10n,
   }) async {
     if (!variantConfig.hasVariantImage) return null;
     
@@ -449,18 +451,20 @@ class MenuItemService {
     );
     
     if (imageUrl == null) {
-      throw Exception(l10n.menuItemService_errorVariantImageUploadFailed);
+      throw Exception('Varyant görsel yüklemesi başarısız oldu.');
     }
     
     return imageUrl;
   }
 
+  // ✅ EN ÖNEMLİ GÜNCELLEME: JSON fallback ile template data çekme
   Future<Map<String, dynamic>> _fetchTemplateData(String token, int templateId, AppLocalizations l10n) async {
     if (kDebugMode) {
       print("📥 Fetching template data: $templateId");
     }
     
     try {
+      // Önce API'den dene
       final response = await http.get(
         ApiService.getUrl('/templates/menu-item-templates/$templateId/'),
         headers: {"Authorization": "Bearer $token"},
@@ -476,20 +480,67 @@ class MenuItemService {
       if (response.statusCode == 200) {
         final data = jsonDecode(utf8.decode(response.bodyBytes));
         if (kDebugMode) {
-          print("📄 Template data received successfully");
+          print("📄 Template data received successfully from API");
         }
         return data;
       } else {
+        // API'den alınamazsa JSON'dan fallback yap
         if (kDebugMode) {
-          print("❌ Template fetch error: ${response.statusCode} - ${response.body}");
+          print("❌ Template fetch error from API: ${response.statusCode} - Trying JSON fallback");
         }
-        throw Exception(l10n.menuItemService_errorFetchingTemplateData);
+        throw Exception('API template not found, trying JSON fallback');
       }
     } catch (e) {
       if (kDebugMode) {
-        print("❌ Network error while fetching template: $e");
+        print("❌ API error, trying JSON fallback: $e");
       }
-      throw Exception(l10n.menuItemService_errorNetworkFetchingTemplate(e.toString()));
+      
+      // JSON fallback
+      try {
+        final languageCode = LanguageProvider.currentLanguageCode;
+        final allMenuItems = await LocalizedTemplateService.loadMenuItems(languageCode);
+        
+        // Template ID'ye göre ara
+        final templateData = allMenuItems.firstWhere(
+          (item) => item['id'] == templateId,
+          orElse: () => null,
+        );
+        
+        if (templateData != null) {
+          if (kDebugMode) {
+            print("✅ Template data found in JSON: ${templateData['name']}");
+          }
+          
+          // JSON formatını API formatına uygun hale getir
+          return {
+            'id': templateData['id'],
+            'name': templateData['name'],
+            'description': templateData['description'] ?? '',
+            'image': templateData['image'],
+            'kdv_rate': templateData['kdv_rate'] ?? 10.0,
+            'price': templateData['price'],
+          };
+        } else {
+          if (kDebugMode) {
+            print("❌ Template not found in JSON either");
+          }
+          throw Exception('Template bulunamadı (ID: $templateId)');
+        }
+      } catch (jsonError) {
+        if (kDebugMode) {
+          print("❌ JSON fallback also failed: $jsonError");
+        }
+        
+        // Son çare olarak varsayılan değerler ver
+        return {
+          'id': templateId,
+          'name': 'Ürün #$templateId',
+          'description': 'Lezzetli ürün',
+          'image': null,
+          'kdv_rate': 10.0,
+          'price': null,
+        };
+      }
     }
   }
 
@@ -508,7 +559,7 @@ class MenuItemService {
     );
     
     if (imageUrl == null) {
-      throw Exception(l10n.menuItemService_errorFirebaseUploadFailed);
+      throw Exception('Firebase görsel yüklemesi başarısız oldu.');
     }
     
     return imageUrl;

@@ -1,0 +1,11 @@
+[
+  { "id": 1, "name": "المقبلات الباردة", "icon_name": "ac_unit" },
+  { "id": 2, "name": "المقبلات الساخنة", "icon_name": "local_fire_department" },
+  { "id": 3, "name": "الشوربات", "icon_name": "soup_kitchen" },
+  { "id": 4, "name": "السلطات", "icon_name": "eco" },
+  { "id": 5, "name": "المشويات", "icon_name": "kebab_dining" },
+  { "id": 6, "name": "الأطباق الرئيسية", "icon_name": "restaurant" },
+  { "id": 7, "name": "المأكولات البحرية", "icon_name": "set_meal" },
+  { "id": 8, "name": "الحلويات", "icon_name": "cake" },
+  { "id": 9, "name": "المشروبات", "icon_name": "local_bar" }
+]

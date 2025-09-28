@@ -1,0 +1,317 @@
+[
+  {
+    "id": 1,
+    "category_id": 1,
+    "name": "Wiener Schnitzel",
+    "description": "Klassisches Kalbsschnitzel paniert mit Kartoffelsalat",
+    "image": "",
+    "kdv_rate": 19.0,
+    "price": 24.90
+  },
+  {
+    "id": 2,
+    "category_id": 1,
+    "name": "Sauerbraten",
+    "description": "Rheinischer Sauerbraten mit Rotkohl und Klößen",
+    "image": "",
+    "kdv_rate": 19.0,
+    "price": 22.50
+  },
+  {
+    "id": 3,
+    "category_id": 1,
+    "name": "Schweinshaxe",
+    "description": "Bayerische Schweinshaxe mit Sauerkraut",
+    "image": "",
+    "kdv_rate": 19.0,
+    "price": 19.90
+  },
+  {
+    "id": 4,
+    "category_id": 1,
+    "name": "Bratwurst mit Sauerkraut",
+    "description": "Thüringer Bratwurst mit hausgemachtem Sauerkraut",
+    "image": "",
+    "kdv_rate": 19.0,
+    "price": 12.90
+  },
+  {
+    "id": 5,
+    "category_id": 2,
+    "name": "Leberwurst-Brot",
+    "description": "Hausgemachte Leberwurst auf Schwarzbrot",
+    "image": "",
+    "kdv_rate": 19.0,
+    "price": 6.50
+  },
+  {
+    "id": 6,
+    "category_id": 2,
+    "name": "Brezeln mit Obazda",
+    "description": "Frische Laugenbrezeln mit bayerischem Obazda",
+    "image": "",
+    "kdv_rate": 19.0,
+    "price": 8.90
+  },
+  {
+    "id": 7,
+    "category_id": 2,
+    "name": "Currywurst",
+    "description": "Bratwurst mit Currysoße und Pommes",
+    "image": "",
+    "kdv_rate": 19.0,
+    "price": 9.50
+  },
+  {
+    "id": 8,
+    "category_id": 3,
+    "name": "Gulaschsuppe",
+    "description": "Herzhafte ungarische Gulaschsuppe",
+    "image": "",
+    "kdv_rate": 19.0,
+    "price": 7.90
+  },
+  {
+    "id": 9,
+    "category_id": 3,
+    "name": "Kartoffelsuppe",
+    "description": "Cremige Kartoffelsuppe mit Würstchen",
+    "image": "",
+    "kdv_rate": 19.0,
+    "price": 6.50
+  },
+  {
+    "id": 10,
+    "category_id": 3,
+    "name": "Linsensuppe",
+    "description": "Deftige Linsensuppe mit Speck",
+    "image": "",
+    "kdv_rate": 19.0,
+    "price": 6.90
+  },
+  {
+    "id": 11,
+    "category_id": 4,
+    "name": "Gemischter Salat",
+    "description": "Bunter Salat mit Hausdressing",
+    "image": "",
+    "kdv_rate": 19.0,
+    "price": 8.50
+  },
+  {
+    "id": 12,
+    "category_id": 4,
+    "name": "Kartoffelsalat",
+    "description": "Schwäbischer Kartoffelsalat",
+    "image": "",
+    "kdv_rate": 19.0,
+    "price": 5.90
+  },
+  {
+    "id": 13,
+    "category_id": 5,
+    "name": "Rinderbraten",
+    "description": "Saftiger Rinderbraten mit Bratensoße",
+    "image": "",
+    "kdv_rate": 19.0,
+    "price": 26.90
+  },
+  {
+    "id": 14,
+    "category_id": 5,
+    "name": "Kassler mit Sauerkraut",
+    "description": "Geräuchertes Kassler mit Sauerkraut und Püree",
+    "image": "",
+    "kdv_rate": 19.0,
+    "price": 16.90
+  },
+  {
+    "id": 15,
+    "category_id": 6,
+    "name": "Forelle Müllerin Art",
+    "description": "Gebratene Forelle mit Mandeln und Petersilie",
+    "image": "",
+    "kdv_rate": 19.0,
+    "price": 18.90
+  },
+  {
+    "id": 16,
+    "category_id": 6,
+    "name": "Matjesfilet",
+    "description": "Matjesfilet mit Zwiebeln und Pellkartoffeln",
+    "image": "",
+    "kdv_rate": 19.0,
+    "price": 14.50
+  },
+  {
+    "id": 17,
+    "category_id": 7,
+    "name": "Käsespätzle",
+    "description": "Schwäbische Käsespätzle mit Röstzwiebeln",
+    "image": "",
+    "kdv_rate": 19.0,
+    "price": 13.90
+  },
+  {
+    "id": 18,
+    "category_id": 7,
+    "name": "Gemüse-Eintopf",
+    "description": "Bunter Gemüseeintopf mit frischen Kräutern",
+    "image": "",
+    "kdv_rate": 19.0,
+    "price": 11.50
+  },
+  {
+    "id": 19,
+    "category_id": 8,
+    "name": "Spaghetti Bolognese",
+    "description": "Klassische Spaghetti mit Hackfleischsoße",
+    "image": "",
+    "kdv_rate": 19.0,
+    "price": 12.90
+  },
+  {
+    "id": 20,
+    "category_id": 8,
+    "name": "Spätzle mit Pilzsoße",
+    "description": "Hausgemachte Spätzle mit cremiger Pilzsoße",
+    "image": "",
+    "kdv_rate": 19.0,
+    "price": 14.50
+  },
+  {
+    "id": 21,
+    "category_id": 9,
+    "name": "Pizza Margherita",
+    "description": "Klassische Pizza mit Tomaten und Mozzarella",
+    "image": "",
+    "kdv_rate": 19.0,
+    "price": 9.90
+  },
+  {
+    "id": 22,
+    "category_id": 9,
+    "name": "Pizza Salami",
+    "description": "Pizza mit italienischer Salami",
+    "image": "",
+    "kdv_rate": 19.0,
+    "price": 11.90
+  },
+  {
+    "id": 23,
+    "category_id": 10,
+    "name": "Schwarzwälder Kirschtorte",
+    "description": "Traditionelle Schwarzwälder Kirschtorte",
+    "image": "",
+    "kdv_rate": 19.0,
+    "price": 6.90
+  },
+  {
+    "id": 24,
+    "category_id": 10,
+    "name": "Apfelstrudel",
+    "description": "Warmer Apfelstrudel mit Vanillesoße",
+    "image": "",
+    "kdv_rate": 19.0,
+    "price": 5.90
+  },
+  {
+    "id": 25,
+    "category_id": 10,
+    "name": "Kaiserschmarrn",
+    "description": "Österreichischer Kaiserschmarrn mit Zwetschgen",
+    "image": "",
+    "kdv_rate": 19.0,
+    "price": 7.50
+  },
+  {
+    "id": 26,
+    "category_id": 11,
+    "name": "Kaffee",
+    "description": "Frisch gebrühter Filterkaffee",
+    "image": "",
+    "kdv_rate": 7.0,
+    "price": 2.80
+  },
+  {
+    "id": 27,
+    "category_id": 11,
+    "name": "Heiße Schokolade",
+    "description": "Cremige heiße Schokolade mit Sahne",
+    "image": "",
+    "kdv_rate": 7.0,
+    "price": 3.90
+  },
+  {
+    "id": 28,
+    "category_id": 11,
+    "name": "Glühwein",
+    "description": "Würziger Glühwein mit Zimt und Nelken",
+    "image": "",
+    "kdv_rate": 19.0,
+    "price": 4.50
+  },
+  {
+    "id": 29,
+    "category_id": 12,
+    "name": "Apfelschorle",
+    "description": "Erfrischende Apfelschorle",
+    "image": "",
+    "kdv_rate": 19.0,
+    "price": 3.50
+  },
+  {
+    "id": 30,
+    "category_id": 12,
+    "name": "Sprudel",
+    "description": "Mineralwasser mit Kohlensäure",
+    "image": "",
+    "kdv_rate": 19.0,
+    "price": 2.50
+  },
+  {
+    "id": 31,
+    "category_id": 13,
+    "name": "Weißbier",
+    "description": "Bayerisches Weißbier vom Fass",
+    "image": "",
+    "kdv_rate": 19.0,
+    "price": 4.20
+  },
+  {
+    "id": 32,
+    "category_id": 13,
+    "name": "Riesling",
+    "description": "Trockener Riesling aus der Pfalz",
+    "image": "",
+    "kdv_rate": 19.0,
+    "price": 5.80
+  },
+  {
+    "id": 33,
+    "category_id": 14,
+    "name": "Bauernfrühstück",
+    "description": "Herzhafte Pfanne mit Eiern, Speck und Kartoffeln",
+    "image": "",
+    "kdv_rate": 19.0,
+    "price": 9.90
+  },
+  {
+    "id": 34,
+    "category_id": 14,
+    "name": "Weißwurst-Frühstück",
+    "description": "Bayerische Weißwurst mit süßem Senf und Brezel",
+    "image": "",
+    "kdv_rate": 19.0,
+    "price": 8.50
+  },
+  {
+    "id": 35,
+    "category_id": 15,
+    "name": "Pommes Frites",
+    "description": "Knusprige Pommes Frites mit Ketchup",
+    "image": "",
+    "kdv_rate": 19.0,
+    "price": 4.50
+  }
+]

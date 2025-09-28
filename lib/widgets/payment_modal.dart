@@ -146,22 +146,77 @@ class _PaymentModalState extends State<PaymentModal> {
             ),
             const SizedBox(height: 20),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(backgroundColor: Colors.white.withOpacity(0.8), foregroundColor: Colors.black, elevation: 4, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16))),
-                  onPressed: _isProcessing ? null : () => _submitPayment('credit_card'),
-                  child: _isProcessing && _currentPaymentType == 'credit_card' ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 3, color: Colors.blueAccent,)) : Text(l10n.paymentTypeCreditCard),
+                Expanded(
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white.withOpacity(0.8), 
+                      foregroundColor: Colors.black, 
+                      elevation: 4, 
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                      padding: const EdgeInsets.symmetric(vertical: 12),
+                    ),
+                    onPressed: _isProcessing ? null : () => _submitPayment('credit_card'),
+                    child: _isProcessing && _currentPaymentType == 'credit_card' 
+                        ? const SizedBox(
+                            width: 20, 
+                            height: 20, 
+                            child: CircularProgressIndicator(strokeWidth: 3, color: Colors.blueAccent)
+                          ) 
+                        : Text(
+                            l10n.paymentTypeCreditCard,
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(fontSize: 12),
+                          ),
+                  ),
                 ),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(backgroundColor: Colors.white.withOpacity(0.8), foregroundColor: Colors.black, elevation: 4, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16))),
-                  onPressed: _isProcessing ? null : () => _submitPayment('cash'),
-                  child: _isProcessing && _currentPaymentType == 'cash' ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 3, color: Colors.blueAccent,)) : Text(l10n.paymentTypeCash),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white.withOpacity(0.8), 
+                      foregroundColor: Colors.black, 
+                      elevation: 4, 
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                      padding: const EdgeInsets.symmetric(vertical: 12),
+                    ),
+                    onPressed: _isProcessing ? null : () => _submitPayment('cash'),
+                    child: _isProcessing && _currentPaymentType == 'cash' 
+                        ? const SizedBox(
+                            width: 20, 
+                            height: 20, 
+                            child: CircularProgressIndicator(strokeWidth: 3, color: Colors.blueAccent)
+                          ) 
+                        : Text(
+                            l10n.paymentTypeCash,
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(fontSize: 12),
+                          ),
+                  ),
                 ),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(backgroundColor: Colors.white.withOpacity(0.8), foregroundColor: Colors.black, elevation: 4, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16))),
-                  onPressed: _isProcessing ? null : () => _submitPayment('food_card'),
-                  child: _isProcessing && _currentPaymentType == 'food_card' ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 3, color: Colors.blueAccent,)) : Text(l10n.paymentTypeFoodCard),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white.withOpacity(0.8), 
+                      foregroundColor: Colors.black, 
+                      elevation: 4, 
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                      padding: const EdgeInsets.symmetric(vertical: 12),
+                    ),
+                    onPressed: _isProcessing ? null : () => _submitPayment('food_card'),
+                    child: _isProcessing && _currentPaymentType == 'food_card' 
+                        ? const SizedBox(
+                            width: 20, 
+                            height: 20, 
+                            child: CircularProgressIndicator(strokeWidth: 3, color: Colors.blueAccent)
+                          ) 
+                        : Text(
+                            l10n.paymentTypeFoodCard,
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(fontSize: 12),
+                          ),
+                  ),
                 ),
               ],
             ),

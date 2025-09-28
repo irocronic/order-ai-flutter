@@ -48,6 +48,106 @@ class _StepLocalizationSettingsWidgetState
     super.initState();
   }
 
+  Map<String, String> _getSupportedTimezones(AppLocalizations l10n) {
+    return {
+      // Avrupa
+      'Europe/Istanbul': l10n.timeZoneNameIstanbul,
+      'Europe/London': l10n.timeZoneNameLondon,
+      'Europe/Berlin': l10n.timeZoneNameBerlin,
+      'Europe/Paris': l10n.timeZoneNameParis,
+      'Europe/Rome': l10n.timeZoneNameRome,
+      'Europe/Madrid': l10n.timeZoneNameMadrid,
+      'Europe/Amsterdam': l10n.timeZoneNameAmsterdam,
+      'Europe/Vienna': l10n.timeZoneNameVienna,
+      'Europe/Warsaw': l10n.timeZoneNameWarsaw,
+      'Europe/Prague': l10n.timeZoneNamePrague,
+      'Europe/Budapest': l10n.timeZoneNameBudapest,
+      'Europe/Athens': l10n.timeZoneNameAthens,
+      'Europe/Helsinki': l10n.timeZoneNameHelsinki,
+      'Europe/Stockholm': l10n.timeZoneNameStockholm,
+      'Europe/Oslo': l10n.timeZoneNameOslo,
+      'Europe/Copenhagen': l10n.timeZoneNameCopenhagen,
+      'Europe/Brussels': l10n.timeZoneNameBrussels,
+      'Europe/Zurich': l10n.timeZoneNameZurich,
+      'Europe/Moscow': l10n.timeZoneNameMoscow,
+      
+      // Amerika - Kuzey
+      'America/New_York': l10n.timeZoneNameNewYork,
+      'America/Los_Angeles': l10n.timeZoneNameLosAngeles,
+      'America/Chicago': l10n.timeZoneNameChicago,
+      'America/Denver': l10n.timeZoneNameDenver,
+      'America/Phoenix': l10n.timeZoneNamePhoenix,
+      'America/Toronto': l10n.timeZoneNameToronto,
+      'America/Vancouver': l10n.timeZoneNameVancouver,
+      'America/Montreal': l10n.timeZoneNameMontreal,
+      
+      // Amerika - Güney
+      'America/Sao_Paulo': l10n.timeZoneNameSaoPaulo,
+      'America/Buenos_Aires': l10n.timeZoneNameBuenosAires,
+      'America/Mexico_City': l10n.timeZoneNameMexicoCity,
+      'America/Bogota': l10n.timeZoneNameBogota,
+      'America/Lima': l10n.timeZoneNameLima,
+      'America/Santiago': l10n.timeZoneNameSantiago,
+      
+      // Asya - Doğu
+      'Asia/Tokyo': l10n.timeZoneNameTokyo,
+      'Asia/Seoul': l10n.timeZoneNameSeoul,
+      'Asia/Shanghai': l10n.timeZoneNameShanghai,
+      'Asia/Hong_Kong': l10n.timeZoneNameHongKong,
+      'Asia/Singapore': l10n.timeZoneNameSingapore,
+      'Asia/Bangkok': l10n.timeZoneNameBangkok,
+      'Asia/Manila': l10n.timeZoneNameManila,
+      'Asia/Jakarta': l10n.timeZoneNameJakarta,
+      'Asia/Kuala_Lumpur': l10n.timeZoneNameKualaLumpur,
+      'Asia/Ho_Chi_Minh': l10n.timeZoneNameHoChiMinh,
+      
+      // Asya - Orta & Batı
+      'Asia/Dubai': l10n.timeZoneNameDubai,
+      'Asia/Riyadh': l10n.timeZoneNameRiyadh,
+      'Asia/Qatar': l10n.timeZoneNameQatar,
+      'Asia/Kuwait': l10n.timeZoneNameKuwait,
+      'Asia/Tehran': l10n.timeZoneNameTehran,
+      'Asia/Baghdad': l10n.timeZoneNameBaghdad,
+      'Asia/Kabul': l10n.timeZoneNameKabul,
+      'Asia/Karachi': l10n.timeZoneNameKarachi,
+      'Asia/Delhi': l10n.timeZoneNameDelhi,
+      'Asia/Dhaka': l10n.timeZoneNameDhaka,
+      'Asia/Colombo': l10n.timeZoneNameColombo,
+      'Asia/Kathmandu': l10n.timeZoneNameKathmandu,
+      
+      // Asya - Merkezi
+      'Asia/Almaty': l10n.timeZoneNameAlmaty,
+      'Asia/Tashkent': l10n.timeZoneNameTashkent,
+      'Asia/Baku': l10n.timeZoneNameBaku,
+      'Asia/Yerevan': l10n.timeZoneNameYerevan,
+      'Asia/Tbilisi': l10n.timeZoneNameTbilisi,
+      
+      // Afrika
+      'Africa/Cairo': l10n.timeZoneNameCairo,
+      'Africa/Casablanca': l10n.timeZoneNameCasablanca,
+      'Africa/Lagos': l10n.timeZoneNameLagos,
+      'Africa/Johannesburg': l10n.timeZoneNameJohannesburg,
+      'Africa/Nairobi': l10n.timeZoneNameNairobi,
+      'Africa/Tunis': l10n.timeZoneNameTunis,
+      'Africa/Algiers': l10n.timeZoneNameAlgiers,
+      
+      // Okyanusya
+      'Australia/Sydney': l10n.timeZoneNameSydney,
+      'Australia/Melbourne': l10n.timeZoneNameMelbourne,
+      'Australia/Brisbane': l10n.timeZoneNameBrisbane,
+      'Australia/Perth': l10n.timeZoneNamePerth,
+      'Australia/Adelaide': l10n.timeZoneNameAdelaide,
+      'Pacific/Auckland': l10n.timeZoneNameAuckland,
+      'Pacific/Honolulu': l10n.timeZoneNameHonolulu,
+      'Pacific/Fiji': l10n.timeZoneNameFiji,
+      
+      // Atlantik
+      'Atlantic/Azores': l10n.timeZoneNameAzores,
+      'Atlantic/Canary': l10n.timeZoneNameCanary,
+      'Atlantic/Reykjavik': l10n.timeZoneNameReykjavik,
+    };
+  }
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -73,14 +173,7 @@ class _StepLocalizationSettingsWidgetState
         'GBP': l10n.currencyNameGBP,
       };
 
-      _supportedTimezones = {
-        'Europe/Istanbul': l10n.timeZoneNameIstanbul,
-        'Europe/London': l10n.timeZoneNameLondon,
-        'Europe/Berlin': l10n.timeZoneNameBerlin,
-        'America/New_York': l10n.timeZoneNameNewYork,
-        'Asia/Dubai': l10n.timeZoneNameDubai,
-        'Asia/Tokyo': l10n.timeZoneNameTokyo,
-      };
+      _supportedTimezones = _getSupportedTimezones(l10n);
 
       final languageProvider =
           Provider.of<LanguageProvider>(context, listen: false);
@@ -271,14 +364,7 @@ class _StepLocalizationSettingsWidgetState
           'GBP': l10n.currencyNameGBP,
         };
 
-        _supportedTimezones = {
-          'Europe/Istanbul': l10n.timeZoneNameIstanbul,
-          'Europe/London': l10n.timeZoneNameLondon,
-          'Europe/Berlin': l10n.timeZoneNameBerlin,
-          'America/New_York': l10n.timeZoneNameNewYork,
-          'Asia/Dubai': l10n.timeZoneNameDubai,
-          'Asia/Tokyo': l10n.timeZoneNameTokyo,
-        };
+        _supportedTimezones = _getSupportedTimezones(l10n);
 
         _selectedLanguageCode = languageProvider.currentLocale?.languageCode ??
             WidgetsBinding.instance.platformDispatcher.locale.languageCode;

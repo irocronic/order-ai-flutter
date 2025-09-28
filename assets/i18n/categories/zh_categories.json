@@ -1,0 +1,11 @@
+[
+  { "id": 1, "name": "凉菜", "icon_name": "ac_unit" },
+  { "id": 2, "name": "汤羹", "icon_name": "soup_kitchen" },
+  { "id": 3, "name": "海鲜", "icon_name": "set_meal" },
+  { "id": 4, "name": "肉类", "icon_name": "kebab_dining" },
+  { "id": 5, "name": "禽类", "icon_name": "egg" },
+  { "id": 6, "name": "蔬菜", "icon_name": "eco" },
+  { "id": 7, "name": "主食", "icon_name": "rice_bowl" },
+  { "id": 8, "name": "点心甜品", "icon_name": "bakery_dining" },
+  { "id": 9, "name": "酒水饮料", "icon_name": "local_bar" }
+]

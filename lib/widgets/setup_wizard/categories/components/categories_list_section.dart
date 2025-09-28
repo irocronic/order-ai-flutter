@@ -327,19 +327,20 @@ class CategoriesListSection extends StatelessWidget {
                 const SizedBox(height: 6),
               ],
               
-              // KDS bilgisi (varsa)
+              // KDS bilgisi (varsa) - 🔧 OVERFLOW ÇÖZÜMÜ
               if (kdsInfo.isNotEmpty) ...[
                 const SizedBox(height: 8),
                 Center(
                   child: Container(
-                    constraints: const BoxConstraints(maxWidth: double.infinity),
+                    width: double.infinity, // Tam genişlik kullan
                     padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
                     decoration: BoxDecoration(
                       color: Colors.blue.withOpacity(0.2),
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Row(
-                      mainAxisSize: MainAxisSize.min,
+                      mainAxisSize: MainAxisSize.min, // Minimum boyut kullan
+                      mainAxisAlignment: MainAxisAlignment.center, // Ortala
                       children: [
                         Icon(
                           Icons.monitor,
@@ -347,9 +348,10 @@ class CategoriesListSection extends StatelessWidget {
                           color: Colors.white.withOpacity(0.8),
                         ),
                         const SizedBox(width: 3),
-                        Flexible(
+                        // 🔧 Expanded ile overflow'u önle
+                        Expanded(
                           child: Text(
-                            kdsInfo.length > 8 ? '${kdsInfo.substring(0, 8)}...' : kdsInfo,
+                            kdsInfo.length > 6 ? '${kdsInfo.substring(0, 6)}...' : kdsInfo,
                             style: TextStyle(
                               fontSize: 9,
                               color: Colors.white.withOpacity(0.8),
@@ -357,6 +359,7 @@ class CategoriesListSection extends StatelessWidget {
                             ),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
+                            textAlign: TextAlign.center, // Metni ortala
                           ),
                         ),
                       ],
@@ -367,17 +370,18 @@ class CategoriesListSection extends StatelessWidget {
               
               const SizedBox(height: 8),
               
-              // KDV bilgisi - ortada
+              // KDV bilgisi - ortada - 🔧 OVERFLOW ÇÖZÜMÜ
               Center(
                 child: Container(
-                  constraints: const BoxConstraints(maxWidth: double.infinity),
+                  width: double.infinity, // Tam genişlik kullan
                   padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
                   decoration: BoxDecoration(
                     color: Colors.white.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Row(
-                    mainAxisSize: MainAxisSize.min,
+                    mainAxisSize: MainAxisSize.min, // Minimum boyut kullan
+                    mainAxisAlignment: MainAxisAlignment.center, // Ortala
                     children: [
                       Icon(
                         Icons.percent,
@@ -385,12 +389,18 @@ class CategoriesListSection extends StatelessWidget {
                         color: Colors.white.withOpacity(0.7),
                       ),
                       const SizedBox(width: 3),
-                      Text(
-                        l10n.setupCategoriesVatRateLabel(kdvRate),
-                        style: TextStyle(
-                          fontSize: 9,
-                          color: Colors.white.withOpacity(0.7),
-                          fontWeight: FontWeight.w500,
+                      // 🔧 Expanded ile overflow'u önle
+                      Expanded(
+                        child: Text(
+                          l10n.setupCategoriesVatRateLabel(kdvRate),
+                          style: TextStyle(
+                            fontSize: 9,
+                            color: Colors.white.withOpacity(0.7),
+                            fontWeight: FontWeight.w500,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          textAlign: TextAlign.center, // Metni ortala
                         ),
                       ),
                     ],

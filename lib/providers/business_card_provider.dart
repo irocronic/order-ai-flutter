@@ -1,5 +1,7 @@
 // lib/providers/business_card_provider.dart
 
+// lib/providers/business_card_provider.dart
+
 import 'dart:convert';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
@@ -221,15 +223,15 @@ class BusinessCardProvider extends ChangeNotifier {
     updateModel(oldModel, newModel);
   }
 
-  void addTextElement() {
+  // GÜNCELLEME: Lokalizasyonlu metin için parametre eklendi
+  void addTextElement({String? localizedText}) {
     final newElement = CardElement(
       id: Uuid().v4(),
       type: CardElementType.text,
-      content: 'Yeni Metin',
+      content: localizedText ?? 'New Text', // Fallback için İngilizce
       position: const Offset(20, 100),
       size: const Size(150, 25),
-      style:
-          const TextStyle(fontSize: 16, color: Colors.black, fontFamily: 'Roboto'),
+      style: const TextStyle(fontSize: 16, color: Colors.black, fontFamily: 'Roboto'),
     );
     final command = AddElementCommand(this, newElement);
     execute(command);

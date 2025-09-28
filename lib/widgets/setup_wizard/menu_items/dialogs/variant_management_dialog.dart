@@ -7,6 +7,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../../models/menu_item_variant.dart';
 import '../../../../services/firebase_storage_service.dart';
+import '../../../../utils/currency_formatter.dart'; // YENİ EKLENEN
 import '../models/variant_template_config.dart';
 import '../components/image_picker_widget.dart';
 import '../utils/icon_utils.dart';
@@ -318,6 +319,10 @@ class _VariantManagementDialogState extends State<VariantManagementDialog> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    
+    // YENİ EKLENEN: Dinamik para birimi simgesi
+    final currencySymbol = CurrencyFormatter.currentSymbol;
+    
     return Dialog(
       insetPadding: const EdgeInsets.all(16.0),
       child: Container(
@@ -478,7 +483,8 @@ class _VariantManagementDialogState extends State<VariantManagementDialog> {
                                   Row(
                                     children: [
                                       Text(
-                                        '₺${variant.price.toStringAsFixed(2)}',
+                                        // GÜNCELLENDİ: Dinamik para birimi simgesi kullanıldı
+                                        '$currencySymbol${variant.price.toStringAsFixed(2)}',
                                         style: TextStyle(
                                           fontSize: 12,
                                           color: Colors.grey.shade700,
@@ -586,7 +592,8 @@ class _VariantManagementDialogState extends State<VariantManagementDialog> {
                                   controller: widget.variantConfig.variantPriceController,
                                   decoration: InputDecoration(
                                     labelText: l10n.variantPriceLabel,
-                                    prefixText: '₺',
+                                    // GÜNCELLENDİ: Dinamik para birimi simgesi kullanıldı
+                                    prefixText: currencySymbol,
                                     border: const OutlineInputBorder(),
                                     contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
                                   ),

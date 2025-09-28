@@ -1,6 +1,4 @@
 // lib/widgets/setup_wizard/menu_items/dialogs/template_selection_dialog.dart
-
-
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:collection/collection.dart';
@@ -127,7 +125,18 @@ class _TemplateSelectionDialogState extends State<TemplateSelectionDialog> {
             final templateName = template['name'] as String? ?? 'İsimsiz Ürün';
 
             templateRecipeStatus[templateId] = true;
-            templatePriceControllers[templateId] = TextEditingController();
+            // ✅ FİX: Price controller'a listener ekliyoruz
+            final priceController = TextEditingController();
+            priceController.addListener(() {
+              // Fiyat değiştiğinde setState çağır
+              if (mounted) {
+                setState(() {
+                  // Bu setState çağrısı _isButtonEnabled'ı yeniden hesaplar
+                });
+              }
+            });
+            templatePriceControllers[templateId] = priceController;
+            
             templateVariantConfigs[templateId] = VariantTemplateConfig(
               templateId: templateId,
               templateName: templateName,
@@ -292,12 +301,20 @@ class _TemplateSelectionDialogState extends State<TemplateSelectionDialog> {
     return true;
   }
   
-  // GÜNCELLEME: Seçilen her ürünün en az bir varyantı olup olmadığını kontrol eden metot.
+  // ✅ GÜNCELLEME: Manuel seçim yapılan ürünler için varyant zorunluluğu kontrolü yapılmayacak
   bool _validateAllSelectedItemsHaveVariants() {
     if (selectedTemplateIds.isEmpty) {
       return true; 
     }
     return selectedTemplateIds.every((id) {
+      final isFromRecipe = templateRecipeStatus[id] ?? true;
+      
+      // ✅ YENİ KONTROL: Eğer manuel seçim yapılmışsa (isFromRecipe = false) varyant zorunlu değil
+      if (!isFromRecipe) {
+        return true; // Manuel seçimde varyant zorunlu değil
+      }
+      
+      // Reçeteli ürünlerde varyant zorunlu
       final config = templateVariantConfigs[id];
       return config != null && config.variants.isNotEmpty;
     });
@@ -404,11 +421,22 @@ class _TemplateSelectionDialogState extends State<TemplateSelectionDialog> {
     setState(() {
       selectedTemplateIds.add(customTemplateId);
       templateRecipeStatus[customTemplateId] = isFromRecipe;
+      
+      // ✅ FİX: Custom product için de price controller'a listener ekliyoruz
       final priceController = TextEditingController();
+      priceController.addListener(() {
+        if (mounted) {
+          setState(() {
+            // Bu setState çağrısı _isButtonEnabled'ı yeniden hesaplar
+          });
+        }
+      });
+      
       if (!isFromRecipe && price != null) {
         priceController.text = price.toStringAsFixed(2);
       }
       templatePriceControllers[customTemplateId] = priceController;
+      
       final variantConfig = VariantTemplateConfig(
         templateId: customTemplateId,
         templateName: productName,
@@ -536,7 +564,7 @@ class _TemplateSelectionDialogState extends State<TemplateSelectionDialog> {
     };
   }
 
-  // GÜNCELLEME: Butonun aktif olma koşulu güncellendi.
+  // ✅ GÜNCELLEME: Butonun aktif olma koşulu güncellendi - manuel seçimlerde varyant zorunluluğu kaldırıldı
   bool get _isButtonEnabled {
     final hasSelection = selectedTemplateIds.isNotEmpty;
     if (!hasSelection) return false;
@@ -545,7 +573,7 @@ class _TemplateSelectionDialogState extends State<TemplateSelectionDialog> {
     final pricesValid = _validatePrices();
     final imageVariantsValid = _validateVariantImages();
     
-    // YENİ KONTROL: Seçilen her ürünün en az bir varyantı olmalı.
+    // ✅ YENİ KONTROL: Manuel seçimler için varyant zorunluluğu kaldırıldı
     final allSelectedHaveVariants = _validateAllSelectedItemsHaveVariants();
 
     return hasCategory && pricesValid && imageVariantsValid && allSelectedHaveVariants;
@@ -574,7 +602,7 @@ class _TemplateSelectionDialogState extends State<TemplateSelectionDialog> {
     final availableHeight = screenHeight - keyboardHeight - 100.0;
     final dialogHeight = availableHeight > 400.0 ? availableHeight : 400.0;
     
-    // YENİ: Varyant zorunluluğu için hata mesajı kontrolü
+    // ✅ GÜNCELLEME: Varyant zorunluluğu için hata mesajı kontrolü - manuel seçimleri hariç tutuyor
     final bool everySelectedHasVariant = _validateAllSelectedItemsHaveVariants();
 
     return Dialog(
@@ -618,8 +646,7 @@ class _TemplateSelectionDialogState extends State<TemplateSelectionDialog> {
               ),
             ),
             
-            // GÜNCELLEME: TemplateSelectionFooter widget'ı kaldırıldı ve yerine
-            // doğrudan buton ve hata mesajı mantığı eklendi.
+            // ✅ GÜNCELLEME: Footer kısmında hata mesajı mantığı güncellendi
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
@@ -651,7 +678,7 @@ class _TemplateSelectionDialogState extends State<TemplateSelectionDialog> {
                       ),
                     ],
                   ),
-                  // YENİ: Koşullu hata mesajı
+                  // ✅ YENİ: Koşullu hata mesajı - sadece reçeteli ürünlerde varyant eksikse gösterilir
                   if (!_isButtonEnabled && selectedTemplateIds.isNotEmpty && !everySelectedHasVariant)
                     Padding(
                       padding: const EdgeInsets.only(top: 8.0),

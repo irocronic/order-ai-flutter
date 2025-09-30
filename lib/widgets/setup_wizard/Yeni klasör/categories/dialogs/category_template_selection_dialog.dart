@@ -33,10 +33,7 @@ class _CategoryTemplateSelectionDialogState
 
   final List<int> _selectedTemplates = [];
   List<KdsScreenModel> _kdsScreens = [];
-  
-  // 🔥 YENİ: Her template için ayrı KDS seçimi
-  Map<int, int?> _templateKdsMap = {};
-  
+  int? _selectedKdsScreenId;
   bool _isLoading = true;
   bool _isSubmitting = false;
 
@@ -76,12 +73,6 @@ class _CategoryTemplateSelectionDialogState
         _allTemplates = templates;
         _filteredTemplates = _allTemplates;
         _kdsScreens = (results[0] as List<KdsScreenModel>).where((kds) => kds.isActive).toList();
-        
-        // 🔥 YENİ: Her template için KDS mapping'i başlat
-        _templateKdsMap = {};
-        for (final template in _allTemplates) {
-          _templateKdsMap[template['id']] = null;
-        }
       });
       
       debugPrint('✅ Template yükleme başarılı: ${_allTemplates.length} kategori');
@@ -164,34 +155,14 @@ class _CategoryTemplateSelectionDialogState
     });
   }
 
-  // 🔥 YENİ: KDS seçimini güncelle
-  void _updateTemplateKds(int templateId, int? kdsId) {
-    setState(() {
-      _templateKdsMap[templateId] = kdsId;
-    });
-  }
-
-  // 🔥 YENİ: KDS seçimi validasyonu
-  bool _validateKdsSelections() {
-    for (final templateId in _selectedTemplates) {
-      if (_templateKdsMap[templateId] == null) {
-        return false;
-      }
-    }
-    return true;
-  }
-
   Future<void> _saveSelectedTemplatesManually(
-      BuildContext context, List<int> selectedIds) async {
+      BuildContext context, List<int> selectedIds, int? kdsScreenId) async {
     final l10n = AppLocalizations.of(context)!;
     final token = UserSession.token;
     final businessId = UserSession.businessId!;
     
     try {
       for (final template in _allTemplates.where((t) => selectedIds.contains(t['id']))) {
-        final templateId = template['id'];
-        final kdsScreenId = _templateKdsMap[templateId];
-        
         await ApiService.createCategoryForBusiness(
           token,
           businessId,
@@ -225,100 +196,12 @@ class _CategoryTemplateSelectionDialogState
   }
 
   void _createCategories() {
-    final l10n = AppLocalizations.of(context)!;
-    
-    // 🔥 YENİ: KDS seçim validasyonu kontrolü
-    if (_selectedTemplates.isNotEmpty && !_validateKdsSelections()) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Seçilen kategoriler için KDS ekranı seçimi zorunludur.'),
-          backgroundColor: Colors.red,
-          duration: const Duration(seconds: 3),
-        ),
-      );
-      return;
-    }
-    
     if (!_formKey.currentState!.validate()) {
       return;
     }
     setState(() => _isSubmitting = true);
 
-    _saveSelectedTemplatesManually(context, _selectedTemplates);
-  }
-
-  // 🔥 YENİ: KDS Dropdown Widget'ı - güncellendi
-  Widget _buildKdsDropdownForTemplate(int templateId, AppLocalizations l10n) {
-    final isSelected = _selectedTemplates.contains(templateId);
-    final hasError = isSelected && _templateKdsMap[templateId] == null;
-    
-    return Container(
-      width: 160,
-      decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(
-          color: hasError 
-              ? Colors.red.withOpacity(0.8) 
-              : Colors.white.withOpacity(0.2),
-          width: hasError ? 2 : 1,
-        ),
-      ),
-      child: DropdownButtonFormField<int?>(
-        value: _templateKdsMap[templateId],
-        isExpanded: true,
-        dropdownColor: Colors.blue.shade800,
-        style: const TextStyle(color: Colors.white, fontSize: 12),
-        decoration: InputDecoration(
-          hintText: isSelected 
-              ? 'KDS Seçimi Zorunlu!'
-              : l10n.kdsScreenNotSelected,
-          hintStyle: TextStyle(
-            color: isSelected 
-                ? Colors.red.withOpacity(0.9) 
-                : Colors.white.withOpacity(0.6), 
-            fontSize: 11,
-            fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-          ),
-          border: InputBorder.none,
-          contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-          isDense: true,
-        ),
-        icon: Icon(
-          Icons.arrow_drop_down, 
-          color: hasError 
-              ? Colors.red.withOpacity(0.8) 
-              : Colors.white.withOpacity(0.8), 
-          size: 16
-        ),
-        items: [
-          DropdownMenuItem<int?>(
-            value: null,
-            child: Text(
-              l10n.kdsScreenNotSelected,
-              style: TextStyle(
-                color: Colors.white.withOpacity(0.7), 
-                fontSize: 11
-              ),
-              overflow: TextOverflow.ellipsis,
-            ),
-          ),
-          ..._kdsScreens.map((kds) {
-            return DropdownMenuItem<int?>(
-              value: kds.id,
-              child: Text(
-                kds.name,
-                style: const TextStyle(fontSize: 11, color: Colors.white),
-                overflow: TextOverflow.ellipsis,
-              ),
-            );
-          }).toList(),
-        ],
-        onChanged: (value) {
-          _updateTemplateKds(templateId, value);
-        },
-      ),
-    );
+    _saveSelectedTemplatesManually(context, _selectedTemplates, _selectedKdsScreenId);
   }
 
   @override
@@ -335,9 +218,6 @@ class _CategoryTemplateSelectionDialogState
     final bool hasVisibleItems = _filteredTemplates.isNotEmpty;
     final bool allVisibleSelected = hasVisibleItems &&
         _filteredTemplates.every((template) => _selectedTemplates.contains(template['id']));
-    
-    // 🔥 YENİ: KDS validasyon durumu
-    final bool hasKdsValidationError = _selectedTemplates.isNotEmpty && !_validateKdsSelections();
 
     return Dialog(
       backgroundColor: Colors.transparent,
@@ -346,7 +226,7 @@ class _CategoryTemplateSelectionDialogState
         vertical: keyboardHeight > 0 ? 8.0 : 24.0,
       ),
       child: Container(
-        width: screenWidth > 600 ? 700 : double.infinity, // 🔥 Genişliği artırdık
+        width: screenWidth > 600 ? 600 : double.infinity,
         height: dialogHeight,
         decoration: BoxDecoration(
           gradient: LinearGradient(
@@ -479,177 +359,128 @@ class _CategoryTemplateSelectionDialogState
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                // 🔥 YENİ: Tümünü seç/bırak butonu ve arama alanı yan yana
-                                Row(
-                                  children: [
-                                    // Tümünü seç/bırak butonu
-                                    if (hasVisibleItems)
-                                      Expanded(
-                                        flex: 2,
-                                        child: Container(
-                                          padding: const EdgeInsets.all(12),
-                                          decoration: BoxDecoration(
-                                            color: Colors.white.withOpacity(0.1),
-                                            borderRadius: BorderRadius.circular(10),
-                                            border: Border.all(
-                                              color: Colors.white.withOpacity(0.2),
-                                            ),
-                                          ),
-                                          child: InkWell(
-                                            onTap: _toggleSelectAll,
-                                            child: Row(
-                                              children: [
-                                                Checkbox(
-                                                  value: allVisibleSelected,
-                                                  onChanged: (_) => _toggleSelectAll(),
-                                                  activeColor: Colors.white,
-                                                  checkColor: Colors.blue.shade800,
-                                                  side: BorderSide(color: Colors.white.withOpacity(0.7)),
-                                                ),
-                                                const SizedBox(width: 8),
-                                                Expanded(
-                                                  child: Column(
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                    mainAxisSize: MainAxisSize.min,
-                                                    children: [
-                                                      Text(
-                                                        allVisibleSelected ? l10n.deselectAll : l10n.selectAll,
-                                                        style: const TextStyle(
-                                                          fontWeight: FontWeight.bold, 
-                                                          fontSize: 14,
-                                                          color: Colors.white,
-                                                        ),
-                                                      ),
-                                                      Text(
-                                                        l10n.templatesDisplayed(_filteredTemplates.length),
-                                                        style: TextStyle(
-                                                          fontSize: 12,
-                                                          color: Colors.white.withOpacity(0.7),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    
-                                    if (hasVisibleItems) const SizedBox(width: 12),
-
-                                    // Arama alanı
-                                    Expanded(
-                                      flex: 3,
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          color: Colors.white.withOpacity(0.15),
-                                          borderRadius: BorderRadius.circular(12),
-                                          border: Border.all(
-                                            color: Colors.white.withOpacity(0.3),
-                                          ),
-                                        ),
-                                        child: TextField(
-                                          controller: _searchController,
-                                          style: const TextStyle(color: Colors.white, fontSize: 14),
-                                          decoration: InputDecoration(
-                                            labelText: l10n.searchCategoryTemplateLabel,
-                                            labelStyle: TextStyle(color: Colors.white.withOpacity(0.8)),
-                                            hintText: l10n.searchCategoryTemplateHint,
-                                            hintStyle: TextStyle(color: Colors.white.withOpacity(0.6)),
-                                            prefixIcon: Icon(Icons.search, color: Colors.white.withOpacity(0.8), size: 20),
-                                            border: InputBorder.none,
-                                            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                                            suffixIcon: _searchController.text.isNotEmpty
-                                                ? IconButton(
-                                                    icon: Icon(Icons.clear, color: Colors.white.withOpacity(0.8), size: 18),
-                                                    onPressed: () {
-                                                      _searchController.clear();
-                                                    },
-                                                  )
-                                                : null,
-                                          ),
-                                        ),
-                                      ),
+                                // Arama alanı
+                                Container(
+                                  decoration: BoxDecoration(
+                                    color: Colors.white.withOpacity(0.15),
+                                    borderRadius: BorderRadius.circular(12),
+                                    border: Border.all(
+                                      color: Colors.white.withOpacity(0.3),
                                     ),
-                                  ],
+                                  ),
+                                  child: TextField(
+                                    controller: _searchController,
+                                    style: const TextStyle(color: Colors.white, fontSize: 14),
+                                    decoration: InputDecoration(
+                                      labelText: l10n.searchCategoryTemplateLabel,
+                                      labelStyle: TextStyle(color: Colors.white.withOpacity(0.8)),
+                                      hintText: l10n.searchCategoryTemplateHint,
+                                      hintStyle: TextStyle(color: Colors.white.withOpacity(0.6)),
+                                      prefixIcon: Icon(Icons.search, color: Colors.white.withOpacity(0.8), size: 20),
+                                      border: InputBorder.none,
+                                      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                                      suffixIcon: _searchController.text.isNotEmpty
+                                          ? IconButton(
+                                              icon: Icon(Icons.clear, color: Colors.white.withOpacity(0.8), size: 18),
+                                              onPressed: () {
+                                                _searchController.clear();
+                                              },
+                                            )
+                                          : null,
+                                    ),
+                                  ),
                                 ),
-                                
                                 const SizedBox(height: 16),
 
-                                // 🔥 YENİ: KDS seçim hatası uyarısı
-                                if (hasKdsValidationError)
+                                // Tümünü seç/bırak
+                                if (hasVisibleItems)
                                   Container(
                                     padding: const EdgeInsets.all(12),
-                                    margin: const EdgeInsets.only(bottom: 16),
                                     decoration: BoxDecoration(
-                                      color: Colors.red.withOpacity(0.15),
-                                      borderRadius: BorderRadius.circular(8),
+                                      color: Colors.white.withOpacity(0.1),
+                                      borderRadius: BorderRadius.circular(10),
                                       border: Border.all(
-                                        color: Colors.red.withOpacity(0.3),
+                                        color: Colors.white.withOpacity(0.2),
                                       ),
                                     ),
-                                    child: Row(
-                                      children: [
-                                        Icon(
-                                          Icons.warning,
-                                          color: Colors.red.withOpacity(0.8),
-                                          size: 20,
+                                    child: CheckboxListTile(
+                                      title: Text(
+                                        allVisibleSelected ? l10n.deselectAll : l10n.selectAll,
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.bold, 
+                                          fontSize: 14,
+                                          color: Colors.white,
                                         ),
-                                        const SizedBox(width: 8),
-                                        Expanded(
-                                          child: Text(
-                                            'Seçilen kategoriler için KDS ekranı seçimi zorunludur.',
-                                            style: TextStyle(
-                                              color: Colors.red.withOpacity(0.9),
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.w500,
-                                            ),
-                                          ),
+                                      ),
+                                      subtitle: Text(
+                                        l10n.templatesDisplayed(_filteredTemplates.length),
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          color: Colors.white.withOpacity(0.7),
                                         ),
-                                      ],
+                                      ),
+                                      value: allVisibleSelected,
+                                      onChanged: (_) => _toggleSelectAll(),
+                                      controlAffinity: ListTileControlAffinity.leading,
+                                      dense: true,
+                                      contentPadding: EdgeInsets.zero,
+                                      activeColor: Colors.white,
+                                      checkColor: Colors.blue.shade800,
+                                      side: BorderSide(color: Colors.white.withOpacity(0.7)),
                                     ),
                                   ),
 
-                                // 🔥 YENİ: Template listesi header
-                                if (hasVisibleItems)
-                                  Container(
-                                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                                    decoration: BoxDecoration(
-                                      color: Colors.white.withOpacity(0.15),
-                                      borderRadius: BorderRadius.circular(8),
-                                      border: Border.all(
-                                        color: Colors.white.withOpacity(0.3),
-                                      ),
-                                    ),
-                                    child: Row(
-                                      children: [
-                                        Expanded(
-                                          flex: 3,
-                                          child: Text(
-                                            'Kategori Adı',
-                                            style: TextStyle(
-                                              fontSize: 13,
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.white.withOpacity(0.9),
-                                            ),
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          width: 160,
-                                          child: Text(
-                                            'KDS Ekranı',
-                                            style: TextStyle(
-                                              fontSize: 13,
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.white.withOpacity(0.9),
-                                            ),
-                                            textAlign: TextAlign.center,
-                                          ),
-                                        ),
-                                      ],
+                                const SizedBox(height: 16),
+
+                                // KDS seçimi
+                                Container(
+                                  decoration: BoxDecoration(
+                                    color: Colors.white.withOpacity(0.15),
+                                    borderRadius: BorderRadius.circular(12),
+                                    border: Border.all(
+                                      color: Colors.white.withOpacity(0.3),
                                     ),
                                   ),
+                                  child: DropdownButtonFormField<int>(
+                                    value: _selectedKdsScreenId,
+                                    isExpanded: true,
+                                    dropdownColor: Colors.blue.shade800,
+                                    style: const TextStyle(color: Colors.white, fontSize: 14),
+                                    decoration: InputDecoration(
+                                      labelText: l10n.kdsScreenLabelRequired,
+                                      labelStyle: TextStyle(color: Colors.white.withOpacity(0.8)),
+                                      border: InputBorder.none,
+                                      prefixIcon: Icon(Icons.kitchen_outlined, color: Colors.white.withOpacity(0.8), size: 20),
+                                      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                                    ),
+                                    hint: Text(
+                                      l10n.kdsScreenNotSelected, 
+                                      style: TextStyle(color: Colors.white.withOpacity(0.6), fontSize: 14)
+                                    ),
+                                    icon: Icon(Icons.arrow_drop_down, color: Colors.white.withOpacity(0.8)),
+                                    items: _kdsScreens.map((kds) {
+                                      return DropdownMenuItem<int>(
+                                        value: kds.id,
+                                        child: Text(
+                                          kds.name, 
+                                          overflow: TextOverflow.ellipsis, 
+                                          style: const TextStyle(fontSize: 14)
+                                        ),
+                                      );
+                                    }).toList(),
+                                    onChanged: (value) {
+                                      setState(() => _selectedKdsScreenId = value);
+                                    },
+                                    validator: (value) {
+                                      if (_selectedTemplates.isNotEmpty && value == null) {
+                                        return l10n.kdsScreenValidator;
+                                      }
+                                      return null;
+                                    },
+                                  ),
+                                ),
+
+                                if (hasVisibleItems) const SizedBox(height: 16),
 
                                 // Template listesi
                                 Container(
@@ -695,9 +526,7 @@ class _CategoryTemplateSelectionDialogState
                                               itemCount: _filteredTemplates.length,
                                               itemBuilder: (context, index) {
                                                 final template = _filteredTemplates[index];
-                                                final templateId = template['id'] as int;
-                                                final bool isSelected = _selectedTemplates.contains(templateId);
-                                                
+                                                final bool isSelected = _selectedTemplates.contains(template['id']);
                                                 return Container(
                                                   margin: const EdgeInsets.only(bottom: 4),
                                                   decoration: BoxDecoration(
@@ -711,64 +540,36 @@ class _CategoryTemplateSelectionDialogState
                                                           : Colors.transparent,
                                                     ),
                                                   ),
-                                                  child: Padding(
-                                                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                                                    child: Row(
-                                                      children: [
-                                                        // 🔥 Checkbox ve template bilgisi
-                                                        Expanded(
-                                                          flex: 3,
-                                                          child: Row(
-                                                            children: [
-                                                              Checkbox(
-                                                                value: isSelected,
-                                                                onChanged: (bool? value) {
-                                                                  if (value != null) {
-                                                                    _toggleTemplateSelection(templateId);
-                                                                  }
-                                                                },
-                                                                activeColor: Colors.white,
-                                                                checkColor: Colors.blue.shade800,
-                                                                side: BorderSide(color: Colors.white.withOpacity(0.7)),
-                                                              ),
-                                                              const SizedBox(width: 8),
-                                                              Expanded(
-                                                                child: Column(
-                                                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                                                  mainAxisSize: MainAxisSize.min,
-                                                                  children: [
-                                                                    Text(
-                                                                      template['name'] ?? '...',
-                                                                      style: const TextStyle(
-                                                                        fontWeight: FontWeight.w500,
-                                                                        fontSize: 13,
-                                                                        color: Colors.white,
-                                                                      ),
-                                                                      overflow: TextOverflow.ellipsis,
-                                                                    ),
-                                                                    if (template['icon_name'] != null && 
-                                                                        template['icon_name'].toString().isNotEmpty) ...[
-                                                                      const SizedBox(height: 2),
-                                                                      Text(
-                                                                        l10n.iconInfo(template['icon_name']),
-                                                                        style: TextStyle(
-                                                                          fontSize: 10,
-                                                                          color: Colors.white.withOpacity(0.7),
-                                                                        ),
-                                                                        overflow: TextOverflow.ellipsis,
-                                                                      ),
-                                                                    ],
-                                                                  ],
-                                                                ),
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        ),
-                                                        
-                                                        // 🔥 YENİ: KDS seçim dropdown'u
-                                                        _buildKdsDropdownForTemplate(templateId, l10n),
-                                                      ],
+                                                  child: CheckboxListTile(
+                                                    title: Text(
+                                                      template['name'] ?? '...',
+                                                      style: const TextStyle(
+                                                        fontWeight: FontWeight.w500,
+                                                        fontSize: 14,
+                                                        color: Colors.white,
+                                                      ),
                                                     ),
+                                                    subtitle: template['icon_name'] != null && template['icon_name'].toString().isNotEmpty
+                                                        ? Text(
+                                                            l10n.iconInfo(template['icon_name']),
+                                                            style: TextStyle(
+                                                              fontSize: 11,
+                                                              color: Colors.white.withOpacity(0.7),
+                                                            ),
+                                                          )
+                                                        : null,
+                                                    value: isSelected,
+                                                    onChanged: (bool? value) {
+                                                      if (value != null) {
+                                                        _toggleTemplateSelection(template['id']);
+                                                      }
+                                                    },
+                                                    controlAffinity: ListTileControlAffinity.leading,
+                                                    dense: true,
+                                                    contentPadding: const EdgeInsets.symmetric(horizontal: 8.0),
+                                                    activeColor: Colors.white,
+                                                    checkColor: Colors.blue.shade800,
+                                                    side: BorderSide(color: Colors.white.withOpacity(0.7)),
                                                   ),
                                                 );
                                               },
@@ -830,7 +631,7 @@ class _CategoryTemplateSelectionDialogState
                       child: Padding(
                         padding: const EdgeInsets.only(left: 12),
                         child: ElevatedButton(
-                          onPressed: (_selectedTemplates.isEmpty || _isSubmitting || hasKdsValidationError) ? null : _createCategories,
+                          onPressed: _selectedTemplates.isEmpty || _isSubmitting ? null : _createCategories,
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.white,
                             foregroundColor: Colors.blue.shade700,

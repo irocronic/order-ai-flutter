@@ -3898,15 +3898,15 @@
   "tooltipUnmute": "Unmute",
   "tooltipMute": "Mute",
   "tooltipReplayGuide": "Replay Guide",
-  "languageNameTr": "Turkish",
+  "languageNameTr": "Türkçe",
   "languageNameEn": "English",
-  "languageNameDe": "German",
-  "languageNameEs": "Spanish",
-  "languageNameAr": "Arabic",
-  "languageNameIt": "Italian",
-  "languageNameZh": "Chinese",
-  "languageNameRu": "Russian",
-  "languageNameFr": "French",
+  "languageNameDe": "Deutsch",
+  "languageNameEs": "Español",
+  "languageNameAr": "العربية",
+  "languageNameIt": "Italiano",
+  "languageNameZh": "中文",
+  "languageNameRu": "Русский",
+  "languageNameFr": "Français",
   "currencyNameTRY": "Turkish Lira (₺)",
   "currencyNameUSD": "US Dollar ($)",
   "currencyNameEUR": "Euro (€)",
@@ -5184,5 +5184,46 @@
   "timeZoneNameFiji": "Fiji (GMT+12)",
   "timeZoneNameAzores": "Azores (GMT-1)",
   "timeZoneNameCanary": "Canary Islands (GMT+0)",
-  "timeZoneNameReykjavik": "Reykjavik (GMT+0)"
+  "timeZoneNameReykjavik": "Reykjavik (GMT+0)",
+  "setupCategoriesLoadingTemplates": "Loading templates...",
+  "getPriceFromRecipe": "Reçeteden fiyat al",
+  "selectCategoryLabel": "Select Category",
+  "selectCategoryHint": "Please choose a category",
+  "loadingProductTemplates": "Loading product templates...",
+  "deselectAllLabel": "Deselect All",
+  "selectAllLabel": "Select All",
+  "productsListedCount": "Products listed: {count}",
+  "@productsListedCount": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "noProductTemplatesFound": "No product templates found",
+  "noProductsMatchSearch": "No products match your search",
+  "customProductLabel": "Custom product",
+  "manageVariants": "Manage variants ({count})",
+  "@manageVariants": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "variantImagesIncomplete": "Variant images incomplete",
+  "selectProductButton": "Select Product",
+  "addSelectedProducts": "Add {count} selected products",
+  "@addSelectedProducts": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "loadingVariants": "Varyantlar yükleniyor...",
+  "variantManagementSubtitle": "Ürün varyantlarını yönet",
+  "totalVariantsInfo": "Toplam {count} varyant",
+  "@totalVariantsInfo": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "variantManagementHint": "Değişiklikleri kaydetmek için tamamla"
 }

@@ -1,6 +1,7 @@
+// lib/widgets/setup_wizard/menu_items/components/template_list_widget.dart
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart'; // EKLENDİ
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../../services/user_session.dart';
 import '../models/variant_template_config.dart';
@@ -49,11 +50,11 @@ class TemplateListWidget extends StatelessWidget {
   }) : super(key: key);
 
   Future<void> _openCustomProductDialog(BuildContext context) async {
-    final l10n = AppLocalizations.of(context)!; // EKLENDİ
+    final l10n = AppLocalizations.of(context)!;
     if (targetCategoryId == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(l10n.selectCategoryFirst), // GÜNCELLENDİ
+          content: Text(l10n.selectCategoryFirst),
           backgroundColor: Colors.red,
         ),
       );
@@ -78,19 +79,19 @@ class TemplateListWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!; // EKLENDİ
+    final l10n = AppLocalizations.of(context)!;
     if (selectedCategoryName == null) {
       return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.category_outlined, size: 32, color: Colors.grey.shade500),
+            Icon(Icons.category_outlined, size: 32, color: Colors.white.withOpacity(0.7)),
             const SizedBox(height: 8),
             Text(
-              l10n.selectCategoryFirst, // GÜNCELLENDİ
+              l10n.selectCategoryFirst,
               style: TextStyle(
                 fontSize: 12,
-                color: Colors.grey.shade600,
+                color: Colors.white.withOpacity(0.9),
                 fontWeight: FontWeight.w500,
               ),
               textAlign: TextAlign.center,
@@ -110,15 +111,15 @@ class TemplateListWidget extends StatelessWidget {
               height: 24,
               child: CircularProgressIndicator(
                 strokeWidth: 2,
-                valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
               ),
             ),
             const SizedBox(height: 8),
             Text(
-              l10n.loadingTemplates, // GÜNCELLENDİ
+              l10n.loadingTemplates,
               style: TextStyle(
                 fontSize: 12,
-                color: Colors.grey.shade600,
+                color: Colors.white.withOpacity(0.9),
               ),
             ),
           ],
@@ -131,13 +132,13 @@ class TemplateListWidget extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.inventory_2_outlined, size: 32, color: Colors.grey.shade500),
+            Icon(Icons.inventory_2_outlined, size: 32, color: Colors.white.withOpacity(0.7)),
             const SizedBox(height: 8),
             Text(
-              l10n.noTemplatesFoundForCategory, // GÜNCELLENDİ
+              l10n.noTemplatesFoundForCategory,
               style: TextStyle(
                 fontSize: 12,
-                color: Colors.grey.shade600,
+                color: Colors.white.withOpacity(0.9),
               ),
               textAlign: TextAlign.center,
             ),
@@ -145,7 +146,7 @@ class TemplateListWidget extends StatelessWidget {
             ElevatedButton.icon(
               onPressed: () => _openCustomProductDialog(context),
               icon: const Icon(Icons.add_circle_outline, size: 18),
-              label: Text(l10n.addCustomProduct), // GÜNCELLENDİ
+              label: Text(l10n.addCustomProduct),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.green,
                 foregroundColor: Colors.white,
@@ -162,13 +163,13 @@ class TemplateListWidget extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.search_off, size: 24, color: Colors.grey.shade500),
+            Icon(Icons.search_off, size: 24, color: Colors.white.withOpacity(0.7)),
             const SizedBox(height: 6),
             Text(
-              l10n.noProductsFoundForSearchCriteria, // GÜNCELLENDİ
+              l10n.noProductsFoundForSearchCriteria,
               style: TextStyle(
                 fontSize: 11,
-                color: Colors.grey.shade600,
+                color: Colors.white.withOpacity(0.9),
               ),
               textAlign: TextAlign.center,
             ),
@@ -176,7 +177,7 @@ class TemplateListWidget extends StatelessWidget {
             ElevatedButton.icon(
               onPressed: () => _openCustomProductDialog(context),
               icon: const Icon(Icons.add_circle_outline, size: 18),
-              label: Text(l10n.addCustomProduct), // GÜNCELLENDİ
+              label: Text(l10n.addCustomProduct),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.green,
                 foregroundColor: Colors.white,
@@ -198,9 +199,9 @@ class TemplateListWidget extends StatelessWidget {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: Colors.white.withOpacity(0.15),
               border: Border(
-                bottom: BorderSide(color: Colors.grey.shade300),
+                bottom: BorderSide(color: Colors.white.withOpacity(0.3)),
               ),
             ),
             child: Row(
@@ -212,18 +213,19 @@ class TemplateListWidget extends StatelessWidget {
                     value: allVisibleSelected,
                     onChanged: (_) => onToggleSelectAll(),
                     materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                    activeColor: Colors.blue,
-                    checkColor: Colors.white,
+                    activeColor: Colors.white,
+                    checkColor: Colors.blue.shade700,
+                    side: BorderSide(color: Colors.white.withOpacity(0.8)),
                   ),
                 ),
                 const SizedBox(width: 6),
                 Expanded(
                   child: Text(
-                    allVisibleSelected ? l10n.deselectAll : l10n.selectAll, // GÜNCELLENDİ
+                    allVisibleSelected ? l10n.deselectAll : l10n.selectAll,
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 12,
-                      color: Colors.black87,
+                      color: Colors.white,
                     ),
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
@@ -233,14 +235,14 @@ class TemplateListWidget extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                   decoration: BoxDecoration(
-                    color: Colors.blue.shade100,
+                    color: Colors.white.withOpacity(0.2),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Text(
                     '${filteredTemplates.length}',
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 10,
-                      color: Colors.blue.shade700,
+                      color: Colors.white,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -253,9 +255,9 @@ class TemplateListWidget extends StatelessWidget {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
             decoration: BoxDecoration(
-              color: Colors.green.withOpacity(0.05),
+              color: Colors.green.withOpacity(0.2),
               border: Border(
-                bottom: BorderSide(color: Colors.grey.shade300),
+                bottom: BorderSide(color: Colors.white.withOpacity(0.3)),
               ),
             ),
             child: SizedBox(
@@ -264,7 +266,7 @@ class TemplateListWidget extends StatelessWidget {
                 onPressed: () => _openCustomProductDialog(context),
                 icon: const Icon(Icons.add_circle_outline, size: 16),
                 label: Text(
-                  l10n.addNewProduct, // GÜNCELLENDİ
+                  l10n.addNewProduct,
                   style: const TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.bold,
@@ -284,191 +286,226 @@ class TemplateListWidget extends StatelessWidget {
           ),
         
         Expanded(
-          child: ListView.builder(
-            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
-            itemCount: filteredTemplates.length,
-            itemBuilder: (context, index) {
-              final template = filteredTemplates[index];
-              final templateId = template['id'] as int;
-              final isSelected = selectedTemplateIds.contains(templateId);
-              final isFromRecipe = templateRecipeStatus[templateId] ?? true;
-              final priceController = templatePriceControllers[templateId];
-              final variantConfig = templateVariantConfigs[templateId];
-              
-              final currentLimits = UserSession.limitsNotifier.value;
-              int totalAfterThisSelection = currentMenuItemCount + selectedTemplateIds.length + (isSelected ? 0 : 1);
-              bool wouldExceedLimit = !isSelected && totalAfterThisSelection > currentLimits.maxMenuItems;
-              
-              return Container(
-                margin: const EdgeInsets.symmetric(vertical: 1),
-                decoration: BoxDecoration(
-                  color: isSelected ? Colors.blue.shade50 : Colors.white,
-                  border: Border.all(
-                    color: isSelected ? Colors.blue.shade200 : Colors.transparent,
-                  ),
-                  borderRadius: BorderRadius.circular(4),
-                ),
-                child: Column(
-                  children: [
-                    CheckboxListTile(
-                      title: Text(
-                        template['name'] ?? l10n.unnamedProduct, // GÜNCELLENDİ
-                        style: TextStyle(
-                          fontWeight: FontWeight.w500,
-                          fontSize: 12,
-                          color: wouldExceedLimit 
-                              ? Colors.grey.shade500 
-                              : Colors.black87,
-                        ),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      subtitle: wouldExceedLimit 
-                          ? Text(
-                              l10n.limitWillBeExceeded, // GÜNCELLENDİ
-                              style: const TextStyle(
-                                color: Colors.red,
-                                fontSize: 9,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            )
-                          : null,
-                      value: isSelected,
-                      onChanged: wouldExceedLimit ? null : (bool? value) {
-                        if (value != null) {
-                          onToggleTemplateSelection(templateId);
-                        }
-                      },
-                      controlAffinity: ListTileControlAffinity.leading,
-                      dense: true,
-                      contentPadding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 0),
-                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                      visualDensity: VisualDensity.compact,
-                      activeColor: Colors.blue,
-                      checkColor: Colors.white,
-                      secondary: isSelected ? ConstrainedBox(
-                        constraints: const BoxConstraints(maxWidth: 100), // Genişlik sınırını artırdım
-                        child: InkWell(
-                          onTap: () => onToggleRecipeStatus(templateId),
-                          borderRadius: BorderRadius.circular(16),
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3), // Padding azaltıldı
-                            decoration: BoxDecoration(
-                              color: isFromRecipe 
-                                  ? Colors.green.shade100 
-                                  : Colors.orange.shade100,
-                              borderRadius: BorderRadius.circular(16),
-                              border: Border.all(
-                                color: isFromRecipe 
-                                    ? Colors.green.shade300 
-                                    : Colors.orange.shade300,
-                              ),
-                            ),
-                            child: Text(
-                              isFromRecipe ? l10n.productTypeRecipe : l10n.productTypeManual, // GÜNCELLENDİ
-                              style: TextStyle(
-                                fontSize: 8, // Font boyutu azaltıldı
-                                fontWeight: FontWeight.bold,
-                                color: isFromRecipe 
-                                    ? Colors.green.shade700 
-                                    : Colors.orange.shade700,
-                              ),
-                              overflow: TextOverflow.ellipsis, // Taşma kontrolü eklendi
-                              maxLines: 1,
-                            ),
-                          ),
-                        ),
-                      ) : null,
+          child: Container(
+            decoration: BoxDecoration(
+              // ✅ DÜZELTME: Beyaz arka plan yerine şeffaf mavi gradient
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  Colors.white.withOpacity(0.05), 
+                  Colors.white.withOpacity(0.1),
+                ],
+              ),
+              borderRadius: const BorderRadius.only(
+                bottomLeft: Radius.circular(8),
+                bottomRight: Radius.circular(8),
+              ),
+            ),
+            child: ListView.builder(
+              padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+              itemCount: filteredTemplates.length,
+              itemBuilder: (context, index) {
+                final template = filteredTemplates[index];
+                final templateId = template['id'] as int;
+                final isSelected = selectedTemplateIds.contains(templateId);
+                final isFromRecipe = templateRecipeStatus[templateId] ?? true;
+                final priceController = templatePriceControllers[templateId];
+                final variantConfig = templateVariantConfigs[templateId];
+                
+                final currentLimits = UserSession.limitsNotifier.value;
+                int totalAfterThisSelection = currentMenuItemCount + selectedTemplateIds.length + (isSelected ? 0 : 1);
+                bool wouldExceedLimit = !isSelected && totalAfterThisSelection > currentLimits.maxMenuItems;
+                
+                return Container(
+                  margin: const EdgeInsets.symmetric(vertical: 1),
+                  decoration: BoxDecoration(
+                    // ✅ DÜZELTME: Ürün container'larının arka planı da şeffaf mavi tonlarında
+                    color: isSelected 
+                        ? Colors.white.withOpacity(0.25)
+                        : Colors.white.withOpacity(0.1),
+                    border: Border.all(
+                      color: isSelected 
+                          ? Colors.white.withOpacity(0.5)
+                          : Colors.white.withOpacity(0.2),
                     ),
-                    
-                    if (isSelected && !isFromRecipe && priceController != null)
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(32, 0, 12, 8),
-                        child: TextFormField(
-                          controller: priceController,
-                          decoration: InputDecoration(
-                            labelText: '${l10n.priceLabel} (${l10n.currencySymbol.trim()})', // GÜNCELLENDİ
-                            hintText: l10n.menuItemPriceHint, // GÜNCELLENDİ
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(6),
-                            ),
-                            contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-                            isDense: true,
-                            prefixText: l10n.currencySymbol, // GÜNCELLENDİ
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                  child: Column(
+                    children: [
+                      CheckboxListTile(
+                        title: Text(
+                          template['name'] ?? l10n.unnamedProduct,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 12,
+                            color: wouldExceedLimit 
+                                ? Colors.white.withOpacity(0.5) 
+                                : Colors.white,
                           ),
-                          style: const TextStyle(fontSize: 12),
-                          keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                          inputFormatters: [
-                            FilteringTextInputFormatter.allow(RegExp(r'^\d*[\.,]?\d{0,2}'))
-                          ],
-                          onChanged: (value) {
-                            // State update will be handled by parent
-                          },
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
                         ),
+                        subtitle: wouldExceedLimit 
+                            ? Text(
+                                l10n.limitWillBeExceeded,
+                                style: const TextStyle(
+                                  color: Colors.red,
+                                  fontSize: 9,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              )
+                            : null,
+                        value: isSelected,
+                        onChanged: wouldExceedLimit ? null : (bool? value) {
+                          if (value != null) {
+                            onToggleTemplateSelection(templateId);
+                          }
+                        },
+                        controlAffinity: ListTileControlAffinity.leading,
+                        dense: true,
+                        contentPadding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 0),
+                        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        visualDensity: VisualDensity.compact,
+                        activeColor: Colors.white,
+                        checkColor: Colors.blue.shade700,
+                        side: BorderSide(color: Colors.white.withOpacity(0.8)),
+                        secondary: isSelected ? ConstrainedBox(
+                          constraints: const BoxConstraints(maxWidth: 100),
+                          child: InkWell(
+                            onTap: () => onToggleRecipeStatus(templateId),
+                            borderRadius: BorderRadius.circular(16),
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+                              decoration: BoxDecoration(
+                                color: isFromRecipe 
+                                    ? Colors.green.withOpacity(0.3)
+                                    : Colors.orange.withOpacity(0.3),
+                                borderRadius: BorderRadius.circular(16),
+                                border: Border.all(
+                                  color: isFromRecipe 
+                                      ? Colors.green.withOpacity(0.5) 
+                                      : Colors.orange.withOpacity(0.5),
+                                ),
+                              ),
+                              child: Text(
+                                isFromRecipe ? l10n.productTypeRecipe : l10n.productTypeManual,
+                                style: TextStyle(
+                                  fontSize: 8,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                              ),
+                            ),
+                          ),
+                        ) : null,
                       ),
-                    
-                    if (isSelected && variantConfig != null)
-                      Container(
-                        margin: const EdgeInsets.fromLTRB(32, 8, 12, 8),
-                        padding: const EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                          color: Colors.blue.withOpacity(0.05),
-                          borderRadius: BorderRadius.circular(6),
-                          border: Border.all(color: Colors.blue.withOpacity(0.2)),
+                      
+                      if (isSelected && !isFromRecipe && priceController != null)
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(32, 0, 12, 8),
+                          child: TextFormField(
+                            controller: priceController,
+                            decoration: InputDecoration(
+                              labelText: '${l10n.priceLabel} (${l10n.currencySymbol.trim()})',
+                              hintText: l10n.menuItemPriceHint,
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(6),
+                                borderSide: BorderSide(color: Colors.white.withOpacity(0.5)),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(6),
+                                borderSide: BorderSide(color: Colors.white.withOpacity(0.5)),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(6),
+                                borderSide: const BorderSide(color: Colors.white, width: 2),
+                              ),
+                              contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                              isDense: true,
+                              prefixText: l10n.currencySymbol,
+                              labelStyle: const TextStyle(color: Colors.white),
+                              hintStyle: TextStyle(color: Colors.white.withOpacity(0.7)),
+                              prefixStyle: const TextStyle(color: Colors.white),
+                              filled: true,
+                              fillColor: Colors.white.withOpacity(0.1),
+                            ),
+                            style: const TextStyle(fontSize: 12, color: Colors.white),
+                            keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                            inputFormatters: [
+                              FilteringTextInputFormatter.allow(RegExp(r'^\d*[\.,]?\d{0,2}'))
+                            ],
+                            onChanged: (value) {
+                              // State update will be handled by parent
+                            },
+                          ),
                         ),
-                        child: Row(
-                          children: [
-                            Icon(Icons.tune, color: Colors.blue.shade700, size: 16),
-                            const SizedBox(width: 8),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    l10n.variants, // GÜNCELLENDİ
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.blue.shade700,
-                                    ),
-                                  ),
-                                  if (variantConfig.variants.isNotEmpty) ...[
-                                    const SizedBox(height: 4),
+                      
+                      if (isSelected && variantConfig != null)
+                        Container(
+                          margin: const EdgeInsets.fromLTRB(32, 8, 12, 8),
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: Colors.white.withOpacity(0.15),
+                            borderRadius: BorderRadius.circular(6),
+                            border: Border.all(color: Colors.white.withOpacity(0.3)),
+                          ),
+                          child: Row(
+                            children: [
+                              Icon(Icons.tune, color: Colors.white, size: 16),
+                              const SizedBox(width: 8),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
                                     Text(
-                                      l10n.variantsAddedCount(variantConfig.variants.length), // GÜNCELLENDİ
-                                      style: TextStyle(
-                                        fontSize: 10,
-                                        color: Colors.green.shade600,
+                                      l10n.variants,
+                                      style: const TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
                                       ),
                                     ),
+                                    if (variantConfig.variants.isNotEmpty) ...[
+                                      const SizedBox(height: 4),
+                                      Text(
+                                        l10n.variantsAddedCount(variantConfig.variants.length),
+                                        style: TextStyle(
+                                          fontSize: 10,
+                                          color: Colors.green.shade200,
+                                        ),
+                                      ),
+                                    ],
                                   ],
-                                ],
+                                ),
                               ),
-                            ),
-                            ElevatedButton.icon(
-                              onPressed: () => onOpenVariantManagement(templateId),
-                              icon: Icon(
-                                variantConfig.variants.isEmpty ? Icons.add : Icons.edit,
-                                size: 14,
+                              ElevatedButton.icon(
+                                onPressed: () => onOpenVariantManagement(templateId),
+                                icon: Icon(
+                                  variantConfig.variants.isEmpty ? Icons.add : Icons.edit,
+                                  size: 14,
+                                ),
+                                label: Text(
+                                  variantConfig.variants.isEmpty ? l10n.add : l10n.edit,
+                                  style: const TextStyle(fontSize: 11),
+                                ),
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.blue,
+                                  foregroundColor: Colors.white,
+                                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                  minimumSize: const Size(0, 0),
+                                ),
                               ),
-                              label: Text(
-                                variantConfig.variants.isEmpty ? l10n.add : l10n.edit, // GÜNCELLENDİ
-                                style: const TextStyle(fontSize: 11),
-                              ),
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.blue,
-                                foregroundColor: Colors.white,
-                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                                minimumSize: const Size(0, 0),
-                              ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
-                  ],
-                ),
-              );
-            },
+                    ],
+                  ),
+                );
+              },
+            ),
           ),
         ),
       ],

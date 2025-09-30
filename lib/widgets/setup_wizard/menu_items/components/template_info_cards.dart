@@ -22,18 +22,22 @@ class TemplateInfoCards extends StatelessWidget {
 
     return Column(
       children: [
-        // Limit bilgisi
+        // Limit bilgisi - mavi gradient için güncellendi
         Container(
           padding: const EdgeInsets.all(8.0),
           margin: const EdgeInsets.only(bottom: 12.0),
           decoration: BoxDecoration(
-            color: Colors.blue.withOpacity(0.1),
+            color: Colors.white.withOpacity(0.15),
             borderRadius: BorderRadius.circular(6.0),
-            border: Border.all(color: Colors.blue.withOpacity(0.3)),
+            border: Border.all(color: Colors.white.withOpacity(0.3)),
           ),
           child: Row(
             children: [
-              const Icon(Icons.info_outline, color: Colors.blue, size: 16),
+              Icon(
+                Icons.info_outline, 
+                color: Colors.white.withOpacity(0.9), 
+                size: 16
+              ),
               const SizedBox(width: 6),
               Expanded(
                 child: Text(
@@ -43,7 +47,7 @@ class TemplateInfoCards extends StatelessWidget {
                   ),
                   style: TextStyle(
                     fontSize: 11,
-                    color: Colors.blue.shade700,
+                    color: Colors.white.withOpacity(0.95),
                     fontWeight: FontWeight.w500,
                   ),
                   maxLines: 2,
@@ -54,19 +58,23 @@ class TemplateInfoCards extends StatelessWidget {
           ),
         ),
         
-        // Varyant durumu özeti
+        // Varyant durumu özeti - mavi gradient için güncellendi
         if (selectedTemplateIds.isNotEmpty)
           Container(
             padding: const EdgeInsets.all(8.0),
             margin: const EdgeInsets.only(bottom: 12.0),
             decoration: BoxDecoration(
-              color: Colors.green.withOpacity(0.1),
+              color: Colors.white.withOpacity(0.2),
               borderRadius: BorderRadius.circular(6.0),
-              border: Border.all(color: Colors.green.withOpacity(0.3)),
+              border: Border.all(color: Colors.white.withOpacity(0.4)),
             ),
             child: Row(
               children: [
-                const Icon(Icons.tune, color: Colors.green, size: 16),
+                Icon(
+                  Icons.tune, 
+                  color: Colors.white.withOpacity(0.9), 
+                  size: 16
+                ),
                 const SizedBox(width: 6),
                 Expanded(
                   child: Builder(
@@ -87,7 +95,7 @@ class TemplateInfoCards extends StatelessWidget {
                         l10n.totalVariantsInfo(totalVariants.toString()) + photoText,
                         style: TextStyle(
                           fontSize: 11,
-                          color: Colors.green.shade700,
+                          color: Colors.white.withOpacity(0.95),
                           fontWeight: FontWeight.w500,
                         ),
                       );

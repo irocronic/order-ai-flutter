@@ -21,18 +21,18 @@ class TemplateSelectionContent extends StatelessWidget {
   final List<dynamic> filteredTemplates;
   final Map<int, bool> templateRecipeStatus;
   final Map<int, TextEditingController> templatePriceControllers;
-  final int? targetCategoryId; // ✅ YENİ EKLENEN
-  final int businessId; // ✅ YENİ EKLENEN
-  final String token; // ✅ YENİ EKLENEN
-  final ScrollController? scrollController; // ✅ YENİ: Scroll controller
+  final int? targetCategoryId;
+  final int businessId;
+  final String token;
+  final ScrollController? scrollController;
   final Function(String?) onCategoryChanged;
   final VoidCallback onToggleSelectAll;
   final Function(int) onToggleTemplateSelection;
   final Function(int) onToggleRecipeStatus;
   final Function(int) onOpenVariantManagement;
   final VoidCallback onShowLimitReached;
-  final Function(Map<String, dynamic>) onCustomProductAdded; // ✅ YENİ EKLENEN
-  final Function(int)? onEnsureItemVisible; // ✅ YENİ: Visibility callback
+  final Function(Map<String, dynamic>) onCustomProductAdded;
+  final Function(int)? onEnsureItemVisible;
 
   const TemplateSelectionContent({
     Key? key,
@@ -47,18 +47,18 @@ class TemplateSelectionContent extends StatelessWidget {
     required this.filteredTemplates,
     required this.templateRecipeStatus,
     required this.templatePriceControllers,
-    required this.targetCategoryId, // ✅ YENİ EKLENEN
-    required this.businessId, // ✅ YENİ EKLENEN
-    required this.token, // ✅ YENİ EKLENEN
-    this.scrollController, // ✅ YENİ: Scroll controller
+    required this.targetCategoryId,
+    required this.businessId,
+    required this.token,
+    this.scrollController,
     required this.onCategoryChanged,
     required this.onToggleSelectAll,
     required this.onToggleTemplateSelection,
     required this.onToggleRecipeStatus,
     required this.onOpenVariantManagement,
     required this.onShowLimitReached,
-    required this.onCustomProductAdded, // ✅ YENİ EKLENEN
-    this.onEnsureItemVisible, // ✅ YENİ: Visibility callback
+    required this.onCustomProductAdded,
+    this.onEnsureItemVisible,
   }) : super(key: key);
 
   @override
@@ -66,7 +66,7 @@ class TemplateSelectionContent extends StatelessWidget {
     final keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
     
     return SingleChildScrollView(
-      controller: scrollController, // ✅ YENİ: Scroll controller'ı kullan
+      controller: scrollController,
       padding: const EdgeInsets.all(16.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -94,13 +94,21 @@ class TemplateSelectionContent extends StatelessWidget {
             const SizedBox(height: 12),
           ],
           
-          // Template listesi container
+          // Template listesi container - BURADA DEĞİŞİKLİK
           Container(
             height: keyboardHeight > 0 ? 200.0 : 350.0,
             decoration: BoxDecoration(
-              border: Border.all(color: Colors.grey.shade300),
+              // ✅ DÜZELTME: Beyaz arka plan yerine şeffaf mavi gradient
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  Colors.white.withOpacity(0.05),
+                  Colors.white.withOpacity(0.1),
+                ],
+              ),
+              border: Border.all(color: Colors.white.withOpacity(0.3)),
               borderRadius: BorderRadius.circular(6.0),
-              color: Colors.grey.shade50,
             ),
             child: TemplateListWidget(
               selectedCategoryName: selectedCategoryName,
@@ -112,16 +120,15 @@ class TemplateSelectionContent extends StatelessWidget {
               templatePriceControllers: templatePriceControllers,
               templateVariantConfigs: templateVariantConfigs,
               currentMenuItemCount: currentMenuItemCount,
-              targetCategoryId: targetCategoryId, // ✅ YENİ EKLENEN
-              businessId: businessId, // ✅ YENİ EKLENEN
-              token: token, // ✅ YENİ EKLENEN
+              targetCategoryId: targetCategoryId,
+              businessId: businessId,
+              token: token,
               onToggleSelectAll: onToggleSelectAll,
               onToggleTemplateSelection: onToggleTemplateSelection,
               onToggleRecipeStatus: onToggleRecipeStatus,
               onOpenVariantManagement: onOpenVariantManagement,
               onShowLimitReached: onShowLimitReached,
-              onCustomProductAdded: onCustomProductAdded, // ✅ YENİ EKLENEN
-              // ✅ KALDIRILDI: onEnsureItemVisible parametresi - TemplateListWidget'ta yok
+              onCustomProductAdded: onCustomProductAdded,
             ),
           ),
         ],

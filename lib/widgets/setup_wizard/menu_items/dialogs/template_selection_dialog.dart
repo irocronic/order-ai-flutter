@@ -606,6 +606,7 @@ class _TemplateSelectionDialogState extends State<TemplateSelectionDialog> {
     final bool everySelectedHasVariant = _validateAllSelectedItemsHaveVariants();
 
     return Dialog(
+      backgroundColor: Colors.transparent,
       insetPadding: EdgeInsets.symmetric(
         horizontal: screenWidth > 600 ? screenWidth * 0.1 : 16.0,
         vertical: keyboardHeight > 0 ? 20.0 : 40.0,
@@ -613,84 +614,238 @@ class _TemplateSelectionDialogState extends State<TemplateSelectionDialog> {
       child: Container(
         width: screenWidth > 600 ? 600 : double.infinity,
         height: dialogHeight,
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              const Color(0xFF1565C0), // Koyu mavi
+              const Color(0xFF1976D2), // Orta mavi
+              const Color(0xFF1E88E5), // Açık mavi
+            ],
+            stops: const [0.0, 0.5, 1.0],
+          ),
+          borderRadius: BorderRadius.circular(16.0),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.3),
+              blurRadius: 20,
+              offset: const Offset(0, 8),
+            ),
+          ],
+        ),
         child: Column(
           children: [
-            TemplateSelectionHeader(
-              onClose: () => Navigator.of(context).pop(),
-            ),
-            
-            Expanded(
-              child: TemplateSelectionContent(
-                currentMenuItemCount: widget.currentMenuItemCount,
-                selectedTemplateIds: selectedTemplateIds,
-                templateVariantConfigs: templateVariantConfigs,
-                availableCategories: widget.availableCategories,
-                selectedCategoryName: _selectedCategoryName,
-                searchController: _searchController,
-                isLoadingTemplates: _isLoadingTemplates,
-                allTemplates: allTemplates,
-                filteredTemplates: filteredTemplates,
-                templateRecipeStatus: templateRecipeStatus,
-                templatePriceControllers: templatePriceControllers,
-                targetCategoryId: _targetCategoryId,
-                businessId: widget.businessId,
-                token: widget.token,
-                scrollController: _scrollController,
-                onCategoryChanged: _onCategoryChanged,
-                onToggleSelectAll: _toggleSelectAll,
-                onToggleTemplateSelection: _toggleTemplateSelection,
-                onToggleRecipeStatus: _toggleRecipeStatus,
-                onOpenVariantManagement: _openVariantManagementDialog,
-                onShowLimitReached: _showLimitReachedDialog,
-                onCustomProductAdded: _onCustomProductAdded,
+            // Header with gradient and glass effect
+            Container(
+              height: 70,
+              padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 12.0),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    Colors.white.withOpacity(0.2),
+                    Colors.white.withOpacity(0.1),
+                  ],
+                ),
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(16.0),
+                  topRight: Radius.circular(16.0),
+                ),
+                border: Border(
+                  bottom: BorderSide(
+                    color: Colors.white.withOpacity(0.2),
+                    width: 1,
+                  ),
+                ),
+              ),
+              child: Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.2),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Icon(
+                      Icons.auto_awesome,
+                      color: Colors.white,
+                      size: 24,
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Text(
+                      l10n.addProductFromTemplateTitle,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        letterSpacing: 0.5,
+                      ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: IconButton(
+                      onPressed: () => Navigator.of(context).pop(),
+                      icon: const Icon(Icons.close, color: Colors.white),
+                      padding: const EdgeInsets.all(8),
+                      constraints: const BoxConstraints(minWidth: 40, minHeight: 40),
+                    ),
+                  ),
+                ],
               ),
             ),
             
-            // ✅ GÜNCELLEME: Footer kısmında hata mesajı mantığı güncellendi
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      TextButton(
-                        onPressed: () => Navigator.of(context).pop(),
-                        child: Text(l10n.dialogButtonCancel),
-                      ),
-                      const SizedBox(width: 8),
-                      ElevatedButton(
-                        onPressed: _isButtonEnabled ? () {
-                          if (!_validateVariantImages()) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text('Varyant fotoğrafları eksik. Lütfen kontrol edin.'),
-                                backgroundColor: Colors.red,
-                              ),
-                            );
-                            return;
-                          }
-                          final result = _prepareResultData();
-                          Navigator.of(context).pop(result);
-                        } : null,
-                        child: Text(l10n.templateAddSelectedButton),
-                      ),
-                    ],
+            // Content with glass effect
+            Expanded(
+              child: Container(
+                margin: const EdgeInsets.all(16.0),
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.15), // ✅ Daha az şeffaflık
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(
+                    color: Colors.white.withOpacity(0.3), // ✅ Daha opak border
+                    width: 1,
                   ),
-                  // ✅ YENİ: Koşullu hata mesajı - sadece reçeteli ürünlerde varyant eksikse gösterilir
-                  if (!_isButtonEnabled && selectedTemplateIds.isNotEmpty && !everySelectedHasVariant)
-                    Padding(
-                      padding: const EdgeInsets.only(top: 8.0),
-                      child: Text(
-                        l10n.templateVariantRequiredError,
-                        style: TextStyle(
-                            color: Theme.of(context).colorScheme.error,
-                            fontSize: 12),
-                        textAlign: TextAlign.right,
-                      ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.1),
+                      blurRadius: 8,
+                      offset: const Offset(0, 2),
                     ),
-                ],
+                  ],
+                ),
+                child: TemplateSelectionContent(
+                  currentMenuItemCount: widget.currentMenuItemCount,
+                  selectedTemplateIds: selectedTemplateIds,
+                  templateVariantConfigs: templateVariantConfigs,
+                  availableCategories: widget.availableCategories,
+                  selectedCategoryName: _selectedCategoryName,
+                  searchController: _searchController,
+                  isLoadingTemplates: _isLoadingTemplates,
+                  allTemplates: allTemplates,
+                  filteredTemplates: filteredTemplates,
+                  templateRecipeStatus: templateRecipeStatus,
+                  templatePriceControllers: templatePriceControllers,
+                  targetCategoryId: _targetCategoryId,
+                  businessId: widget.businessId,
+                  token: widget.token,
+                  scrollController: _scrollController,
+                  onCategoryChanged: _onCategoryChanged,
+                  onToggleSelectAll: _toggleSelectAll,
+                  onToggleTemplateSelection: _toggleTemplateSelection,
+                  onToggleRecipeStatus: _toggleRecipeStatus,
+                  onOpenVariantManagement: _openVariantManagementDialog,
+                  onShowLimitReached: _showLimitReachedDialog,
+                  onCustomProductAdded: _onCustomProductAdded,
+                ),
+              ),
+            ),
+            
+            // Footer with gradient
+            Container(
+              height: 80,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Colors.white.withOpacity(0.1),
+                    Colors.white.withOpacity(0.2),
+                  ],
+                ),
+                borderRadius: const BorderRadius.only(
+                  bottomLeft: Radius.circular(16.0),
+                  bottomRight: Radius.circular(16.0),
+                ),
+                border: Border(
+                  top: BorderSide(color: Colors.white.withOpacity(0.2)),
+                ),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        TextButton(
+                          onPressed: () => Navigator.of(context).pop(),
+                          style: TextButton.styleFrom(
+                            foregroundColor: Colors.white.withOpacity(0.9),
+                            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              side: BorderSide(color: Colors.white.withOpacity(0.3)),
+                            ),
+                          ),
+                          child: Text(
+                            l10n.dialogButtonCancel, 
+                            style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600)
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        ElevatedButton(
+                          onPressed: _isButtonEnabled ? () {
+                            if (!_validateVariantImages()) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text('Varyant fotoğrafları eksik. Lütfen kontrol edin.'),
+                                  backgroundColor: Colors.red,
+                                ),
+                              );
+                              return;
+                            }
+                            final result = _prepareResultData();
+                            Navigator.of(context).pop(result);
+                          } : null,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.white,
+                            foregroundColor: Colors.blue.shade700,
+                            disabledBackgroundColor: Colors.white.withOpacity(0.3),
+                            disabledForegroundColor: Colors.white.withOpacity(0.5),
+                            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            elevation: 4,
+                            shadowColor: Colors.black.withOpacity(0.3),
+                          ),
+                          child: Text(
+                            l10n.templateAddSelectedButton,
+                            style: const TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    // ✅ YENİ: Koşullu hata mesajı - sadece reçeteli ürünlerde varyant eksikse gösterilir
+                    if (!_isButtonEnabled && selectedTemplateIds.isNotEmpty && !everySelectedHasVariant)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 8.0),
+                        child: Text(
+                          l10n.templateVariantRequiredError,
+                          style: TextStyle(
+                            color: Colors.red.shade200,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500,
+                          ),
+                          textAlign: TextAlign.right,
+                        ),
+                      ),
+                  ],
+                ),
               ),
             ),
           ],

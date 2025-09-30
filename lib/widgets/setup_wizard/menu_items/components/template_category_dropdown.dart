@@ -21,24 +21,32 @@ class TemplateCategoryDropdown extends StatelessWidget {
     return DropdownButtonFormField<String>(
       value: selectedCategoryName,
       isExpanded: true,
-      dropdownColor: Colors.white,
-      iconEnabledColor: Colors.grey.shade600,
+      dropdownColor: const Color(0xFF1976D2), // ✅ Mavi ton dropdown arka planı
+      iconEnabledColor: Colors.white,
       decoration: InputDecoration(
         labelText: l10n.templateCategoryDropdownLabel,
-        border: const OutlineInputBorder(),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: BorderSide(color: Colors.white.withOpacity(0.5)),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: BorderSide(color: Colors.white.withOpacity(0.5)),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: const BorderSide(color: Colors.white, width: 2),
+        ),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
         isDense: true,
-        labelStyle: const TextStyle(color: Colors.grey),
-        enabledBorder: const OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.grey),
-        ),
-        focusedBorder: const OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.blue, width: 2),
-        ),
+        labelStyle: const TextStyle(color: Colors.white), // ✅ Beyaz label
+        hintStyle: TextStyle(color: Colors.white.withOpacity(0.7)), // ✅ Beyaz hint
+        filled: true,
+        fillColor: Colors.white.withOpacity(0.1), // ✅ Hafif beyaz arka plan
       ),
       style: const TextStyle(
         fontSize: 14,
-        color: Colors.black87,
+        color: Colors.white, // ✅ Beyaz yazı
         fontWeight: FontWeight.w500,
       ),
       items: availableCategories.map<DropdownMenuItem<String>>((category) {
@@ -51,7 +59,7 @@ class TemplateCategoryDropdown extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
               style: const TextStyle(
                 fontSize: 14,
-                color: Colors.black87,
+                color: Colors.white, // ✅ Dropdown item'ları da beyaz
                 fontWeight: FontWeight.w500,
               ),
             ),
@@ -61,8 +69,8 @@ class TemplateCategoryDropdown extends StatelessWidget {
       onChanged: onCategoryChanged,
       hint: Text(
         l10n.templateCategoryDropdownHint,
-        style: const TextStyle(
-          color: Colors.grey,
+        style: TextStyle(
+          color: Colors.white.withOpacity(0.7), // ✅ Beyaz hint
           fontSize: 14,
         ),
       ),

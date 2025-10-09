@@ -16,24 +16,25 @@ class TemplateGalleryDialog extends StatefulWidget {
 }
 
 class _TemplateGalleryDialogState extends State<TemplateGalleryDialog> {
-  // Örnek şablon listesi. Bunu dışarıdan da alabilirsiniz.
-  final List<Template> _templates = [
-    Template(
-      name: "Business Card V1",
-      assetPath: 'assets/templates/modern_template.json',
-      previewImagePath: 'assets/previews/modern.png', 
-    ),
-    Template(
-      name: "Business Card V2",
-      assetPath: 'assets/templates/classic_template.json',
-      previewImagePath: 'assets/previews/classic.png', 
-    ),
-    Template(
-      name: "Logo V1",
-      assetPath: 'assets/templates/logo.json',
-      previewImagePath: 'assets/previews/logo.png',
-    ),
-  ];
+  List<Template> _getTemplates(AppLocalizations l10n) {
+    return [
+      Template(
+        name: l10n.businessCardV1,
+        assetPath: 'assets/templates/modern_template.json',
+        previewImagePath: 'assets/previews/modern.png', 
+      ),
+      Template(
+        name: l10n.businessCardV2,
+        assetPath: 'assets/templates/classic_template.json',
+        previewImagePath: 'assets/previews/classic.png', 
+      ),
+      Template(
+        name: l10n.logoV1,
+        assetPath: 'assets/templates/logo.json',
+        previewImagePath: 'assets/previews/logo.png',
+      ),
+    ];
+  }
 
   Future<void> _loadTemplate(BuildContext context, String assetPath) async {
     final l10n = AppLocalizations.of(context)!;
@@ -60,6 +61,7 @@ class _TemplateGalleryDialogState extends State<TemplateGalleryDialog> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final templates = _getTemplates(l10n);
     
     return AlertDialog(
       title: Text(l10n.templateGalleryTitle),
@@ -72,9 +74,9 @@ class _TemplateGalleryDialogState extends State<TemplateGalleryDialog> {
             mainAxisSpacing: 10,
             childAspectRatio: 0.8,
           ),
-          itemCount: _templates.length,
+          itemCount: templates.length,
           itemBuilder: (context, index) {
-            final template = _templates[index];
+            final template = templates[index];
             return GestureDetector(
               onTap: () => _loadTemplate(context, template.assetPath),
               child: Card(
@@ -89,7 +91,7 @@ class _TemplateGalleryDialogState extends State<TemplateGalleryDialog> {
                           template.previewImagePath,
                           fit: BoxFit.contain,
                           errorBuilder: (context, error, stackTrace) {
-                            return const Center(child: Icon(Icons.image_not_supported));
+                            return Center(child: Icon(Icons.image_not_supported, color: Colors.grey));
                           },
                         ),
                       ),

@@ -5053,44 +5053,229 @@
   "timeZoneNameCanary": "Isole Canarie (GMT+0)",
   "timeZoneNameReykjavik": "Reykjavik (GMT+0)",
   "setupCategoriesLoadingTemplates": "Caricamento dei modelli...",
-  "getPriceFromRecipe": "Reçeteden fiyat al",
-  "selectCategoryLabel": "Select Category",
-  "selectCategoryHint": "Please choose a category",
-  "loadingProductTemplates": "Loading product templates...",
-  "deselectAllLabel": "Deselect All",
-  "selectAllLabel": "Select All",
-  "productsListedCount": "Products listed: {count}",
+  "getPriceFromRecipe": "Ottieni il prezzo dalla ricetta",
+  "selectCategoryLabel": "Seleziona categoria",
+  "selectCategoryHint": "Per favore, scegli una categoria",
+  "loadingProductTemplates": "Caricamento dei modelli di prodotto...",
+  "deselectAllLabel": "Deseleziona tutto",
+  "selectAllLabel": "Seleziona tutto",
+  "productsListedCount": "Prodotti elencati: {count}",
   "@productsListedCount": {
+    "description": "Mostra il numero di prodotti elencati.",
     "placeholders": {
-      "count": {}
+      "count": { "type": "int", "example": "12" }
     }
   },
-  "noProductTemplatesFound": "No product templates found",
-  "noProductsMatchSearch": "No products match your search",
-  "customProductLabel": "Custom product",
-  "manageVariants": "Manage variants ({count})",
+  "noProductTemplatesFound": "Nessun modello di prodotto trovato",
+  "noProductsMatchSearch": "Nessun prodotto corrisponde alla tua ricerca",
+  "customProductLabel": "Prodotto personalizzato",
+  "manageVariants": "Gestisci varianti ({count})",
   "@manageVariants": {
+    "description": "Numero di varianti collegate al prodotto.",
     "placeholders": {
-      "count": {}
+      "count": { "type": "int", "example": "5" }
     }
   },
-  "variantImagesIncomplete": "Variant images incomplete",
-  "selectProductButton": "Select Product",
-  "addSelectedProducts": "Add {count} selected products",
+  "variantImagesIncomplete": "Immagini delle varianti incomplete",
+  "selectProductButton": "Seleziona prodotto",
+  "addSelectedProducts": "Aggiungi {count} prodotti selezionati",
   "@addSelectedProducts": {
+    "description": "Aggiunge i prodotti selezionati all'elenco.",
     "placeholders": {
-      "count": {}
+      "count": { "type": "int", "example": "3" }
     }
   },
-  "loadingVariants": "Varyantlar yükleniyor...",
-  "variantManagementSubtitle": "Ürün varyantlarını yönet",
-  "totalVariantsInfo": "Toplam {count} varyant",
+  "loadingVariants": "Caricamento varianti...",
+  "variantManagementSubtitle": "Gestisci varianti del prodotto",
+  "totalVariantsInfo": "Totale {count} varianti",
   "@totalVariantsInfo": {
+    "description": "Mostra il numero totale di varianti.",
     "placeholders": {
-      "count": {
+      "count": { "type": "String", "example": "8" }
+    }
+  },
+  "variantManagementHint": "Completa per salvare le modifiche",
+  "continentEurope": "Europa",
+  "continentAsia": "Asia",
+  "continentAmerica": "America",
+  "continentAfrica": "Africa",
+  "continentOceania": "Oceania",
+  "continentAtlantic": "Atlantico",
+  "timezoneIconWorld": "🌍",
+  "kdsSelectionRequiredError": "La selezione di uno schermo KDS è obbligatoria per le categorie selezionate.",
+  "kdsRequired": "KDS richiesto!",
+  "templatesLoading": "Caricamento modelli...",
+  "categoryName": "Nome della categoria",
+  "kdsScreen": "Schermo KDS",
+  "creating": "Creazione in corso...",
+  "connectivity_service_started": "Avviato.",
+  "connection_status_changed": "Stato di connessione cambiato",
+  "online": "ONLINE",
+  "offline": "OFFLINE",
+  "backend_connected": "Backend raggiungibile (online).",
+  "backend_connection_failed": "Backend irraggiungibile (considerato offline)",
+  "connectivity_service_stopped": "Fermato.",
+  "offline_save_error": "Errore durante il salvataggio offline: {error}",
+  "@offline_save_error": {
+    "placeholders": {
+      "error": {
         "type": "String"
       }
     }
   },
-  "variantManagementHint": "Değişiklikleri kaydetmek için tamamla"
+  "token_not_found": "Token non trovato",
+  "no_records_to_sync": "Nessun record da sincronizzare",
+  "sync_result_message": "Riuscito: {success}, Fallito: {failure}",
+  "@sync_result_message": {
+    "placeholders": {
+      "success": {
+        "type": "int"
+      },
+      "failure": {
+        "type": "int"
+      }
+    }
+  },
+  "fetch_locations_failed": "Impossibile recuperare le posizioni di check-in",
+  "fetch_locations_error": "Errore nel recupero delle posizioni",
+  "create_location_error": "Errore nella creazione della posizione",
+  "update_location_failed": "Impossibile aggiornare la posizione",
+  "update_location_error": "Errore nell'aggiornamento della posizione",
+  "delete_location_failed": "Impossibile eliminare la posizione",
+  "delete_location_error": "Errore nell'eliminazione della posizione",
+  "qr_code_generation_error": "Errore nella generazione del codice QR",
+  "attendance_record_error": "Errore nella creazione del record di presenza",
+  "fetch_history_failed": "Impossibile recuperare la cronologia delle presenze",
+  "fetch_history_error": "Errore nel recupero della cronologia delle presenze",
+  "checkInLocations": "Posizioni di Check-in",
+  "deleteLocation": "Elimina Posizione",
+  "deleteLocationConfirmation": "Sei sicuro di voler eliminare la posizione {locationName}?",
+  "@deleteLocationConfirmation": {
+    "placeholders": {
+      "locationName": {
+        "type": "String"
+      }
+    }
+  },
+  "cancel": "Annulla",
+  "delete": "Elimina",
+  "locationDeletedSuccessfully": "Posizione eliminata con successo",
+  "deleteError": "Errore di eliminazione: {error}",
+  "@deleteError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "tryAgain": "Riprova",
+  "noLocationAdded": "Nessuna posizione aggiunta ancora",
+  "addLocation": "Aggiungi Posizione",
+  "radiusMeters": "Raggio: {radius} metri",
+  "@radiusMeters": {
+    "placeholders": {
+      "radius": {
+        "type": "int"
+      }
+    }
+  },
+  "status": "Stato: {status}",
+  "@status": {
+    "placeholders": {
+      "status": {
+        "type": "String"
+      }
+    }
+  },
+  "active": "Attivo",
+  "inactive": "Inattivo",
+  "edit": "Modifica",
+  "addNewLocation": "Aggiungi Nuova Posizione",
+  "locationName": "Nome della Posizione",
+  "locationNameRequired": "Il nome della posizione è richiesto",
+  "radiusMeter": "Raggio (metri)",
+  "radiusRequired": "Il raggio è richiesto",
+  "enterValidRadius": "Inserisci un raggio valido",
+  "getting": "Ottenendo...",
+  "getLocation": "Ottieni Posizione",
+  "locationCoordinates": "Posizione: {lat}, {lng}",
+  "@locationCoordinates": {
+    "placeholders": {
+      "lat": {
+        "type": "String"
+      },
+      "lng": {
+        "type": "String"
+      }
+    }
+  },
+  "create": "Crea",
+  "location_not_obtained": "Posizione non ottenuta",
+  "locationError": "Errore nell'ottenere la posizione: {error}",
+  "@locationError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "pleaseGetLocationFirst": "Per favore, ottieni prima la posizione",
+  "locationCreatedSuccessfully": "Posizione creata con successo",
+  "creationError": "Errore di creazione: {error}",
+  "@creationError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "editLocation": "Modifica Posizione",
+  "thisLocationIsActive": "Questa posizione è attiva",
+  "thisLocationIsInactive": "Questa posizione è inattiva",
+  "locationUpdatedSuccessfully": "Posizione aggiornata con successo",
+  "updateError": "Errore di aggiornamento: {error}",
+  "@updateError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "update": "Aggiorna",
+  "attendanceManagementTitle": "Gestione Presenze del Personale",
+  "locationManagement": "Gestione delle Posizioni", 
+  "locationManagementDescription": "Gestisci i punti di registrazione",
+  "qrCodeGeneration": "Genera Codice QR",
+  "qrCodeGenerationDescription": "Codici QR entrata-uscita del personale",
+  "attendanceHistory": "Cronologia Presenze",
+  "attendanceHistoryDescription": "Registri entrata-uscita del personale",
+  "activeLocations": "Posizioni Attive",
+  "radiusMeters": "Raggio: {meters} metri",
+  "@radiusMeters": {
+    "description": "Visualizza il raggio in metri per una posizione",
+    "placeholders": {
+      "meters": {
+        "type": "int",
+        "example": "100"
+      }
+    }
+  },
+  "quantityInputLabel": "Quantità",
+  "@quantityInputLabel": {
+    "description": "Label for the quantity input field"
+  },
+  "quantityRequiredError": "La quantità è richiesta",
+  "@quantityRequiredError": {
+    "description": "Error message when quantity is not entered"
+  },
+  "quantityInvalidNumberError": "Inserire un numero valido",
+  "@quantityInvalidNumberError": {
+    "description": "Error message when entered quantity is not a valid number"
+  },
+  "alertThresholdLabel": "Soglia di Avviso",
+  "alertThresholdHint": "Livello di scorte critico",
+  "alertThresholdHelper": "Verrà inviata un'email quando il livello scende sotto questa soglia",
+  "alertThresholdDisplay": "Soglia di Avviso",
+  "validQuantityError": "Inserisci una quantità valida",
+  "errorPrefix": "Errore"
 }

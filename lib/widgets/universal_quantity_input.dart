@@ -1,6 +1,7 @@
 // lib/widgets/universal_quantity_input.dart
 
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../models/ingredient.dart';
 import '../utils/unit_converter.dart';
 
@@ -87,6 +88,7 @@ class _UniversalQuantityInputState extends State<UniversalQuantityInput> {
   
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     List<String> availableUnits = _getAvailableUnits();
     String conversionText = _getConversionText();
     
@@ -101,7 +103,7 @@ class _UniversalQuantityInputState extends State<UniversalQuantityInput> {
               child: TextFormField(
                 controller: _quantityController,
                 decoration: InputDecoration(
-                  labelText: 'Miktar',
+                  labelText: l10n.quantityInputLabel,
                   border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
                   filled: true,
                   fillColor: Colors.grey.shade50,
@@ -113,9 +115,9 @@ class _UniversalQuantityInputState extends State<UniversalQuantityInput> {
                   widget.onQuantityChanged(_getConvertedValue());
                 },
                 validator: (value) {
-                  if (value == null || value.isEmpty) return 'Miktar gerekli';
+                  if (value == null || value.isEmpty) return l10n.quantityRequiredError;
                   if (double.tryParse(value.replaceAll(',', '.')) == null) {
-                    return 'Geçerli bir sayı girin';
+                    return l10n.quantityValidNumberError;
                   }
                   return null;
                 },

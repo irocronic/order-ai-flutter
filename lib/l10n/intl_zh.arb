@@ -4794,59 +4794,51 @@
   "infoOrderCreatedSuccessfully": "订单创建成功。",
   "errorCreatingOrderWithDetails": "创建订单时出错 ({statusCode}): {details}",
   "errorCreatingOrderGeneric": "创建订单时出错：{error}",
-  "_DESIGNER_SCREEN": "名片设计师屏幕",
-  "designerTitle": "名片设计师",
+  "designerTitle": "名片设计器",
   "designerUndo": "撤销",
   "designerRedo": "重做",
-  "designerSave": "保存", 
+  "designerSave": "保存",
   "designerLoad": "加载",
-  "designerExportPdf": "导出PDF",
+  "designerExportPdf": "导出（PDF）",
   "designerSaved": "设计已保存！",
   "designerLoaded": "设计已加载！",
-  "designerEditElement": "选择要编辑的元素",
-  
-  "_CONTROLS_PANEL": "控制面板",
+  "designerEditElement": "请选择要编辑的元素",
+
   "controlsGeneral": "常规",
   "controlsAddElement": "添加元素",
-  "controlsTemplate": "模板", 
+  "controlsTemplate": "模板",
   "controlsLayer": "图层",
   "controlsElement": "元素",
-  
-  "_BACKGROUND_SETTINGS": "背景设置",
+
   "backgroundSettings": "背景设置",
   "backgroundUseGradient": "使用渐变",
   "backgroundColor": "颜色",
   "backgroundStartColor": "起始颜色",
   "backgroundEndColor": "结束颜色",
-  
-  "_ADD_ELEMENT_CONTROLS": "添加元素控件",
+
   "addElementTitle": "添加新元素",
-  "addElementText": "文本",
-  "addElementImage": "图像",
-  "addElementQrCode": "二维码", 
+  "addElementText": "文字",
+  "addElementImage": "图片",
+  "addElementQrCode": "二维码",
   "addElementShape": "形状",
-  "addElementSvg": "添加SVG对象",
-  "addElementIcon": "添加现成图标",
+  "addElementSvg": "添加 SVG 对象",
+  "addElementIcon": "添加图标",
   "addElementShapeRectangle": "矩形",
   "addElementShapeEllipse": "椭圆",
   "addElementShapeLine": "线条",
-  
-  "_TEMPLATE_CONTROLS": "模板控件",
+
   "templateTitle": "模板",
   "templateGallery": "模板库",
   "templateSaveAs": "另存为",
   "templateSaved": "设计已保存为模板！",
-  
-  "_LAYERS_CONTROLS": "图层控件",
+
   "layersTitle": "图层",
-  
-  "_QR_CODE_DIALOG": "二维码对话框",
+
   "qrCodeTitle": "二维码数据",
   "qrCodeHint": "https://example.com",
   "qrCodeCancel": "取消",
   "qrCodeAdd": "添加",
-  
-  "_TEMPLATE_GALLERY_DIALOG": "模板库对话框", 
+
   "templateGalleryTitle": "模板库",
   "templateClose": "关闭",
   "templateLoadSuccess": "模板加载成功！",
@@ -4858,13 +4850,11 @@
       }
     }
   },
-  
-  "_ICON_GALLERY_DIALOG": "图标库对话框",
-  "iconGalleryTitle": "图标库", 
+
+  "iconGalleryTitle": "图标库",
   "iconGalleryClose": "关闭",
-  
-  "_ELEMENT_PROPERTIES": "元素属性",
-  "elementSelectedCount": "选中的元素 ({count})",
+
+  "elementSelectedCount": "已选择元素 ({count})",
   "@elementSelectedCount": {
     "placeholders": {
       "count": {
@@ -4872,52 +4862,112 @@
       }
     }
   },
-  "elementDelete": "删除元素", 
-  "elementTextContent": "文本内容",
+  "elementDelete": "删除元素",
+  "elementTextContent": "文字内容",
   "elementColor": "元素颜色",
   "elementIconColor": "图标颜色",
   "elementOpacity": "不透明度",
-  
-  "_SHAPE_STYLE": "形状样式",
+
   "shapeStyle": "形状样式",
   "shapeFillColor": "填充颜色",
   "shapeBorderColor": "边框颜色",
-  "shapeBorderWidth": "边框宽度",
-  
-  "_ADVANCED_TEXT_STYLE": "高级文本样式", 
-  "advancedTextStyle": "高级文本样式",
+  "shapeBorderWidth": "边框厚度",
+
+  "advancedTextStyle": "高级文字样式",
   "textAddShadow": "添加阴影",
-  "textLetterSpacing": "字符间距",
+  "textLetterSpacing": "字母间距",
   "textLineHeight": "行高",
-  "textShadowNote": "注意：阴影可能不会在PDF输出中显示。",
-  
-  "_TRANSFORM_CONTROLS": "变换控件",
-  "transformSizeRotation": "大小和旋转",
+  "textShadowNote": "注意：阴影可能不会出现在 PDF 输出中。",
+
+  "transformSizeRotation": "尺寸与旋转",
   "transformWidth": "宽：",
   "transformHeight": "高：",
-  
-  "_TEXT_STYLE_CONTROLS": "文本样式控件",
-  "textStyleBold": "粗体",
-  "textStyleItalic": "斜体", 
+
+  "textStyleBold": "加粗",
+  "textStyleItalic": "斜体",
   "textStyleAlignLeft": "左对齐",
   "textStyleAlignCenter": "居中",
-  "textStyleAlignRight": "右对齐", 
-  "textStyleFontFamily": "字体系列",
-  
-  "_LAYER_ORDER_CONTROLS": "图层顺序控件",
-  "layerSendBack": "后移",
-  "layerBringFront": "前移",
-  
-  "_COLOR_PICKER": "颜色选择器",
+  "textStyleAlignRight": "右对齐",
+  "textStyleFontFamily": "字体",
+
+  "layerSendBack": "移到后面",
+  "layerBringFront": "移到前面",
+
   "colorPickerTitle": "选择颜色",
   "colorPickerOk": "确定",
-  
-  "_KEYBOARD_SHORTCUTS": "键盘快捷键", 
-  "keyboardCopied": "选中的元素已复制！",
-  
-  "_PDF_EXPORT": "PDF导出",
-  "pdfImageArea": "图像区域",
-  "newText": "新文本",
+
+  "keyboardCopied": "已复制所选元素！",
+
+  "pdfImageArea": "图片区域",
+
+  "elementsCopied": "已复制所选元素！",
+  "undo": "撤销",
+  "redo": "重做",
+  "save": "保存",
+  "designSaved": "设计已保存！",
+  "load": "加载",
+  "designLoaded": "设计已加载！",
+  "exportPdf": "导出（PDF）",
+  "qrCodeData": "二维码数据",
+  "cancel": "取消",
+  "generalSettings": "常规",
+  "addElement": "添加元素",
+  "templates": "模板",
+  "layers": "图层",
+  "element": "元素",
+  "selectElementToEdit": "请选择要编辑的元素",
+  "text": "文字",
+  "image": "图片",
+  "qrCode": "二维码",
+  "shape": "形状",
+  "rectangle": "矩形",
+  "ellipse": "椭圆",
+  "line": "线条",
+  "addSvgObject": "添加 SVG 对象",
+  "addReadyIcon": "添加图标",
+  "saveAs": "另存为",
+  "designSavedAsTemplate": "设计已保存为模板！",
+  "useGradient": "使用渐变",
+  "color": "颜色",
+  "startColor": "起始颜色",
+  "endColor": "结束颜色",
+  "selectedElement": "已选择元素 ({count})",
+  "@selectedElement": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "deleteElement": "删除元素",
+  "textContent": "文字内容",
+  "iconColor": "图标颜色",
+  "opacity": "不透明度",
+  "fillColor": "填充颜色",
+  "borderColor": "边框颜色",
+  "borderWidth": "边框厚度",
+  "addShadow": "添加阴影",
+  "letterSpacing": "字母间距",
+  "lineHeight": "行高",
+  "shadowNote": "注意：阴影可能不会出现在 PDF 输出中。",
+  "sizeRotation": "尺寸与旋转",
+  "width": "宽：",
+  "height": "高：",
+  "bold": "加粗",
+  "italic": "斜体",
+  "alignLeft": "左对齐",
+  "alignCenter": "居中",
+  "alignRight": "右对齐",
+  "fontFamily": "字体",
+  "sendToBack": "移到后面",
+  "bringToFront": "移到前面",
+  "selectColor": "选择颜色",
+  "ok": "确定",
+  "iconGallery": "图标库",
+  "close": "关闭",
+  "templateLoadedSuccess": "模板加载成功！",
+  "newText": "新文字",
+
   "timeZoneNameIstanbul": "伊斯坦布尔 (GMT+3)",
   "timeZoneNameLondon": "伦敦 (GMT+0)",
   "timeZoneNameBerlin": "柏林 (GMT+1)",
@@ -4996,45 +5046,249 @@
   "timeZoneNameAzores": "亚速尔群岛 (GMT-1)",
   "timeZoneNameCanary": "加那利群岛 (GMT+0)",
   "timeZoneNameReykjavik": "雷克雅未克 (GMT+0)",
-  "setupCategoriesLoadingTemplates": "正在加载模板...",
-  "getPriceFromRecipe": "Reçeteden fiyat al",
-  "selectCategoryLabel": "Select Category",
-  "selectCategoryHint": "Please choose a category",
-  "loadingProductTemplates": "Loading product templates...",
-  "deselectAllLabel": "Deselect All",
-  "selectAllLabel": "Select All",
-  "productsListedCount": "Products listed: {count}",
+
+  "getPriceFromRecipe": "从配方获取价格",
+  "selectCategoryLabel": "选择类别",
+  "selectCategoryHint": "请选择一个类别",
+  "loadingProductTemplates": "正在加载产品模板…",
+  "deselectAllLabel": "取消全选",
+  "selectAllLabel": "全选",
+  "productsListedCount": "列出的产品数量：{count}",
   "@productsListedCount": {
+    "description": "显示已列出产品的数量。",
     "placeholders": {
-      "count": {}
+      "count": { "type": "int", "example": "12" }
     }
   },
-  "noProductTemplatesFound": "No product templates found",
-  "noProductsMatchSearch": "No products match your search",
-  "customProductLabel": "Custom product",
-  "manageVariants": "Manage variants ({count})",
+  "noProductTemplatesFound": "未找到任何产品模板",
+  "noProductsMatchSearch": "未找到与搜索匹配的产品",
+  "customProductLabel": "自定义产品",
+  "manageVariants": "管理变体 ({count})",
   "@manageVariants": {
+    "description": "在管理产品变体按钮上显示的数量。",
     "placeholders": {
-      "count": {}
+      "count": { "type": "int", "example": "5" }
     }
   },
-  "variantImagesIncomplete": "Variant images incomplete",
-  "selectProductButton": "Select Product",
-  "addSelectedProducts": "Add {count} selected products",
+  "variantImagesIncomplete": "变体图片不完整",
+  "selectProductButton": "选择产品",
+  "addSelectedProducts": "添加已选择的 {count} 个产品",
   "@addSelectedProducts": {
+    "description": "用于添加所选产品的按钮文本。",
     "placeholders": {
-      "count": {}
+      "count": { "type": "int", "example": "3" }
     }
   },
-  "loadingVariants": "Varyantlar yükleniyor...",
-  "variantManagementSubtitle": "Ürün varyantlarını yönet",
-  "totalVariantsInfo": "Toplam {count} varyant",
+  "loadingVariants": "正在加载变体…",
+  "variantManagementSubtitle": "管理产品变体",
+  "totalVariantsInfo": "总计 {count} 个变体",
   "@totalVariantsInfo": {
+    "description": "显示总变体数量。",
     "placeholders": {
-      "count": {
+      "count": { "type": "String", "example": "8" }
+    }
+  },
+  "variantManagementHint": "完成后保存更改",
+  "continentEurope": "欧洲",
+  "continentAsia": "亚洲",
+  "continentAmerica": "美洲",
+  "continentAfrica": "非洲",
+  "continentOceania": "大洋洲",
+  "continentAtlantic": "大西洋",
+  "timezoneIconWorld": "🌍",
+  "kdsSelectionRequiredError": "所选类别必须选择 KDS 屏幕。",
+  "kdsRequired": "需要 KDS！",
+  "templatesLoading": "正在加载模板…",
+  "categoryName": "类别名称",
+  "kdsScreen": "KDS 屏幕",
+  "creating": "正在创建…",
+  "attendanceManagementTitle": "员工出勤管理",
+  "qrCheckInTitle": "扫码签到/签退",
+  "locationManagementTitle": "位置管理",
+  "qrGeneratorTitle": "二维码生成器",
+  "attendanceHistoryTitle": "出勤记录",
+  "currentStatusCheckedIn": "您在工作场所",
+  "currentStatusCheckedOut": "您不在工作场所",
+  "scanQRInstruction": "请将二维码对准摄像头",
+  "locationPermissionRequired": "需要位置权限",
+  "checkInSuccessful": "签到成功",
+  "checkOutSuccessful": "签退成功",
+  "qrCodeGenerated": "二维码已生成",
+  "qrCodeShared": "二维码已分享",
+  "qrCodeHint": "https://example.com",
+  "newTemplate": "新模板",
+  "shadowNote": "提示：要看到阴影效果，请使用浅色背景。",
+  "businessCardV1": "名片 V1",
+  "businessCardV2": "名片 V2",
+  "logoV1": "标志 V1",
+  "connectivity_service_started": "已启动。",
+  "connection_status_changed": "连接状态已改变",
+  "online": "在线",
+  "offline": "离线",
+  "backend_connected": "已连接后端（在线）。",
+  "backend_connection_failed": "无法连接后端（视为离线）",
+  "connectivity_service_stopped": "已停止。",
+  "offline_save_error": "离线保存时出错：{error}",
+  "@offline_save_error": {
+    "placeholders": {
+      "error": {
         "type": "String"
       }
     }
   },
-  "variantManagementHint": "Değişiklikleri kaydetmek için tamamla"
+  "token_not_found": "未找到令牌",
+  "no_records_to_sync": "没有要同步的记录",
+  "sync_result_message": "成功：{success}，失败：{failure}",
+  "@sync_result_message": {
+    "placeholders": {
+      "success": {
+        "type": "int"
+      },
+      "failure": {
+        "type": "int"
+      }
+    }
+  },
+  "fetch_locations_failed": "无法获取签到位置",
+  "fetch_locations_error": "获取位置时出错",
+  "create_location_error": "创建位置时出错",
+  "update_location_failed": "无法更新位置",
+  "update_location_error": "更新位置时出错",
+  "delete_location_failed": "无法删除位置",
+  "delete_location_error": "删除位置时出错",
+  "qr_code_generation_error": "生成二维码时出错",
+  "attendance_record_error": "创建考勤记录时出错",
+  "fetch_history_failed": "无法获取考勤历史",
+  "fetch_history_error": "获取考勤历史时出错",
+  "checkInLocations": "签到位置",
+  "deleteLocation": "删除位置",
+  "deleteLocationConfirmation": "您确定要删除位置 {locationName} 吗？",
+  "@deleteLocationConfirmation": {
+    "placeholders": {
+      "locationName": {
+        "type": "String"
+      }
+    }
+  },
+  "cancel": "取消",
+  "delete": "删除",
+  "locationDeletedSuccessfully": "位置删除成功",
+  "deleteError": "删除错误：{error}",
+  "@deleteError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "tryAgain": "重试",
+  "noLocationAdded": "尚未添加位置",
+  "addLocation": "添加位置",
+  "radiusMeters": "半径：{radius} 米",
+  "@radiusMeters": {
+    "placeholders": {
+      "radius": {
+        "type": "int"
+      }
+    }
+  },
+  "status": "状态：{status}",
+  "@status": {
+    "placeholders": {
+      "status": {
+        "type": "String"
+      }
+    }
+  },
+  "active": "激活",
+  "inactive": "未激活",
+  "edit": "编辑",
+  "addNewLocation": "添加新位置",
+  "locationName": "位置名称",
+  "locationNameRequired": "位置名称必填",
+  "radiusMeter": "半径（米）",
+  "radiusRequired": "半径必填",
+  "enterValidRadius": "请输入有效半径",
+  "getting": "正在获取...",
+  "getLocation": "获取位置",
+  "locationCoordinates": "位置：{lat}, {lng}",
+  "@locationCoordinates": {
+    "placeholders": {
+      "lat": {
+        "type": "String"
+      },
+      "lng": {
+        "type": "String"
+      }
+    }
+  },
+  "create": "创建",
+  "location_not_obtained": "未获取到位置",
+  "locationError": "位置错误：{error}",
+  "@locationError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "pleaseGetLocationFirst": "请先获取位置",
+  "locationCreatedSuccessfully": "位置创建成功",
+  "creationError": "创建错误：{error}",
+  "@creationError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "editLocation": "编辑位置",
+  "thisLocationIsActive": "此位置已激活",
+  "thisLocationIsInactive": "此位置未激活",
+  "locationUpdatedSuccessfully": "位置更新成功",
+  "updateError": "更新错误：{error}",
+  "@updateError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "update": "更新",
+  "attendanceManagementTitle": "员工考勤管理",
+  "locationManagement": "位置管理", 
+  "locationManagementDescription": "管理签到点",
+  "qrCodeGeneration": "生成二维码",
+  "qrCodeGenerationDescription": "员工签到签退二维码",
+  "attendanceHistory": "考勤历史",
+  "attendanceHistoryDescription": "员工签到签退记录",
+  "activeLocations": "活跃位置",
+  "radiusMeters": "半径：{meters} 米",
+  "@radiusMeters": {
+    "description": "显示位置的米半径",
+    "placeholders": {
+      "meters": {
+        "type": "int",
+        "example": "100"
+      }
+    }
+  },
+  "quantityInputLabel": "数量",
+  "@quantityInputLabel": {
+    "description": "Label for the quantity input field"
+  },
+  "quantityRequiredError": "数量必填",
+  "@quantityRequiredError": {
+    "description": "Error message when quantity is not entered"
+  },
+  "quantityInvalidNumberError": "请输入有效数字",
+  "@quantityInvalidNumberError": {
+    "description": "Error message when entered quantity is not a valid number"
+  },
+  "alertThresholdLabel": "警告阈值",
+  "alertThresholdHint": "关键库存水平",
+  "alertThresholdHelper": "当水平低于此阈值时将发送电子邮件",
+  "alertThresholdDisplay": "警告阈值",
+  "validQuantityError": "请输入有效数量",
+  "errorPrefix": "错误"
 }

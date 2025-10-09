@@ -5040,44 +5040,229 @@
   "timeZoneNameCanary": "جزر الكناري (GMT+0)",
   "timeZoneNameReykjavik": "ريكيافيك (GMT+0)",
   "setupCategoriesLoadingTemplates": "جارٍ تحميل القوالب...",
-  "getPriceFromRecipe": "Reçeteden fiyat al",
-  "selectCategoryLabel": "Select Category",
-  "selectCategoryHint": "Please choose a category",
-  "loadingProductTemplates": "Loading product templates...",
-  "deselectAllLabel": "Deselect All",
-  "selectAllLabel": "Select All",
-  "productsListedCount": "Products listed: {count}",
+  "getPriceFromRecipe": "احصل على السعر من الوصفة",
+  "selectCategoryLabel": "اختر الفئة",
+  "selectCategoryHint": "يرجى اختيار فئة",
+  "loadingProductTemplates": "جارٍ تحميل قوالب المنتجات...",
+  "deselectAllLabel": "إلغاء تحديد الكل",
+  "selectAllLabel": "تحديد الكل",
+  "productsListedCount": "عدد المنتجات المدرجة: {count}",
   "@productsListedCount": {
+    "description": "يعرض عدد المنتجات المدرجة.",
     "placeholders": {
-      "count": {}
+      "count": { "type": "int", "example": "12" }
     }
   },
-  "noProductTemplatesFound": "No product templates found",
-  "noProductsMatchSearch": "No products match your search",
-  "customProductLabel": "Custom product",
-  "manageVariants": "Manage variants ({count})",
+  "noProductTemplatesFound": "لم يتم العثور على قوالب للمنتجات",
+  "noProductsMatchSearch": "لا توجد منتجات تطابق بحثك",
+  "customProductLabel": "منتج مخصص",
+  "manageVariants": "إدارة المتغيرات ({count})",
   "@manageVariants": {
+    "description": "عدد المتغيرات المرتبطة بالمنتج.",
     "placeholders": {
-      "count": {}
+      "count": { "type": "int", "example": "5" }
     }
   },
-  "variantImagesIncomplete": "Variant images incomplete",
-  "selectProductButton": "Select Product",
-  "addSelectedProducts": "Add {count} selected products",
+  "variantImagesIncomplete": "صور المتغيرات غير مكتملة",
+  "selectProductButton": "اختر المنتج",
+  "addSelectedProducts": "إضافة {count} من المنتجات المحددة",
   "@addSelectedProducts": {
+    "description": "يضيف المنتجات المحددة إلى القائمة.",
     "placeholders": {
-      "count": {}
+      "count": { "type": "int", "example": "3" }
     }
   },
-  "loadingVariants": "Varyantlar yükleniyor...",
-  "variantManagementSubtitle": "Ürün varyantlarını yönet",
-  "totalVariantsInfo": "Toplam {count} varyant",
+  "loadingVariants": "جارٍ تحميل المتغيرات...",
+  "variantManagementSubtitle": "إدارة متغيرات المنتج",
+  "totalVariantsInfo": "إجمالي {count} متغير",
   "@totalVariantsInfo": {
+    "description": "يعرض العدد الإجمالي للمتغيرات.",
     "placeholders": {
-      "count": {
+      "count": { "type": "String", "example": "8" }
+    }
+  },
+  "variantManagementHint": "أكمل لحفظ التغييرات",
+  "continentEurope": "أوروبا",
+  "continentAsia": "آسيا",
+  "continentAmerica": "أمريكا",
+  "continentAfrica": "أفريقيا",
+  "continentOceania": "أوقيانوسيا",
+  "continentAtlantic": "الأطلسي",
+  "timezoneIconWorld": "🌍",
+  "kdsSelectionRequiredError": "يجب تحديد شاشة KDS للفئات المحددة.",
+  "kdsRequired": "مطلوب KDS!",
+  "templatesLoading": "جارٍ تحميل القوالب...",
+  "categoryName": "اسم الفئة",
+  "kdsScreen": "شاشة KDS",
+  "creating": "جارٍ الإنشاء...",
+  "connectivity_service_started": "تم البدء.",
+  "connection_status_changed": "تغيرت حالة الاتصال",
+  "online": "متصل",
+  "offline": "غير متصل",
+  "backend_connected": "تم الوصول للخادم الخلفي (متصل).",
+  "backend_connection_failed": "لا يمكن الوصول للخادم الخلفي (يعتبر غير متصل)",
+  "connectivity_service_stopped": "تم الإيقاف.",
+  "offline_save_error": "خطأ أثناء الحفظ دون اتصال: {error}",
+  "@offline_save_error": {
+    "placeholders": {
+      "error": {
         "type": "String"
       }
     }
   },
-  "variantManagementHint": "Değişiklikleri kaydetmek için tamamla"
+  "token_not_found": "لم يتم العثور على الرمز المميز",
+  "no_records_to_sync": "لا توجد سجلات للمزامنة",
+  "sync_result_message": "نجح: {success}، فشل: {failure}",
+  "@sync_result_message": {
+    "placeholders": {
+      "success": {
+        "type": "int"
+      },
+      "failure": {
+        "type": "int"
+      }
+    }
+  },
+  "fetch_locations_failed": "لا يمكن الحصول على مواقع تسجيل الدخول",
+  "fetch_locations_error": "خطأ في الحصول على المواقع",
+  "create_location_error": "خطأ في إنشاء الموقع",
+  "update_location_failed": "لا يمكن تحديث الموقع",
+  "update_location_error": "خطأ في تحديث الموقع",
+  "delete_location_failed": "لا يمكن حذف الموقع",
+  "delete_location_error": "خطأ في حذف الموقع",
+  "qr_code_generation_error": "خطأ في إنشاء رمز الاستجابة السريعة",
+  "attendance_record_error": "خطأ في إنشاء سجل الحضور",
+  "fetch_history_failed": "لا يمكن الحصول على تاريخ الحضور",
+  "fetch_history_error": "خطأ في الحصول على تاريخ الحضور",
+  "checkInLocations": "مواقع تسجيل الدخول",
+  "deleteLocation": "حذف الموقع",
+  "deleteLocationConfirmation": "هل أنت متأكد من رغبتك في حذف الموقع {locationName}؟",
+  "@deleteLocationConfirmation": {
+    "placeholders": {
+      "locationName": {
+        "type": "String"
+      }
+    }
+  },
+  "cancel": "إلغاء",
+  "delete": "حذف",
+  "locationDeletedSuccessfully": "تم حذف الموقع بنجاح",
+  "deleteError": "خطأ في الحذف: {error}",
+  "@deleteError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "tryAgain": "حاول مرة أخرى",
+  "noLocationAdded": "لم يتم إضافة موقع بعد",
+  "addLocation": "إضافة موقع",
+  "radiusMeters": "نصف القطر: {radius} متر",
+  "@radiusMeters": {
+    "placeholders": {
+      "radius": {
+        "type": "int"
+      }
+    }
+  },
+  "status": "الحالة: {status}",
+  "@status": {
+    "placeholders": {
+      "status": {
+        "type": "String"
+      }
+    }
+  },
+  "active": "نشط",
+  "inactive": "غير نشط",
+  "edit": "تحرير",
+  "addNewLocation": "إضافة موقع جديد",
+  "locationName": "اسم الموقع",
+  "locationNameRequired": "اسم الموقع مطلوب",
+  "radiusMeter": "نصف القطر (متر)",
+  "radiusRequired": "نصف القطر مطلوب",
+  "enterValidRadius": "أدخل نصف قطر صحيح",
+  "getting": "جاري الحصول...",
+  "getLocation": "الحصول على الموقع",
+  "locationCoordinates": "الموقع: {lat}، {lng}",
+  "@locationCoordinates": {
+    "placeholders": {
+      "lat": {
+        "type": "String"
+      },
+      "lng": {
+        "type": "String"
+      }
+    }
+  },
+  "create": "إنشاء",
+  "location_not_obtained": "لم يتم الحصول على الموقع",
+  "locationError": "خطأ في الحصول على الموقع: {error}",
+  "@locationError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "pleaseGetLocationFirst": "يرجى الحصول على الموقع أولاً",
+  "locationCreatedSuccessfully": "تم إنشاء الموقع بنجاح",
+  "creationError": "خطأ في الإنشاء: {error}",
+  "@creationError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "editLocation": "تحرير الموقع",
+  "thisLocationIsActive": "هذا الموقع نشط",
+  "thisLocationIsInactive": "هذا الموقع غير نشط",
+  "locationUpdatedSuccessfully": "تم تحديث الموقع بنجاح",
+  "updateError": "خطأ في التحديث: {error}",
+  "@updateError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "update": "تحديث",
+  "attendanceManagementTitle": "إدارة حضور الموظفين",
+  "locationManagement": "إدارة المواقع", 
+  "locationManagementDescription": "إدارة نقاط تسجيل الحضور",
+  "qrCodeGeneration": "إنشاء رمز QR",
+  "qrCodeGenerationDescription": "رموز QR لدخول وخروج الموظفين",
+  "attendanceHistory": "تاريخ الحضور",
+  "attendanceHistoryDescription": "سجلات دخول وخروج الموظفين",
+  "activeLocations": "المواقع النشطة",
+  "radiusMeters": "نصف القطر: {meters} متر",
+  "@radiusMeters": {
+    "description": "يعرض نصف القطر بالمتر للموقع",
+    "placeholders": {
+      "meters": {
+        "type": "int",
+        "example": "100"
+      }
+    }
+  },
+  "quantityInputLabel": "الكمية",
+  "@quantityInputLabel": {
+    "description": "Label for the quantity input field"
+  },
+  "quantityRequiredError": "الكمية مطلوبة",
+  "@quantityRequiredError": {
+    "description": "Error message when quantity is not entered"
+  },
+  "quantityInvalidNumberError": "أدخل رقماً صحيحاً",
+  "@quantityInvalidNumberError": {
+    "description": "Error message when entered quantity is not a valid number"
+  },
+  "alertThresholdLabel": "عتبة التنبيه",
+  "alertThresholdHint": "مستوى المخزون الحرج",
+  "alertThresholdHelper": "سيتم إرسال بريد إلكتروني عندما ينخفض المستوى تحت هذه العتبة",
+  "alertThresholdDisplay": "عتبة التنبيه",
+  "validQuantityError": "يرجى إدخال كمية صالحة",
+  "errorPrefix": "خطأ"
 }

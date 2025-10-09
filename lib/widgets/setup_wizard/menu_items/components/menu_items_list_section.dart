@@ -21,7 +21,7 @@ class MenuItemsListSection extends StatefulWidget {
   final bool isLoading;
   final VoidCallback onMenuItemDeleted;
   final Function(String, {bool isError}) onMessageChanged;
-  final int businessId; // 🆕 YENİ EKLENEN
+  final int businessId;
 
   const MenuItemsListSection({
     Key? key,
@@ -31,7 +31,7 @@ class MenuItemsListSection extends StatefulWidget {
     required this.isLoading,
     required this.onMenuItemDeleted,
     required this.onMessageChanged,
-    required this.businessId, // 🆕 YENİ EKLENEN
+    required this.businessId,
   }) : super(key: key);
 
   @override
@@ -48,19 +48,240 @@ class _MenuItemsListSectionState extends State<MenuItemsListSection> {
     
     final confirm = await showDialog<bool>(
       context: context,
-      builder: (ctx) => AlertDialog(
-        title: Text(l10n.dialogDeleteMenuItemTitle),
-        content: Text(l10n.dialogDeleteMenuItemContent(menuItemName)),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(ctx).pop(false),
-            child: Text(l10n.dialogButtonCancel),
+      barrierDismissible: false,
+      builder: (ctx) => Dialog(
+        backgroundColor: Colors.transparent,
+        insetPadding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 24.0),
+        child: Container(
+          constraints: const BoxConstraints(maxWidth: 400),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                const Color(0xFF1565C0), // Koyu mavi
+                const Color(0xFF1976D2), // Orta mavi
+                const Color(0xFF1E88E5), // Açık mavi
+              ],
+              stops: const [0.0, 0.5, 1.0],
+            ),
+            borderRadius: BorderRadius.circular(20.0),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.3),
+                blurRadius: 20,
+                offset: const Offset(0, 8),
+              ),
+            ],
           ),
-          TextButton(
-            onPressed: () => Navigator.of(ctx).pop(true),
-            child: Text(l10n.dialogButtonDelete, style: const TextStyle(color: Colors.red)),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Header with gradient and glass effect
+              Container(
+                padding: const EdgeInsets.all(24.0),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [
+                      Colors.white.withOpacity(0.2),
+                      Colors.white.withOpacity(0.1),
+                    ],
+                  ),
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(20.0),
+                    topRight: Radius.circular(20.0),
+                  ),
+                ),
+                child: Column(
+                  children: [
+                    // Icon
+                    Container(
+                      width: 64,
+                      height: 64,
+                      decoration: BoxDecoration(
+                        color: Colors.red.withOpacity(0.2),
+                        borderRadius: BorderRadius.circular(32),
+                        border: Border.all(
+                          color: Colors.red.withOpacity(0.3),
+                          width: 2,
+                        ),
+                      ),
+                      child: Icon(
+                        Icons.delete_outline,
+                        color: Colors.red.shade300,
+                        size: 32,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    
+                    // Title
+                    Text(
+                      l10n.dialogDeleteMenuItemTitle,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        letterSpacing: 0.5,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
+              ),
+
+              // Content
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 20.0),
+                child: Column(
+                  children: [
+                    // Menu item name highlight
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.15),
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          color: Colors.white.withOpacity(0.3),
+                        ),
+                      ),
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.fastfood_outlined,
+                            color: Colors.white.withOpacity(0.8),
+                            size: 20,
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: Text(
+                              menuItemName,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    
+                    const SizedBox(height: 16),
+                    
+                    // Warning message
+                    Text(
+                      l10n.dialogDeleteMenuItemContent(menuItemName),
+                      style: TextStyle(
+                        color: Colors.white.withOpacity(0.9),
+                        fontSize: 16,
+                        height: 1.4,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
+              ),
+
+              // Actions
+              Container(
+                padding: const EdgeInsets.all(24.0),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      Colors.white.withOpacity(0.1),
+                      Colors.white.withOpacity(0.2),
+                    ],
+                  ),
+                  borderRadius: const BorderRadius.only(
+                    bottomLeft: Radius.circular(20.0),
+                    bottomRight: Radius.circular(20.0),
+                  ),
+                  border: Border(
+                    top: BorderSide(color: Colors.white.withOpacity(0.2)),
+                  ),
+                ),
+                child: Row(
+                  children: [
+                    // Cancel button
+                    Expanded(
+                      child: TextButton(
+                        onPressed: () => Navigator.of(ctx).pop(false),
+                        style: TextButton.styleFrom(
+                          foregroundColor: Colors.white.withOpacity(0.9),
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            side: BorderSide(color: Colors.white.withOpacity(0.3)),
+                          ),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.close,
+                              size: 18,
+                              color: Colors.white.withOpacity(0.8),
+                            ),
+                            const SizedBox(width: 8),
+                            Text(
+                              l10n.dialogButtonCancel,
+                              style: const TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    
+                    const SizedBox(width: 12),
+                    
+                    // Delete button
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () => Navigator.of(ctx).pop(true),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.red.shade600,
+                          foregroundColor: Colors.white,
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          elevation: 4,
+                          shadowColor: Colors.red.withOpacity(0.4),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Icon(
+                              Icons.delete_outline,
+                              size: 18,
+                            ),
+                            const SizedBox(width: 8),
+                            Text(
+                              l10n.dialogButtonDelete,
+                              style: const TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
 
@@ -772,7 +993,7 @@ class _MenuItemsListSectionState extends State<MenuItemsListSection> {
                   
                   const SizedBox(height: 8),
                   
-                  // KDV bilgisi - ortada
+                  // 🔧 DÜZELTİLDİ: KDV bilgisi - Flexible ile overflow sorunu çözüldü
                   Center(
                     child: Container(
                       constraints: const BoxConstraints(maxWidth: double.infinity),
@@ -794,14 +1015,17 @@ class _MenuItemsListSectionState extends State<MenuItemsListSection> {
                                 : Colors.white.withOpacity(0.7),
                           ),
                           const SizedBox(width: 3),
-                          Text(
-                            l10n.vatRate(kdvRate),
-                            style: TextStyle(
-                              fontSize: 9,
-                              color: isNewlyAdded 
-                                  ? Colors.green.shade200 // ✅ YENİ: Yeni ürünler için yeşil yazı
-                                  : Colors.white.withOpacity(0.7),
-                              fontWeight: FontWeight.w500,
+                          Flexible( // 🔧 DÜZELTİLDİ: Expanded yerine Flexible kullanıldı
+                            child: Text(
+                              l10n.vatRate(kdvRate),
+                              style: TextStyle(
+                                fontSize: 9,
+                                color: isNewlyAdded 
+                                    ? Colors.green.shade200 // ✅ YENİ: Yeni ürünler için yeşil yazı
+                                    : Colors.white.withOpacity(0.7),
+                                fontWeight: FontWeight.w500,
+                              ),
+                              overflow: TextOverflow.ellipsis, // 🔧 DÜZELTİLDİ: Overflow koruması
                             ),
                           ),
                         ],
@@ -809,14 +1033,15 @@ class _MenuItemsListSectionState extends State<MenuItemsListSection> {
                     ),
                   ),
                   
-                  // 🎨 YENİ TASARIM: Daha görünür butonlar
+                  // 🔧 DÜZELTİLDİ: Butonlar - Expanded yerine Flexible kullanıldı
                   if (menuItemId != null) ...[
                     const SizedBox(height: 8),
                     Row(
                       children: [
-                        Expanded(
+                        Flexible( // 🔧 DÜZELTİLDİ: Expanded yerine Flexible
                           child: SizedBox(
                             height: 32,
+                            width: double.infinity, // 🔧 DÜZELTİLDİ: Full width
                             child: IconButton(
                               icon: const Icon(
                                 Icons.tune,
@@ -845,10 +1070,11 @@ class _MenuItemsListSectionState extends State<MenuItemsListSection> {
                         
                         const SizedBox(width: 6),
                         
-                        // 🎨 Sil butonu - Daha koyu kırmızı arka plan
-                        Expanded(
+                        // 🔧 DÜZELTİLDİ: Sil butonu - Flexible ile
+                        Flexible( // 🔧 DÜZELTİLDİ: Expanded yerine Flexible
                           child: SizedBox(
                             height: 32,
+                            width: double.infinity, // 🔧 DÜZELTİLDİ: Full width
                             child: IconButton(
                               icon: const Icon(
                                 Icons.delete_outline,

@@ -1,7 +1,5 @@
 // lib/widgets/designer/controls_panel_widget.dart
 
-// lib/widgets/designer/controls_panel_widget.dart
-
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -53,9 +51,9 @@ class _QrCodeDialogState extends State<_QrCodeDialog> {
       content: TextField(
         controller: _controller,
         autofocus: true,
-        decoration: const InputDecoration(
-          hintText: "https://example.com",
-          border: OutlineInputBorder(),
+        decoration: InputDecoration(
+          hintText: l10n.qrCodeHint,
+          border: const OutlineInputBorder(),
         ),
         onSubmitted: (_) => _addElement(),
       ),
@@ -374,7 +372,7 @@ class _ControlsPanelWidgetState extends State<ControlsPanelWidget>
             Expanded(
               child: ElevatedButton.icon(
                 onPressed: () {
-                  provider.saveCardAsTemplate("Yeni Şablon");
+                  provider.saveCardAsTemplate(l10n.newTemplate);
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                       content: Text(l10n.designSavedAsTemplate)));
                 },

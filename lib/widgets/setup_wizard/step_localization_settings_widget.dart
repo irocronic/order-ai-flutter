@@ -12,6 +12,30 @@ import '../../services/api_service.dart';
 import '../../services/user_session.dart';
 import '../../services/setup_wizard_audio_service.dart';
 
+// Dil bilgilerini tutmak için sınıf
+class LanguageInfo {
+  final String code;
+  final String name;
+  final String flag;
+
+  LanguageInfo({required this.code, required this.name, required this.flag});
+}
+
+// Zaman dilimi kategorilerini tutmak için sınıf
+class TimezoneCategory {
+  final String name;
+  final List<TimezoneInfo> timezones;
+
+  TimezoneCategory({required this.name, required this.timezones});
+}
+
+class TimezoneInfo {
+  final String code;
+  final String name;
+
+  TimezoneInfo({required this.code, required this.name});
+}
+
 class StepLocalizationSettingsWidget extends StatefulWidget {
   final String token;
   final int businessId;
@@ -39,113 +63,148 @@ class _StepLocalizationSettingsWidgetState
 
   final SetupWizardAudioService _audioService = SetupWizardAudioService.instance;
 
-  late Map<String, String> _supportedLanguages;
+  late List<LanguageInfo> _supportedLanguages;
   late Map<String, String> _supportedCurrencies;
-  late Map<String, String> _supportedTimezones;
+  late List<TimezoneCategory> _timezoneCategories;
 
   @override
   void initState() {
     super.initState();
   }
 
-  Map<String, String> _getSupportedTimezones(AppLocalizations l10n) {
-    return {
-      // Avrupa
-      'Europe/Istanbul': l10n.timeZoneNameIstanbul,
-      'Europe/London': l10n.timeZoneNameLondon,
-      'Europe/Berlin': l10n.timeZoneNameBerlin,
-      'Europe/Paris': l10n.timeZoneNameParis,
-      'Europe/Rome': l10n.timeZoneNameRome,
-      'Europe/Madrid': l10n.timeZoneNameMadrid,
-      'Europe/Amsterdam': l10n.timeZoneNameAmsterdam,
-      'Europe/Vienna': l10n.timeZoneNameVienna,
-      'Europe/Warsaw': l10n.timeZoneNameWarsaw,
-      'Europe/Prague': l10n.timeZoneNamePrague,
-      'Europe/Budapest': l10n.timeZoneNameBudapest,
-      'Europe/Athens': l10n.timeZoneNameAthens,
-      'Europe/Helsinki': l10n.timeZoneNameHelsinki,
-      'Europe/Stockholm': l10n.timeZoneNameStockholm,
-      'Europe/Oslo': l10n.timeZoneNameOslo,
-      'Europe/Copenhagen': l10n.timeZoneNameCopenhagen,
-      'Europe/Brussels': l10n.timeZoneNameBrussels,
-      'Europe/Zurich': l10n.timeZoneNameZurich,
-      'Europe/Moscow': l10n.timeZoneNameMoscow,
-      
-      // Amerika - Kuzey
-      'America/New_York': l10n.timeZoneNameNewYork,
-      'America/Los_Angeles': l10n.timeZoneNameLosAngeles,
-      'America/Chicago': l10n.timeZoneNameChicago,
-      'America/Denver': l10n.timeZoneNameDenver,
-      'America/Phoenix': l10n.timeZoneNamePhoenix,
-      'America/Toronto': l10n.timeZoneNameToronto,
-      'America/Vancouver': l10n.timeZoneNameVancouver,
-      'America/Montreal': l10n.timeZoneNameMontreal,
-      
-      // Amerika - Güney
-      'America/Sao_Paulo': l10n.timeZoneNameSaoPaulo,
-      'America/Buenos_Aires': l10n.timeZoneNameBuenosAires,
-      'America/Mexico_City': l10n.timeZoneNameMexicoCity,
-      'America/Bogota': l10n.timeZoneNameBogota,
-      'America/Lima': l10n.timeZoneNameLima,
-      'America/Santiago': l10n.timeZoneNameSantiago,
-      
-      // Asya - Doğu
-      'Asia/Tokyo': l10n.timeZoneNameTokyo,
-      'Asia/Seoul': l10n.timeZoneNameSeoul,
-      'Asia/Shanghai': l10n.timeZoneNameShanghai,
-      'Asia/Hong_Kong': l10n.timeZoneNameHongKong,
-      'Asia/Singapore': l10n.timeZoneNameSingapore,
-      'Asia/Bangkok': l10n.timeZoneNameBangkok,
-      'Asia/Manila': l10n.timeZoneNameManila,
-      'Asia/Jakarta': l10n.timeZoneNameJakarta,
-      'Asia/Kuala_Lumpur': l10n.timeZoneNameKualaLumpur,
-      'Asia/Ho_Chi_Minh': l10n.timeZoneNameHoChiMinh,
-      
-      // Asya - Orta & Batı
-      'Asia/Dubai': l10n.timeZoneNameDubai,
-      'Asia/Riyadh': l10n.timeZoneNameRiyadh,
-      'Asia/Qatar': l10n.timeZoneNameQatar,
-      'Asia/Kuwait': l10n.timeZoneNameKuwait,
-      'Asia/Tehran': l10n.timeZoneNameTehran,
-      'Asia/Baghdad': l10n.timeZoneNameBaghdad,
-      'Asia/Kabul': l10n.timeZoneNameKabul,
-      'Asia/Karachi': l10n.timeZoneNameKarachi,
-      'Asia/Delhi': l10n.timeZoneNameDelhi,
-      'Asia/Dhaka': l10n.timeZoneNameDhaka,
-      'Asia/Colombo': l10n.timeZoneNameColombo,
-      'Asia/Kathmandu': l10n.timeZoneNameKathmandu,
-      
-      // Asya - Merkezi
-      'Asia/Almaty': l10n.timeZoneNameAlmaty,
-      'Asia/Tashkent': l10n.timeZoneNameTashkent,
-      'Asia/Baku': l10n.timeZoneNameBaku,
-      'Asia/Yerevan': l10n.timeZoneNameYerevan,
-      'Asia/Tbilisi': l10n.timeZoneNameTbilisi,
-      
-      // Afrika
-      'Africa/Cairo': l10n.timeZoneNameCairo,
-      'Africa/Casablanca': l10n.timeZoneNameCasablanca,
-      'Africa/Lagos': l10n.timeZoneNameLagos,
-      'Africa/Johannesburg': l10n.timeZoneNameJohannesburg,
-      'Africa/Nairobi': l10n.timeZoneNameNairobi,
-      'Africa/Tunis': l10n.timeZoneNameTunis,
-      'Africa/Algiers': l10n.timeZoneNameAlgiers,
-      
-      // Okyanusya
-      'Australia/Sydney': l10n.timeZoneNameSydney,
-      'Australia/Melbourne': l10n.timeZoneNameMelbourne,
-      'Australia/Brisbane': l10n.timeZoneNameBrisbane,
-      'Australia/Perth': l10n.timeZoneNamePerth,
-      'Australia/Adelaide': l10n.timeZoneNameAdelaide,
-      'Pacific/Auckland': l10n.timeZoneNameAuckland,
-      'Pacific/Honolulu': l10n.timeZoneNameHonolulu,
-      'Pacific/Fiji': l10n.timeZoneNameFiji,
-      
-      // Atlantik
-      'Atlantic/Azores': l10n.timeZoneNameAzores,
-      'Atlantic/Canary': l10n.timeZoneNameCanary,
-      'Atlantic/Reykjavik': l10n.timeZoneNameReykjavik,
-    };
+  List<LanguageInfo> _getSupportedLanguages(AppLocalizations l10n) {
+    return [
+      LanguageInfo(code: 'tr', name: l10n.languageNameTr, flag: '🇹🇷'),
+      LanguageInfo(code: 'en', name: l10n.languageNameEn, flag: '🇺🇸'),
+      LanguageInfo(code: 'de', name: l10n.languageNameDe, flag: '🇩🇪'),
+      LanguageInfo(code: 'es', name: l10n.languageNameEs, flag: '🇪🇸'),
+      LanguageInfo(code: 'ar', name: l10n.languageNameAr, flag: '🇸🇦'),
+      LanguageInfo(code: 'it', name: l10n.languageNameIt, flag: '🇮🇹'),
+      LanguageInfo(code: 'zh', name: l10n.languageNameZh, flag: '🇨🇳'),
+      LanguageInfo(code: 'ru', name: l10n.languageNameRu, flag: '🇷🇺'),
+      LanguageInfo(code: 'fr', name: l10n.languageNameFr, flag: '🇫🇷'),
+    ];
+  }
+
+  List<TimezoneCategory> _getTimezoneCategories(AppLocalizations l10n) {
+    return [
+      TimezoneCategory(
+        name: l10n.continentEurope,
+        timezones: [
+          TimezoneInfo(code: 'Europe/Istanbul', name: l10n.timeZoneNameIstanbul),
+          TimezoneInfo(code: 'Europe/London', name: l10n.timeZoneNameLondon),
+          TimezoneInfo(code: 'Europe/Berlin', name: l10n.timeZoneNameBerlin),
+          TimezoneInfo(code: 'Europe/Paris', name: l10n.timeZoneNameParis),
+          TimezoneInfo(code: 'Europe/Rome', name: l10n.timeZoneNameRome),
+          TimezoneInfo(code: 'Europe/Madrid', name: l10n.timeZoneNameMadrid),
+          TimezoneInfo(code: 'Europe/Amsterdam', name: l10n.timeZoneNameAmsterdam),
+          TimezoneInfo(code: 'Europe/Vienna', name: l10n.timeZoneNameVienna),
+          TimezoneInfo(code: 'Europe/Warsaw', name: l10n.timeZoneNameWarsaw),
+          TimezoneInfo(code: 'Europe/Prague', name: l10n.timeZoneNamePrague),
+          TimezoneInfo(code: 'Europe/Budapest', name: l10n.timeZoneNameBudapest),
+          TimezoneInfo(code: 'Europe/Athens', name: l10n.timeZoneNameAthens),
+          TimezoneInfo(code: 'Europe/Helsinki', name: l10n.timeZoneNameHelsinki),
+          TimezoneInfo(code: 'Europe/Stockholm', name: l10n.timeZoneNameStockholm),
+          TimezoneInfo(code: 'Europe/Oslo', name: l10n.timeZoneNameOslo),
+          TimezoneInfo(code: 'Europe/Copenhagen', name: l10n.timeZoneNameCopenhagen),
+          TimezoneInfo(code: 'Europe/Brussels', name: l10n.timeZoneNameBrussels),
+          TimezoneInfo(code: 'Europe/Zurich', name: l10n.timeZoneNameZurich),
+          TimezoneInfo(code: 'Europe/Moscow', name: l10n.timeZoneNameMoscow),
+        ],
+      ),
+      TimezoneCategory(
+        name: l10n.continentAsia,
+        timezones: [
+          // Doğu Asya
+          TimezoneInfo(code: 'Asia/Tokyo', name: l10n.timeZoneNameTokyo),
+          TimezoneInfo(code: 'Asia/Seoul', name: l10n.timeZoneNameSeoul),
+          TimezoneInfo(code: 'Asia/Shanghai', name: l10n.timeZoneNameShanghai),
+          TimezoneInfo(code: 'Asia/Hong_Kong', name: l10n.timeZoneNameHongKong),
+          TimezoneInfo(code: 'Asia/Singapore', name: l10n.timeZoneNameSingapore),
+          TimezoneInfo(code: 'Asia/Bangkok', name: l10n.timeZoneNameBangkok),
+          TimezoneInfo(code: 'Asia/Manila', name: l10n.timeZoneNameManila),
+          TimezoneInfo(code: 'Asia/Jakarta', name: l10n.timeZoneNameJakarta),
+          TimezoneInfo(code: 'Asia/Kuala_Lumpur', name: l10n.timeZoneNameKualaLumpur),
+          TimezoneInfo(code: 'Asia/Ho_Chi_Minh', name: l10n.timeZoneNameHoChiMinh),
+          
+          // Orta & Batı Asya
+          TimezoneInfo(code: 'Asia/Dubai', name: l10n.timeZoneNameDubai),
+          TimezoneInfo(code: 'Asia/Riyadh', name: l10n.timeZoneNameRiyadh),
+          TimezoneInfo(code: 'Asia/Qatar', name: l10n.timeZoneNameQatar),
+          TimezoneInfo(code: 'Asia/Kuwait', name: l10n.timeZoneNameKuwait),
+          TimezoneInfo(code: 'Asia/Tehran', name: l10n.timeZoneNameTehran),
+          TimezoneInfo(code: 'Asia/Baghdad', name: l10n.timeZoneNameBaghdad),
+          TimezoneInfo(code: 'Asia/Kabul', name: l10n.timeZoneNameKabul),
+          TimezoneInfo(code: 'Asia/Karachi', name: l10n.timeZoneNameKarachi),
+          TimezoneInfo(code: 'Asia/Delhi', name: l10n.timeZoneNameDelhi),
+          TimezoneInfo(code: 'Asia/Dhaka', name: l10n.timeZoneNameDhaka),
+          TimezoneInfo(code: 'Asia/Colombo', name: l10n.timeZoneNameColombo),
+          TimezoneInfo(code: 'Asia/Kathmandu', name: l10n.timeZoneNameKathmandu),
+          
+          // Merkezi Asya
+          TimezoneInfo(code: 'Asia/Almaty', name: l10n.timeZoneNameAlmaty),
+          TimezoneInfo(code: 'Asia/Tashkent', name: l10n.timeZoneNameTashkent),
+          TimezoneInfo(code: 'Asia/Baku', name: l10n.timeZoneNameBaku),
+          TimezoneInfo(code: 'Asia/Yerevan', name: l10n.timeZoneNameYerevan),
+          TimezoneInfo(code: 'Asia/Tbilisi', name: l10n.timeZoneNameTbilisi),
+        ],
+      ),
+      TimezoneCategory(
+        name: l10n.continentAmerica,
+        timezones: [
+          // Kuzey Amerika
+          TimezoneInfo(code: 'America/New_York', name: l10n.timeZoneNameNewYork),
+          TimezoneInfo(code: 'America/Los_Angeles', name: l10n.timeZoneNameLosAngeles),
+          TimezoneInfo(code: 'America/Chicago', name: l10n.timeZoneNameChicago),
+          TimezoneInfo(code: 'America/Denver', name: l10n.timeZoneNameDenver),
+          TimezoneInfo(code: 'America/Phoenix', name: l10n.timeZoneNamePhoenix),
+          TimezoneInfo(code: 'America/Toronto', name: l10n.timeZoneNameToronto),
+          TimezoneInfo(code: 'America/Vancouver', name: l10n.timeZoneNameVancouver),
+          TimezoneInfo(code: 'America/Montreal', name: l10n.timeZoneNameMontreal),
+          
+          // Güney Amerika
+          TimezoneInfo(code: 'America/Sao_Paulo', name: l10n.timeZoneNameSaoPaulo),
+          TimezoneInfo(code: 'America/Buenos_Aires', name: l10n.timeZoneNameBuenosAires),
+          TimezoneInfo(code: 'America/Mexico_City', name: l10n.timeZoneNameMexicoCity),
+          TimezoneInfo(code: 'America/Bogota', name: l10n.timeZoneNameBogota),
+          TimezoneInfo(code: 'America/Lima', name: l10n.timeZoneNameLima),
+          TimezoneInfo(code: 'America/Santiago', name: l10n.timeZoneNameSantiago),
+        ],
+      ),
+      TimezoneCategory(
+        name: l10n.continentAfrica,
+        timezones: [
+          TimezoneInfo(code: 'Africa/Cairo', name: l10n.timeZoneNameCairo),
+          TimezoneInfo(code: 'Africa/Casablanca', name: l10n.timeZoneNameCasablanca),
+          TimezoneInfo(code: 'Africa/Lagos', name: l10n.timeZoneNameLagos),
+          TimezoneInfo(code: 'Africa/Johannesburg', name: l10n.timeZoneNameJohannesburg),
+          TimezoneInfo(code: 'Africa/Nairobi', name: l10n.timeZoneNameNairobi),
+          TimezoneInfo(code: 'Africa/Tunis', name: l10n.timeZoneNameTunis),
+          TimezoneInfo(code: 'Africa/Algiers', name: l10n.timeZoneNameAlgiers),
+        ],
+      ),
+      TimezoneCategory(
+        name: l10n.continentOceania,
+        timezones: [
+          TimezoneInfo(code: 'Australia/Sydney', name: l10n.timeZoneNameSydney),
+          TimezoneInfo(code: 'Australia/Melbourne', name: l10n.timeZoneNameMelbourne),
+          TimezoneInfo(code: 'Australia/Brisbane', name: l10n.timeZoneNameBrisbane),
+          TimezoneInfo(code: 'Australia/Perth', name: l10n.timeZoneNamePerth),
+          TimezoneInfo(code: 'Australia/Adelaide', name: l10n.timeZoneNameAdelaide),
+          TimezoneInfo(code: 'Pacific/Auckland', name: l10n.timeZoneNameAuckland),
+          TimezoneInfo(code: 'Pacific/Honolulu', name: l10n.timeZoneNameHonolulu),
+          TimezoneInfo(code: 'Pacific/Fiji', name: l10n.timeZoneNameFiji),
+        ],
+      ),
+      TimezoneCategory(
+        name: l10n.continentAtlantic,
+        timezones: [
+          TimezoneInfo(code: 'Atlantic/Azores', name: l10n.timeZoneNameAzores),
+          TimezoneInfo(code: 'Atlantic/Canary', name: l10n.timeZoneNameCanary),
+          TimezoneInfo(code: 'Atlantic/Reykjavik', name: l10n.timeZoneNameReykjavik),
+        ],
+      ),
+    ];
   }
 
   @override
@@ -154,17 +213,7 @@ class _StepLocalizationSettingsWidgetState
     if (!_isInitialized) {
       final l10n = AppLocalizations.of(context)!;
 
-      _supportedLanguages = {
-        'tr': l10n.languageNameTr,
-        'en': l10n.languageNameEn,
-        'de': l10n.languageNameDe,
-        'es': l10n.languageNameEs,
-        'ar': l10n.languageNameAr,
-        'it': l10n.languageNameIt,
-        'zh': l10n.languageNameZh,
-        'ru': l10n.languageNameRu,
-        'fr': l10n.languageNameFr,
-      };
+      _supportedLanguages = _getSupportedLanguages(l10n);
 
       _supportedCurrencies = {
         'TRY': l10n.currencyNameTRY,
@@ -173,7 +222,7 @@ class _StepLocalizationSettingsWidgetState
         'GBP': l10n.currencyNameGBP,
       };
 
-      _supportedTimezones = _getSupportedTimezones(l10n);
+      _timezoneCategories = _getTimezoneCategories(l10n);
 
       final languageProvider =
           Provider.of<LanguageProvider>(context, listen: false);
@@ -265,72 +314,78 @@ class _StepLocalizationSettingsWidgetState
       builder: (context, isMuted, child) {
         return Container(
           margin: const EdgeInsets.only(right: 8),
-          child: Row(
+          child: Column(
             mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               if (_audioService.isPlaying)
-                Flexible(
-                  child: Container(
-                    margin: const EdgeInsets.only(right: 8),
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                    decoration: BoxDecoration(
-                      color: Colors.green.withOpacity(0.2),
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: Colors.green.withOpacity(0.3)),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(Icons.volume_up, color: Colors.green, size: 16),
-                        const SizedBox(width: 4),
-                        Flexible(
-                          child: Text(
-                            l10n.voiceGuideActive,
-                            style: TextStyle(
-                              color: Colors.green.shade700,
-                              fontSize: 12,
-                              fontWeight: FontWeight.w500,
-                            ),
-                            overflow: TextOverflow.ellipsis,
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  margin: const EdgeInsets.only(bottom: 8),
+                  constraints: const BoxConstraints(maxWidth: 150),
+                  decoration: BoxDecoration(
+                    color: Colors.green.withOpacity(0.2),
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: Colors.green.withOpacity(0.3)),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(Icons.volume_up, color: Colors.green, size: 16),
+                      const SizedBox(width: 4),
+                      Flexible(
+                        child: Text(
+                          l10n.voiceGuideActive,
+                          style: TextStyle(
+                            color: Colors.green.shade700,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500,
                           ),
+                          overflow: TextOverflow.ellipsis,
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
-              IconButton(
-                icon: Icon(
-                  isMuted ? Icons.volume_off : Icons.volume_up,
-                  color: Colors.white.withOpacity(0.9),
-                  size: 24,
-                ),
-                onPressed: () {
-                  setState(() {
-                    _audioService.toggleMute();
-                  });
-                },
-                tooltip: isMuted ? l10n.tooltipUnmute : l10n.tooltipMute,
-                style: IconButton.styleFrom(
-                  backgroundColor: isMuted 
-                    ? Colors.red.withOpacity(0.2) 
-                    : Colors.blue.withOpacity(0.2),
-                  padding: const EdgeInsets.all(12),
-                ),
-              ),
-              IconButton(
-                icon: Icon(
-                  Icons.replay,
-                  color: Colors.white.withOpacity(0.9),
-                  size: 20,
-                ),
-                onPressed: _audioService.isMuted ? null : () {
-                  _audioService.playLocalizationStepAudio(context: context);
-                },
-                tooltip: l10n.tooltipReplayGuide,
-                style: IconButton.styleFrom(
-                  backgroundColor: Colors.orange.withOpacity(0.2),
-                  padding: const EdgeInsets.all(8),
-                ),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  IconButton(
+                    icon: Icon(
+                      isMuted ? Icons.volume_off : Icons.volume_up,
+                      color: Colors.white.withOpacity(0.9),
+                      size: 24,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _audioService.toggleMute();
+                      });
+                    },
+                    tooltip: isMuted ? l10n.tooltipUnmute : l10n.tooltipMute,
+                    style: IconButton.styleFrom(
+                      backgroundColor: isMuted 
+                        ? Colors.red.withOpacity(0.2) 
+                        : Colors.blue.withOpacity(0.2),
+                      padding: const EdgeInsets.all(12),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  IconButton(
+                    icon: Icon(
+                      Icons.replay,
+                      color: Colors.white.withOpacity(0.9),
+                      size: 20,
+                    ),
+                    onPressed: _audioService.isMuted ? null : () {
+                      _audioService.playLocalizationStepAudio(context: context);
+                    },
+                    tooltip: l10n.tooltipReplayGuide,
+                    style: IconButton.styleFrom(
+                      backgroundColor: Colors.orange.withOpacity(0.2),
+                      padding: const EdgeInsets.all(8),
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
@@ -339,23 +394,24 @@ class _StepLocalizationSettingsWidgetState
     );
   }
 
+  // Tüm zaman dilimlerini düz bir liste haline getiren yardımcı fonksiyon
+  Map<String, String> _getAllTimezones() {
+    Map<String, String> allTimezones = {};
+    for (var category in _timezoneCategories) {
+      for (var timezone in category.timezones) {
+        allTimezones[timezone.code] = timezone.name;
+      }
+    }
+    return allTimezones;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Consumer<LanguageProvider>(
       builder: (context, languageProvider, child) {
         final l10n = AppLocalizations.of(context)!;
 
-        _supportedLanguages = {
-          'tr': l10n.languageNameTr,
-          'en': l10n.languageNameEn,
-          'de': l10n.languageNameDe,
-          'es': l10n.languageNameEs,
-          'ar': l10n.languageNameAr,
-          'it': l10n.languageNameIt,
-          'zh': l10n.languageNameZh,
-          'ru': l10n.languageNameRu,
-          'fr': l10n.languageNameFr,
-        };
+        _supportedLanguages = _getSupportedLanguages(l10n);
 
         _supportedCurrencies = {
           'TRY': l10n.currencyNameTRY,
@@ -364,7 +420,7 @@ class _StepLocalizationSettingsWidgetState
           'GBP': l10n.currencyNameGBP,
         };
 
-        _supportedTimezones = _getSupportedTimezones(l10n);
+        _timezoneCategories = _getTimezoneCategories(l10n);
 
         _selectedLanguageCode = languageProvider.currentLocale?.languageCode ??
             WidgetsBinding.instance.platformDispatcher.locale.languageCode;
@@ -426,6 +482,7 @@ class _StepLocalizationSettingsWidgetState
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
+                      // Dil seçimi - Bayraklarla
                       DropdownButtonFormField<String>(
                         value: _selectedLanguageCode,
                         dropdownColor: Colors.blue.shade800,
@@ -434,21 +491,54 @@ class _StepLocalizationSettingsWidgetState
                           labelText: l10n.language,
                           prefixIcon: Icon(Icons.language, color: Colors.white.withOpacity(0.7)),
                         ),
-                        items: _supportedLanguages.entries.map((entry) {
+                        items: _supportedLanguages.map((languageInfo) {
                           return DropdownMenuItem<String>(
-                            value: entry.key,
-                            child: Text(entry.value, style: const TextStyle(color: Colors.white)),
+                            value: languageInfo.code,
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  languageInfo.flag,
+                                  style: const TextStyle(fontSize: 20),
+                                ),
+                                const SizedBox(width: 12),
+                                Flexible(
+                                  child: Text(
+                                    languageInfo.name,
+                                    style: const TextStyle(color: Colors.white),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              ],
+                            ),
                           );
                         }).toList(),
                         selectedItemBuilder: (BuildContext context) {
-                          return _supportedLanguages.values
-                              .map<Widget>((String item) {
-                            return Text(item, style: const TextStyle(color: Colors.white));
+                          return _supportedLanguages.map<Widget>((languageInfo) {
+                            return Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  languageInfo.flag,
+                                  style: const TextStyle(fontSize: 18),
+                                ),
+                                const SizedBox(width: 8),
+                                Flexible(
+                                  child: Text(
+                                    languageInfo.name,
+                                    style: const TextStyle(color: Colors.white),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              ],
+                            );
                           }).toList();
                         },
                         onChanged: _onLanguageChanged,
                       ),
                       const SizedBox(height: 20),
+                      
+                      // Para birimi seçimi
                       DropdownButtonFormField<String>(
                         value: _selectedCurrency,
                         dropdownColor: Colors.blue.shade800,
@@ -477,6 +567,8 @@ class _StepLocalizationSettingsWidgetState
                         },
                       ),
                       const SizedBox(height: 20),
+                      
+                      // Zaman dilimi seçimi - Kategorize edilmiş
                       DropdownButtonFormField<String>(
                         value: _selectedTimezone,
                         isExpanded: true,
@@ -486,16 +578,15 @@ class _StepLocalizationSettingsWidgetState
                           labelText: l10n.businessSettingsTimezoneLabel,
                           prefixIcon: Icon(Icons.access_time_outlined, color: Colors.white.withOpacity(0.7)),
                         ),
-                        items: _supportedTimezones.entries.map((entry) {
-                          return DropdownMenuItem<String>(
-                            value: entry.key,
-                            child: Text(entry.value, style: const TextStyle(color: Colors.white), overflow: TextOverflow.ellipsis),
-                          );
-                        }).toList(),
+                        items: _buildTimezoneDropdownItems(),
                         selectedItemBuilder: (BuildContext context) {
-                          return _supportedTimezones.values
-                              .map<Widget>((String item) {
-                            return Text(item, style: const TextStyle(color: Colors.white), overflow: TextOverflow.ellipsis);
+                          final allTimezones = _getAllTimezones();
+                          return allTimezones.values.map<Widget>((String item) {
+                            return Text(
+                              item,
+                              style: const TextStyle(color: Colors.white),
+                              overflow: TextOverflow.ellipsis,
+                            );
                           }).toList();
                         },
                         onChanged: (String? newValue) {
@@ -515,5 +606,66 @@ class _StepLocalizationSettingsWidgetState
         );
       },
     );
+  }
+
+  // Kategorize edilmiş zaman dilimi dropdown öğelerini oluşturan fonksiyon
+  List<DropdownMenuItem<String>> _buildTimezoneDropdownItems() {
+    final l10n = AppLocalizations.of(context)!;
+    List<DropdownMenuItem<String>> items = [];
+    
+    for (int categoryIndex = 0; categoryIndex < _timezoneCategories.length; categoryIndex++) {
+      final category = _timezoneCategories[categoryIndex];
+      
+      // Kategori başlığını ekle
+      if (categoryIndex > 0) {
+        items.add(
+          DropdownMenuItem<String>(
+            enabled: false,
+            value: null,
+            child: Container(
+              margin: const EdgeInsets.only(top: 8),
+              child: Divider(color: Colors.white.withOpacity(0.3), thickness: 1),
+            ),
+          ),
+        );
+      }
+      
+      items.add(
+        DropdownMenuItem<String>(
+          enabled: false,
+          value: null,
+          child: Container(
+            padding: const EdgeInsets.symmetric(vertical: 4),
+            child: Text(
+              '${l10n.timezoneIconWorld} ${category.name}',
+              style: TextStyle(
+                color: Colors.amber.shade300,
+                fontWeight: FontWeight.bold,
+                fontSize: 14,
+              ),
+            ),
+          ),
+        ),
+      );
+      
+      // Kategori içindeki zaman dilimlerini ekle
+      for (final timezone in category.timezones) {
+        items.add(
+          DropdownMenuItem<String>(
+            value: timezone.code,
+            child: Container(
+              padding: const EdgeInsets.only(left: 16),
+              child: Text(
+                timezone.name,
+                style: const TextStyle(color: Colors.white),
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ),
+        );
+      }
+    }
+    
+    return items;
   }
 }

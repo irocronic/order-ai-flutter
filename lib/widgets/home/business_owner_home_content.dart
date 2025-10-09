@@ -33,8 +33,11 @@ import 'home_grid_view.dart';
 import 'subscription_status_card.dart';
 import '../../screens/reservations_screen.dart';
 import '../../screens/business_card_designer_screen.dart';
-// +++ YENİ EKLENEN IMPORT +++
 import '../../screens/payment_settings_screen.dart';
+// +++ YENİ EKLENEN IMPORT'LAR +++
+import '../../screens/attendance_management_screen.dart';
+import '../../screens/qr_check_in_screen.dart';
+import '../../screens/weekly_attendance_report_screen.dart';
 
 class BusinessOwnerHomeContent extends StatefulWidget {
   final String token;
@@ -407,6 +410,18 @@ class _BusinessOwnerHomeContentState extends State<BusinessOwnerHomeContent> {
                   builder: (_) => const ReservationsScreen()),
             ),
           ),
+          // +++ YENİ EKLENENLİR - PERSONEL GİRİŞ-ÇIKIŞ +++
+          if (UserSession.userType == 'staff')
+            HomeMenuItem(
+              icon: Icons.qr_code_scanner,
+              title: 'Giriş-Çıkış',
+              baseColor: Colors.orange.shade600,
+              permissionKey: '',
+              onTapBuilder: (ctx) => () => Navigator.push(
+                ctx,
+                MaterialPageRoute(builder: (_) => const QRCheckInScreen()),
+              ),
+            ),
         ],
       ),
       HomeMenuSection(
@@ -511,6 +526,18 @@ class _BusinessOwnerHomeContentState extends State<BusinessOwnerHomeContent> {
                       builder: (_) => StaffPerformanceScreen(
                           token: widget.token,
                           businessId: widget.businessId)))),
+          // +++ YENİ EKLENENLİR - HAFTALIK RAPOR +++
+          HomeMenuItem(
+            icon: Icons.calendar_view_week,
+            title: 'Haftalık Çalışma Raporu',
+            baseColor: Colors.indigo.shade600,
+            permissionKey: PermissionKeys.viewReports,
+            requiresBusinessOwner: true,
+            onTapBuilder: (ctx) => () => Navigator.push(
+              ctx,
+              MaterialPageRoute(builder: (_) => const WeeklyAttendanceReportScreen()),
+            ),
+          ),
         ],
       ),
       HomeMenuSection(
@@ -528,18 +555,16 @@ class _BusinessOwnerHomeContentState extends State<BusinessOwnerHomeContent> {
                       builder: (_) => BusinessSettingsScreen(
                           token: widget.token,
                           businessId: widget.businessId)))),
-          // ++++++++++++++++ İSTEDİĞİNİZ DEĞİŞİKLİK BURADA EKLENDİ ++++++++++++++++
           HomeMenuItem(
             icon: Icons.payment,
-            title: l10n.homeMenuPaymentSettings, // .arb dosyanıza eklediğiniz anahtar
+            title: l10n.homeMenuPaymentSettings,
             baseColor: Colors.deepPurple.shade500,
             requiresBusinessOwner: true,
             onTapBuilder: (ctx) => () => Navigator.push(
                 ctx, MaterialPageRoute(builder: (_) => const PaymentSettingsScreen()))),
-          // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
           HomeMenuItem(
               icon: Icons.contact_mail_outlined,
-              title: l10n.homeMenuBusinessCard, // .arb dosyanıza eklediğiniz anahtar
+              title: l10n.homeMenuBusinessCard,
               baseColor: Colors.teal.shade600,
               requiresBusinessOwner: true,
               onTapBuilder: (ctx) => () => Navigator.push(
@@ -552,6 +577,18 @@ class _BusinessOwnerHomeContentState extends State<BusinessOwnerHomeContent> {
               permissionKey: '',
               onTapBuilder: (ctx) => () => Navigator.push(ctx,
                   MaterialPageRoute(builder: (_) => const ManageWebsiteScreen()))),
+          // +++ YENİ EKLENENLİR - PERSONEL GİRİŞ-ÇIKIŞ YÖNETİMİ +++
+          HomeMenuItem(
+            icon: Icons.qr_code,
+            title: 'Personel Giriş-Çıkış',
+            baseColor: Colors.teal.shade600,
+            permissionKey: PermissionKeys.manageStaff,
+            requiresBusinessOwner: true,
+            onTapBuilder: (ctx) => () => Navigator.push(
+              ctx,
+              MaterialPageRoute(builder: (_) => const AttendanceManagementScreen()),
+            ),
+          ),
           HomeMenuItem(
               icon: Icons.group_add_outlined,
               title: l10n.homeMenuStaffManagement,

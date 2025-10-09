@@ -5050,44 +5050,229 @@
   "timeZoneNameCanary": "Канарские острова (GMT+0)",
   "timeZoneNameReykjavik": "Рейкьявик (GMT+0)",
   "setupCategoriesLoadingTemplates": "Загрузка шаблонов...",
-  "getPriceFromRecipe": "Reçeteden fiyat al",
-  "selectCategoryLabel": "Select Category",
-  "selectCategoryHint": "Please choose a category",
-  "loadingProductTemplates": "Loading product templates...",
-  "deselectAllLabel": "Deselect All",
-  "selectAllLabel": "Select All",
-  "productsListedCount": "Products listed: {count}",
+  "getPriceFromRecipe": "Получить цену из рецепта",
+  "selectCategoryLabel": "Выбрать категорию",
+  "selectCategoryHint": "Пожалуйста, выберите категорию",
+  "loadingProductTemplates": "Загрузка шаблонов продуктов...",
+  "deselectAllLabel": "Снять выделение со всех",
+  "selectAllLabel": "Выбрать все",
+  "productsListedCount": "Размещенные товары: {count}",
   "@productsListedCount": {
+    "description": "Отображает количество размещенных товаров.",
     "placeholders": {
-      "count": {}
+      "count": { "type": "int", "example": "12" }
     }
   },
-  "noProductTemplatesFound": "No product templates found",
-  "noProductsMatchSearch": "No products match your search",
-  "customProductLabel": "Custom product",
-  "manageVariants": "Manage variants ({count})",
+  "noProductTemplatesFound": "Шаблоны товаров не найдены",
+  "noProductsMatchSearch": "Нет товаров, соответствующих вашему запросу",
+  "customProductLabel": "Пользовательский товар",
+  "manageVariants": "Управление вариантами ({count})",
   "@manageVariants": {
+    "description": "Количество вариантов, связанных с товаром.",
     "placeholders": {
-      "count": {}
+      "count": { "type": "int", "example": "5" }
     }
   },
-  "variantImagesIncomplete": "Variant images incomplete",
-  "selectProductButton": "Select Product",
-  "addSelectedProducts": "Add {count} selected products",
+  "variantImagesIncomplete": "Изображения вариантов неполные",
+  "selectProductButton": "Выбрать товар",
+  "addSelectedProducts": "Добавить {count} выбранных товаров",
   "@addSelectedProducts": {
+    "description": "Добавляет выбранные товары в список.",
     "placeholders": {
-      "count": {}
+      "count": { "type": "int", "example": "3" }
     }
   },
-  "loadingVariants": "Varyantlar yükleniyor...",
-  "variantManagementSubtitle": "Ürün varyantlarını yönet",
-  "totalVariantsInfo": "Toplam {count} varyant",
+  "loadingVariants": "Загрузка вариантов...",
+  "variantManagementSubtitle": "Управление вариантами товаров",
+  "totalVariantsInfo": "Всего вариантов: {count}",
   "@totalVariantsInfo": {
+    "description": "Отображает общее количество вариантов.",
     "placeholders": {
-      "count": {
+      "count": { "type": "String", "example": "8" }
+    }
+  },
+  "variantManagementHint": "Завершите, чтобы сохранить изменения",
+  "continentEurope": "Европа",
+  "continentAsia": "Азия",
+  "continentAmerica": "Америка",
+  "continentAfrica": "Африка",
+  "continentOceania": "Океания",
+  "continentAtlantic": "Атлантика",
+  "timezoneIconWorld": "🌍",
+  "kdsSelectionRequiredError": "Для выбранных категорий необходимо выбрать экран KDS.",
+  "kdsRequired": "Требуется KDS!",
+  "templatesLoading": "Загрузка шаблонов...",
+  "categoryName": "Название категории",
+  "kdsScreen": "Экран KDS",
+  "creating": "Создание...",
+  "connectivity_service_started": "Запущено.",
+  "connection_status_changed": "Статус соединения изменен",
+  "online": "В СЕТИ",
+  "offline": "НЕ В СЕТИ",
+  "backend_connected": "Бэкенд доступен (в сети).",
+  "backend_connection_failed": "Бэкенд недоступен (считается не в сети)",
+  "connectivity_service_stopped": "Остановлено.",
+  "offline_save_error": "Ошибка при автономном сохранении: {error}",
+  "@offline_save_error": {
+    "placeholders": {
+      "error": {
         "type": "String"
       }
     }
   },
-  "variantManagementHint": "Değişiklikleri kaydetmek için tamamla"
+  "token_not_found": "Токен не найден",
+  "no_records_to_sync": "Нет записей для синхронизации",
+  "sync_result_message": "Успешно: {success}, Неудачно: {failure}",
+  "@sync_result_message": {
+    "placeholders": {
+      "success": {
+        "type": "int"
+      },
+      "failure": {
+        "type": "int"
+      }
+    }
+  },
+  "fetch_locations_failed": "Не удалось получить местоположения для отметки",
+  "fetch_locations_error": "Ошибка при получении местоположений",
+  "create_location_error": "Ошибка при создании местоположения",
+  "update_location_failed": "Не удалось обновить местоположение",
+  "update_location_error": "Ошибка при обновлении местоположения",
+  "delete_location_failed": "Не удалось удалить местоположение",
+  "delete_location_error": "Ошибка при удалении местоположения",
+  "qr_code_generation_error": "Ошибка при генерации QR-кода",
+  "attendance_record_error": "Ошибка при создании записи посещаемости",
+  "fetch_history_failed": "Не удалось получить историю посещаемости",
+  "fetch_history_error": "Ошибка при получении истории посещаемости",
+  "checkInLocations": "Места для Отметки",
+  "deleteLocation": "Удалить Местоположение",
+  "deleteLocationConfirmation": "Вы уверены, что хотите удалить местоположение {locationName}?",
+  "@deleteLocationConfirmation": {
+    "placeholders": {
+      "locationName": {
+        "type": "String"
+      }
+    }
+  },
+  "cancel": "Отмена",
+  "delete": "Удалить",
+  "locationDeletedSuccessfully": "Местоположение успешно удалено",
+  "deleteError": "Ошибка удаления: {error}",
+  "@deleteError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "tryAgain": "Попробовать Снова",
+  "noLocationAdded": "Местоположение еще не добавлено",
+  "addLocation": "Добавить Местоположение",
+  "radiusMeters": "Радиус: {radius} метров",
+  "@radiusMeters": {
+    "placeholders": {
+      "radius": {
+        "type": "int"
+      }
+    }
+  },
+  "status": "Статус: {status}",
+  "@status": {
+    "placeholders": {
+      "status": {
+        "type": "String"
+      }
+    }
+  },
+  "active": "Активный",
+  "inactive": "Неактивный",
+  "edit": "Редактировать",
+  "addNewLocation": "Добавить Новое Местоположение",
+  "locationName": "Название Местоположения",
+  "locationNameRequired": "Название местоположения обязательно",
+  "radiusMeter": "Радиус (метры)",
+  "radiusRequired": "Радиус обязателен",
+  "enterValidRadius": "Введите действительный радиус",
+  "getting": "Получение...",
+  "getLocation": "Получить Местоположение",
+  "locationCoordinates": "Местоположение: {lat}, {lng}",
+  "@locationCoordinates": {
+    "placeholders": {
+      "lat": {
+        "type": "String"
+      },
+      "lng": {
+        "type": "String"
+      }
+    }
+  },
+  "create": "Создать",
+  "location_not_obtained": "Местоположение не получено",
+  "locationError": "Ошибка получения местоположения: {error}",
+  "@locationError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "pleaseGetLocationFirst": "Пожалуйста, сначала получите местоположение",
+  "locationCreatedSuccessfully": "Местоположение успешно создано",
+  "creationError": "Ошибка создания: {error}",
+  "@creationError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "editLocation": "Редактировать Местоположение",
+  "thisLocationIsActive": "Это местоположение активно",
+  "thisLocationIsInactive": "Это местоположение неактивно",
+  "locationUpdatedSuccessfully": "Местоположение успешно обновлено",
+  "updateError": "Ошибка обновления: {error}",
+  "@updateError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "update": "Обновить",
+  "attendanceManagementTitle": "Управление Посещаемостью Персонала",
+  "locationManagement": "Управление Местоположениями", 
+  "locationManagementDescription": "Управление точками регистрации",
+  "qrCodeGeneration": "Генерировать QR-код",
+  "qrCodeGenerationDescription": "QR-коды входа-выхода персонала",
+  "attendanceHistory": "История Посещений",
+  "attendanceHistoryDescription": "Записи входа-выхода персонала",
+  "activeLocations": "Активные Местоположения",
+  "radiusMeters": "Радиус: {meters} метров",
+  "@radiusMeters": {
+    "description": "Отображает радиус в метрах для местоположения",
+    "placeholders": {
+      "meters": {
+        "type": "int",
+        "example": "100"
+      }
+    }
+  },
+  "quantityInputLabel": "Количество",
+  "@quantityInputLabel": {
+    "description": "Label for the quantity input field"
+  },
+  "quantityRequiredError": "Количество обязательно",
+  "@quantityRequiredError": {
+    "description": "Error message when quantity is not entered"
+  },
+  "quantityInvalidNumberError": "Введите правильное число",
+  "@quantityInvalidNumberError": {
+    "description": "Error message when entered quantity is not a valid number"
+  },
+  "alertThresholdLabel": "Порог Предупреждения",
+  "alertThresholdHint": "Критический уровень запасов",
+  "alertThresholdHelper": "Электронное письмо будет отправлено, когда уровень опустится ниже этого порога",
+  "alertThresholdDisplay": "Порог Предупреждения",
+  "validQuantityError": "Пожалуйста, введите действительное количество",
+  "errorPrefix": "Ошибка"
 }

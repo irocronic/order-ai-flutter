@@ -5194,8 +5194,9 @@
   "selectAllLabel": "Select All",
   "productsListedCount": "Products listed: {count}",
   "@productsListedCount": {
+    "description": "Displays the number of listed products.",
     "placeholders": {
-      "count": {}
+      "count": { "type": "int", "example": "12" }
     }
   },
   "noProductTemplatesFound": "No product templates found",
@@ -5203,27 +5204,211 @@
   "customProductLabel": "Custom product",
   "manageVariants": "Manage variants ({count})",
   "@manageVariants": {
+    "description": "Number of variants linked to the product.",
     "placeholders": {
-      "count": {}
+      "count": { "type": "int", "example": "5" }
     }
   },
   "variantImagesIncomplete": "Variant images incomplete",
   "selectProductButton": "Select Product",
   "addSelectedProducts": "Add {count} selected products",
   "@addSelectedProducts": {
+    "description": "Adds selected products to the list.",
     "placeholders": {
-      "count": {}
+      "count": { "type": "int", "example": "3" }
     }
   },
-  "loadingVariants": "Varyantlar yükleniyor...",
-  "variantManagementSubtitle": "Ürün varyantlarını yönet",
-  "totalVariantsInfo": "Toplam {count} varyant",
+  "loadingVariants": "Loading variants...",
+  "variantManagementSubtitle": "Manage product variants",
+  "totalVariantsInfo": "Total {count} variants",
   "@totalVariantsInfo": {
+    "description": "Displays total number of variants.",
     "placeholders": {
-      "count": {
+      "count": { "type": "String", "example": "8" }
+    }
+  },
+  "variantManagementHint": "Complete to save changes",
+  "continentEurope": "Europe",
+  "continentAsia": "Asia",
+  "continentAmerica": "America",
+  "continentAfrica": "Africa",
+  "continentOceania": "Oceania",
+  "continentAtlantic": "Atlantic",
+  "timezoneIconWorld": "🌍",
+  "kdsSelectionRequiredError": "Selecting a KDS screen is required for the chosen categories.",
+  "kdsRequired": "KDS Required!",
+  "templatesLoading": "Loading templates...",
+  "categoryName": "Category Name",
+  "kdsScreen": "KDS Screen",
+  "creating": "Creating...",
+  "connectivity_service_started": "Started.",
+  "connection_status_changed": "Connection status changed",
+  "online": "ONLINE",
+  "offline": "OFFLINE",
+  "backend_connected": "Backend reached (online).",
+  "backend_connection_failed": "Backend unreachable (considered offline)",
+  "connectivity_service_stopped": "Stopped.",
+  "offline_save_error": "Error during offline save: {error}",
+  "@offline_save_error": {
+    "placeholders": {
+      "error": {
         "type": "String"
       }
     }
   },
-  "variantManagementHint": "Değişiklikleri kaydetmek için tamamla"
+  "token_not_found": "Token not found",
+  "no_records_to_sync": "No records to synchronize",
+  "sync_result_message": "Successful: {success}, Failed: {failure}",
+  "@sync_result_message": {
+    "placeholders": {
+      "success": {
+        "type": "int"
+      },
+      "failure": {
+        "type": "int"
+      }
+    }
+  },
+  "fetch_locations_failed": "Could not retrieve check-in locations",
+  "fetch_locations_error": "Error retrieving locations",
+  "create_location_error": "Error creating location",
+  "update_location_failed": "Could not update location",
+  "update_location_error": "Error updating location",
+  "delete_location_failed": "Could not delete location",
+  "delete_location_error": "Error deleting location",
+  "qr_code_generation_error": "Error generating QR code",
+  "attendance_record_error": "Error creating attendance record",
+  "fetch_history_failed": "Could not retrieve attendance history",
+  "fetch_history_error": "Error retrieving attendance history",
+  "checkInLocations": "Check-in Locations",
+  "deleteLocation": "Delete Location",
+  "deleteLocationConfirmation": "Are you sure you want to delete the location {locationName}?",
+  "@deleteLocationConfirmation": {
+    "placeholders": {
+      "locationName": {
+        "type": "String"
+      }
+    }
+  },
+  "cancel": "Cancel",
+  "delete": "Delete",
+  "locationDeletedSuccessfully": "Location deleted successfully",
+  "deleteError": "Delete error: {error}",
+  "@deleteError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "tryAgain": "Try Again",
+  "noLocationAdded": "No location added yet",
+  "addLocation": "Add Location",
+  "radiusMeters": "Radius: {radius} meters",
+  "@radiusMeters": {
+    "placeholders": {
+      "radius": {
+        "type": "int"
+      }
+    }
+  },
+  "status": "Status: {status}",
+  "@status": {
+    "placeholders": {
+      "status": {
+        "type": "String"
+      }
+    }
+  },
+  "active": "Active",
+  "inactive": "Inactive",
+  "edit": "Edit",
+  "addNewLocation": "Add New Location",
+  "locationName": "Location Name",
+  "locationNameRequired": "Location name is required",
+  "radiusMeter": "Radius (meters)",
+  "radiusRequired": "Radius is required",
+  "enterValidRadius": "Enter a valid radius",
+  "getting": "Getting...",
+  "getLocation": "Get Location",
+  "locationCoordinates": "Location: {lat}, {lng}",
+  "@locationCoordinates": {
+    "placeholders": {
+      "lat": {
+        "type": "String"
+      },
+      "lng": {
+        "type": "String"
+      }
+    }
+  },
+  "create": "Create",
+  "location_not_obtained": "Location not obtained",
+  "locationError": "Location error: {error}",
+  "@locationError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "pleaseGetLocationFirst": "Please get location first",
+  "locationCreatedSuccessfully": "Location created successfully",
+  "creationError": "Creation error: {error}",
+  "@creationError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "editLocation": "Edit Location",
+  "thisLocationIsActive": "This location is active",
+  "thisLocationIsInactive": "This location is inactive",
+  "locationUpdatedSuccessfully": "Location updated successfully",
+  "updateError": "Update error: {error}",
+  "@updateError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "update": "Update",
+  "attendanceManagementTitle": "Staff Attendance Management",
+  "locationManagement": "Location Management",
+  "locationManagementDescription": "Manage check-in points",
+  "qrCodeGeneration": "Generate QR Code",
+  "qrCodeGenerationDescription": "Staff check-in/out QR codes",
+  "attendanceHistory": "Attendance History",
+  "attendanceHistoryDescription": "Staff check-in/out records",
+  "activeLocations": "Active Locations",
+  "radiusMeters": "Radius: {meters} meters",
+  "@radiusMeters": {
+    "description": "Displays the radius in meters for a location",
+    "placeholders": {
+      "meters": {
+        "type": "int",
+        "example": "100"
+      }
+    }
+  },
+  "quantityInputLabel": "Quantity",
+  "@quantityInputLabel": {
+    "description": "Label for quantity input field"
+  },
+  "quantityRequiredError": "Quantity is required",
+  "@quantityRequiredError": {
+    "description": "Error message when quantity field is empty"
+  },
+  "quantityValidNumberError": "Please enter a valid number",
+  "@quantityValidNumberError": {
+    "description": "Error message when entered value is not a valid number"
+  },
+  "alertThresholdLabel": "Alert Threshold",
+  "alertThresholdHint": "Critical stock level",
+  "alertThresholdHelper": "Email will be sent when stock falls below this level",
+  "alertThresholdDisplay": "Alert Threshold",
+  "validQuantityError": "Please enter a valid quantity",
+  "errorPrefix": "Error"
 }

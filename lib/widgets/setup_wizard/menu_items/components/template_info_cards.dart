@@ -20,91 +20,29 @@ class TemplateInfoCards extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
-    return Column(
+    return Row(
       children: [
-        // Limit bilgisi - mavi gradient için güncellendi
-        Container(
-          padding: const EdgeInsets.all(8.0),
-          margin: const EdgeInsets.only(bottom: 12.0),
-          decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.15),
-            borderRadius: BorderRadius.circular(6.0),
-            border: Border.all(color: Colors.white.withOpacity(0.3)),
-          ),
-          child: Row(
-            children: [
-              Icon(
-                Icons.info_outline, 
-                color: Colors.white.withOpacity(0.9), 
-                size: 16
-              ),
-              const SizedBox(width: 6),
-              Expanded(
-                child: Text(
-                  l10n.itemSelectionInfo(
-                    currentMenuItemCount.toString(),
-                    selectedTemplateIds.length.toString(),
-                  ),
-                  style: TextStyle(
-                    fontSize: 11,
-                    color: Colors.white.withOpacity(0.95),
-                    fontWeight: FontWeight.w500,
-                  ),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-            ],
+        Icon(
+          Icons.info_outline, 
+          color: Colors.white.withOpacity(0.9), 
+          size: 16
+        ),
+        const SizedBox(width: 6),
+        Expanded(
+          child: Text(
+            l10n.itemSelectionInfo(
+              currentMenuItemCount.toString(),
+              selectedTemplateIds.length.toString(),
+            ),
+            style: TextStyle(
+              fontSize: 11,
+              color: Colors.white.withOpacity(0.95),
+              fontWeight: FontWeight.w500,
+            ),
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
           ),
         ),
-        
-        // Varyant durumu özeti - mavi gradient için güncellendi
-        if (selectedTemplateIds.isNotEmpty)
-          Container(
-            padding: const EdgeInsets.all(8.0),
-            margin: const EdgeInsets.only(bottom: 12.0),
-            decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.2),
-              borderRadius: BorderRadius.circular(6.0),
-              border: Border.all(color: Colors.white.withOpacity(0.4)),
-            ),
-            child: Row(
-              children: [
-                Icon(
-                  Icons.tune, 
-                  color: Colors.white.withOpacity(0.9), 
-                  size: 16
-                ),
-                const SizedBox(width: 6),
-                Expanded(
-                  child: Builder(
-                    builder: (context) {
-                      int totalVariants = 0;
-                      int variantsWithPhoto = 0;
-                      for (int templateId in selectedTemplateIds) {
-                        final config = templateVariantConfigs[templateId];
-                        if (config != null) {
-                          totalVariants += config.variants.length;
-                          if (config.hasVariantImageEnabled && config.hasVariantImage) {
-                            variantsWithPhoto++;
-                          }
-                        }
-                      }
-                      final photoText = variantsWithPhoto > 0 ? ' (📸$variantsWithPhoto)' : '';
-                      return Text(
-                        l10n.totalVariantsInfo(totalVariants.toString()) + photoText,
-                        style: TextStyle(
-                          fontSize: 11,
-                          color: Colors.white.withOpacity(0.95),
-                          fontWeight: FontWeight.w500,
-                        ),
-                      );
-                    },
-                  ),
-                ),
-              ],
-            ),
-          ),
       ],
     );
   }

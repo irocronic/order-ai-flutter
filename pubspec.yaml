@@ -61,6 +61,9 @@ dependencies:
   google_maps_flutter: ^2.12.0
   flutter_svg: ^2.0.7
   file_picker: ^6.1.1
+  mobile_scanner: ^5.2.3
+  geolocator: ^10.1.0
+  share_plus: ^10.0.0
 
   # YENİ EKLENDİ: Özel ses dosyalarını çalmak için.
   audioplayers: ^6.5.0

@@ -11,6 +11,7 @@ import '../services/template_selection_service.dart';
 import '../components/template_selection_header.dart';
 import '../components/template_selection_content.dart';
 import '../components/template_selection_footer.dart';
+import '../dialogs/custom_product_dialog.dart';
 import 'variant_management_dialog.dart';
 
 class TemplateSelectionDialog extends StatefulWidget {
@@ -638,7 +639,6 @@ class _TemplateSelectionDialogState extends State<TemplateSelectionDialog> {
           children: [
             // Header with gradient and glass effect
             Container(
-              height: 70,
               padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 12.0),
               decoration: BoxDecoration(
                 gradient: LinearGradient(
@@ -660,46 +660,82 @@ class _TemplateSelectionDialogState extends State<TemplateSelectionDialog> {
                   ),
                 ),
               ),
-              child: Row(
+              child: Column(
                 children: [
-                  Container(
-                    padding: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.2),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Icon(
-                      Icons.auto_awesome,
-                      color: Colors.white,
-                      size: 24,
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Text(
-                      l10n.addProductFromTemplateTitle,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        letterSpacing: 0.5,
+                  Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.2),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Icon(
+                          Icons.auto_awesome,
+                          color: Colors.white,
+                          size: 24,
+                        ),
                       ),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Text(
+                          l10n.addProductFromTemplateTitle,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 0.5,
+                          ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: IconButton(
+                          onPressed: () => Navigator.of(context).pop(),
+                          icon: const Icon(Icons.close, color: Colors.white),
+                          padding: const EdgeInsets.all(8),
+                          constraints: const BoxConstraints(minWidth: 40, minHeight: 40),
+                        ),
+                      ),
+                    ],
                   ),
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(8),
+                  
+                  // ✅ YENİ: Hata mesajını header'ın altına ekliyoruz
+                  if (!_isButtonEnabled && selectedTemplateIds.isNotEmpty && !everySelectedHasVariant)
+                    Container(
+                      margin: const EdgeInsets.only(top: 12),
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: Colors.red.withOpacity(0.2),
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(color: Colors.red.withOpacity(0.4)),
+                      ),
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.warning_amber,
+                            color: Colors.red.shade200,
+                            size: 20,
+                          ),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: Text(
+                              l10n.templateVariantRequiredError,
+                              style: TextStyle(
+                                color: Colors.red.shade200,
+                                fontSize: 13,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                    child: IconButton(
-                      onPressed: () => Navigator.of(context).pop(),
-                      icon: const Icon(Icons.close, color: Colors.white),
-                      padding: const EdgeInsets.all(8),
-                      constraints: const BoxConstraints(minWidth: 40, minHeight: 40),
-                    ),
-                  ),
                 ],
               ),
             ),
@@ -750,9 +786,8 @@ class _TemplateSelectionDialogState extends State<TemplateSelectionDialog> {
               ),
             ),
             
-            // Footer with gradient
+            // ✅ FİX: Footer'ı dinamik yükseklik ile güncelledik
             Container(
-              height: 80,
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   begin: Alignment.topCenter,
@@ -771,80 +806,213 @@ class _TemplateSelectionDialogState extends State<TemplateSelectionDialog> {
                 ),
               ),
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        TextButton(
-                          onPressed: () => Navigator.of(context).pop(),
-                          style: TextButton.styleFrom(
-                            foregroundColor: Colors.white.withOpacity(0.9),
-                            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              side: BorderSide(color: Colors.white.withOpacity(0.3)),
-                            ),
-                          ),
-                          child: Text(
-                            l10n.dialogButtonCancel, 
-                            style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600)
-                          ),
-                        ),
-                        const SizedBox(width: 8),
-                        ElevatedButton(
-                          onPressed: _isButtonEnabled ? () {
-                            if (!_validateVariantImages()) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text('Varyant fotoğrafları eksik. Lütfen kontrol edin.'),
-                                  backgroundColor: Colors.red,
+                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    final availableWidth = constraints.maxWidth;
+                    
+                    // ✅ Küçük ekranlar için farklı düzen - dinamik yükseklik ile
+                    if (availableWidth < 350) {
+                      return IntrinsicHeight(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            // İlk satır: Yeni Ürün Ekle butonu
+                            if (_targetCategoryId != null)
+                              Container(
+                                width: double.infinity,
+                                height: 32,
+                                child: ElevatedButton.icon(
+                                  onPressed: () async {
+                                    final result = await showDialog<Map<String, dynamic>>(
+                                      context: context,
+                                      barrierDismissible: false,
+                                      builder: (context) => CustomProductDialog(
+                                        token: widget.token,
+                                        businessId: widget.businessId,
+                                        targetCategoryId: _targetCategoryId!,
+                                        selectedCategoryName: _selectedCategoryName ?? '',
+                                      ),
+                                    );
+
+                                    if (result != null) {
+                                      _onCustomProductAdded(result);
+                                    }
+                                  },
+                                  icon: const Icon(Icons.add, size: 14),
+                                  label: Text(
+                                    'Yeni Ürün',
+                                    style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold),
+                                  ),
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.green,
+                                    foregroundColor: Colors.white,
+                                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                                    elevation: 2,
+                                  ),
                                 ),
-                              );
-                              return;
-                            }
-                            final result = _prepareResultData();
-                            Navigator.of(context).pop(result);
-                          } : null,
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.white,
-                            foregroundColor: Colors.blue.shade700,
-                            disabledBackgroundColor: Colors.white.withOpacity(0.3),
-                            disabledForegroundColor: Colors.white.withOpacity(0.5),
-                            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
+                              ),
+                            
+                            const SizedBox(height: 8), // Araya boşluk
+                            
+                            // İkinci satır: İptal ve Ekle butonları
+                            SizedBox(
+                              height: 36,
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: TextButton(
+                                      onPressed: () => Navigator.of(context).pop(),
+                                      style: TextButton.styleFrom(
+                                        foregroundColor: Colors.white.withOpacity(0.9),
+                                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(8),
+                                          side: BorderSide(color: Colors.white.withOpacity(0.3)),
+                                        ),
+                                      ),
+                                      child: Text(
+                                        l10n.dialogButtonCancel,
+                                        style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w600),
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 6),
+                                  Expanded(
+                                    flex: 2,
+                                    child: ElevatedButton(
+                                      onPressed: _isButtonEnabled ? () {
+                                        if (!_validateVariantImages()) {
+                                          ScaffoldMessenger.of(context).showSnackBar(
+                                            const SnackBar(
+                                              content: Text('Varyant fotoğrafları eksik. Lütfen kontrol edin.'),
+                                              backgroundColor: Colors.red,
+                                            ),
+                                          );
+                                          return;
+                                        }
+                                        final result = _prepareResultData();
+                                        Navigator.of(context).pop(result);
+                                      } : null,
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.white,
+                                        foregroundColor: Colors.blue.shade700,
+                                        disabledBackgroundColor: Colors.white.withOpacity(0.3),
+                                        disabledForegroundColor: Colors.white.withOpacity(0.5),
+                                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                                        elevation: 4,
+                                      ),
+                                      child: Text(
+                                        'Ekle',
+                                        style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
-                            elevation: 4,
-                            shadowColor: Colors.black.withOpacity(0.3),
-                          ),
-                          child: Text(
-                            l10n.templateAddSelectedButton,
-                            style: const TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
+                          ],
+                        ),
+                      );
+                    }
+                    
+                    // ✅ Normal ekranlar için tek satır düzen - sabit yükseklik
+                    return SizedBox(
+                      height: 56,
+                      child: Row(
+                        children: [
+                          // Yeni Ürün Ekle butonu (sol taraf)
+                          if (_targetCategoryId != null)
+                            Flexible(
+                              child: ElevatedButton.icon(
+                                onPressed: () async {
+                                  final result = await showDialog<Map<String, dynamic>>(
+                                    context: context,
+                                    barrierDismissible: false,
+                                    builder: (context) => CustomProductDialog(
+                                      token: widget.token,
+                                      businessId: widget.businessId,
+                                      targetCategoryId: _targetCategoryId!,
+                                      selectedCategoryName: _selectedCategoryName ?? '',
+                                    ),
+                                  );
+
+                                  if (result != null) {
+                                    _onCustomProductAdded(result);
+                                  }
+                                },
+                                icon: const Icon(Icons.add_circle_outline, size: 16),
+                                label: Text(
+                                  l10n.addNewProduct,
+                                  style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.green,
+                                  foregroundColor: Colors.white,
+                                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                                  elevation: 2,
+                                ),
+                              ),
+                            ),
+                          
+                          const Spacer(), // Orta boşluk
+                          
+                          // İptal butonu
+                          TextButton(
+                            onPressed: () => Navigator.of(context).pop(),
+                            style: TextButton.styleFrom(
+                              foregroundColor: Colors.white.withOpacity(0.9),
+                              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                side: BorderSide(color: Colors.white.withOpacity(0.3)),
+                              ),
+                            ),
+                            child: Text(
+                              l10n.dialogButtonCancel,
+                              style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                    // ✅ YENİ: Koşullu hata mesajı - sadece reçeteli ürünlerde varyant eksikse gösterilir
-                    if (!_isButtonEnabled && selectedTemplateIds.isNotEmpty && !everySelectedHasVariant)
-                      Padding(
-                        padding: const EdgeInsets.only(top: 8.0),
-                        child: Text(
-                          l10n.templateVariantRequiredError,
-                          style: TextStyle(
-                            color: Colors.red.shade200,
-                            fontSize: 12,
-                            fontWeight: FontWeight.w500,
+                          const SizedBox(width: 8),
+                          
+                          // Seçilenleri Ekle butonu
+                          ElevatedButton(
+                            onPressed: _isButtonEnabled ? () {
+                              if (!_validateVariantImages()) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text('Varyant fotoğrafları eksik. Lütfen kontrol edin.'),
+                                    backgroundColor: Colors.red,
+                                  ),
+                                );
+                                return;
+                              }
+                              final result = _prepareResultData();
+                              Navigator.of(context).pop(result);
+                            } : null,
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.white,
+                              foregroundColor: Colors.blue.shade700,
+                              disabledBackgroundColor: Colors.white.withOpacity(0.3),
+                              disabledForegroundColor: Colors.white.withOpacity(0.5),
+                              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                              elevation: 4,
+                            ),
+                            child: Text(
+                              l10n.templateAddSelectedButton,
+                              style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
+                            ),
                           ),
-                          textAlign: TextAlign.right,
-                        ),
+                        ],
                       ),
-                  ],
+                    );
+                  },
                 ),
               ),
             ),

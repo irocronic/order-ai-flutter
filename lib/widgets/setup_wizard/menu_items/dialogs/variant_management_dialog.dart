@@ -7,7 +7,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../../models/menu_item_variant.dart';
 import '../../../../services/firebase_storage_service.dart';
-import '../../../../utils/currency_formatter.dart'; // YENİ EKLENEN
+import '../../../../utils/currency_formatter.dart';
 import '../models/variant_template_config.dart';
 import '../components/image_picker_widget.dart';
 import '../utils/icon_utils.dart';
@@ -36,7 +36,14 @@ class VariantManagementDialog extends StatefulWidget {
 
 class _VariantManagementDialogState extends State<VariantManagementDialog> {
   final _formKey = GlobalKey<FormState>();
+  final ScrollController _scrollController = ScrollController();
   bool _isUploading = false;
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
 
   void _addVariant() async {
     final l10n = AppLocalizations.of(context)!;
@@ -206,577 +213,1298 @@ class _VariantManagementDialogState extends State<VariantManagementDialog> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
-          title: Row(
-            children: [
-              const Icon(Icons.warning_amber, color: Colors.orange, size: 24),
-              const SizedBox(width: 8),
-              Text(
-                l10n.dialogPendingVariantTitle,
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
+        return Dialog(
+          backgroundColor: Colors.transparent,
+          insetPadding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 24.0),
+          child: Container(
+            constraints: const BoxConstraints(maxWidth: 500),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  const Color(0xFF1565C0), // Koyu mavi
+                  const Color(0xFF1976D2), // Orta mavi
+                  const Color(0xFF1E88E5), // Açık mavi
+                ],
+                stops: const [0.0, 0.5, 1.0],
               ),
-            ],
-          ),
-          content: SingleChildScrollView(
+              borderRadius: BorderRadius.circular(20.0),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.3),
+                  blurRadius: 20,
+                  offset: const Offset(0, 8),
+                ),
+              ],
+            ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  l10n.dialogPendingVariantContent1,
-                  style: const TextStyle(fontSize: 16),
-                ),
-                const SizedBox(height: 12),
+                // Header with gradient and glass effect
                 Container(
-                  padding: const EdgeInsets.all(12),
+                  padding: const EdgeInsets.all(24.0),
                   decoration: BoxDecoration(
-                    color: Colors.orange.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(8),
-                    border: Border.all(color: Colors.orange.withOpacity(0.3)),
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        Colors.white.withOpacity(0.2),
+                        Colors.white.withOpacity(0.1),
+                      ],
+                    ),
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(20.0),
+                      topRight: Radius.circular(20.0),
+                    ),
                   ),
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      if (widget.variantConfig.variantNameController.text.trim().isNotEmpty)
-                        Text(
-                          l10n.dialogPendingVariantContentName(widget.variantConfig.variantNameController.text.trim()),
-                          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+                      // Icon
+                      Container(
+                        width: 64,
+                        height: 64,
+                        decoration: BoxDecoration(
+                          color: Colors.orange.withOpacity(0.2),
+                          borderRadius: BorderRadius.circular(32),
+                          border: Border.all(
+                            color: Colors.orange.withOpacity(0.3),
+                            width: 2,
+                          ),
                         ),
-                      if (widget.variantConfig.variantPriceController.text.trim().isNotEmpty)
-                        Text(
-                          l10n.dialogPendingVariantContentPrice(widget.variantConfig.variantPriceController.text.trim()),
-                          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+                        child: Icon(
+                          Icons.warning_amber,
+                          color: Colors.orange.shade300,
+                          size: 32,
                         ),
+                      ),
+                      const SizedBox(height: 16),
+                      
+                      // Title
+                      Text(
+                        l10n.dialogPendingVariantTitle,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 0.5,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
                     ],
                   ),
                 ),
-                const SizedBox(height: 12),
-                Text(
-                  l10n.dialogPendingVariantContent2,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.black87,
+
+                // Content
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 20.0),
+                  child: Column(
+                    children: [
+                      // Message
+                      Text(
+                        l10n.dialogPendingVariantContent1,
+                        style: TextStyle(
+                          color: Colors.white.withOpacity(0.9),
+                          fontSize: 16,
+                          height: 1.4,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      
+                      const SizedBox(height: 16),
+                      
+                      // Pending data highlight
+                      Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.15),
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(
+                            color: Colors.orange.withOpacity(0.3),
+                          ),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            if (widget.variantConfig.variantNameController.text.trim().isNotEmpty)
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 8),
+                                child: Row(
+                                  children: [
+                                    Icon(
+                                      Icons.label_outline,
+                                      color: Colors.white.withOpacity(0.8),
+                                      size: 16,
+                                    ),
+                                    const SizedBox(width: 8),
+                                    Expanded(
+                                      child: Text(
+                                        l10n.dialogPendingVariantContentName(widget.variantConfig.variantNameController.text.trim()),
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            if (widget.variantConfig.variantPriceController.text.trim().isNotEmpty)
+                              Row(
+                                children: [
+                                  Icon(
+                                    Icons.monetization_on_outlined,
+                                    color: Colors.white.withOpacity(0.8),
+                                    size: 16,
+                                  ),
+                                  const SizedBox(width: 8),
+                                  Expanded(
+                                    child: Text(
+                                      l10n.dialogPendingVariantContentPrice(widget.variantConfig.variantPriceController.text.trim()),
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                          ],
+                        ),
+                      ),
+                      
+                      const SizedBox(height: 16),
+                      
+                      // Additional message
+                      Text(
+                        l10n.dialogPendingVariantContent2,
+                        style: TextStyle(
+                          color: Colors.white.withOpacity(0.8),
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
+                ),
+
+                // Actions
+                Container(
+                  padding: const EdgeInsets.all(24.0),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        Colors.white.withOpacity(0.1),
+                        Colors.white.withOpacity(0.2),
+                      ],
+                    ),
+                    borderRadius: const BorderRadius.only(
+                      bottomLeft: Radius.circular(20.0),
+                      bottomRight: Radius.circular(20.0),
+                    ),
+                    border: Border(
+                      top: BorderSide(color: Colors.white.withOpacity(0.2)),
+                    ),
+                  ),
+                  child: Column(
+                    children: [
+                      // First row: Cancel and Delete buttons
+                      Row(
+                        children: [
+                          // Cancel button
+                          Expanded(
+                            child: TextButton(
+                              onPressed: () => Navigator.of(context).pop(),
+                              style: TextButton.styleFrom(
+                                foregroundColor: Colors.white.withOpacity(0.9),
+                                padding: const EdgeInsets.symmetric(vertical: 16),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                  side: BorderSide(color: Colors.white.withOpacity(0.3)),
+                                ),
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.close,
+                                    size: 18,
+                                    color: Colors.white.withOpacity(0.8),
+                                  ),
+                                  const SizedBox(width: 8),
+                                  Flexible(
+                                    child: Text(
+                                      l10n.dialogButtonCancel,
+                                      style: const TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          
+                          const SizedBox(width: 12),
+                          
+                          // Delete and exit button
+                          Expanded(
+                            child: TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                                setState(() {
+                                  widget.variantConfig.clearVariantForm();
+                                });
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(l10n.snackbarPendingVariantDataCleared),
+                                    backgroundColor: Colors.orange,
+                                    duration: const Duration(seconds: 2),
+                                  ),
+                                );
+                              },
+                              style: TextButton.styleFrom(
+                                foregroundColor: Colors.red.shade300,
+                                padding: const EdgeInsets.symmetric(vertical: 16),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                  side: BorderSide(color: Colors.red.withOpacity(0.3)),
+                                ),
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.delete_outline,
+                                    size: 18,
+                                    color: Colors.red.shade300,
+                                  ),
+                                  const SizedBox(width: 8),
+                                  Flexible(
+                                    child: Text(
+                                      l10n.dialogButtonDeleteAndExit,
+                                      style: const TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      
+                      const SizedBox(height: 12),
+                      
+                      // Second row: Add variant button (full width)
+                      SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                            _addVariant();
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.white,
+                            foregroundColor: Colors.blue.shade700,
+                            padding: const EdgeInsets.symmetric(vertical: 16),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            elevation: 4,
+                            shadowColor: Colors.black.withOpacity(0.3),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Icon(Icons.add, size: 20),
+                              const SizedBox(width: 8),
+                              Flexible(
+                                child: Text(
+                                  l10n.buttonAddVariant,
+                                  style: const TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ],
             ),
           ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: Text(
-                l10n.dialogButtonCancel,
-                style: const TextStyle(color: Colors.grey),
-              ),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(); // Dialog'u kapat
-                setState(() {
-                  widget.variantConfig.clearVariantForm();
-                });
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(l10n.snackbarPendingVariantDataCleared),
-                    backgroundColor: Colors.orange,
-                    duration: const Duration(seconds: 2),
-                  ),
-                );
-              },
-              child: Text(
-                l10n.dialogButtonDeleteAndExit,
-                style: const TextStyle(color: Colors.red),
-              ),
-            ),
-            ElevatedButton.icon(
-              onPressed: () {
-                Navigator.of(context).pop(); // Dialog'u kapat
-                _addVariant(); // Varyantı ekle
-              },
-              icon: const Icon(Icons.add, size: 18),
-              label: Text(l10n.buttonAddVariant),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.blue,
-                foregroundColor: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
+        );
+      },
+    );
+  }
+
+  Widget _buildCustomCheckbox({
+    required String title,
+    required String subtitle,
+    required bool value,
+    required Function(bool) onChanged,
+    required bool enabled,
+  }) {
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: Colors.white.withOpacity(0.2)),
+      ),
+      child: GestureDetector(
+        onTap: enabled ? () => onChanged(!value) : null,
+        behavior: HitTestBehavior.translucent,
+        child: Row(
+          children: [
+            Container(
+              width: 20,
+              height: 20,
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: enabled 
+                      ? Colors.white.withOpacity(0.7) 
+                      : Colors.white.withOpacity(0.3),
+                  width: 2,
                 ),
+                borderRadius: BorderRadius.circular(4),
+                color: value 
+                    ? (enabled ? Colors.white : Colors.white.withOpacity(0.3))
+                    : Colors.transparent,
+              ),
+              child: value 
+                  ? Icon(
+                      Icons.check,
+                      size: 16,
+                      color: enabled ? Colors.blue.shade800 : Colors.blue.shade800.withOpacity(0.5),
+                    )
+                  : null,
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    title,
+                    style: TextStyle(
+                      color: enabled ? Colors.white : Colors.white.withOpacity(0.5),
+                      fontSize: 13,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    subtitle,
+                    style: TextStyle(
+                      color: enabled 
+                          ? Colors.white.withOpacity(0.7) 
+                          : Colors.white.withOpacity(0.3),
+                      fontSize: 11,
+                    ),
+                  ),
+                ],
               ),
             ),
           ],
-        );
-      },
+        ),
+      ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    
-    // YENİ EKLENEN: Dinamik para birimi simgesi
     final currencySymbol = CurrencyFormatter.currentSymbol;
+    final mediaQuery = MediaQuery.of(context);
+    final screenHeight = mediaQuery.size.height;
+    final screenWidth = mediaQuery.size.width;
+    final keyboardHeight = mediaQuery.viewInsets.bottom;
+
+    final availableHeight = screenHeight - keyboardHeight - 100.0;
+    final double dialogHeight = availableHeight > 600.0 ? availableHeight : 600.0;
     
     return Dialog(
-      insetPadding: const EdgeInsets.all(16.0),
+      backgroundColor: Colors.transparent,
+      insetPadding: EdgeInsets.symmetric(
+        horizontal: screenWidth > 600 ? screenWidth * 0.15 : 16.0,
+        vertical: keyboardHeight > 0 ? 8.0 : 24.0,
+      ),
       child: Container(
-        width: double.infinity,
-        height: MediaQuery.of(context).size.height * 0.8,
-        padding: const EdgeInsets.all(16.0),
+        width: screenWidth > 600 ? 800 : double.infinity,
+        height: dialogHeight,
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              const Color(0xFF1565C0), // Koyu mavi
+              const Color(0xFF1976D2), // Orta mavi
+              const Color(0xFF1E88E5), // Açık mavi
+            ],
+            stops: const [0.0, 0.5, 1.0],
+          ),
+          borderRadius: BorderRadius.circular(16.0),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.3),
+              blurRadius: 20,
+              offset: const Offset(0, 8),
+            ),
+          ],
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // Header
-            Row(
-              children: [
-                Icon(Icons.tune, color: Colors.blue.shade700, size: 20),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: Text(
-                    l10n.variantManagementDialogTitle(widget.variantConfig.templateName),
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.blue.shade700,
-                    ),
+            // Header with gradient and glass effect
+            Container(
+              height: 70,
+              padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 12.0),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    Colors.white.withOpacity(0.2),
+                    Colors.white.withOpacity(0.1),
+                  ],
+                ),
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(16.0),
+                  topRight: Radius.circular(16.0),
+                ),
+                border: Border(
+                  bottom: BorderSide(
+                    color: Colors.white.withOpacity(0.2),
+                    width: 1,
                   ),
                 ),
-                IconButton(
-                  onPressed: _isUploading ? null : () {
-                    if (_hasUnfinishedVariantData) {
-                      _showUnfinishedVariantWarning();
-                    } else {
-                      Navigator.of(context).pop(true);
-                    }
-                  },
-                  icon: const Icon(Icons.close),
-                  padding: EdgeInsets.zero,
-                ),
-              ],
+              ),
+              child: Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.2),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Icon(
+                      Icons.tune,
+                      color: Colors.white,
+                      size: 24,
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Text(
+                      l10n.variantManagementDialogTitle(widget.variantConfig.templateName),
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        letterSpacing: 0.5,
+                      ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: IconButton(
+                      onPressed: _isUploading ? null : () {
+                        if (_hasUnfinishedVariantData) {
+                          _showUnfinishedVariantWarning();
+                        } else {
+                          Navigator.of(context).pop(true);
+                        }
+                      },
+                      icon: const Icon(Icons.close, color: Colors.white),
+                      padding: const EdgeInsets.all(8),
+                      constraints: const BoxConstraints(minWidth: 40, minHeight: 40),
+                    ),
+                  ),
+                ],
+              ),
             ),
-            const Divider(),
-            const SizedBox(height: 8),
-            
-            // Content
+
+            // Content with glass effect
             Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    // Hızlı Varyant Ekleme
-                    if (widget.variantTemplates.isNotEmpty) ...[
-                      Row(
-                        children: [
-                          Icon(Icons.flash_on, color: Colors.yellow.shade700, size: 16),
-                          const SizedBox(width: 4),
-                          Text(
-                            l10n.quickAddVariantTitle,
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.blue.shade700,
-                            ),
-                          ),
-                          if (widget.isLoadingVariantTemplates) ...[
-                            const SizedBox(width: 8),
-                            const SizedBox(
-                              width: 16,
-                              height: 16,
-                              child: CircularProgressIndicator(
-                                strokeWidth: 2,
-                                valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+              child: Container(
+                margin: const EdgeInsets.all(16.0),
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(
+                    color: Colors.white.withOpacity(0.2),
+                    width: 1,
+                  ),
+                ),
+                child: Scrollbar(
+                  controller: _scrollController,
+                  thumbVisibility: true,
+                  trackVisibility: true,
+                  thickness: 6.0,
+                  radius: const Radius.circular(3),
+                  child: SingleChildScrollView(
+                    controller: _scrollController,
+                    physics: const ClampingScrollPhysics(),
+                    padding: const EdgeInsets.all(20.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        // Hızlı Varyant Ekleme
+                        if (widget.variantTemplates.isNotEmpty) ...[
+                          Container(
+                            padding: const EdgeInsets.all(16),
+                            decoration: BoxDecoration(
+                              color: Colors.white.withOpacity(0.1),
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(
+                                color: Colors.white.withOpacity(0.3),
                               ),
                             ),
-                          ],
-                        ],
-                      ),
-                      const SizedBox(height: 12),
-                      if (widget.isLoadingVariantTemplates)
-                        Container(
-                          padding: const EdgeInsets.all(12),
-                          child: Text(
-                            l10n.loadingVariantTemplates,
-                            style: TextStyle(color: Colors.grey.shade600, fontSize: 12),
-                          ),
-                        )
-                      else
-                        Wrap(
-                          spacing: 8.0,
-                          runSpacing: 8.0,
-                          children: widget.variantTemplates.take(12).map<Widget>((variantTemplate) {
-                            final variantName = variantTemplate['name'] as String;
-                            final isUsed = widget.variantConfig.variants.any((variant) => 
-                              variant.name.toLowerCase() == variantName.toLowerCase()
-                            );
-                            
-                            return ActionChip(
-                              avatar: Icon(
-                                IconUtils.getIconFromName(variantTemplate['icon_name'] ?? 'label_outline'),
-                                size: 16,
-                                color: isUsed ? Colors.grey : Colors.blue.shade700,
-                              ),
-                              label: Text(
-                                variantName,
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w500,
-                                  color: isUsed ? Colors.grey : Colors.blue.shade700,
-                                ),
-                              ),
-                              backgroundColor: isUsed ? Colors.grey.shade200 : Colors.white,
-                              onPressed: isUsed || _isUploading ? null : () {
-                                widget.onVariantTemplateSelected(variantTemplate);
-                              },
-                              elevation: isUsed ? 0 : 2,
-                              pressElevation: 1,
-                              side: BorderSide(
-                                color: isUsed ? Colors.grey.shade300 : Colors.blue.shade300,
-                                width: 1,
-                              ),
-                            );
-                          }).toList(),
-                        ),
-                      const SizedBox(height: 16),
-                      const Divider(),
-                      const SizedBox(height: 16),
-                    ],
-                    
-                    // Mevcut Varyantlar
-                    if (widget.variantConfig.variants.isNotEmpty) ...[
-                      Text(
-                        l10n.addedVariantsTitle(widget.variantConfig.variants.length),
-                        style: const TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black87,
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      ...widget.variantConfig.variants.map((variant) => Container(
-                        margin: const EdgeInsets.only(bottom: 8),
-                        padding: const EdgeInsets.all(12),
-                        decoration: BoxDecoration(
-                          color: Colors.green.withOpacity(0.05),
-                          borderRadius: BorderRadius.circular(8),
-                          border: Border.all(color: Colors.green.withOpacity(0.3)),
-                        ),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    variant.name,
-                                    style: const TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w600,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    Container(
+                                      padding: const EdgeInsets.all(6),
+                                      decoration: BoxDecoration(
+                                        color: Colors.yellow.withOpacity(0.2),
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                      child: Icon(
+                                        Icons.flash_on, 
+                                        color: Colors.yellow.shade300, 
+                                        size: 20
+                                      ),
                                     ),
-                                  ),
-                                  const SizedBox(height: 4),
-                                  Row(
-                                    children: [
-                                      Text(
-                                        // GÜNCELLENDİ: Dinamik para birimi simgesi kullanıldı
-                                        '$currencySymbol${variant.price.toStringAsFixed(2)}',
-                                        style: TextStyle(
-                                          fontSize: 12,
-                                          color: Colors.grey.shade700,
+                                    const SizedBox(width: 8),
+                                    Expanded(
+                                      child: Text(
+                                        l10n.quickAddVariantTitle,
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white,
                                         ),
                                       ),
-                                      if (variant.isExtra) ...[
-                                        const SizedBox(width: 8),
-                                        Container(
-                                          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                                          decoration: BoxDecoration(
-                                            color: Colors.orange.shade100,
-                                            borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    if (widget.isLoadingVariantTemplates) ...[
+                                      SizedBox(
+                                        width: 20,
+                                        height: 20,
+                                        child: CircularProgressIndicator(
+                                          strokeWidth: 2,
+                                          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                                        ),
+                                      ),
+                                    ],
+                                  ],
+                                ),
+                                const SizedBox(height: 16),
+                                if (widget.isLoadingVariantTemplates)
+                                  Center(
+                                    child: Text(
+                                      l10n.loadingVariantTemplates,
+                                      style: TextStyle(
+                                        color: Colors.white.withOpacity(0.7), 
+                                        fontSize: 14
+                                      ),
+                                    ),
+                                  )
+                                else
+                                  Wrap(
+                                    spacing: 8.0,
+                                    runSpacing: 8.0,
+                                    children: widget.variantTemplates.take(12).map<Widget>((variantTemplate) {
+                                      final variantName = variantTemplate['name'] as String;
+                                      final isUsed = widget.variantConfig.variants.any((variant) => 
+                                        variant.name.toLowerCase() == variantName.toLowerCase()
+                                      );
+                                      
+                                      return Container(
+                                        decoration: BoxDecoration(
+                                          color: isUsed 
+                                              ? Colors.white.withOpacity(0.1) 
+                                              : Colors.white.withOpacity(0.2),
+                                          borderRadius: BorderRadius.circular(8),
+                                          border: Border.all(
+                                            color: isUsed 
+                                                ? Colors.white.withOpacity(0.2) 
+                                                : Colors.white.withOpacity(0.4),
                                           ),
-                                          child: Text(
-                                            l10n.variantExtraTag,
-                                            style: TextStyle(
-                                              fontSize: 10,
-                                              color: Colors.orange.shade700,
+                                        ),
+                                        child: Material(
+                                          color: Colors.transparent,
+                                          child: InkWell(
+                                            onTap: isUsed || _isUploading ? null : () {
+                                              widget.onVariantTemplateSelected(variantTemplate);
+                                            },
+                                            borderRadius: BorderRadius.circular(8),
+                                            child: Padding(
+                                              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                                              child: Row(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: [
+                                                  Icon(
+                                                    IconUtils.getIconFromName(variantTemplate['icon_name'] ?? 'label_outline'),
+                                                    size: 16,
+                                                    color: isUsed 
+                                                        ? Colors.white.withOpacity(0.5) 
+                                                        : Colors.white,
+                                                  ),
+                                                  const SizedBox(width: 6),
+                                                  Flexible(
+                                                    child: Text(
+                                                      variantName,
+                                                      style: TextStyle(
+                                                        fontSize: 12,
+                                                        fontWeight: FontWeight.w500,
+                                                        color: isUsed 
+                                                            ? Colors.white.withOpacity(0.5) 
+                                                            : Colors.white,
+                                                      ),
+                                                      overflow: TextOverflow.ellipsis,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
                                             ),
                                           ),
                                         ),
-                                      ],
-                                      if (variant.image.isNotEmpty) ...[
-                                        const SizedBox(width: 8),
-                                        Container(
-                                          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                                          decoration: BoxDecoration(
-                                            color: Colors.blue.shade100,
-                                            borderRadius: BorderRadius.circular(8),
-                                          ),
-                                          child: Row(
-                                            mainAxisSize: MainAxisSize.min,
+                                      );
+                                    }).toList(),
+                                  ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(height: 20),
+                        ],
+                        
+                        // Mevcut Varyantlar
+                        if (widget.variantConfig.variants.isNotEmpty) ...[
+                          Container(
+                            padding: const EdgeInsets.all(16),
+                            decoration: BoxDecoration(
+                              color: Colors.white.withOpacity(0.1),
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(
+                                color: Colors.white.withOpacity(0.3),
+                              ),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    Container(
+                                      padding: const EdgeInsets.all(6),
+                                      decoration: BoxDecoration(
+                                        color: Colors.green.withOpacity(0.2),
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                      child: Icon(
+                                        Icons.check_circle_outline, 
+                                        color: Colors.green.shade300, 
+                                        size: 20
+                                      ),
+                                    ),
+                                    const SizedBox(width: 8),
+                                    Flexible(
+                                      child: Text(
+                                        l10n.addedVariantsTitle(widget.variantConfig.variants.length),
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white,
+                                        ),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 12),
+                                ...widget.variantConfig.variants.asMap().entries.map((entry) {
+                                  final variant = entry.value;
+                                  return Container(
+                                    margin: const EdgeInsets.only(bottom: 8),
+                                    padding: const EdgeInsets.all(12),
+                                    decoration: BoxDecoration(
+                                      color: Colors.white.withOpacity(0.15),
+                                      borderRadius: BorderRadius.circular(8),
+                                      border: Border.all(color: Colors.white.withOpacity(0.3)),
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
-                                              Icon(Icons.camera_alt, color: Colors.blue.shade600, size: 12),
-                                              const SizedBox(width: 4),
                                               Text(
-                                                l10n.variantWithPhotoTag,
-                                                style: TextStyle(
-                                                  fontSize: 10,
-                                                  color: Colors.blue.shade700,
-                                                  fontWeight: FontWeight.bold,
+                                                variant.name,
+                                                style: const TextStyle(
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.w600,
+                                                  color: Colors.white,
                                                 ),
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                              const SizedBox(height: 4),
+                                              Wrap(
+                                                spacing: 8.0,
+                                                runSpacing: 4.0,
+                                                children: [
+                                                  Container(
+                                                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                                                    decoration: BoxDecoration(
+                                                      color: Colors.white.withOpacity(0.2),
+                                                      borderRadius: BorderRadius.circular(4),
+                                                    ),
+                                                    child: Text(
+                                                      '$currencySymbol${variant.price.toStringAsFixed(2)}',
+                                                      style: TextStyle(
+                                                        fontSize: 12,
+                                                        color: Colors.white.withOpacity(0.9),
+                                                        fontWeight: FontWeight.w600,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  if (variant.isExtra)
+                                                    Container(
+                                                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                                                      decoration: BoxDecoration(
+                                                        color: Colors.orange.withOpacity(0.3),
+                                                        borderRadius: BorderRadius.circular(4),
+                                                      ),
+                                                      child: Text(
+                                                        l10n.variantExtraTag,
+                                                        style: TextStyle(
+                                                          fontSize: 10,
+                                                          color: Colors.orange.shade200,
+                                                          fontWeight: FontWeight.bold,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  if (variant.image.isNotEmpty)
+                                                    Container(
+                                                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                                                      decoration: BoxDecoration(
+                                                        color: Colors.blue.withOpacity(0.3),
+                                                        borderRadius: BorderRadius.circular(4),
+                                                      ),
+                                                      child: Row(
+                                                        mainAxisSize: MainAxisSize.min,
+                                                        children: [
+                                                          Icon(Icons.camera_alt, color: Colors.blue.shade200, size: 10),
+                                                          const SizedBox(width: 2),
+                                                          Text(
+                                                            l10n.variantWithPhotoTag,
+                                                            style: TextStyle(
+                                                              fontSize: 10,
+                                                              color: Colors.blue.shade200,
+                                                              fontWeight: FontWeight.bold,
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                ],
                                               ),
                                             ],
                                           ),
                                         ),
-                                      ],
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                            IconButton(
-                              onPressed: _isUploading ? null : () => _removeVariant(variant.id),
-                              icon: Icon(
-                                Icons.delete_outline,
-                                size: 20,
-                                color: Colors.red.shade600,
-                              ),
-                            ),
-                          ],
-                        ),
-                      )),
-                      const SizedBox(height: 16),
-                      const Divider(),
-                      const SizedBox(height: 16),
-                    ],
-                    
-                    // Manuel Varyant Ekleme Formu
-                    Text(
-                      l10n.manualAddVariantTitle,
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.grey.shade700,
-                      ),
-                    ),
-                    const SizedBox(height: 12),
-                    
-                    Form(
-                      key: _formKey,
-                      child: Column(
-                        children: [
-                          // Varyant adı ve fiyat
-                          Row(
-                            children: [
-                              Expanded(
-                                flex: 3,
-                                child: TextFormField(
-                                  controller: widget.variantConfig.variantNameController,
-                                  decoration: InputDecoration(
-                                    labelText: l10n.variantNameLabel,
-                                    hintText: l10n.variantNameHint,
-                                    border: const OutlineInputBorder(),
-                                    contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
-                                  ),
-                                  validator: (v) => (v == null || v.isEmpty) ? l10n.validatorVariantNameRequired : null,
-                                  enabled: !_isUploading,
-                                ),
-                              ),
-                              const SizedBox(width: 12),
-                              Expanded(
-                                flex: 2,
-                                child: TextFormField(
-                                  controller: widget.variantConfig.variantPriceController,
-                                  decoration: InputDecoration(
-                                    labelText: l10n.variantPriceLabel,
-                                    // GÜNCELLENDİ: Dinamik para birimi simgesi kullanıldı
-                                    prefixText: currencySymbol,
-                                    border: const OutlineInputBorder(),
-                                    contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
-                                  ),
-                                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                                  inputFormatters: [
-                                    FilteringTextInputFormatter.allow(RegExp(r'^\d*[\.,]?\d{0,2}'))
-                                  ],
-                                  validator: (v) {
-                                    if (v == null || v.isEmpty) return l10n.validatorPriceRequired;
-                                    if (double.tryParse(v.replaceAll(',', '.')) == null) return l10n.validatorInvalidPrice;
-                                    return null;
-                                  },
-                                  enabled: !_isUploading,
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 16),
-                          
-                          // Seçenekler
-                          Row(
-                            children: [
-                              Expanded(
-                                child: CheckboxListTile(
-                                  title: Text(l10n.checkboxExtraOptionTitle),
-                                  subtitle: Text(l10n.checkboxExtraOptionSubtitle),
-                                  value: widget.variantConfig.isVariantExtra,
-                                  onChanged: _isUploading ? null : (val) => _toggleVariantExtra(val ?? false),
-                                  contentPadding: EdgeInsets.zero,
-                                  dense: true,
-                                ),
-                              ),
-                              Expanded(
-                                child: CheckboxListTile(
-                                  title: Text(l10n.checkboxAddPhotoTitle),
-                                  subtitle: Text(l10n.checkboxAddPhotoSubtitle),
-                                  value: widget.variantConfig.hasVariantImageEnabled,
-                                  onChanged: _isUploading ? null : (val) => _toggleVariantPhoto(val ?? false),
-                                  contentPadding: EdgeInsets.zero,
-                                  dense: true,
-                                ),
-                              ),
-                            ],
-                          ),
-                          
-                          // Fotoğraf yükleme alanı
-                          if (widget.variantConfig.hasVariantImageEnabled) ...[
-                            const SizedBox(height: 16),
-                            Container(
-                              padding: const EdgeInsets.all(16),
-                              decoration: BoxDecoration(
-                                color: Colors.orange.withOpacity(0.1),
-                                borderRadius: BorderRadius.circular(8),
-                                border: Border.all(color: Colors.orange.withOpacity(0.3)),
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Icon(Icons.camera_alt, color: Colors.orange.shade700, size: 20),
-                                      const SizedBox(width: 8),
-                                      Text(
-                                        l10n.variantPhotoTitle,
-                                        style: TextStyle(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.orange.shade700,
-                                        ),
-                                      ),
-                                      const Spacer(),
-                                      if (widget.variantConfig.hasVariantImage)
-                                        Container(
-                                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                                          decoration: BoxDecoration(
-                                            color: Colors.green.shade100,
-                                            borderRadius: BorderRadius.circular(12),
-                                          ),
-                                          child: Text(
-                                            l10n.statusSelected,
-                                            style: TextStyle(
-                                              fontSize: 12,
-                                              color: Colors.green.shade700,
-                                              fontWeight: FontWeight.bold,
+                                        const SizedBox(width: 8),
+                                        GestureDetector(
+                                          onTap: _isUploading ? null : () => _removeVariant(variant.id),
+                                          child: Container(
+                                            padding: const EdgeInsets.all(8),
+                                            decoration: BoxDecoration(
+                                              color: Colors.red.withOpacity(0.1),
+                                              borderRadius: BorderRadius.circular(6),
+                                            ),
+                                            child: Icon(
+                                              Icons.delete_outline,
+                                              size: 20,
+                                              color: _isUploading ? Colors.red.shade300.withOpacity(0.5) : Colors.red.shade300,
                                             ),
                                           ),
                                         ),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 12),
-                                  Stack(
-                                    children: [
-                                      ImagePickerWidget(
-                                        isCompact: false,
-                                        initialImageFile: widget.variantConfig.variantImageXFile,
-                                        initialImageBytes: widget.variantConfig.variantWebImageBytes,
-                                        onImageChanged: _isUploading 
-                                            ? (xFile, bytes) {}
-                                            : (xFile, bytes) {
-                                                setState(() {
-                                                  widget.variantConfig.setVariantImage(xFile, bytes);
-                                                });
-                                              },
+                                      ],
+                                    ),
+                                  );
+                                }),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(height: 20),
+                        ],
+                        
+                        // Manuel Varyant Ekleme Formu
+                        Container(
+                          padding: const EdgeInsets.all(16),
+                          decoration: BoxDecoration(
+                            color: Colors.white.withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(
+                              color: Colors.white.withOpacity(0.3),
+                            ),
+                          ),
+                          child: Form(
+                            key: _formKey,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    Container(
+                                      padding: const EdgeInsets.all(6),
+                                      decoration: BoxDecoration(
+                                        color: Colors.white.withOpacity(0.2),
+                                        borderRadius: BorderRadius.circular(8),
                                       ),
-                                      if (_isUploading)
-                                        Container(
-                                          width: double.infinity,
-                                          height: 100,
-                                          decoration: BoxDecoration(
-                                            color: Colors.black.withOpacity(0.3),
-                                            borderRadius: BorderRadius.circular(8),
-                                          ),
-                                          child: const Center(
-                                            child: CircularProgressIndicator(),
-                                          ),
+                                      child: Icon(
+                                        Icons.add_circle_outline, 
+                                        color: Colors.white, 
+                                        size: 20
+                                      ),
+                                    ),
+                                    const SizedBox(width: 8),
+                                    Flexible(
+                                      child: Text(
+                                        l10n.manualAddVariantTitle,
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white,
                                         ),
-                                    ],
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 16),
+                                
+                                // Varyant adı ve fiyat
+                                LayoutBuilder(
+                                  builder: (context, constraints) {
+                                    if (constraints.maxWidth < 400) {
+                                      return Column(
+                                        children: [
+                                          Container(
+                                            decoration: BoxDecoration(
+                                              color: Colors.white.withOpacity(0.15),
+                                              borderRadius: BorderRadius.circular(8),
+                                              border: Border.all(color: Colors.white.withOpacity(0.3)),
+                                            ),
+                                            child: TextFormField(
+                                              controller: widget.variantConfig.variantNameController,
+                                              style: const TextStyle(color: Colors.white),
+                                              decoration: InputDecoration(
+                                                labelText: l10n.variantNameLabel,
+                                                labelStyle: TextStyle(color: Colors.white.withOpacity(0.8)),
+                                                hintText: l10n.variantNameHint,
+                                                hintStyle: TextStyle(color: Colors.white.withOpacity(0.6)),
+                                                border: InputBorder.none,
+                                                contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                                              ),
+                                              validator: (v) => (v == null || v.isEmpty) ? l10n.validatorVariantNameRequired : null,
+                                              enabled: !_isUploading,
+                                            ),
+                                          ),
+                                          const SizedBox(height: 12),
+                                          Container(
+                                            decoration: BoxDecoration(
+                                              color: Colors.white.withOpacity(0.15),
+                                              borderRadius: BorderRadius.circular(8),
+                                              border: Border.all(color: Colors.white.withOpacity(0.3)),
+                                            ),
+                                            child: TextFormField(
+                                              controller: widget.variantConfig.variantPriceController,
+                                              style: const TextStyle(color: Colors.white),
+                                              decoration: InputDecoration(
+                                                labelText: l10n.variantPriceLabel,
+                                                labelStyle: TextStyle(color: Colors.white.withOpacity(0.8)),
+                                                prefixText: currencySymbol,
+                                                prefixStyle: TextStyle(color: Colors.white.withOpacity(0.8)),
+                                                border: InputBorder.none,
+                                                contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                                              ),
+                                              keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                                              inputFormatters: [
+                                                FilteringTextInputFormatter.allow(RegExp(r'^\d*[\.,]?\d{0,2}'))
+                                              ],
+                                              validator: (v) {
+                                                if (v == null || v.isEmpty) return l10n.validatorPriceRequired;
+                                                if (double.tryParse(v.replaceAll(',', '.')) == null) return l10n.validatorInvalidPrice;
+                                                return null;
+                                              },
+                                              enabled: !_isUploading,
+                                            ),
+                                          ),
+                                        ],
+                                      );
+                                    } else {
+                                      return Row(
+                                        children: [
+                                          Expanded(
+                                            flex: 3,
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                color: Colors.white.withOpacity(0.15),
+                                                borderRadius: BorderRadius.circular(8),
+                                                border: Border.all(color: Colors.white.withOpacity(0.3)),
+                                              ),
+                                              child: TextFormField(
+                                                controller: widget.variantConfig.variantNameController,
+                                                style: const TextStyle(color: Colors.white),
+                                                decoration: InputDecoration(
+                                                  labelText: l10n.variantNameLabel,
+                                                  labelStyle: TextStyle(color: Colors.white.withOpacity(0.8)),
+                                                  hintText: l10n.variantNameHint,
+                                                  hintStyle: TextStyle(color: Colors.white.withOpacity(0.6)),
+                                                  border: InputBorder.none,
+                                                  contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                                                ),
+                                                validator: (v) => (v == null || v.isEmpty) ? l10n.validatorVariantNameRequired : null,
+                                                enabled: !_isUploading,
+                                              ),
+                                            ),
+                                          ),
+                                          const SizedBox(width: 12),
+                                          Expanded(
+                                            flex: 2,
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                color: Colors.white.withOpacity(0.15),
+                                                borderRadius: BorderRadius.circular(8),
+                                                border: Border.all(color: Colors.white.withOpacity(0.3)),
+                                              ),
+                                              child: TextFormField(
+                                                controller: widget.variantConfig.variantPriceController,
+                                                style: const TextStyle(color: Colors.white),
+                                                decoration: InputDecoration(
+                                                  labelText: l10n.variantPriceLabel,
+                                                  labelStyle: TextStyle(color: Colors.white.withOpacity(0.8)),
+                                                  prefixText: currencySymbol,
+                                                  prefixStyle: TextStyle(color: Colors.white.withOpacity(0.8)),
+                                                  border: InputBorder.none,
+                                                  contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                                                ),
+                                                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                                                inputFormatters: [
+                                                  FilteringTextInputFormatter.allow(RegExp(r'^\d*[\.,]?\d{0,2}'))
+                                                ],
+                                                validator: (v) {
+                                                  if (v == null || v.isEmpty) return l10n.validatorPriceRequired;
+                                                  if (double.tryParse(v.replaceAll(',', '.')) == null) return l10n.validatorInvalidPrice;
+                                                  return null;
+                                                },
+                                                enabled: !_isUploading,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      );
+                                    }
+                                  },
+                                ),
+                                const SizedBox(height: 16),
+                                
+                                // Seçenekler
+                                Column(
+                                  children: [
+                                    _buildCustomCheckbox(
+                                      title: l10n.checkboxExtraOptionTitle,
+                                      subtitle: l10n.checkboxExtraOptionSubtitle,
+                                      value: widget.variantConfig.isVariantExtra,
+                                      onChanged: _toggleVariantExtra,
+                                      enabled: !_isUploading,
+                                    ),
+                                    const SizedBox(height: 12),
+                                    _buildCustomCheckbox(
+                                      title: l10n.checkboxAddPhotoTitle,
+                                      subtitle: l10n.checkboxAddPhotoSubtitle,
+                                      value: widget.variantConfig.hasVariantImageEnabled,
+                                      onChanged: _toggleVariantPhoto,
+                                      enabled: !_isUploading,
+                                    ),
+                                  ],
+                                ),
+                                
+                                // Fotoğraf yükleme alanı
+                                if (widget.variantConfig.hasVariantImageEnabled) ...[
+                                  const SizedBox(height: 16),
+                                  Container(
+                                    padding: const EdgeInsets.all(16),
+                                    decoration: BoxDecoration(
+                                      color: Colors.white.withOpacity(0.1),
+                                      borderRadius: BorderRadius.circular(8),
+                                      border: Border.all(color: Colors.white.withOpacity(0.3)),
+                                    ),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Container(
+                                              padding: const EdgeInsets.all(6),
+                                              decoration: BoxDecoration(
+                                                color: Colors.orange.withOpacity(0.2),
+                                                borderRadius: BorderRadius.circular(8),
+                                              ),
+                                              child: Icon(
+                                                Icons.camera_alt, 
+                                                color: Colors.orange.shade300, 
+                                                size: 20
+                                              ),
+                                            ),
+                                            const SizedBox(width: 8),
+                                            Expanded(
+                                              child: Text(
+                                                l10n.variantPhotoTitle,
+                                                style: const TextStyle(
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                            ),
+                                            if (widget.variantConfig.hasVariantImage)
+                                              Container(
+                                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                                decoration: BoxDecoration(
+                                                  color: Colors.green.withOpacity(0.3),
+                                                  borderRadius: BorderRadius.circular(12),
+                                                ),
+                                                child: Text(
+                                                  l10n.statusSelected,
+                                                  style: TextStyle(
+                                                    fontSize: 12,
+                                                    color: Colors.green.shade200,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ),
+                                          ],
+                                        ),
+                                        const SizedBox(height: 12),
+                                        Stack(
+                                          children: [
+                                            Container(
+                                              decoration: BoxDecoration(
+                                                color: Colors.white.withOpacity(0.05),
+                                                borderRadius: BorderRadius.circular(8),
+                                                border: Border.all(color: Colors.white.withOpacity(0.2)),
+                                              ),
+                                              child: ImagePickerWidget(
+                                                isCompact: false,
+                                                initialImageFile: widget.variantConfig.variantImageXFile,
+                                                initialImageBytes: widget.variantConfig.variantWebImageBytes,
+                                                onImageChanged: _isUploading 
+                                                    ? (xFile, bytes) {}
+                                                    : (xFile, bytes) {
+                                                        setState(() {
+                                                          widget.variantConfig.setVariantImage(xFile, bytes);
+                                                        });
+                                                      },
+                                              ),
+                                            ),
+                                            if (_isUploading)
+                                              Container(
+                                                width: double.infinity,
+                                                height: 100,
+                                                decoration: BoxDecoration(
+                                                  color: Colors.black.withOpacity(0.5),
+                                                  borderRadius: BorderRadius.circular(8),
+                                                ),
+                                                child: const Center(
+                                                  child: CircularProgressIndicator(
+                                                    color: Colors.white,
+                                                  ),
+                                                ),
+                                              ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ],
+                                
+                                const SizedBox(height: 20),
+                                
+                                // Ekle butonu
+                                SizedBox(
+                                  width: double.infinity,
+                                  child: ElevatedButton.icon(
+                                    onPressed: _isUploading ? null : _addVariant,
+                                    icon: _isUploading 
+                                        ? const SizedBox(
+                                            width: 20, 
+                                            height: 20, 
+                                            child: CircularProgressIndicator(
+                                              strokeWidth: 2,
+                                              color: Colors.blue,
+                                            )
+                                          )
+                                        : const Icon(Icons.add, size: 20),
+                                    label: Text(
+                                      _isUploading ? l10n.statusUploading : l10n.buttonAddVariant,
+                                    ),
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: _isUploading ? Colors.white.withOpacity(0.3) : Colors.white,
+                                      foregroundColor: _isUploading ? Colors.white.withOpacity(0.5) : Colors.blue.shade700,
+                                      disabledBackgroundColor: Colors.white.withOpacity(0.3),
+                                      disabledForegroundColor: Colors.white.withOpacity(0.5),
+                                      padding: const EdgeInsets.symmetric(vertical: 16),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                      elevation: 4,
+                                      shadowColor: Colors.black.withOpacity(0.3),
+                                      textStyle: const TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            
+            // Footer/Actions with gradient - Responsive footer
+            Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Colors.white.withOpacity(0.1),
+                    Colors.white.withOpacity(0.2),
+                  ],
+                ),
+                borderRadius: const BorderRadius.only(
+                  bottomLeft: Radius.circular(16.0),
+                  bottomRight: Radius.circular(16.0),
+                ),
+                border: Border(
+                  top: BorderSide(color: Colors.white.withOpacity(0.2)),
+                ),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 16.0),
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    // Responsive button layout
+                    return IntrinsicHeight(
+                      child: Row(
+                        children: [
+                          // Close button
+                          Expanded(
+                            flex: 2,
+                            child: TextButton(
+                              onPressed: _isUploading ? null : () {
+                                if (_hasUnfinishedVariantData) {
+                                  _showUnfinishedVariantWarning();
+                                } else {
+                                  Navigator.of(context).pop(true);
+                                }
+                              },
+                              style: TextButton.styleFrom(
+                                foregroundColor: Colors.white.withOpacity(0.9),
+                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  side: BorderSide(color: Colors.white.withOpacity(0.3)),
+                                ),
+                              ),
+                              child: FittedBox(
+                                fit: BoxFit.scaleDown,
+                                child: Text(
+                                  l10n.buttonClose,
+                                  style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+                                ),
                               ),
                             ),
-                          ],
+                          ),
                           
-                          const SizedBox(height: 20),
+                          const SizedBox(width: 12),
                           
-                          // Ekle butonu
-                          SizedBox(
-                            width: double.infinity,
-                            child: ElevatedButton.icon(
-                              onPressed: _isUploading ? null : _addVariant,
-                              icon: _isUploading 
-                                  ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2))
-                                  : const Icon(Icons.add, size: 20),
-                              label: Text(_isUploading ? l10n.statusUploading : l10n.buttonAddVariant),
+                          // Complete button
+                          Expanded(
+                            flex: 3,
+                            child: ElevatedButton(
+                              onPressed: _isUploading ? null : _onCompletePressed,
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: _isUploading ? Colors.grey : Colors.blue,
-                                foregroundColor: Colors.white,
-                                padding: const EdgeInsets.symmetric(vertical: 16),
-                                textStyle: const TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
+                                backgroundColor: Colors.white,
+                                foregroundColor: Colors.green.shade700,
+                                disabledBackgroundColor: Colors.white.withOpacity(0.3),
+                                disabledForegroundColor: Colors.white.withOpacity(0.5),
+                                padding: const EdgeInsets.symmetric(vertical: 12),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
                                 ),
+                                elevation: 4,
+                                shadowColor: Colors.black.withOpacity(0.3),
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  const Icon(Icons.check_circle_outline, size: 18),
+                                  const SizedBox(width: 6),
+                                  Flexible(
+                                    child: FittedBox(
+                                      fit: BoxFit.scaleDown,
+                                      child: Text(
+                                        l10n.buttonComplete(widget.variantConfig.variants.length),
+                                        style: const TextStyle(
+                                          fontSize: 13,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           ),
                         ],
                       ),
-                    ),
-                  ],
+                    );
+                  },
                 ),
               ),
-            ),
-            
-            // Footer
-            const SizedBox(height: 16),
-            Row(
-              children: [
-                Expanded(
-                  child: TextButton(
-                    onPressed: _isUploading ? null : () {
-                      if (_hasUnfinishedVariantData) {
-                        _showUnfinishedVariantWarning();
-                      } else {
-                        Navigator.of(context).pop(true);
-                      }
-                    },
-                    child: Text(l10n.buttonClose),
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: _isUploading ? null : _onCompletePressed,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: _isUploading ? Colors.grey : Colors.green,
-                      foregroundColor: Colors.white,
-                    ),
-                    child: Text(
-                      l10n.buttonComplete(widget.variantConfig.variants.length),
-                    ),
-                  ),
-                ),
-              ],
             ),
           ],
         ),

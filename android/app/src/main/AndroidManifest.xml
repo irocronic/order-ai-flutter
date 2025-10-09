@@ -1,9 +1,26 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <!-- Konum izinleri -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-
+    
+    <!-- Kamera izni - QR kod tarama için gerekli -->
+    <uses-permission android:name="android.permission.CAMERA"/>
+    
+    <!-- Depolama izni -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    
+    <!-- İnternet izni -->
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+
+    <!-- Kamera özelliğinin zorunlu olup olmadığını belirt -->
+    <uses-feature 
+        android:name="android.hardware.camera" 
+        android:required="true" />
+    <uses-feature 
+        android:name="android.hardware.camera.autofocus" 
+        android:required="false" />
 
     <application
         android:label="OrderAI"

@@ -5053,43 +5053,247 @@
   "timeZoneNameCanary": "Kanarya Adaları (GMT+0)",
   "timeZoneNameReykjavik": "Reykjavik (GMT+0)",
   "getPriceFromRecipe": "Reçeteden fiyat al",
-  "selectCategoryLabel": "Select Category",
-  "selectCategoryHint": "Please choose a category",
-  "loadingProductTemplates": "Loading product templates...",
-  "deselectAllLabel": "Deselect All",
-  "selectAllLabel": "Select All",
-  "productsListedCount": "Products listed: {count}",
+  "selectCategoryLabel": "Kategori Seç",
+  "selectCategoryHint": "Lütfen bir kategori seçin",
+  "loadingProductTemplates": "Ürün şablonları yükleniyor...",
+  "deselectAllLabel": "Tüm Seçimleri Kaldır",
+  "selectAllLabel": "Tümünü Seç",
+  "productsListedCount": "Listelenen ürün sayısı: {count}",
   "@productsListedCount": {
+    "description": "Listeye eklenen ürünlerin sayısını gösterir.",
     "placeholders": {
-      "count": {}
+      "count": { "type": "int", "example": "12" }
     }
   },
-  "noProductTemplatesFound": "No product templates found",
-  "noProductsMatchSearch": "No products match your search",
-  "customProductLabel": "Custom product",
-  "manageVariants": "Manage variants ({count})",
+  "noProductTemplatesFound": "Hiç ürün şablonu bulunamadı",
+  "noProductsMatchSearch": "Aramanızla eşleşen ürün bulunamadı",
+  "customProductLabel": "Özel ürün",
+  "manageVariants": "Varyantları yönet ({count})",
   "@manageVariants": {
+    "description": "Ürüne bağlı varyantları yönetme butonunda gösterilen sayı.",
     "placeholders": {
-      "count": {}
+      "count": { "type": "int", "example": "5" }
     }
   },
-  "variantImagesIncomplete": "Variant images incomplete",
-  "selectProductButton": "Select Product",
-  "addSelectedProducts": "Add {count} selected products",
+  "variantImagesIncomplete": "Varyant görselleri eksik",
+  "selectProductButton": "Ürün Seç",
+  "addSelectedProducts": "{count} seçili ürünü ekle",
   "@addSelectedProducts": {
+    "description": "Seçilen ürünlerin eklenmesini sağlayan buton metni.",
     "placeholders": {
-      "count": {}
+      "count": { "type": "int", "example": "3" }
     }
   },
   "loadingVariants": "Varyantlar yükleniyor...",
   "variantManagementSubtitle": "Ürün varyantlarını yönet",
   "totalVariantsInfo": "Toplam {count} varyant",
   "@totalVariantsInfo": {
+    "description": "Toplam varyant sayısını gösterir.",
     "placeholders": {
-      "count": {
+      "count": { "type": "String", "example": "8" }
+    }
+  },
+  "variantManagementHint": "Değişiklikleri kaydetmek için tamamla",
+  "continentEurope": "Avrupa",
+  "continentAsia": "Asya",
+  "continentAmerica": "Amerika",
+  "continentAfrica": "Afrika",
+  "continentOceania": "Okyanusya",
+  "continentAtlantic": "Atlantik",
+  "timezoneIconWorld": "🌍",
+  "kdsSelectionRequiredError": "Seçilen kategoriler için KDS ekranı seçimi zorunludur.",
+  "kdsRequired": "KDS Gerekli!",
+  "templatesLoading": "Şablonlar yükleniyor...",
+  "categoryName": "Kategori Adı",
+  "kdsScreen": "KDS Ekranı",
+  "creating": "Oluşturuluyor...",
+  "attendanceManagementTitle": "Personel Giriş-Çıkış Yönetimi",
+  "qrCheckInTitle": "QR ile Giriş-Çıkış",
+  "locationManagementTitle": "Lokasyon Yönetimi",
+  "qrGeneratorTitle": "QR Kod Üreteci",
+  "attendanceHistoryTitle": "Giriş-Çıkış Geçmişi",
+  "currentStatusCheckedIn": "İşyerinde bulunuyorsunuz",
+  "currentStatusCheckedOut": "İşyerinde değilsiniz",
+  "scanQRInstruction": "QR kodu kameranın karşısına tutun",
+  "locationPermissionRequired": "Konum izni gereklidir",
+  "checkInSuccessful": "Giriş başarıyla kaydedildi",
+  "checkOutSuccessful": "Çıkış başarıyla kaydedildi",
+  "qrCodeGenerated": "QR kod oluşturuldu",
+  "qrCodeShared": "QR kod paylaşıldı",
+  "qrCodeHint": "https://example.com",
+  "newTemplate": "Yeni Şablon",
+  "shadowNote": "Gölge etkisini görmek için arka planın açık renkli olması gerekebilir.",
+  "businessCardV1": "Kartvizit V1",
+  "businessCardV2": "Kartvizit V2",
+  "logoV1": "Logo V1",
+  "connectivity_service_started": "Başlatıldı.",
+  "connection_status_changed": "Bağlantı durumu değişti",
+  "online": "ÇEVRİMİÇİ",
+  "offline": "ÇEVRİMDIŞI",
+  "backend_connected": "Backend'e ulaşıldı (çevrimiçi).",
+  "backend_connection_failed": "Backend'e ulaşılamıyor (çevrimdışı kabul ediliyor)",
+  "connectivity_service_stopped": "Durduruldu.",
+  "offline_save_error": "Offline kayıt sırasında hata: {error}",
+  "@offline_save_error": {
+    "placeholders": {
+      "error": {
         "type": "String"
       }
     }
   },
-  "variantManagementHint": "Değişiklikleri kaydetmek için tamamla"
+  "token_not_found": "Token bulunamadı",
+  "no_records_to_sync": "Senkronize edilecek kayıt yok",
+  "sync_result_message": "Başarılı: {success}, Başarısız: {failure}",
+  "@sync_result_message": {
+    "placeholders": {
+      "success": {
+        "type": "int"
+      },
+      "failure": {
+        "type": "int"
+      }
+    }
+  },
+  "fetch_locations_failed": "Check-in lokasyonları alınamadı",
+  "fetch_locations_error": "Lokasyonlar alınırken hata",
+  "create_location_error": "Lokasyon oluşturulurken hata",
+  "update_location_failed": "Lokasyon güncellenemedi",
+  "update_location_error": "Lokasyon güncellenirken hata",
+  "delete_location_failed": "Lokasyon silinemedi",
+  "delete_location_error": "Lokasyon silinirken hata",
+  "qr_code_generation_error": "QR kod oluşturulurken hata",
+  "attendance_record_error": "Giriş-çıkış kaydı oluşturulurken hata",
+  "fetch_history_failed": "Giriş-çıkış geçmişi alınamadı",
+  "fetch_history_error": "Giriş-çıkış geçmişi alınırken hata",
+  "checkInLocations": "Check-in Lokasyonları",
+  "deleteLocation": "Lokasyonu Sil",
+  "deleteLocationConfirmation": "{locationName} lokasyonunu silmek istediğinizden emin misiniz?",
+  "@deleteLocationConfirmation": {
+    "placeholders": {
+      "locationName": {
+        "type": "String"
+      }
+    }
+  },
+  "cancel": "İptal",
+  "delete": "Sil",
+  "locationDeletedSuccessfully": "Lokasyon başarıyla silindi",
+  "deleteError": "Silme hatası: {error}",
+  "@deleteError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "tryAgain": "Yeniden Dene",
+  "noLocationAdded": "Henüz lokasyon eklenmemiş",
+  "addLocation": "Lokasyon Ekle",
+  "radiusMeters": "Yarıçap: {radius} metre",
+  "@radiusMeters": {
+    "placeholders": {
+      "radius": {
+        "type": "int"
+      }
+    }
+  },
+  "status": "Durum: {status}",
+  "@status": {
+    "placeholders": {
+      "status": {
+        "type": "String"
+      }
+    }
+  },
+  "active": "Aktif",
+  "inactive": "Pasif",
+  "edit": "Düzenle",
+  "addNewLocation": "Yeni Lokasyon Ekle",
+  "locationName": "Lokasyon Adı",
+  "locationNameRequired": "Lokasyon adı gerekli",
+  "radiusMeter": "Yarıçap (metre)",
+  "radiusRequired": "Yarıçap gerekli",
+  "enterValidRadius": "Geçerli bir yarıçap girin",
+  "getting": "Alınıyor...",
+  "getLocation": "Konumu Al",
+  "locationCoordinates": "Konum: {lat}, {lng}",
+  "@locationCoordinates": {
+    "placeholders": {
+      "lat": {
+        "type": "String"
+      },
+      "lng": {
+        "type": "String"
+      }
+    }
+  },
+  "create": "Oluştur",
+  "location_not_obtained": "Konum alınamadı",
+  "locationError": "Konum alma hatası: {error}",
+  "@locationError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "pleaseGetLocationFirst": "Lütfen önce konumu alın",
+  "locationCreatedSuccessfully": "Lokasyon başarıyla oluşturuldu",
+  "creationError": "Oluşturma hatası: {error}",
+  "@creationError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "editLocation": "Lokasyonu Düzenle",
+  "thisLocationIsActive": "Bu lokasyon aktif",
+  "thisLocationIsInactive": "Bu lokasyon pasif",
+  "locationUpdatedSuccessfully": "Lokasyon başarıyla güncellendi",
+  "updateError": "Güncelleme hatası: {error}",
+  "@updateError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "update": "Güncelle",
+  "attendanceManagementTitle": "Personel Giriş-Çıkış Yönetimi",
+  "locationManagement": "Lokasyon Yönetimi", 
+  "locationManagementDescription": "Check-in noktalarını yönetin",
+  "qrCodeGeneration": "QR Kod Üret",
+  "qrCodeGenerationDescription": "Personel giriş-çıkış QR kodları",
+  "attendanceHistory": "Giriş-Çıkış Geçmişi",
+  "attendanceHistoryDescription": "Personel giriş-çıkış kayıtları",
+  "activeLocations": "Aktif Lokasyonlar",
+  "radiusMeters": "Yarıçap: {meters} metre",
+  "@radiusMeters": {
+    "description": "Displays the radius in meters for a location",
+    "placeholders": {
+      "meters": {
+        "type": "int",
+        "example": "100"
+      }
+    }
+  },
+  "quantityInputLabel": "Miktar",
+  "@quantityInputLabel": {
+    "description": "Label for quantity input field"
+  },
+  "quantityRequiredError": "Miktar gerekli",
+  "@quantityRequiredError": {
+    "description": "Error message when quantity field is empty"
+  },
+  "quantityValidNumberError": "Geçerli bir sayı girin",
+  "@quantityValidNumberError": {
+    "description": "Error message when entered value is not a valid number"
+  },
+  "alertThresholdLabel": "Uyarı Eşiği",
+  "alertThresholdHint": "Kritik stok seviyesi",
+  "alertThresholdHelper": "Bu seviyenin altına düştüğünde e-posta gönderilir",
+  "alertThresholdDisplay": "Uyarı Eşiği",
+  "validQuantityError": "Lütfen geçerli bir miktar girin",
+  "errorPrefix": "Hata"
 }

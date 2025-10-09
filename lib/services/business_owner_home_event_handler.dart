@@ -32,19 +32,19 @@ class BusinessOwnerHomeEventHandler {
   static Timer? _batchEventTimer;
   static final Set<String> _pendingEventTypes = {};
   
-  // Callback functions
-  late Function() _onOrderCountRefresh;
-  late Function() _onStockAlertsCheck;
-  late Function() _onConnectivityChanged;
-  late Function() _onSocketStatusUpdate;
-  late Function() _onSyncStatusMessage;
-  late Function() _onStockAlertUpdate;
-  late bool Function() _shouldProcessUpdate; // DÜZELTME: Function(bool) -> bool Function()
+  // Callback functions - Initialize edilmemiş late değişkenlerin yerine nullable yaptık
+  Function()? _onOrderCountRefresh;
+  Function()? _onStockAlertsCheck;
+  Function()? _onConnectivityChanged;
+  Function()? _onSocketStatusUpdate;
+  Function()? _onSyncStatusMessage;
+  Function()? _onStockAlertUpdate;
+  bool Function()? _shouldProcessUpdate; // DÜZELTME: nullable yapıldı ve default değer eklendi
   
-  // Notification callbacks
-  late Function(Map<String, dynamic>) _refreshAllScreensCallback;
-  late Function(Map<String, dynamic>) _screenBecameActiveCallback;
-  late Function(Map<String, dynamic>) _kdsUpdateCallback;
+  // Notification callbacks - Aynı şekilde nullable yapıldı
+  Function(Map<String, dynamic>)? _refreshAllScreensCallback;
+  Function(Map<String, dynamic>)? _screenBecameActiveCallback;
+  Function(Map<String, dynamic>)? _kdsUpdateCallback;
   
   bool _isInitialized = false;
   String _token = '';
@@ -61,7 +61,7 @@ class BusinessOwnerHomeEventHandler {
     required Function() onSocketStatusUpdate,
     required Function() onSyncStatusMessage,
     required Function() onStockAlertUpdate,
-    required bool Function() shouldProcessUpdate, // DÜZELTME: Function(bool) -> bool Function()
+    required bool Function() shouldProcessUpdate,
   }) {
     if (_isInitialized) return;
     
@@ -103,9 +103,14 @@ class BusinessOwnerHomeEventHandler {
     debugPrint("[BusinessOwnerHomeEventHandler] Handler disposed");
   }
 
+  // Helper method to safely check if updates should be processed
+  bool _canProcessUpdate() {
+    return _shouldProcessUpdate?.call() ?? false;
+  }
+
   void _setupNotificationCenterListeners() {
     _refreshAllScreensCallback = (data) {
-      if (!_shouldProcessUpdate()) return;
+      if (!_canProcessUpdate()) return;
       final eventType = data['eventType'] as String?;
       final eventData = data['data'] as Map<String, dynamic>?;
       
@@ -116,8 +121,8 @@ class BusinessOwnerHomeEventHandler {
         bool shouldRefresh = eventTypes.any((type) => _shouldRefreshForEvent(type));
         if (shouldRefresh) {
           _throttledEventProcessor('batch_refresh', () async {
-            await _onOrderCountRefresh();
-            await _onStockAlertsCheck();
+            await _onOrderCountRefresh?.call();
+            await _onStockAlertsCheck?.call();
           });
         }
         return;
@@ -126,63 +131,75 @@ class BusinessOwnerHomeEventHandler {
       debugPrint("[BusinessOwnerHomeEventHandler] 📡 Global refresh received: $eventType");
       if (_shouldRefreshForEvent(eventType)) {
         _throttledEventProcessor('global_refresh_$eventType', () async {
-          await _onOrderCountRefresh();
-          await _onStockAlertsCheck();
+          await _onOrderCountRefresh?.call();
+          await _onStockAlertsCheck?.call();
         });
       }
     };
 
     _screenBecameActiveCallback = (data) {
-      if (!_shouldProcessUpdate()) return;
+      if (!_canProcessUpdate()) return;
       debugPrint("[BusinessOwnerHomeEventHandler] 📱 Screen became active notification received");
       _throttledEventProcessor('screen_active', () async {
-        await _onOrderCountRefresh();
-        await _onStockAlertsCheck();
+        await _onOrderCountRefresh?.call();
+        await _onStockAlertsCheck?.call();
       });
     };
 
     _kdsUpdateCallback = (data) {
-      if (!_shouldProcessUpdate()) return;
+      if (!_canProcessUpdate()) return;
       final eventType = data['event_type'] as String?;
       debugPrint("[BusinessOwnerHomeEventHandler] 🔥 KDS update detected: $eventType");
       if (_isKdsEvent(eventType)) {
         _immediateEventProcessor('kds_update_$eventType', () async {
-          await _onOrderCountRefresh();
-          await _onStockAlertsCheck();
+          await _onOrderCountRefresh?.call();
+          await _onStockAlertsCheck?.call();
         });
       }
     };
 
-    NotificationCenter.instance.addObserver('refresh_all_screens', _refreshAllScreensCallback);
-    NotificationCenter.instance.addObserver('screen_became_active', _screenBecameActiveCallback);
-    NotificationCenter.instance.addObserver('order_status_update', _kdsUpdateCallback);
+    if (_refreshAllScreensCallback != null) {
+      NotificationCenter.instance.addObserver('refresh_all_screens', _refreshAllScreensCallback!);
+    }
+    if (_screenBecameActiveCallback != null) {
+      NotificationCenter.instance.addObserver('screen_became_active', _screenBecameActiveCallback!);
+    }
+    if (_kdsUpdateCallback != null) {
+      NotificationCenter.instance.addObserver('order_status_update', _kdsUpdateCallback!);
+    }
   }
 
   void _cleanupNotificationCenterListeners() {
-    NotificationCenter.instance.removeObserver('refresh_all_screens', _refreshAllScreensCallback);
-    NotificationCenter.instance.removeObserver('screen_became_active', _screenBecameActiveCallback);
-    NotificationCenter.instance.removeObserver('order_status_update', _kdsUpdateCallback);
+    if (_refreshAllScreensCallback != null) {
+      NotificationCenter.instance.removeObserver('refresh_all_screens', _refreshAllScreensCallback!);
+    }
+    if (_screenBecameActiveCallback != null) {
+      NotificationCenter.instance.removeObserver('screen_became_active', _screenBecameActiveCallback!);
+    }
+    if (_kdsUpdateCallback != null) {
+      NotificationCenter.instance.removeObserver('order_status_update', _kdsUpdateCallback!);
+    }
   }
 
   void _addSocketServiceAndNotifierListeners() {
-    _connectivityService.isOnlineNotifier.addListener(_onConnectivityChanged);
-    _socketService.connectionStatusNotifier.addListener(_onSocketStatusUpdate);
+    _connectivityService.isOnlineNotifier.addListener(_onConnectivityChanged ?? () {});
+    _socketService.connectionStatusNotifier.addListener(_onSocketStatusUpdate ?? () {});
     orderStatusUpdateNotifier.addListener(_handleSilentOrderUpdatesThrottled);
     shouldRefreshWaitingCountNotifier.addListener(_handleWaitingCountRefreshThrottled);
     shouldRefreshTablesNotifier.addListener(_handleTablesRefreshThrottled);
-    syncStatusMessageNotifier.addListener(_onSyncStatusMessage);
-    stockAlertNotifier.addListener(_onStockAlertUpdate);
+    syncStatusMessageNotifier.addListener(_onSyncStatusMessage ?? () {});
+    stockAlertNotifier.addListener(_onStockAlertUpdate ?? () {});
     debugPrint("[BusinessOwnerHomeEventHandler] Notifier listener'ları eklendi.");
   }
 
   void _removeSocketServiceAndNotifierListeners() {
-    _connectivityService.isOnlineNotifier.removeListener(_onConnectivityChanged);
-    _socketService.connectionStatusNotifier.removeListener(_onSocketStatusUpdate);
+    _connectivityService.isOnlineNotifier.removeListener(_onConnectivityChanged ?? () {});
+    _socketService.connectionStatusNotifier.removeListener(_onSocketStatusUpdate ?? () {});
     orderStatusUpdateNotifier.removeListener(_handleSilentOrderUpdatesThrottled);
     shouldRefreshWaitingCountNotifier.removeListener(_handleWaitingCountRefreshThrottled);
     shouldRefreshTablesNotifier.removeListener(_handleTablesRefreshThrottled);
-    syncStatusMessageNotifier.removeListener(_onSyncStatusMessage);
-    stockAlertNotifier.removeListener(_onStockAlertUpdate);
+    syncStatusMessageNotifier.removeListener(_onSyncStatusMessage ?? () {});
+    stockAlertNotifier.removeListener(_onStockAlertUpdate ?? () {});
     debugPrint("[BusinessOwnerHomeEventHandler] Tüm notifier listener'ları kaldırıldı.");
   }
 
@@ -206,7 +223,7 @@ class BusinessOwnerHomeEventHandler {
     }
     
     _eventThrottlers[eventKey] = Timer(const Duration(milliseconds: 300), () async {
-      if (!_shouldProcessUpdate()) return;
+      if (!_canProcessUpdate()) return;
       
       _processingEvents.add(eventKey);
       debugPrint("[BusinessOwnerHomeEventHandler] 🟡 Processing throttled event: $eventKey");
@@ -242,33 +259,33 @@ class BusinessOwnerHomeEventHandler {
   }
 
   void _handleTablesRefreshThrottled() {
-    if (!_shouldProcessUpdate()) {
+    if (!_canProcessUpdate()) {
       debugPrint('[BusinessOwnerHomeEventHandler] Ekran aktif değil, tables refresh atlandı.');
       return;
     }
     
     _throttledEventProcessor('tables_refresh', () async {
       debugPrint('[BusinessOwnerHomeEventHandler] Enhanced notification tables refresh tetiklendi');
-      await _onOrderCountRefresh();
-      await _onStockAlertsCheck();
+      await _onOrderCountRefresh?.call();
+      await _onStockAlertsCheck?.call();
     });
   }
 
   void _handleWaitingCountRefreshThrottled() {
-    if (!_shouldProcessUpdate()) {
+    if (!_canProcessUpdate()) {
       debugPrint('[BusinessOwnerHomeEventHandler] Ekran aktif değil, waiting count refresh atlandı.');
       return;
     }
     
     _throttledEventProcessor('waiting_count_refresh', () async {
       debugPrint('[BusinessOwnerHomeEventHandler] Waiting count refresh tetiklendi');
-      await _onOrderCountRefresh();
+      await _onOrderCountRefresh?.call();
     });
   }
 
   void _handleSilentOrderUpdatesThrottled() {
     final notificationData = orderStatusUpdateNotifier.value;
-    if (notificationData == null || !_shouldProcessUpdate()) {
+    if (notificationData == null || !_canProcessUpdate()) {
       if (notificationData != null) {
         debugPrint("[BusinessOwnerHomeEventHandler] Ekran aktif değil, bildirim atlandı: ${notificationData['event_type']}");
       }
@@ -284,8 +301,8 @@ class BusinessOwnerHomeEventHandler {
         _isPickupDeliveryEvent(eventType)) {
       debugPrint("[BusinessOwnerHomeEventHandler] 🔥 Item pickup/delivery event detected, using immediate processing: $eventType");
       _immediateEventProcessor('pickup_delivery_$eventType', () async {
-        await _onOrderCountRefresh();
-        await _onStockAlertsCheck();
+        await _onOrderCountRefresh?.call();
+        await _onStockAlertsCheck?.call();
       });
       return;
     }
@@ -293,8 +310,8 @@ class BusinessOwnerHomeEventHandler {
     if (eventType == 'order_cancelled_update' || eventType == 'order_completed_update') {
       debugPrint("[BusinessOwnerHomeEventHandler] 🔥 Critical order event detected, using priority refresh: $eventType");
       _immediateEventProcessor('critical_order_$eventType', () async {
-        await _onOrderCountRefresh();
-        await _onStockAlertsCheck();
+        await _onOrderCountRefresh?.call();
+        await _onStockAlertsCheck?.call();
       });
       return;
     }
@@ -302,8 +319,8 @@ class BusinessOwnerHomeEventHandler {
     if (_isKdsEvent(eventType)) {
       debugPrint("[BusinessOwnerHomeEventHandler] 🔥 KDS event detected, using priority refresh: $eventType");
       _immediateEventProcessor('kds_direct_$eventType', () async {
-        await _onOrderCountRefresh();
-        await _onStockAlertsCheck();
+        await _onOrderCountRefresh?.call();
+        await _onStockAlertsCheck?.call();
       });
       return;
     }
@@ -311,8 +328,8 @@ class BusinessOwnerHomeEventHandler {
     if (_shouldRefreshForEvent(eventType) || notificationData['is_paid_update'] == true) {
       _throttledEventProcessor('order_update_$eventType', () async {
         debugPrint("[BusinessOwnerHomeEventHandler] Sayaçları etkileyen bir olay geldi, sayılar yenileniyor.");
-        await _onOrderCountRefresh();
-        await _onStockAlertsCheck();
+        await _onOrderCountRefresh?.call();
+        await _onStockAlertsCheck?.call();
       });
     } else {
       debugPrint("[BusinessOwnerHomeEventHandler] Sayaçları etkilemeyen olay, atlandı: $eventType");
@@ -373,19 +390,18 @@ class BusinessOwnerHomeEventHandler {
 
   // Public methods for external access
   void safeRefreshDataWithThrottling() {
-    if (!_shouldProcessUpdate()) return;
+    if (!_canProcessUpdate()) return;
     _throttledEventProcessor('business_owner_home_refresh', () async {
-      await _onOrderCountRefresh();
-      await _onStockAlertsCheck();
+      await _onOrderCountRefresh?.call();
+      await _onStockAlertsCheck?.call();
     });
   }
 
   void handleScreenBecameActive() {
-    if (!_shouldProcessUpdate()) return;
+    if (!_canProcessUpdate()) return;
     _throttledEventProcessor('screen_active', () async {
-      await _onOrderCountRefresh();
-      await _onStockAlertsCheck();
+      await _onOrderCountRefresh?.call();
+      await _onStockAlertsCheck?.call();
     });
   }
-
 }

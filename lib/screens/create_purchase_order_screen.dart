@@ -124,14 +124,14 @@ class _CreatePurchaseOrderScreenState extends State<CreatePurchaseOrderScreen> {
                     TextFormField(
                       controller: alertThresholdController,
                       decoration: InputDecoration(
-                        labelText: "Uyarı Eşiği",
-                        hintText: "Kritik stok seviyesi",
+                        labelText: l10n.alertThresholdLabel,
+                        hintText: l10n.alertThresholdHint,
                         suffixText: selectedIngredient?.unitAbbreviation,
                         border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
                         filled: true,
                         fillColor: Colors.orange.shade50,
                         prefixIcon: const Icon(Icons.warning_amber, color: Colors.orange),
-                        helperText: "Bu seviyenin altına düştüğünde e-posta gönderilir",
+                        helperText: l10n.alertThresholdHelper,
                         helperMaxLines: 2,
                       ),
                       keyboardType: TextInputType.number,
@@ -174,7 +174,7 @@ class _CreatePurchaseOrderScreenState extends State<CreatePurchaseOrderScreen> {
                       Navigator.pop(ctx);
                     } else if (finalQuantity <= 0) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text("Lütfen geçerli bir miktar girin"))
+                        SnackBar(content: Text(l10n.validQuantityError))
                       );
                     }
                   },
@@ -209,7 +209,7 @@ class _CreatePurchaseOrderScreenState extends State<CreatePurchaseOrderScreen> {
       }
     } catch (e) {
       if(mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Hata: $e")));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("${l10n.errorPrefix}: $e")));
         setState(() => _isLoading = false);
       }
     }
@@ -267,7 +267,7 @@ class _CreatePurchaseOrderScreenState extends State<CreatePurchaseOrderScreen> {
                                   // *** YENİ: Uyarı eşiği gösterimi ***
                                   if (item.alertThreshold != null)
                                     Text(
-                                      'Uyarı Eşiği: ${item.alertThreshold} ${item.unitAbbreviation}',
+                                      '${l10n.alertThresholdDisplay}: ${item.alertThreshold} ${item.unitAbbreviation}',
                                       style: TextStyle(
                                         color: Colors.orange.shade700,
                                         fontSize: 12,
